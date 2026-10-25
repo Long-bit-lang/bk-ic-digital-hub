@@ -1,0 +1,118 @@
+{
+  "units": [
+    {
+      "id": "BN",
+      "name": "Ban Chủ nhiệm",
+      "shortName": "BN",
+      "description": "Chỉ đạo chiến lược, điều hành tổng thể, phê duyệt quyết định nhân sự, đánh giá và đối ngoại cấp cao.",
+      "leaderName": ""
+    },
+    {
+      "id": "BDH",
+      "name": "Ban Điều hành",
+      "shortName": "BĐH",
+      "description": "Tổ chức các hoạt động chuyên môn, các buổi training, quản lý dự án đổi mới sáng tạo và điều phối liên đơn vị.",
+      "leaderName": ""
+    },
+    {
+      "id": "BTV",
+      "name": "Ban Thành viên",
+      "shortName": "BTV",
+      "description": "Quản lý hồ sơ nhân sự, ghi nhận điểm danh, cập nhật trạng thái thành viên và hỗ trợ nội bộ.",
+      "leaderName": ""
+    }
+  ],
+  "users": [
+    {
+      "id": "usr-admin",
+      "memberId": "BKIC-BN-ADMIN01",
+      "email": "admin.bkic@dut.udn.vn",
+      "fullName": "Quản trị viên Hệ thống (Admin)",
+      "studentId": "ADMIN-DUT-2026",
+      "faculty": "Trường Đại học Bách khoa - ĐHĐN",
+      "classId": "Ban Cố vấn & Quản trị",
+      "academicYear": "Quản trị viên",
+      "role": "admin",
+      "unit": "BN",
+      "committee": "BN",
+      "position": "Admin Kỹ thuật & Quản trị Hệ thống",
+      "joinDate": "2026-04-04",
+      "status": "active",
+      "statusEffectiveDate": "2026-04-04",
+      "phone": "",
+      "accountStatus": "active",
+      "emailVerified": true,
+      "createdAt": "2026-04-04T08:00:00.000Z",
+      "passwordSalt": "1a3372c4cf347ed4431f05522c326179",
+      "passwordHash": "e6b5d48ead8b3b86eb924395a263efc8fa5ffb47a47db926cb2ed1939fb9ee30d1753e0d13c78deae6b9a8e04ddaee583aae386a6296ce1c5c7687f26bfdde74",
+      "statusHistory": [
+        {
+          "id": "sh-admin-01",
+          "previousStatus": "active",
+          "newStatus": "active",
+          "effectiveDate": "2026-04-04",
+          "reason": "Khởi tạo tài khoản Quản trị viên cấp quyền hệ thống",
+          "approvedBy": "Hội đồng Nhà trường",
+          "updatedBy": "Admin",
+          "timestamp": "2026-04-04T08:00:00Z"
+        }
+      ],
+      "mustChangePassword": false,
+      "isRecoverySession": false,
+      "lastLoginAt": "2026-10-24T18:37:22.995Z"
+    }
+  ],
+  "sessions": [],
+  "attendance": [],
+  "attendanceRecords": [],
+  "attendanceRequests": [],
+  "tasks": [],
+  "evaluations": [],
+  "notifications": [],
+  "auditLogs": [
+    {
+      "id": "audit-1792867042996",
+      "timestamp": "2026-10-24T18:37:22.996Z",
+      "actorId": "usr-admin",
+      "actorName": "Quản trị viên Hệ thống (Admin)",
+      "actorRole": "admin",
+      "actorUnit": "BN",
+      "action": "Đăng nhập hệ thống",
+      "targetType": "User",
+      "targetId": "usr-admin",
+      "details": "Đăng nhập thành công với email admin.bkic@dut.udn.vn (Vai trò: admin)"
+    },
+    {
+      "id": "audit-init-01",
+      "timestamp": "2026-04-04T08:00:00.000Z",
+      "actorId": "usr-admin",
+      "actorName": "Quản trị viên Hệ thống (Admin)",
+      "actorRole": "admin",
+      "actorUnit": "BN",
+      "action": "Khởi tạo hệ thống quản trị chính thức",
+      "targetType": "System",
+      "targetId": "BKIC-Hub-v2",
+      "details": "Hệ thống sẵn sàng vận hành chính thức cho Câu lạc bộ Sáng tạo Khởi nghiệp BK-IC Trường ĐH Bách khoa - ĐHĐN."
+    }
+  ],
+  "applications": [],
+  "projects": [],
+  "events": [],
+  "articles": [],
+  "siteSettings": {
+    "clubName": "BK-IC",
+    "clubFullName": "Bách Khoa Innovation Club",
+    "clubVietnameseName": "Câu lạc bộ Khởi nghiệp và Đổi mới sáng tạo Trường Đại học Bách khoa – ĐHĐN",
+    "universityName": "Trường Đại học Bách khoa – Đại học Đà Nẵng (DUT)",
+    "heroEyebrow": "BACH KHOA INNOVATION CLUB · DA NANG",
+    "heroHeadline": "Ý tưởng hôm nay. Tương lai ngày mai.",
+    "heroSubheadline": "Nơi sinh viên Bách khoa gặp gỡ, học hỏi và cùng nhau biến những ý tưởng sáng tạo thành giải pháp mang giá trị thực tiễn.",
+    "heroTagline": "Think. Build. Impact.",
+    "englishTagline": "Empowering Student Innovation & Entrepreneurship at Danang University of Science and Technology",
+    "recruitmentStatus": "open",
+    "recruitmentDeadline": "2026-11-15",
+    "contactEmail": "bkic@dut.udn.vn",
+    "contactAddress": "54 Nguyễn Lương Bằng, Phường Hòa Khánh Bắc, Quận Liên Chiểu, TP. Đà Nẵng",
+    "isDemoMode": false
+  }
+}

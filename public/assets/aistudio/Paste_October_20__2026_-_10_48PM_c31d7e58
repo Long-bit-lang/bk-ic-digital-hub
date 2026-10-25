@@ -1,0 +1,623 @@
+# MASTER PROMPT — NÂNG CẤP BK-IC DIGITAL HUB
+
+## 1. VAI TRÒ VÀ MỤC TIÊU
+
+Bạn là một Senior Full-stack Engineer, Software Architect và UI/UX Designer có kinh nghiệm xây dựng hệ thống quản lý tổ chức, phân quyền người dùng và quy trình nghiệp vụ.
+
+Hãy tiếp nhận **source code prototype BK-IC Digital Hub hiện tại** và phát triển nó thành một hệ thống quản lý hoạt động nội bộ hoàn chỉnh cho BK-IC.
+
+Đây là yêu cầu nâng cấp một dự án có sẵn, không phải tạo một ứng dụng hoàn toàn mới.
+
+### Nguyên tắc bắt buộc
+
+1. Kiểm tra toàn bộ cấu trúc dự án, các trang, component, context, kiểu dữ liệu, dữ liệu mẫu và luồng điều hướng trước khi sửa code.
+2. Tận dụng các component và giao diện hiện có nếu còn phù hợp.
+3. Giữ lại website công khai giới thiệu CLB, đồng thời ưu tiên phát triển hệ thống quản lý thành viên và vận hành nội bộ.
+4. Không tự ý thay đổi các quy tắc nghiệp vụ đã được mô tả trong prompt.
+5. Không tạo nút bấm chỉ để trang trí. Mọi thao tác phải có hành vi thực tế, trạng thái phản hồi và xử lý lỗi phù hợp.
+6. Không sử dụng dữ liệu giả hoặc `localStorage` làm nguồn dữ liệu chính thức cho hệ thống nhiều người dùng.
+7. Không giả lập việc đăng nhập, phê duyệt, gửi email, quét QR hoặc lưu dữ liệu thành công nếu chức năng đó chưa thực sự hoạt động.
+8. Không xóa lịch sử nghiệp vụ khi chỉnh sửa hoặc vô hiệu hóa tài khoản.
+9. Ưu tiên tính chính xác của nghiệp vụ, bảo mật, khả năng bảo trì và trải nghiệm người dùng hơn việc thêm nhiều tính năng không cần thiết.
+10. Sau mỗi giai đoạn, kiểm tra lỗi TypeScript, lỗi giao diện, lỗi luồng dữ liệu và các quy tắc phân quyền.
+
+## 2. KIẾN TRÚC VÀ CÔNG NGHỆ
+
+Trước tiên, hãy xác định công nghệ thực tế đang có trong dự án. Prototype hiện tại được xây dựng bằng React, TypeScript và Vite; hãy giữ lại nền tảng này nếu source code xác nhận đúng như vậy.
+
+### Yêu cầu về dữ liệu
+
+Hệ thống phải hỗ trợ nhiều người dùng đăng nhập đồng thời và nhìn thấy dữ liệu nhất quán.
+
+- Nếu dự án đã có backend phù hợp, tiếp tục sử dụng và hoàn thiện backend đó.
+- Nếu chưa có backend, ưu tiên Firebase Authentication cho xác thực và Cloud Firestore cho dữ liệu tập trung, kết hợp Cloud Functions hoặc cơ chế phía máy chủ phù hợp cho các thao tác cần quyền tin cậy.
+- Thiết lập quy tắc bảo mật phía máy chủ, không chỉ kiểm tra quyền ở giao diện.
+- Không lưu mật khẩu dạng văn bản, khóa bí mật hoặc thông tin xác thực nhạy cảm trong source code.
+- Sử dụng biến môi trường và hướng dẫn cấu hình các dịch vụ cần thiết.
+- Không dùng tài khoản hoặc quyền admin được khai báo cố định trong giao diện để thay thế xác thực thực tế.
+
+Không nhất thiết phải thay đổi toàn bộ kiến trúc nếu dự án đã có giải pháp tốt hơn. Tuy nhiên, phải giải thích rõ cách triển khai xác thực, lưu trữ, phân quyền và xử lý nghiệp vụ.
+
+### Dữ liệu và lịch sử
+
+- Mỗi thành viên có mã định danh duy nhất.
+- Mỗi buổi training, nhiệm vụ, bản đánh giá và phản hồi có định danh riêng.
+- Các thay đổi quan trọng phải có lịch sử.
+- Không xóa cứng hồ sơ thành viên chỉ vì thành viên rời CLB.
+- Dùng giao dịch hoặc cơ chế cập nhật nhất quán khi nhiều người có thể thao tác trên cùng một bản ghi.
+- Thời gian nghiệp vụ phải được tính nhất quán theo múi giờ Việt Nam (`Asia/Ho_Chi_Minh`).
+- Các hạn 24 giờ, 48 giờ và các thời điểm đóng/mở biểu mẫu phải dựa trên thời gian thực của hệ thống, không dựa vào đồng hồ do trình duyệt người dùng tự khai báo.
+
+## 3. CƠ CẤU TỔ CHỨC VÀ PHÂN QUYỀN
+
+BK-IC có ba đơn vị chính:
+
+1. **Ban Chủ nhiệm (BN):** quản lý tổng thể, giám sát toàn CLB và phê duyệt các quyết định thuộc thẩm quyền.
+2. **Ban Điều hành (BĐH):** tổ chức hoạt động, quản lý training và điều phối công việc liên đơn vị.
+3. **Ban Thành viên (BTV):** quản lý hồ sơ thành viên, ghi nhận điểm danh và cập nhật dữ liệu nhân sự theo quyết định đã được phê duyệt.
+
+### Tách vai trò tài khoản khỏi chức vụ và đơn vị
+
+Không đồng nhất quyền tài khoản với đơn vị hoặc chức vụ của một người.
+
+Một tài khoản có thể đồng thời có nhiều nhiệm vụ hoặc phạm vi trách nhiệm. Không tạo tài khoản trùng cho cùng một người chỉ vì họ kiêm nhiệm.
+
+Các vai trò cơ bản của hệ thống:
+
+- `admin`: quản trị kỹ thuật, tài khoản, cấu hình và các quyền được cấp.
+- `leader`: quản lý trong phạm vi đơn vị được giao.
+- `member`: thành viên chính thức, chủ yếu thao tác trên dữ liệu của bản thân.
+
+Quyền nghiệp vụ phải được xác định thêm bằng đơn vị, chức vụ, phạm vi được ủy quyền và hành động được phép thực hiện.
+
+### Quy tắc quyền truy cập
+
+- BN được xem dữ liệu toàn CLB trong phạm vi nghiệp vụ và quyền được cấp.
+- Leader chỉ được quản lý dữ liệu trong phạm vi được giao.
+- Member chỉ được xem hồ sơ, điểm danh, nhiệm vụ và đánh giá của chính mình.
+- Admin có quyền quản trị hệ thống theo phân quyền, nhưng không mặc nhiên là người phê duyệt cuối cùng của mọi nghiệp vụ.
+- Không được tự cấp quyền chỉ bằng cách sửa dữ liệu phía client.
+- Mọi hành động phê duyệt phải kiểm tra quyền ở phía máy chủ.
+
+Quyền đặc thù cần triển khai:
+
+- Chỉ BN và BĐH được tạo buổi training.
+- Người phụ trách buổi training mở QR và chốt danh sách điểm danh.
+- Người phụ trách buổi hoặc BTV được ghi nhận điểm danh thủ công.
+- BTV có thể sửa điểm danh sau khi đã chốt, nhưng phải ghi nhật ký.
+- BN xử lý hoặc phê duyệt các ngoại lệ thuộc thẩm quyền.
+- Leader giao và xác nhận nhiệm vụ trong phạm vi đơn vị.
+- BN phê duyệt đánh giá thành viên cuối cùng.
+- BTV cập nhật trạng thái thành viên sau khi có quyết định phê duyệt của BN.
+
+## 4. QUẢN LÝ THÀNH VIÊN
+
+### Hồ sơ thành viên
+
+Mỗi hồ sơ cần hỗ trợ tối thiểu:
+
+- Mã thành viên duy nhất.
+- Họ tên và thông tin liên hệ cần thiết.
+- Đơn vị hiện tại.
+- Chức vụ hoặc trách nhiệm hiện tại.
+- Trạng thái thành viên.
+- Ngày hiệu lực của trạng thái.
+- Lịch sử thay đổi đơn vị, chức vụ và trạng thái.
+- Lịch sử nhiệm vụ, điểm danh và đánh giá liên quan.
+
+Cấu trúc dữ liệu phải cho phép lưu lại đơn vị và chức vụ của thành viên tại thời điểm một nhiệm vụ hoặc sự kiện diễn ra. Không dùng đơn vị hiện tại để ghi đè lịch sử.
+
+### Trạng thái thành viên
+
+Sử dụng ba trạng thái:
+
+- `active`: Đang hoạt động.
+- `paused`: Tạm ngưng/bảo lưu.
+- `left`: Đã rời CLB.
+
+Quy tắc:
+
+1. BN phê duyệt quyết định bảo lưu hoặc rời CLB.
+2. BTV cập nhật trạng thái sau phê duyệt.
+3. Ngày hiệu lực là ngày quyết định được phê duyệt, trừ khi quyết định có quy tắc ngày hiệu lực khác được xác định rõ.
+4. Bảo lưu không có thời hạn tối đa mặc định. BN quyết định từng trường hợp.
+5. Hết thời gian dự kiến bảo lưu không tự động chuyển trạng thái. Hệ thống chờ BN quyết định.
+6. Thành viên bảo lưu chỉ được đăng nhập để xem hồ sơ và lịch sử của chính mình; không nhận nhiệm vụ và không tham gia điểm danh với tư cách thành viên hoạt động.
+7. Nếu thành viên bảo lưu hoặc rời CLB, các nhiệm vụ còn lại được hủy có lý do; giữ lịch sử tiến độ.
+8. Không tự động trừ điểm vì thành viên bảo lưu, rời CLB hoặc nhiệm vụ bị hủy.
+9. BN phê duyệt việc quay lại hoạt động.
+10. Thành viên đã rời CLB muốn quay lại được khôi phục hồ sơ cũ sau khi BN phê duyệt, giữ nguyên lịch sử.
+11. Mỗi lần đổi trạng thái phải tạo một bản ghi lịch sử mới, không ghi đè bản ghi trước.
+
+### Bảo vệ lý do riêng tư
+
+- BTV và BN được xem lý do bảo lưu/rời CLB.
+- Leader chỉ nhận thông tin tối thiểu cần thiết để quản lý công việc.
+- Không đưa lý do riêng tư vào báo cáo thông thường hoặc tệp xuất dữ liệu nếu không có quyền phù hợp.
+
+## 5. QUẢN LÝ BUỔI TRAINING
+
+Tạo phân hệ quản lý training hoàn chỉnh, không chỉ là danh sách sự kiện.
+
+### Thông tin buổi training
+
+Mỗi buổi gồm tối thiểu:
+
+- Mã buổi training.
+- Tên buổi.
+- Nội dung và mục tiêu.
+- Người phụ trách bắt buộc.
+- Người tạo buổi.
+- Thời gian bắt đầu và kết thúc chính thức.
+- Địa điểm hoặc hình thức tổ chức.
+- Trạng thái buổi.
+- Trạng thái điểm danh.
+- Trạng thái biểu mẫu phản hồi.
+- Lịch sử thay đổi thời gian và trạng thái.
+
+Chỉ BN/BĐH được tạo buổi training. Không cho phép hoàn tất thao tác tạo buổi nếu chưa chỉ định người phụ trách.
+
+### Quy trình vòng đời
+
+Hỗ trợ các trạng thái phù hợp như nháp, đã lên lịch, đang diễn ra, đã kết thúc và đã hủy.
+
+Không cho phép các thao tác trái quy trình. Ví dụ: buổi đã hủy không thể tiếp tục mở QR hoặc nhận phản hồi.
+
+Nếu thời gian bắt đầu thay đổi trước buổi học, tính lại cửa sổ QR và thông báo những người bị ảnh hưởng.
+
+Nếu thời gian kết thúc thay đổi, tính lại hạn giải trình và hạn phản hồi. Nếu biểu mẫu đã đóng, không tự động mở lại; BN quyết định có mở lại hay không.
+
+Mọi thay đổi thời gian phải ghi người thực hiện, thời điểm, giá trị cũ, giá trị mới và lý do.
+
+## 6. ĐIỂM DANH BẰNG QR VÀ THỦ CÔNG
+
+Đây là một trong những phân hệ ưu tiên cao nhất.
+
+### Cửa sổ QR
+
+- QR riêng cho từng buổi training.
+- Cửa sổ QR mở trước giờ bắt đầu 15 phút.
+- Cửa sổ QR đóng sau giờ bắt đầu 15 phút.
+- Người dùng phải đăng nhập bằng tài khoản hợp lệ.
+- Kiểm tra trùng điểm danh.
+- Dùng thời gian hệ thống để xác định thời điểm quét.
+- QR phải có cơ chế hạn chế giả mạo, tái sử dụng hoặc sử dụng ngoài buổi được cấp.
+- Nếu buổi training bị hủy, QR bị vô hiệu hóa.
+
+Không coi QR là bằng chứng tuyệt đối rằng thành viên đã tham dự toàn bộ buổi học.
+
+### Quy tắc đi trễ
+
+Ngưỡng đi trễ cố định là 10 phút sau giờ bắt đầu, áp dụng cho các buổi training của CLB.
+
+Ví dụ buổi training bắt đầu lúc 18:00:
+
+- Từ 17:45 đến trước 18:10: đúng giờ.
+- Từ 18:10 đến 18:15: đi trễ nhưng QR vẫn còn trong cửa sổ hoạt động.
+- Sau 18:15: không tự điểm danh bằng QR; phải xử lý bằng phương thức thủ công được ủy quyền.
+
+Lưu ý: cửa sổ QR và ngưỡng đi trễ là hai quy tắc độc lập.
+
+Nếu người phụ trách xác minh được giờ đến thực tế, lưu giờ đến đó. Không tự suy đoán giờ đến nếu không có căn cứ.
+
+### Trạng thái điểm danh
+
+Hỗ trợ:
+
+- Chưa điểm danh.
+- Có mặt đúng giờ.
+- Đi trễ.
+- Vắng có phép.
+- Vắng không phép.
+
+Trạng thái chưa điểm danh chỉ dùng trong thời gian buổi còn mở. Sau khi chốt danh sách, người phụ trách phải xử lý các trường hợp còn thiếu dữ liệu theo quy trình.
+
+Không tự động chuyển thành viên thành vắng mặt chỉ vì cửa sổ QR đã đóng.
+
+### Điểm danh thủ công và chốt danh sách
+
+- Người phụ trách buổi hoặc BTV có thể ghi nhận điểm danh thủ công.
+- Người phụ trách buổi chốt danh sách điểm danh.
+- Khi chốt, lưu người chốt và thời điểm chốt.
+- Sau khi chốt, BTV được sửa dữ liệu trong phạm vi quyền được giao.
+- Mỗi lần sửa phải ghi lý do, người sửa, thời điểm, giá trị trước và sau.
+- BN xử lý hoặc phê duyệt ngoại lệ thuộc thẩm quyền.
+
+### Giải trình và yêu cầu sửa điểm danh
+
+Phân biệt rõ hai loại yêu cầu:
+
+**A. Giải trình vắng mặt**
+
+- Thành viên gửi giải trình trong vòng 48 giờ kể từ giờ kết thúc chính thức của buổi training.
+- Người phụ trách buổi quyết định nội dung giải trình trong quy trình thông thường.
+- BTV ghi nhận quyết định vào dữ liệu điểm danh.
+- Nếu gửi sau hạn, BN quyết định có cho phép xem xét hay không; nếu được phép, người phụ trách buổi vẫn quyết định nội dung giải trình.
+- Việc gửi yêu cầu không đồng nghĩa với việc yêu cầu được chấp thuận.
+
+**B. Yêu cầu sửa điểm danh**
+
+- Thành viên gửi yêu cầu trong vòng 24 giờ kể từ giờ kết thúc chính thức.
+- Nếu quá 24 giờ, BTV tiếp nhận yêu cầu và BN quyết định có cho phép ngoại lệ hay không.
+- BTV kiểm tra yêu cầu điểm danh; nếu có tranh chấp hoặc không đồng thuận, BN giải quyết.
+- Lưu toàn bộ lịch sử xử lý.
+
+Không gộp thời hạn 24 giờ sửa điểm danh với thời hạn 48 giờ giải trình vắng mặt.
+
+### Quy tắc bổ sung
+
+- Chỉ lưu trạng thái cuối cùng cho trường hợp đến trễ hoặc rời sớm; không tạo trạng thái “rời sớm” riêng.
+- Chưa có ngưỡng rời sớm được xác định; không tự đặt ra.
+- Nếu người phụ trách vắng mặt, BĐH hoặc BN chỉ định người thay thế.
+- Nếu thay đổi điểm danh ảnh hưởng đến bản đánh giá đã công bố, đánh dấu bản đánh giá cần xem xét lại; không tự âm thầm thay đổi điểm số.
+
+### Buổi training bị hủy
+
+- Không ghi thành viên vắng mặt.
+- Vô hiệu hóa QR.
+- Vô hiệu hóa biểu mẫu phản hồi.
+- Không tính buổi đã hủy vào tỷ lệ vắng mặt hoặc tiêu chí đánh giá như một buổi đã diễn ra.
+
+## 7. PHẢN HỒI CHẤT LƯỢNG TRAINING
+
+Đây là khảo sát thành viên đánh giá chất lượng buổi training, không phải đánh giá điểm số cá nhân.
+
+### Tiêu chí phản hồi
+
+Mỗi tiêu chí dùng thang điểm từ 1 đến 5:
+
+1. Chất lượng nội dung.
+2. Khả năng truyền đạt của người hướng dẫn.
+3. Thời lượng buổi training có phù hợp hay không.
+4. Mức độ hữu ích của buổi training.
+
+Có thêm trường góp ý bằng văn bản, không bắt buộc.
+
+### Đối tượng và thời gian
+
+- Chỉ thành viên có ghi nhận tham dự mới đủ điều kiện phản hồi.
+- Mỗi thành viên chỉ được gửi một phản hồi cho mỗi buổi.
+- Thành viên có thể sửa phản hồi của mình đến khi biểu mẫu đóng.
+- Hạn mặc định là 24 giờ kể từ giờ kết thúc chính thức của buổi training.
+- Khi giờ kết thúc thay đổi, tính lại hạn phản hồi và thông báo thành viên đủ điều kiện.
+- Nếu biểu mẫu đã đóng, chỉ mở lại sau khi BN quyết định.
+- Khi BN cho phép mở lại, biểu mẫu mở thêm 24 giờ kể từ thời điểm mở lại.
+- Thông báo cho tất cả thành viên đủ điều kiện.
+- Thành viên đủ điều kiện vẫn chỉ có một phản hồi; phản hồi cũ được giữ và có thể chỉnh sửa trong thời gian mở lại.
+- Nếu buổi training bị hủy, không cho phép gửi phản hồi.
+
+Nếu dữ liệu điểm danh thay đổi sau khi biểu mẫu đã mở, hệ thống phải cập nhật điều kiện tham gia, lưu lịch sử thay đổi và giữ các phản hồi đã có. Không tự động xóa phản hồi khi trạng thái điểm danh thay đổi.
+
+### Ẩn danh
+
+Cho phép thành viên chọn gửi ẩn danh hoặc có danh tính.
+
+Đối với phản hồi ẩn danh:
+
+- Tách thông tin xác thực điều kiện tham gia khỏi nội dung phản hồi.
+- Vẫn kiểm tra người gửi có đủ điều kiện và đã gửi phản hồi hay chưa.
+- Người xem nội dung phản hồi không được xem danh tính người gửi.
+- Không để lộ liên kết giữa danh tính và nội dung phản hồi qua API, giao diện hoặc báo cáo.
+- Không công bố nội dung có thể nhận diện người gửi.
+
+Không đánh đồng việc ẩn tên hiển thị với việc bảo vệ danh tính thực sự.
+
+### Tổng hợp và công bố
+
+- BN được xem phản hồi chi tiết toàn CLB.
+- BĐH được xem phản hồi chi tiết trong phạm vi phụ trách.
+- BN xử lý phản hồi nhạy cảm, xúc phạm hoặc nghiêm trọng.
+- Chỉ công bố kết quả tổng hợp, không công bố danh tính người gửi.
+- Cần ít nhất 5 phản hồi mới đủ điều kiện công bố.
+- BN/BĐH phải xem xét trước khi công bố trong phạm vi phụ trách.
+- Kết quả công bố gồm điểm trung bình theo tiêu chí và ý kiến đã loại bỏ thông tin nhận dạng.
+- Nếu dưới 5 phản hồi, không công bố kết quả tổng hợp.
+- Nếu giờ kết thúc thay đổi sau khi biểu mẫu đã đóng, BN quyết định có mở lại hay không.
+- Nếu mở lại, phải lưu quyết định, lý do, người thực hiện và thời hạn mới.
+
+Phản hồi chất lượng training không tự động tác động đến điểm đánh giá cá nhân.
+
+## 8. QUẢN LÝ NHIỆM VỤ
+
+### Giao nhiệm vụ
+
+- Leader giao nhiệm vụ cho thành viên trong đơn vị được giao.
+- Thành viên cập nhật tiến độ, kết quả và minh chứng.
+- Với nhiệm vụ liên đơn vị, BĐH điều phối và BN giám sát.
+- Mỗi nhiệm vụ liên đơn vị cần có người chịu trách nhiệm chung, các nhiệm vụ con và người phụ trách từng nhiệm vụ con.
+- Leader chịu trách nhiệm các phần việc trong đơn vị mình.
+
+### Trạng thái nhiệm vụ
+
+Hỗ trợ tối thiểu:
+
+- Chưa bắt đầu.
+- Đang thực hiện.
+- Chờ xác nhận.
+- Cần chỉnh sửa.
+- Hoàn thành.
+- Quá hạn.
+- Đã hủy.
+
+Thành viên được nộp kết quả nhưng không tự xác nhận hoàn thành chính thức. Người được giao trách nhiệm xác nhận kết quả theo phân quyền.
+
+Khi thay đổi hạn, người phụ trách hoặc hủy nhiệm vụ, bắt buộc ghi lý do và lưu lịch sử.
+
+### Nhiệm vụ bị hủy
+
+- Không tự động coi nhiệm vụ bị hủy là hoàn thành hoặc thất bại.
+- Loại nhiệm vụ bị hủy khỏi tử số và mẫu số của tỷ lệ hoàn thành thông thường.
+- Giữ nhiệm vụ trong báo cáo lịch sử.
+- Nếu thành viên đã đóng góp trước khi nhiệm vụ bị hủy, leader có thể xem xét phần đóng góp theo tiêu chí đánh giá đã công bố.
+- Không tự động trừ điểm chỉ vì thành viên bảo lưu, rời CLB hoặc nhiệm vụ bị hủy.
+- Nếu lý do hủy liên quan đến trách nhiệm cá nhân, phải đánh giá theo tiêu chí đã công bố, không chỉ dựa vào trạng thái “Đã hủy”.
+
+Ví dụ: một thành viên có 5 nhiệm vụ, 3 hoàn thành, 1 bị hủy và 1 chưa hoàn thành. Tỷ lệ hoàn thành thông thường là 3/4 = 75%, vì nhiệm vụ bị hủy được loại khỏi mẫu số.
+
+Nếu một tháng không có nhiệm vụ được giao, tiêu chí hoàn thành nhiệm vụ là “Không áp dụng”, không phải 0 điểm.
+
+## 9. ĐÁNH GIÁ THÀNH VIÊN HẰNG THÁNG
+
+Đây là quy trình độc lập với phản hồi chất lượng training.
+
+### Quy trình
+
+- Chu kỳ đánh giá: hàng tháng.
+- Leader đánh giá thành viên thuộc phạm vi phụ trách.
+- BN phê duyệt cuối cùng.
+- Bộ tiêu chí gồm các tiêu chí chung và có thể có tiêu chí riêng của đơn vị.
+- Tất cả tiêu chí và tiêu chí riêng phải được BN phê duyệt trước khi áp dụng.
+- Mỗi tiêu chí được chấm từ 0 đến 10.
+- Không quy định trọng số cố định nếu chưa có quyết định nghiệp vụ khác.
+
+### Tính điểm
+
+Điểm tổng kết là trung bình cộng của các tiêu chí áp dụng.
+
+- Tiêu chí “Không áp dụng” không tham gia phép tính.
+- Tiêu chí thiếu dữ liệu không tự động được chấm 0.
+- Nếu không có tiêu chí nào đủ điều kiện, trạng thái là “Chưa đủ dữ liệu” và không có điểm tổng kết.
+- Hiển thị tối đa 2 chữ số thập phân, nhưng giữ giá trị chưa làm tròn trong dữ liệu.
+
+### Thời hạn
+
+- Leader hoàn thành đánh giá chậm nhất ngày 3 của tháng tiếp theo.
+- BN phê duyệt chậm nhất ngày 5 của tháng tiếp theo.
+- Nếu thiếu dữ liệu hoặc leader quá hạn, đánh dấu “Chưa đủ dữ liệu”, nhắc người phụ trách và không công bố điểm.
+
+### Trường hợp đặc biệt
+
+- Thành viên mới: đánh giá theo thời gian hoạt động thực tế và dữ liệu đủ điều kiện.
+- Thành viên chuyển đơn vị giữa tháng: hai leader phối hợp đánh giá các giai đoạn thuộc phạm vi quản lý của mình; BN phê duyệt kết quả cuối cùng.
+- Thành viên bảo lưu hoặc rời CLB giữa tháng: chỉ đánh giá theo thời gian hoạt động thực tế và dữ liệu đủ điều kiện trước ngày hiệu lực quyết định.
+- Nhiệm vụ bị hủy: xử lý theo quy tắc nhiệm vụ ở trên.
+
+### Khiếu nại điểm đánh giá
+
+- Thành viên được gửi khiếu nại trong vòng 7 ngày lịch kể từ ngày công bố kết quả.
+- BN quyết định cuối cùng và có thể yêu cầu leader giải trình.
+- Khi đang khiếu nại, giữ nguyên bản đánh giá đã công bố và đánh dấu trạng thái đang được xem xét.
+- Nếu khiếu nại được chấp nhận, tạo phiên bản đánh giá mới và giữ nguyên lịch sử phiên bản cũ.
+- Không âm thầm ghi đè điểm đã công bố.
+
+Mỗi kỳ đánh giá phải lưu tiêu chí và phiên bản tiêu chí được áp dụng tại thời điểm đánh giá.
+
+## 10. THÔNG BÁO VÀ NHẮC VIỆC
+
+Sử dụng thông báo trong ứng dụng và email.
+
+### Lịch nhắc
+
+- Trước hạn 24 giờ.
+- Trước hạn 3 giờ.
+- Sau hạn: một lần mỗi ngày cho đến khi xử lý hoặc không còn hiệu lực.
+
+Áp dụng cho nhiệm vụ, yêu cầu chờ phê duyệt và các kỳ đánh giá theo lịch đã xác định.
+
+### Quá hạn
+
+- Người chịu trách nhiệm và leader phụ trách nhận thông báo quá hạn hằng ngày.
+- Khi quá hạn 3 ngày, thông báo cấp quản lý tiếp theo theo phạm vi công việc.
+- Không tự động trừ điểm hoặc tạo hình phạt do quá hạn chỉ dựa trên việc chuyển cấp.
+
+### Thay đổi và dừng nhắc
+
+- Khi thay đổi hạn, người phụ trách hoặc trạng thái, chỉ thông báo cho người bị ảnh hưởng trực tiếp.
+- Tính lại lịch nhắc sau khi thay đổi thời hạn.
+- Ngừng gửi nhắc theo lịch cũ cho người không còn phụ trách.
+- Dừng nhắc khi công việc đã được xử lý, phê duyệt, hủy hoặc hết hiệu lực.
+- Chống gửi trùng thông báo.
+- Lưu thời điểm tạo, người nhận, kênh gửi và trạng thái gửi.
+- Nếu email thất bại, thông báo trong ứng dụng vẫn được giữ.
+
+## 11. BÁO CÁO VÀ XUẤT DỮ LIỆU
+
+Cần có báo cáo cho:
+
+- Điểm danh.
+- Nhiệm vụ.
+- Đánh giá thành viên.
+- Toàn CLB.
+- Từng đơn vị.
+
+Hỗ trợ lọc theo tháng, kỳ đánh giá, đơn vị, trạng thái và thành viên tùy quyền truy cập.
+
+### Quyền xuất
+
+- BN, admin và leader được xuất báo cáo trong phạm vi quyền truy cập hiện có.
+- Định dạng: Excel và PDF.
+- Dữ liệu xuất phải tuân theo đúng bộ lọc và quyền truy cập.
+- Không mặc nhiên đưa lý do bảo lưu/rời CLB hoặc dữ liệu nhạy cảm vào báo cáo.
+- Lưu nhật ký xuất dữ liệu gồm người xuất, thời điểm, loại dữ liệu và bộ lọc.
+
+Không được để người dùng truy cập dữ liệu ngoài phạm vi chỉ bằng cách sửa tham số trên trình duyệt hoặc gọi trực tiếp API.
+
+## 12. NHẬT KÝ KIỂM TOÁN
+
+Mọi thao tác quan trọng phải lưu nhật ký, bao gồm:
+
+- Thay đổi trạng thái thành viên.
+- Thay đổi đơn vị và chức vụ.
+- Sửa điểm danh sau khi chốt.
+- Quyết định giải trình hoặc ngoại lệ.
+- Tạo, thay đổi, hủy nhiệm vụ.
+- Phê duyệt, công bố hoặc chỉnh sửa đánh giá.
+- Xử lý khiếu nại.
+- Mở lại biểu mẫu phản hồi.
+- Thay đổi quyền truy cập.
+- Xuất báo cáo.
+
+Mỗi bản ghi cần lưu thông tin phù hợp: người thực hiện, thời điểm, đối tượng bị thay đổi, giá trị trước/sau, lý do và kết quả thao tác.
+
+Quyền xem nhật ký:
+
+- BN và admin: trong phạm vi được cấp trên toàn CLB.
+- Leader: trong phạm vi đơn vị được giao.
+- Member: không được xem nhật ký quản trị.
+
+Nhật ký không được sửa hoặc xóa bởi người dùng thông thường.
+
+## 13. WEBSITE CÔNG KHAI VÀ GIAO DIỆN
+
+Giữ lại các trang công khai đang có nếu còn phù hợp:
+
+- Trang chủ.
+- Giới thiệu.
+- Hoạt động.
+- Sự kiện.
+- Dự án.
+- Tin tức.
+- Tham gia.
+- Liên hệ.
+
+Ưu tiên giao diện tiếng Việt, dễ sử dụng trên máy tính và điện thoại.
+
+Khu vực nội bộ cần có điều hướng rõ ràng theo quyền:
+
+- Dashboard.
+- Hồ sơ thành viên.
+- Training.
+- Điểm danh.
+- Phản hồi training.
+- Nhiệm vụ.
+- Đánh giá thành viên.
+- Báo cáo.
+- Quản lý thành viên.
+- Cấu hình và phân quyền.
+
+Sử dụng trạng thái hiển thị rõ ràng như chờ xử lý, đã duyệt, bị từ chối, quá hạn, đã hủy và chưa đủ dữ liệu.
+
+Mỗi biểu mẫu cần kiểm tra dữ liệu đầu vào, thông báo lỗi rõ ràng, trạng thái đang xử lý và xác nhận kết quả. Những thao tác quan trọng như chốt điểm danh, hủy nhiệm vụ, duyệt đánh giá hoặc mở lại biểu mẫu cần có bước xác nhận phù hợp.
+
+Không công khai dữ liệu nội bộ lên website công khai.
+
+## 14. CÁC NGUYÊN TẮC KHÔNG ĐƯỢC VI PHẠM
+
+1. Không xóa cứng hồ sơ thành viên hoặc lịch sử nghiệp vụ.
+2. Không tự động phê duyệt giải trình, đánh giá hoặc yêu cầu ngoại lệ.
+3. Không để admin mặc nhiên thay thế thẩm quyền nghiệp vụ của BN.
+4. Không để thành viên xem dữ liệu cá nhân của người khác.
+5. Không để người gửi phản hồi ẩn danh bị lộ danh tính qua dữ liệu hoặc API.
+6. Không công bố tổng hợp phản hồi khi chưa đạt tối thiểu 5 phản hồi.
+7. Không tự động trừ điểm do nhiệm vụ bị hủy hoặc do thành viên bảo lưu/rời CLB.
+8. Không tự động chấm 0 cho dữ liệu thiếu hoặc tiêu chí không áp dụng.
+9. Không tự động mở lại biểu mẫu đã đóng nếu chưa có quyết định của BN.
+10. Không coi giao diện hoạt động là bằng chứng rằng backend, bảo mật hoặc thông báo đã hoạt động thật.
+
+## 15. KẾ HOẠCH TRIỂN KHAI
+
+Thực hiện theo các giai đoạn, không sửa toàn bộ dự án một cách thiếu kiểm soát.
+
+### Giai đoạn 1 — Khảo sát và chuẩn hóa
+
+- Kiểm tra toàn bộ source code.
+- Xác định component có thể tái sử dụng.
+- Kiểm tra dữ liệu mẫu và mô hình dữ liệu.
+- Lập danh sách chức năng đang có, còn thiếu và cần sửa.
+- Đề xuất cấu trúc dữ liệu, phân quyền và kiến trúc backend.
+- Không xóa tính năng hiện có trước khi xác định ảnh hưởng.
+
+### Giai đoạn 2 — Nền tảng hệ thống
+
+- Hoàn thiện xác thực và phân quyền.
+- Chuẩn hóa ba đơn vị và mô hình vai trò.
+- Chuẩn hóa hồ sơ thành viên, trạng thái và lịch sử.
+- Xây dựng lưu trữ dữ liệu tập trung và kiểm soát truy cập.
+
+### Giai đoạn 3 — Training và điểm danh
+
+- Tạo và quản lý buổi training.
+- QR và điểm danh thủ công.
+- Chốt danh sách, giải trình và sửa điểm danh.
+- Quản lý ngoại lệ, nhật ký và quyền truy cập.
+
+### Giai đoạn 4 — Phản hồi training
+
+- Biểu mẫu phản hồi.
+- Ẩn danh và xác minh điều kiện tham gia.
+- Tổng hợp điểm, lọc thông tin nhận dạng.
+- Duyệt và công bố kết quả.
+- Mở lại biểu mẫu theo quyết định của BN.
+
+### Giai đoạn 5 — Nhiệm vụ và đánh giá
+
+- Giao nhiệm vụ và theo dõi tiến độ.
+- Nhiệm vụ liên đơn vị.
+- Đánh giá thành viên hàng tháng.
+- Phê duyệt, khiếu nại và lịch sử phiên bản.
+
+### Giai đoạn 6 — Báo cáo và thông báo
+
+- Báo cáo.
+- Xuất Excel/PDF.
+- Nhắc việc.
+- Nhật ký xuất dữ liệu và kiểm toán.
+
+### Giai đoạn 7 — Kiểm thử và hoàn thiện
+
+- Kiểm tra phân quyền ở cả giao diện và backend.
+- Kiểm thử các trường hợp đúng hạn, quá hạn, bị hủy và ngoại lệ.
+- Kiểm thử các mốc thời gian 10 phút, 15 phút, 24 giờ và 48 giờ.
+- Kiểm thử đánh giá có tiêu chí không áp dụng hoặc thiếu dữ liệu.
+- Kiểm thử nhiều người dùng cùng thao tác.
+- Kiểm tra responsive, lỗi giao diện, lỗi TypeScript và dữ liệu không nhất quán.
+- Viết hướng dẫn cấu hình, chạy ứng dụng và triển khai.
+
+## 16. TIÊU CHÍ NGHIỆM THU
+
+Chỉ coi một chức năng là hoàn thành khi đáp ứng cả giao diện, dữ liệu và quyền truy cập.
+
+Các luồng cần kiểm thử tối thiểu:
+
+1. Tạo training không thể hoàn thành nếu thiếu người phụ trách.
+2. Quét QR đúng cửa sổ và bị từ chối ngoài cửa sổ.
+3. Thành viên đến ở phút thứ 10 được xác định là đi trễ.
+4. Buổi bị hủy không ghi vắng mặt và không mở QR/biểu mẫu.
+5. Giải trình và yêu cầu sửa điểm danh tuân thủ hai thời hạn riêng biệt.
+6. Chỉnh sửa điểm danh sau khi chốt có nhật ký.
+7. Thành viên không tham dự không thể gửi phản hồi.
+8. Phản hồi ẩn danh không để lộ người gửi cho người xem nội dung.
+9. Dưới 5 phản hồi thì không công bố kết quả tổng hợp.
+10. Mở lại biểu mẫu cần quyết định của BN và tạo hạn mới 24 giờ.
+11. Đánh giá thiếu dữ liệu không tự động bị chấm 0.
+12. Khiếu nại đánh giá giữ nguyên bản đã công bố và tạo phiên bản mới nếu được chấp nhận.
+13. Nhiệm vụ bị hủy không tự động được tính là hoàn thành hoặc thất bại.
+14. Thành viên bảo lưu không nhận nhiệm vụ mới hoặc điểm danh.
+15. Khôi phục thành viên không làm mất lịch sử.
+16. Leader không truy cập được dữ liệu ngoài phạm vi được giao.
+17. Thành viên không xem được dữ liệu cá nhân của thành viên khác.
+18. Xuất Excel/PDF tuân thủ phân quyền và có nhật ký.
+19. Nhắc việc không gửi trùng và được tính lại khi thời hạn thay đổi.
+20. Các dữ liệu lịch sử và quyết định phê duyệt được bảo toàn sau khi cập nhật ứng dụng.
+
+## 17. CÁCH LÀM VIỆC VỚI SOURCE CODE
+
+Bắt đầu bằng việc khảo sát source code thực tế và xác định trạng thái của dự án. Sau đó triển khai theo từng giai đoạn có thể kiểm tra được.
+
+Nếu thiếu cấu hình Firebase hoặc dịch vụ ngoài, hãy nêu rõ thông tin cần thiết và cung cấp hướng dẫn cấu hình; không giả vờ rằng backend đã được kết nối.
+
+Nếu gặp quy tắc nghiệp vụ chưa được xác định, không tự sáng tạo quy tắc làm thay đổi quyền lợi thành viên. Hãy giữ hành vi an toàn, nêu rõ điểm còn thiếu và đề xuất phương án để người quản lý quyết định.
+
+Không chỉ trả về bản thiết kế hoặc danh sách công việc. Hãy thực sự sửa và hoàn thiện source code trong môi trường dự án khi các công cụ cho phép, kiểm tra kết quả, chỉ rõ các chức năng đã hoạt động và các bước cấu hình còn cần người dùng thực hiện.
+
+**Mục tiêu cuối cùng:** BK-IC Digital Hub phải trở thành hệ thống quản lý CLB có dữ liệu nhất quán, quy trình nghiệp vụ rõ ràng, phân quyền an toàn, lịch sử đầy đủ và giao diện dễ sử dụng; không chỉ là một prototype có giao diện đẹp.

@@ -1,0 +1,8 @@
+{
+  "name": "Remix BK-IC Digital Hub",
+  "description": "Cổng thông tin \u0026 Nền tảng Quản trị Câu lạc bộ Khởi nghiệp và Đổi mới sáng tạo - Trường Đại học Bách khoa – Đại học Đà Nẵng (DUT)",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

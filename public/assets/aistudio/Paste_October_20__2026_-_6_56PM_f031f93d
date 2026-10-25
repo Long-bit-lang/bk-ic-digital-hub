@@ -1,0 +1,1393 @@
+# MASTER PROMPT: BUILD BK-IC DIGITAL HUB
+
+## ROLE & MISSION
+
+You are a world-class multidisciplinary team consisting of:
+
+- Senior Creative Director specialized in Apple-inspired digital experiences.
+- Award-winning UI/UX Designer.
+- Senior Full-Stack Software Engineer.
+- Frontend Animation Engineer.
+- Firebase Architect and Security Engineer.
+- Product Manager specializing in university communities and membership management.
+
+Your mission is to **DESIGN AND BUILD A COMPLETE, BEAUTIFUL, RESPONSIVE, FUNCTIONAL WEB APPLICATION** called:
+
+**BK-IC DIGITAL HUB**
+
+This is the official-facing digital platform concept for:
+
+**BK-IC — Bách Khoa Innovation Club**
+
+**Câu lạc bộ Khởi nghiệp và Đổi mới sáng tạo**
+
+**Trường Đại học Bách khoa – Đại học Đà Nẵng (DUT).**
+
+The platform must combine two products:
+
+1. A premium public-facing landing page that attracts students, showcases innovative projects, introduces the club, and supports recruitment.
+2. A secure internal club management platform for members and administrators, including weekly attendance, QR check-in, activity evaluation, member management, and analytics.
+
+This must be a REAL, RUNNABLE APPLICATION, not merely a Figma-style mockup or static UI.
+
+Prioritize a stunning public website and a clean, fully operational internal system.
+
+All public-facing UI text must be in natural, polished Vietnamese, except intentional English branding and short creative taglines.
+
+---
+
+# 1. VISUAL REFERENCE & CREATIVE DIRECTION
+
+## Primary reference website
+
+https://hire.dsuc.fun/
+
+Study this website if browsing is available.
+
+The reference uses an editorial recruitment experience, storytelling through scroll, large typography, team introductions, community photographs, and strong calls to action.
+
+Draw inspiration from its:
+
+- Emotional, narrative-driven presentation.
+- Strong full-screen hero experience.
+- Generous editorial typography.
+- Section-by-section storytelling.
+- Elegant navigation.
+- Carefully arranged photography.
+- Recruitment-oriented messaging.
+- Immersive gallery and community sections.
+- Smooth interactive transitions.
+
+DO NOT copy the DSUC website, its layout exactly, code, graphics, wording, identity, or brand assets.
+
+Translate its creative qualities into an ORIGINAL design appropriate for BK-IC.
+
+## Additional design inspiration
+
+Apple.com — premium minimalism, precise spacing, typography, visual hierarchy, restrained animations.
+
+Apple product launch pages — cinematic hero sections, scroll-triggered reveals, product-storytelling techniques.
+
+Linear.app — polished application interface, thoughtful micro-interactions, restrained visual system.
+
+Vercel.com — modern technical branding, clean component architecture, strong contrast.
+
+Stripe.com — refined gradients, intelligent composition and responsive layouts.
+
+## Design philosophy
+
+**APPLE-LIKE MINIMALISM MEETS STUDENT INNOVATION CULTURE.**
+
+The website must feel:
+
+- Premium but approachable.
+- Innovative but trustworthy.
+- Minimal but not empty.
+- Dynamic but not distracting.
+- Academic but youthful.
+- Technologically advanced without appearing like a cryptocurrency or financial trading website.
+- Beautiful on both desktop and mobile.
+
+Avoid generic AI-generated SaaS templates.
+
+Avoid repetitive rows of identical cards, excessive purple gradients, oversized glowing orbs, and unnecessary glassmorphism.
+
+Do not generate a bland corporate dashboard.
+
+The landing page should feel like a meticulously art-directed digital experience.
+
+---
+
+# 2. BRAND IDENTITY
+
+Brand name: BK-IC
+
+Full name: Bách Khoa Innovation Club.
+
+Vietnamese name: Câu lạc bộ Khởi nghiệp và Đổi mới sáng tạo.
+
+Affiliation: Trường Đại học Bách khoa – Đại học Đà Nẵng.
+
+Suggested tagline:
+
+**"Từ ý tưởng đầu tiên, đến những đổi mới tạo nên khác biệt."**
+
+English supporting tagline:
+
+**"Where Ideas Become Impact."**
+
+These are proposed marketing taglines, not claims of officially adopted slogans.
+
+## Brand colors
+
+Primary background: #F8FAFC
+
+Pure white: #FFFFFF
+
+Main text: #101828
+
+Innovation Blue: #245BFA
+
+Soft blue: #DCEBFF
+
+Iris accent: #8B84F6
+
+Muted text: #667085
+
+Subtle border: #E5E7EB
+
+Use these as a starting point rather than a rigid palette.
+
+Create sophisticated linear and radial gradients only where they improve visual hierarchy.
+
+Preferred overall style: light mode first, with an optional beautiful dark mode.
+
+## Typography
+
+Use a font family with reliable Vietnamese support.
+
+Preferred font: Be Vietnam Pro or Inter.
+
+Use editorial headline typography inspired by Apple SF Pro.
+
+Headings must be large, refined and responsive.
+
+Use fluid typography with CSS clamp().
+
+Suggested desktop hero font size: 72–112px.
+
+Mobile hero: 40–56px.
+
+Body text: 16–18px.
+
+Maintain excellent line heights and readability for Vietnamese diacritics.
+
+## Logo
+
+Create a temporary original typography-based BK-IC wordmark using clean geometric letterforms.
+
+Include a minimal symbolic motif representing innovation, connection and forward movement.
+
+Do not impersonate the university's official logo.
+
+Support replacing the temporary logo with approved image or SVG assets later.
+
+---
+
+# 3. WEBSITE INFORMATION ARCHITECTURE
+
+Build the following routes:
+
+PUBLIC WEBSITE:
+
+- `/` — Homepage
+- `/about` — About BK-IC
+- `/activities` — Activities
+- `/events` — Events and workshops
+- `/projects` — Innovation projects
+- `/news` — News and announcements
+- `/join` — Member recruitment
+- `/contact` — Contact and collaboration
+
+AUTHENTICATION:
+
+- `/login`
+- `/auth/callback`
+- `/pending-approval`
+
+MEMBER PORTAL:
+
+- `/portal`
+- `/portal/profile`
+- `/portal/sessions`
+- `/portal/attendance`
+- `/portal/evaluations`
+- `/portal/feedback`
+
+ADMIN PORTAL:
+
+- `/admin`
+- `/admin/members`
+- `/admin/sessions`
+- `/admin/attendance`
+- `/admin/evaluations`
+- `/admin/feedback`
+- `/admin/applications`
+- `/admin/content`
+- `/admin/settings`
+
+Use shared components and appropriate layouts instead of duplicating the interface.
+
+Implement meaningful loading states, empty states, error states and success notifications.
+
+Navigation must work.
+
+Every visible button must perform a meaningful action.
+
+---
+
+# 4. HOMEPAGE — HIGH-END LANDING PAGE
+
+This is the most important visual part of the application.
+
+Design a memorable, visually polished landing page.
+
+## 4.1. Navigation bar
+
+Create a floating, translucent navigation bar similar to the sophistication of modern Apple interfaces.
+
+Requirements:
+
+- Sticky navigation.
+- Smooth transition on scroll.
+- Refined backdrop blur.
+- BK-IC wordmark on the left.
+- Navigation links in the center.
+- Login and Join BK-IC calls to action on the right.
+- Animated active link indicator.
+- Responsive mobile menu.
+- Accessible keyboard interaction.
+
+Desktop navigation:
+
+BK-IC | Giới thiệu | Hoạt động | Dự án | Sự kiện | Tham gia | Đăng nhập
+
+The navigation should be understated and elegant.
+
+## 4.2. Hero section
+
+Create an impressive full-viewport hero.
+
+Small eyebrow:
+
+BACH KHOA INNOVATION CLUB
+
+Primary headline:
+
+**"Ý tưởng hôm nay.**
+
+**Tương lai ngày mai."**
+
+Supporting text:
+
+"Một cộng đồng dành cho những người trẻ dám nghĩ, dám thử nghiệm và cùng nhau biến những ý tưởng sáng tạo thành giá trị thực tiễn."
+
+CTA 1: "Khám phá BK-IC"
+
+CTA 2: "Trở thành thành viên"
+
+Create an original abstract visual composition using soft blue gradients, delicate light patterns, interconnected points, geometric forms, and subtle depth.
+
+The visual should suggest a meeting point between engineering, innovation and entrepreneurship.
+
+Use cinematic but lightweight motion.
+
+Suggested animation sequence:
+
+1. Small eyebrow fades in.
+2. Headline reveals with elegant staggered movement.
+3. Supporting text and buttons appear.
+4. Background composition slowly becomes visible.
+5. Subtle parallax responds to scrolling.
+6. A discreet "Cuộn để khám phá" indicator invites exploration.
+
+Do not use loud or distracting visual effects.
+
+Do not use autoplay background video that significantly hurts performance.
+
+## 4.3. Manifesto section
+
+Full-width editorial section.
+
+Headline:
+
+**"Không chỉ là một câu lạc bộ."**
+
+**"Đây là nơi ý tưởng bắt đầu."**
+
+Present three themes:
+
+01 — THINK
+
+Tư duy khác biệt.
+
+02 — BUILD
+
+Biến ý tưởng thành giải pháp.
+
+03 — IMPACT
+
+Tạo giá trị cho cộng đồng.
+
+Use asymmetric composition, oversized typography and premium spacing.
+
+Animate each theme on scroll.
+
+## 4.4. About section
+
+Section title:
+
+"BK-IC là ai?"
+
+Introduce the club using the confirmed name and university affiliation.
+
+Suggested copy:
+
+"BK-IC là cộng đồng sinh viên quan tâm đến khởi nghiệp và đổi mới sáng tạo tại Trường Đại học Bách khoa, Đại học Đà Nẵng. Chúng mình hướng tới một môi trường nơi sinh viên có thể kết nối, học hỏi, thử nghiệm ý tưởng và cùng nhau phát triển những giải pháp có ý nghĩa."
+
+This is proposed website copy, not a quotation from an official club charter.
+
+Create a premium split layout:
+
+- Large editorial typography on one side.
+- Authentic club imagery or a tasteful placeholder on the other.
+- Clear links to About and Projects pages.
+
+Do not invent club statistics.
+
+If verified metrics are unavailable, omit the metrics component or display neutral explanatory content rather than fake numerical achievements.
+
+## 4.5. Club activity ecosystem
+
+Create a beautifully designed section explaining what members can experience.
+
+Possible content categories:
+
+- Innovation Workshops.
+- Startup Training.
+- Business Model Development.
+- Design Thinking.
+- Startup Pitching.
+- Mentoring and Networking.
+- Project Development.
+- Innovation Competitions.
+
+These are suggested activity categories, not a verified list of events already conducted by BK-IC.
+
+Use large editorial panels instead of generic repetitive cards.
+
+Each activity should feature:
+
+- Category number.
+- Short title.
+- Description.
+- Visual illustration or curated image.
+- Explore action.
+
+Use a refined hover and scroll interaction.
+
+## 4.6. Community gallery
+
+Section headline:
+
+**"Những ý tưởng lớn luôn bắt đầu từ những con người."**
+
+Build an engaging photo gallery inspired by the storytelling approach of DSUC.
+
+Requirements:
+
+- Responsive asymmetric grid or horizontal gallery.
+- Large imagery.
+- Hover transitions.
+- Image lightbox.
+- Next/previous controls.
+- Keyboard accessibility.
+- Mobile swipe support.
+- Captions and alt text.
+
+Support CMS-controlled images.
+
+Only publish authentic BK-IC images with appropriate permission.
+
+If authentic images are not provided, create clearly labeled demonstration assets and make them replaceable.
+
+Do not use photographs from DSUC or other organizations and misrepresent them as BK-IC activities.
+
+## 4.7. Projects showcase
+
+Section title:
+
+**"From Ideas to Impact."**
+
+Introduce the possibility of innovation projects developed by club members.
+
+Each project card should contain:
+
+- Project image.
+- Project name.
+- Category.
+- Short description.
+- Team name, only if verified.
+- Project status.
+- View details action.
+
+Use visually varied layouts.
+
+Project data must come from a CMS or verified content records.
+
+Do not claim a particular project belongs to BK-IC without confirmation.
+
+When no approved projects are available, show a tasteful "Các dự án sẽ sớm được giới thiệu" state rather than fabricated case studies.
+
+## 4.8. Events and workshops
+
+Show upcoming club sessions and events.
+
+Fields:
+
+- Title.
+- Date.
+- Time.
+- Location.
+- Event type.
+- Cover image.
+- Registration or details action.
+- Status: Upcoming / Ongoing / Finished.
+
+All events should be retrieved from stored data.
+
+Do not invent actual upcoming dates.
+
+Implement a visually polished event list with optional calendar view.
+
+Past events can have an approved photo gallery and recap.
+
+## 4.9. Community and membership benefits
+
+Section title:
+
+"Bạn sẽ tìm thấy gì tại BK-IC?"
+
+Highlight four benefits:
+
+- Kết nối cộng đồng sáng tạo.
+- Phát triển tư duy và kỹ năng khởi nghiệp.
+- Thực hành qua dự án và hoạt động thực tế.
+- Tiếp cận cơ hội học hỏi và hợp tác.
+
+Use storytelling rather than aggressive marketing language.
+
+## 4.10. Recruitment section
+
+Create an emotionally engaging large final CTA section.
+
+Headline:
+
+**"Ý tưởng tiếp theo có thể bắt đầu từ bạn."**
+
+Supporting copy:
+
+"Bạn không cần có sẵn một startup. Chỉ cần sự tò mò, tinh thần chủ động và mong muốn cùng những người bạn mới tạo ra điều khác biệt."
+
+Button:
+
+"Gia nhập BK-IC"
+
+Open the recruitment flow.
+
+## 4.11. Footer
+
+Include:
+
+- BK-IC branding.
+- University affiliation.
+- Navigation links.
+- Public contact information when confirmed.
+- Social media links when confirmed.
+- Privacy policy.
+- Copyright information.
+
+Do not invent social media URLs or contact information.
+
+---
+
+# 5. RESEARCH & VERIFIED CONTENT
+
+Before populating the public website, attempt to collect relevant public information from legitimate sources.
+
+Research topics:
+
+- Official BK-IC name.
+- University affiliation.
+- Public launch information.
+- Public events and club announcements.
+- Approved images.
+- Club programs.
+- Official social media accounts, if confidently identified.
+
+Start with these known references:
+
+1. https://baodanang.vn/thuc-day-lien-ket-trong-khoi-nghiep-3330893.html
+
+2. https://dut.udn.vn/
+
+3. https://hire.dsuc.fun/ — visual reference only, not an information source about BK-IC.
+
+A Báo Đà Nẵng article dated April 4, 2026 includes a caption identifying the launch of "Câu lạc bộ Khởi nghiệp và đổi mới sáng tạo - Bách Khoa Innovation Club."
+
+Distinguish this specific club from similarly named clubs at other universities, especially Ho Chi Minh City University of Technology.
+
+Do not assume that earlier startup clubs at DUT are legally or organizationally the same entity as BK-IC.
+
+Very important data-integrity rules:
+
+- Never invent the number of members.
+- Never invent founding dates.
+- Never invent awards.
+- Never invent leadership members.
+- Never invent partners or sponsors.
+- Never create fake published events.
+- Never generate fake testimonials attributed to real people.
+- Never fabricate university logos.
+- Never invent official recruitment requirements.
+- Never scrape private member information.
+- Respect website access restrictions and image copyrights.
+
+If browsing is unavailable, proceed using the confirmed details included in this prompt.
+
+Create a content provenance structure with:
+
+`title`, `sourceUrl`, `publishedAt`, `verifiedAt`, `verificationStatus`, `contentType`.
+
+Use `draft`, `verified`, `published`, and `archived` content states.
+
+Only verified and approved entries may appear as factual content on the public website.
+
+Create an admin interface to update the website without editing code.
+
+---
+
+# 6. MEMBER RECRUITMENT SYSTEM
+
+Build an online application form.
+
+Suggested fields:
+
+- Full name.
+- Student ID.
+- Email.
+- Faculty.
+- Class.
+- Academic year.
+- Interest areas.
+- Motivation for joining.
+- Skills and experience (optional).
+
+Collect only information necessary for club recruitment.
+
+Applications must be stored in the database.
+
+Statuses:
+
+- Pending.
+- Under review.
+- Approved.
+- Rejected.
+
+Administrative features:
+
+- View applications.
+- Search and filter applicants.
+- Approve or reject.
+- Add internal review notes.
+- Export applications.
+- Convert approved applicants into club members.
+
+Do not automatically grant member privileges to anyone simply because they log in with Google.
+
+A new Google account must remain a guest or pending applicant until membership approval.
+
+Recruitment must support open/closed application periods.
+
+---
+
+# 7. AUTHENTICATION & ROLES
+
+Use Firebase Authentication with Google Sign-In.
+
+If Firebase is available in Google AI Studio, offer to provision it through the native integration.
+
+Implement session persistence, secure logout and authentication state handling.
+
+Create these application roles:
+
+1. Guest.
+2. Applicant.
+3. Member.
+4. Committee Leader.
+5. Club Administrator.
+6. System Administrator.
+
+Permission examples:
+
+Guest:
+
+- Access public website.
+- Submit recruitment application.
+
+Applicant:
+
+- Check application status.
+- Edit permitted application information.
+
+Member:
+
+- View their own profile.
+- View session schedule.
+- Check in to sessions.
+- View personal attendance history.
+- Submit feedback.
+- View their own evaluations.
+
+Committee Leader:
+
+- View members assigned to their committee.
+- Manage authorized session records.
+- Submit evaluations for authorized members.
+
+Club Administrator:
+
+- Manage members.
+- Manage sessions.
+- Review attendance.
+- Approve evaluations.
+- Review applications.
+- View club-wide reports.
+- Manage public content.
+
+System Administrator:
+
+- Manage permissions.
+- Configure settings.
+- Access security and audit information.
+
+Enforce permissions on the server and in Firestore Security Rules.
+
+Never rely on hidden buttons or frontend checks as security controls.
+
+Never let users assign themselves administrator roles.
+
+Administrator accounts must be provisioned using a secure process.
+
+---
+
+# 8. MEMBER PORTAL
+
+Design a beautiful and intuitive personal dashboard.
+
+This interface should feel like a premium productivity application.
+
+Use subtle borders, spacious layouts, refined typography and clear information hierarchy.
+
+Avoid overly crowded dashboard widgets.
+
+## Dashboard overview
+
+Display:
+
+- Personalized greeting.
+- Member name.
+- Current committee.
+- Next upcoming session.
+- Personal attendance rate.
+- Number of attended sessions.
+- Personal activity score if available.
+- Latest club announcement.
+- Quick check-in shortcut.
+
+## Member profile
+
+Fields:
+
+- Full name.
+- Student ID.
+- Faculty.
+- Class.
+- Email.
+- Join date.
+- Committee.
+- Position.
+- Membership status.
+
+Allow authorized profile editing.
+
+## Attendance history
+
+Create a clean attendance table showing:
+
+- Session title.
+- Date.
+- Check-in time.
+- Attendance status.
+- Notes.
+
+Include filters and a timeline view.
+
+## Evaluations
+
+Allow members to see their approved results.
+
+Never expose another member's private evaluation or personal information.
+
+Provide a simple explanation of how scores are calculated.
+
+---
+
+# 9. WEEKLY ATTENDANCE SYSTEM
+
+Build a real QR-based attendance system.
+
+This is a core feature, not a visual simulation.
+
+## Admin creates a session
+
+Fields:
+
+- Session title.
+- Description.
+- Session date.
+- Starting time.
+- Ending time.
+- Location.
+- Organizer.
+- Target participants.
+- Attendance opening time.
+- Late threshold.
+- Attendance closing time.
+- QR rotation interval.
+- Session status.
+
+Statuses:
+
+Draft / Scheduled / Open / Closed / Cancelled.
+
+## Dynamic QR attendance
+
+The administrator opens a session and projects a QR code.
+
+The QR code should rotate approximately every 20–30 seconds, configurable by the administrator.
+
+Each token should include or reference:
+
+- Session identifier.
+- Issued time.
+- Expiration time.
+- Cryptographically secure signature or opaque server-generated token.
+
+Validate the token server-side.
+
+Never trust client-supplied timestamps.
+
+Do not expose secret signing keys in frontend code.
+
+## Member check-in workflow
+
+1. Member signs in.
+2. Member scans the QR code using the phone camera or follows its check-in link.
+3. App checks authentication.
+4. Server validates the token.
+5. Server verifies the member is eligible.
+6. Server checks the attendance window.
+7. Server checks for duplicate attendance.
+8. Attendance is stored atomically.
+9. Member receives a success or informative error message.
+
+Use consistent server timestamps.
+
+One member can have at most one active attendance record per session.
+
+## Attendance statuses
+
+- Present.
+- Late.
+- Excused absence.
+- Unexcused absence.
+- Pending review.
+
+Allow administrators to approve excused absences and manually correct records.
+
+Every manual correction must capture:
+
+- Previous status.
+- New status.
+- Administrator identity.
+- Timestamp.
+- Reason.
+
+Important: rotating QR codes reduce casual misuse but cannot eliminate all forms of remote sharing.
+
+Do not falsely describe the system as completely preventing proxy attendance.
+
+Provide optional in-person verification by a session organizer.
+
+## Attendance dashboard
+
+Show:
+
+- Eligible members.
+- Checked-in members.
+- Attendance rate.
+- Late arrivals.
+- Approved absences.
+- Missing attendance records.
+
+Allow filtering by sessions, committees and time periods.
+
+Export CSV data compatible with Excel.
+
+Support UTF-8 encoding and proper Vietnamese characters.
+
+---
+
+# 10. MEMBER EVALUATION SYSTEM
+
+Implement structured evaluation by session and semester.
+
+Each evaluated member can receive scores in three suggested categories.
+
+Attendance: maximum 4 points.
+
+Contribution: maximum 4 points.
+
+Responsibility: maximum 2 points.
+
+Total: 10 points.
+
+These are CONFIGURABLE prototype criteria, not an official BK-IC evaluation regulation.
+
+## Evaluation rules
+
+- Attendance-based scores should derive from actual attendance where applicable.
+- Contribution and responsibility scores are entered by authorized evaluators.
+- An evaluator may provide written comments.
+- An evaluator may attach supporting references.
+- Excused absences must be treated according to the configured evaluation policy.
+- A member should not be penalized for sessions outside their assigned participation obligations.
+- Prevent unauthorized or duplicate finalized evaluations.
+- Allow administrators to approve and lock scores.
+- Maintain revision and approval history.
+
+Statuses:
+
+Draft / Submitted / Approved / Locked.
+
+## Evaluation interface
+
+Build:
+
+- Member search.
+- Session selector.
+- Interactive score controls.
+- Dynamic total score.
+- Text feedback.
+- Save draft.
+- Submit for review.
+- Approval workflow.
+- Semester summary.
+
+## Analytics
+
+Display:
+
+- Evaluation completion rate.
+- Club-wide aggregated average.
+- Committee-level aggregates.
+- Member trends over time.
+- Attendance vs evaluation trends.
+
+Avoid public leaderboards of private scores.
+
+---
+
+# 11. SESSION FEEDBACK
+
+After each session, allow members to submit feedback.
+
+Questions:
+
+1. How useful was the session? (1–5)
+2. Was the content understandable? (1–5)
+3. Was the session well organized? (1–5)
+4. What did you find most valuable?
+5. What could be improved?
+6. What topic would you like next?
+
+Support anonymous feedback for sensitive evaluations of session quality.
+
+Do not present member identity to administrators when a response is designated anonymous.
+
+Never combine anonymous feedback with individually identifiable data in a way that defeats anonymity.
+
+Build aggregated charts and a qualitative feedback view.
+
+Show feedback submission status to the member without leaking anonymous responses.
+
+---
+
+# 12. ADMIN DASHBOARD
+
+Create a premium administration interface.
+
+Design inspiration: Linear, Apple Settings and modern analytics platforms.
+
+Left navigation sidebar with:
+
+- Overview.
+- Members.
+- Sessions.
+- Attendance.
+- Evaluations.
+- Feedback.
+- Applications.
+- Content Management.
+- Settings.
+
+Include a profile menu, search and notification area.
+
+## Overview metrics
+
+- Active members.
+- Upcoming sessions.
+- Completed sessions.
+- Average attendance rate.
+- Evaluations pending approval.
+- Applications pending review.
+
+Use REAL database aggregates.
+
+During demonstration, use an explicitly identified Demo Mode.
+
+Do not show fake metrics as official BK-IC statistics.
+
+## Charts
+
+Include:
+
+- Weekly attendance trend.
+- Attendance distribution.
+- Participation by committee.
+- Evaluation trend by semester.
+- Membership growth when data exists.
+
+Use Recharts or an equivalent reliable React charting library.
+
+Provide date and committee filters.
+
+## Members management
+
+Required capabilities:
+
+- Search members.
+- Filter by committee.
+- Filter by membership status.
+- Add member.
+- Edit member.
+- Assign committee.
+- Assign permitted roles.
+- Change membership status.
+- Import CSV.
+- Export CSV.
+- View attendance and evaluation history.
+
+Use confirmation dialogs for important administrative actions.
+
+## Sessions management
+
+Create, edit, cancel, open and close sessions.
+
+Show session details and an attendance monitor.
+
+Generate QR codes only for active sessions.
+
+Allow authorized admins to resolve attendance discrepancies.
+
+## Content Management System
+
+Allow club administrators to edit:
+
+- Homepage hero text.
+- About content.
+- Public announcements.
+- Activity categories.
+- Events.
+- Projects.
+- Gallery photos.
+- Recruitment information.
+- Contact and social links.
+
+Support draft and publish states.
+
+---
+
+# 13. DATA ARCHITECTURE
+
+Prefer the native Firebase integration available in Google AI Studio.
+
+Use:
+
+- Firebase Authentication.
+- Cloud Firestore.
+- Firebase Storage if available and appropriately configured.
+- Node.js server endpoints for trusted operations.
+
+Suggested Firestore collections:
+
+`users`
+
+`members`
+
+`committees`
+
+`applications`
+
+`sessions`
+
+`attendance`
+
+`evaluations`
+
+`feedback`
+
+`projects`
+
+`events`
+
+`articles`
+
+`gallery`
+
+`siteSettings`
+
+`auditLogs`
+
+`contentSources`
+
+## Data integrity
+
+Use stable document identifiers.
+
+For attendance, use a deterministic record identity based on session and member, or enforce uniqueness via a transaction.
+
+Never create duplicate attendance records because of double clicks or concurrent requests.
+
+Use server timestamps for important transitions.
+
+Separate authentication identity from club membership records.
+
+Separate private member data from public content.
+
+Store minimum necessary personal information.
+
+Add indexes for common searches and filters.
+
+## Security
+
+Generate and review Firestore Security Rules.
+
+A member can only read their own private records unless explicitly authorized otherwise.
+
+Public visitors cannot read member data.
+
+Administrative writes require role verification.
+
+Sensitive role changes must be performed through trusted server code.
+
+Private storage assets must require authorization.
+
+Apply reasonable rate limits to check-in and recruitment endpoints.
+
+Avoid leaking secrets in client-side code.
+
+Do not store privileged tokens in localStorage.
+
+Create an audit trail for membership changes, attendance overrides and evaluation approvals.
+
+---
+
+# 14. FRONTEND TECHNOLOGY
+
+Google AI Studio Build Mode is the target development environment.
+
+Preferred frontend stack:
+
+- React.
+- TypeScript.
+- Tailwind CSS.
+- shadcn/ui.
+- Framer Motion or Motion for React.
+- Lucide React icons.
+- React Router.
+- Recharts.
+- Firebase SDK.
+- QR code generation library.
+- QR scanning library.
+
+Use a server-side Node.js component where required.
+
+Prefer maintainability over unnecessary technical complexity.
+
+Build reusable components such as:
+
+- Navbar.
+- Footer.
+- Hero.
+- AnimatedHeadline.
+- SectionReveal.
+- EditorialGrid.
+- ActivityCard.
+- ProjectCard.
+- EventCard.
+- Gallery.
+- LoginForm.
+- MemberSidebar.
+- AdminSidebar.
+- KPIWidget.
+- DataTable.
+- QRCheckin.
+- QRDisplay.
+- EvaluationForm.
+- FeedbackForm.
+- EmptyState.
+- LoadingSkeleton.
+- ConfirmDialog.
+
+Use a clear folder structure and separate components, data services, hooks, authorization logic and business rules.
+
+Do not put the entire application into one huge component.
+
+---
+
+# 15. ANIMATION & INTERACTION QUALITY
+
+Animations are a major part of the experience.
+
+Use subtle, intentional motion.
+
+Recommended techniques:
+
+- Elegant text reveal.
+- Scroll-triggered fades.
+- Soft translate-and-fade transitions.
+- Small image parallax.
+- Hover transformations.
+- Smooth route transitions.
+- Subtle button interactions.
+- Navigation backdrop transitions.
+- Animated counters only for verified numerical data.
+
+Animation timing:
+
+- Micro-interactions: around 150–250 ms.
+- Section reveals: around 400–700 ms.
+- Hero introductions: carefully staggered.
+
+Use appropriate easing curves.
+
+Avoid excessive bounce animations.
+
+Avoid unnecessary full-page loading sequences.
+
+Avoid heavy WebGL or 3D scenes unless lightweight and genuinely beneficial.
+
+Respect `prefers-reduced-motion`.
+
+Maintain smooth performance on mid-range mobile devices.
+
+---
+
+# 16. RESPONSIVE DESIGN
+
+Design mobile-first while preserving premium desktop layouts.
+
+Target viewports:
+
+- 320–390 px mobile.
+- 390–768 px large mobile.
+- 768–1024 px tablet.
+- 1024–1440 px desktop.
+- 1440 px and above large screens.
+
+Important:
+
+- No horizontal scrolling caused by layout overflow.
+- Comfortable touch targets.
+- Readable Vietnamese typography.
+- Accessible mobile navigation.
+- Responsive tables.
+- Mobile-friendly QR scanning.
+- Dashboard cards adapt gracefully.
+- Forms must be easy to use on smartphones.
+
+The public landing page must look especially polished on desktop and mobile.
+
+---
+
+# 17. ACCESSIBILITY, SEO & QUALITY
+
+Follow accessible web development practices.
+
+Include:
+
+- Semantic HTML.
+- Proper heading hierarchy.
+- Alt text.
+- Accessible form labels.
+- Visible keyboard focus.
+- Appropriate color contrast.
+- Keyboard-operable dialogs.
+- Error messages near form fields.
+- Reduced-motion support.
+
+SEO:
+
+- Descriptive page titles.
+- Vietnamese meta descriptions.
+- Open Graph tags.
+- Canonical URLs when deployment domain is known.
+- Appropriate sitemap.
+- Organization metadata using only verified facts.
+
+Performance:
+
+- Lazy-load noncritical images.
+- Optimize images.
+- Minimize layout shifts.
+- Avoid heavy JavaScript dependencies.
+- Keep animations efficient.
+- Aim for high Lighthouse performance and accessibility scores.
+
+Use browser-native capabilities where possible.
+
+---
+
+# 18. DEMO MODE & REAL DATA MODE
+
+Implement a clear separation between demonstration and production data.
+
+Demo Mode:
+
+- Uses fictional sample members and sessions.
+- Shows realistic workflows.
+- Can be reset.
+- Clearly labels all metrics as demo data.
+- Allows interface exploration without production access.
+
+Production Mode:
+
+- Uses Firebase Authentication and Firestore.
+- Requires proper authorization.
+- Reads and writes real stored data.
+- Shows clear empty states when there are no records.
+
+Demo data must never be mixed into real member records or public achievement statistics.
+
+If Firebase is not enabled, build the complete frontend and a functional isolated demo repository, then make the production integration steps explicit.
+
+Do not claim that data is persistent or securely stored unless it actually is.
+
+---
+
+# 19. VISUAL ACCEPTANCE CRITERIA
+
+The final application should meet the following:
+
+The homepage must feel like a thoughtfully designed product launch website.
+
+The visual hierarchy must be distinctive.
+
+The hero should be memorable without becoming overdecorated.
+
+The site should have multiple interesting editorial layouts instead of one repetitive card pattern.
+
+Animations should appear smooth and deliberate.
+
+Every section should have a clear narrative purpose.
+
+The recruitment CTA must be compelling.
+
+The member portal must be simple enough for a student to understand immediately.
+
+The admin portal must make common tasks fast and obvious.
+
+The interface must look cohesive across the public site and private portal.
+
+The quality standard is a premium creative studio website combined with a reliable club-management system.
+
+---
+
+# 20. IMPLEMENTATION PRIORITY
+
+Build in this order:
+
+**Phase 1 — Premium Landing Page**
+
+Build the complete public-facing website with beautiful responsive layouts, polished interactions and verified-content placeholders.
+
+**Phase 2 — Authentication and Member Management**
+
+Implement Firebase integration, accounts, roles and member management.
+
+**Phase 3 — Weekly Attendance**
+
+Implement session management, secure dynamic QR generation, check-in validation and attendance history.
+
+**Phase 4 — Evaluations and Feedback**
+
+Implement configurable member evaluation, feedback collection and approval workflows.
+
+**Phase 5 — Administrative Analytics and CMS**
+
+Implement statistics, content management and CSV export.
+
+Maintain the same component architecture and design system throughout every phase.
+
+Do not redesign the application from scratch during later phases.
+
+---
+
+# 21. WHAT I EXPECT YOU TO DELIVER
+
+Generate actual application files, install the required dependencies and produce a runnable preview.
+
+Deliver:
+
+1. Complete responsive public website.
+2. Login experience.
+3. Member portal.
+4. Admin portal.
+5. Firebase integration or clearly separated functional Demo Mode.
+6. Secure role-based access control.
+7. Session management.
+8. Working QR attendance flow.
+9. Member evaluation workflow.
+10. Session feedback workflow.
+11. CMS for public information.
+12. Reports and analytics.
+13. Error handling and empty states.
+14. README and setup instructions.
+15. Example environment configuration with no hardcoded secrets.
+16. A brief explanation of the implementation architecture.
+
+After implementation, check:
+
+- Application compiles.
+- Routes render.
+- Navigation works.
+- Buttons are functional.
+- Forms validate correctly.
+- Authentication redirects work.
+- Unauthorized users cannot access private data.
+- QR check-in rejects expired and duplicate attempts.
+- Dashboard reads the correct source.
+- No obvious console errors.
+- Layout works on mobile and desktop.
+
+Do not stop after writing an implementation plan.
+
+START BUILDING THE APPLICATION NOW.
+
+If work must be divided across multiple passes, complete the landing page and functional application foundation first, then systematically implement the remaining modules.
+
+Use your own creative judgment for visual polish without sacrificing correctness, security or maintainability.
+
+**FINAL GOAL: Create the most visually compelling, professional and operationally useful digital platform possible for Bách Khoa Innovation Club.**
