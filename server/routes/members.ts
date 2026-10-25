@@ -405,15 +405,20 @@ membersRouter.post('/', (req, res) => {
 
   const unitName = assignedUnit === 'BN' ? 'Ban Chủ nhiệm' : assignedUnit === 'BDH' ? 'Ban Điều hành' : 'Ban Thành viên';
 
+  let inviteSendResult: any = null;
   if (inviteLink && expiresAt) {
-    sendAccountInviteEmail({
-      to: newMember.email,
-      fullName: newMember.fullName,
-      inviteLink,
-      expiresAt,
-      unitName,
-      roleName: newMember.position
-    }).catch(err => console.error('Lỗi gửi thư mời thành viên:', err));
+    try {
+      inviteSendResult = await sendAccountInviteEmail({
+        to: newMember.email,
+        fullName: newMember.fullName,
+        inviteLink,
+        expiresAt,
+        unitName,
+        roleName: newMember.position
+      });
+    } catch (err) {
+      console.error('[Members] Lỗi gửi thư mời thành viên:', err);
+    }
   }
 
   store.auditLogs.unshift({
@@ -435,10 +440,15 @@ membersRouter.post('/', (req, res) => {
     success: true,
     message: initialPasswordHash
       ? `Đã cấp tài khoản thành công cho ${newMember.fullName}. Tài khoản đã được kích hoạt và có thể đăng nhập ngay!`
-      : `Đã cấp tài khoản thành công cho ${newMember.fullName} và gửi thư mời thiết lập mật khẩu bảo mật tới email "${newMember.email}".`,
+      : (inviteSendResult && inviteSendResult.deliveryMethod === 'smtp' && inviteSendResult.success)
+        ? `Đã cấp tài khoản thành công cho ${newMember.fullName} và gửi thư mời thiết lập mật khẩu bảo mật tới email "${newMember.email}".`
+        : `Đã cấp tài khoản thành công cho ${newMember.fullName}. Thư mời đã được tạo và lưu trong Hộp thư Quản trị (Admin Outbox).`,
     member: sanitizeUser(newMember),
     inviteLink,
-    initialPassword: initialPasswordHash ? password.trim() : undefined
+    initialPassword: initialPasswordHash ? password.trim() : undefined,
+    deliveryMethod: inviteSendResult?.deliveryMethod,
+    deliveryStatus: inviteSendResult?.status,
+    deliveryMessage: inviteSendResult?.message
   });
 });
 

@@ -158,27 +158,47 @@ export function generateSecureTemporaryPassword(): string {
  * Falls back to localhost in dev.
  */
 export function getPublicAppUrl(req?: any): string {
-  // 1. Explicitly configured public URL (custom domain, .env, or cloud platform variable like Render)
-  const envUrl = process.env.APP_URL || process.env.VITE_APP_URL || process.env.RENDER_EXTERNAL_URL;
-  if (envUrl && typeof envUrl === 'string' && envUrl.trim()) {
-    let clean = envUrl.trim().replace(/\/$/, '');
+  const renderUrl = process.env.RENDER_EXTERNAL_URL;
+  const configuredAppUrl = process.env.APP_URL || process.env.VITE_APP_URL;
+
+  // 1. If running on Render (RENDER_EXTERNAL_URL) and APP_URL is unset or points to localhost
+  if (renderUrl && (!configuredAppUrl || configuredAppUrl.includes('localhost') || configuredAppUrl.includes('127.0.0.1'))) {
+    return renderUrl.trim().replace(/\/$/, '');
+  }
+
+  // 2. Derive automatically from incoming HTTP request if request comes from a real public host
+  if (req) {
+    const rawHost = req.headers ? (req.headers['x-forwarded-host'] || req.headers['host']) : (req.get ? req.get('host') : '');
+    if (rawHost && typeof rawHost === 'string' && rawHost.trim()) {
+      const hostClean = rawHost.trim().split(',')[0].trim();
+      const isReqLocal = /^(localhost|127\.0\.0\.1)(:\d+)?$/i.test(hostClean);
+      if (!isReqLocal) {
+        const proto = req.headers?.['x-forwarded-proto'] || (req.secure ? 'https' : 'https');
+        return `${proto}://${hostClean}`;
+      }
+    }
+  }
+
+  // 3. Explicitly configured non-localhost APP_URL
+  if (configuredAppUrl && typeof configuredAppUrl === 'string' && configuredAppUrl.trim()) {
+    let clean = configuredAppUrl.trim().replace(/\/$/, '');
     if (!clean.startsWith('http://') && !clean.startsWith('https://')) {
       clean = `https://${clean}`;
     }
     return clean;
   }
 
-  // 2. Derive automatically from incoming HTTP request
+  // 4. Derive from request even if local
   if (req) {
     const rawHost = req.headers ? (req.headers['x-forwarded-host'] || req.headers['host']) : (req.get ? req.get('host') : '');
     if (rawHost && typeof rawHost === 'string' && rawHost.trim()) {
       const hostClean = rawHost.trim().split(',')[0].trim();
-      const proto = req.headers?.['x-forwarded-proto'] || (req.secure ? 'https' : (/^(localhost|127\.0\.0\.1)(:\d+)?$/i.test(hostClean) ? 'http' : 'https'));
+      const proto = req.headers?.['x-forwarded-proto'] || (req.secure ? 'https' : 'http');
       return `${proto}://${hostClean}`;
     }
   }
 
-  // 3. Fallback
+  // 5. Fallback
   const defaultPort = process.env.PORT || '3000';
   return `http://localhost:${defaultPort}`;
 }

@@ -77,6 +77,49 @@ export function sanitizeSmtpPass(rawPass: unknown): string {
   return cleaned;
 }
 
+// Transporter caching and connection pooling
+let cachedTransporter: Transporter | null = null;
+let cachedTransporterKey = '';
+
+function getOrCreateTransporter(key: string, createFn: () => Transporter): Transporter {
+  if (cachedTransporter && cachedTransporterKey === key) {
+    return cachedTransporter;
+  }
+  if (cachedTransporter) {
+    try {
+      cachedTransporter.close();
+    } catch (_) {}
+  }
+  cachedTransporter = createFn();
+  cachedTransporterKey = key;
+  return cachedTransporter;
+}
+
+/**
+ * Converts HTML email templates into a clean plain-text version for RFC-compliant
+ * multipart/alternative MIME emails. This significantly lowers anti-spam score in
+ * Gmail, Outlook, and academic email servers.
+ */
+export function htmlToPlainText(html: string): string {
+  if (!html || typeof html !== 'string') return '';
+  return html
+    .replace(/<style[^>]*>[\s\S]*?<\/style>/gi, '')
+    .replace(/<head[^>]*>[\s\S]*?<\/head>/gi, '')
+    .replace(/<br\s*[\/]?>/gi, '\n')
+    .replace(/<\/p>/gi, '\n\n')
+    .replace(/<\/h[1-6]>/gi, '\n\n')
+    .replace(/<\/div>/gi, '\n')
+    .replace(/<a[^>]*href="([^"]*)"[^>]*>([\s\S]*?)<\/a>/gi, '$2: $1')
+    .replace(/<[^>]+>/g, '')
+    .replace(/&nbsp;/g, ' ')
+    .replace(/&copy;/g, '©')
+    .replace(/&amp;/g, '&')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/\n\s+\n/g, '\n\n')
+    .trim();
+}
+
 // Determine active SMTP configuration
 export function getActiveSmtpConfig(): {
   isConfigured: boolean;
@@ -114,18 +157,24 @@ export function getActiveSmtpConfig(): {
     process.env.SMTP_USER = envUser;
 
     try {
-      const transporter = nodemailer.createTransport({
-        host: envHost,
-        port: envPort,
-        secure: envSecure,
-        auth: {
-          user: envUser,
-          pass: envPass
-        },
-        connectionTimeout: 10000,
-        greetingTimeout: 10000,
-        socketTimeout: 15000
-      });
+      const cacheKey = `env:${envHost}:${envPort}:${envSecure}:${envUser}:${envPass}`;
+      const transporter = getOrCreateTransporter(cacheKey, () =>
+        nodemailer.createTransport({
+          host: envHost,
+          port: envPort,
+          secure: envSecure,
+          auth: {
+            user: envUser,
+            pass: envPass
+          },
+          pool: true,
+          maxConnections: 3,
+          maxMessages: 100,
+          connectionTimeout: 15000,
+          greetingTimeout: 15000,
+          socketTimeout: 20000
+        })
+      );
       return {
         isConfigured: true,
         transporter,
@@ -151,18 +200,24 @@ export function getActiveSmtpConfig(): {
       const dbUser = sanitizeSmtpUser(dbConfig.user);
       const dbPass = sanitizeSmtpPass(dbConfig.pass);
 
-      const transporter = nodemailer.createTransport({
-        host: dbHost,
-        port: dbPort,
-        secure: dbSecure,
-        auth: {
-          user: dbUser,
-          pass: dbPass
-        },
-        connectionTimeout: 10000,
-        greetingTimeout: 10000,
-        socketTimeout: 15000
-      });
+      const cacheKey = `db:${dbHost}:${dbPort}:${dbSecure}:${dbUser}:${dbPass}`;
+      const transporter = getOrCreateTransporter(cacheKey, () =>
+        nodemailer.createTransport({
+          host: dbHost,
+          port: dbPort,
+          secure: dbSecure,
+          auth: {
+            user: dbUser,
+            pass: dbPass
+          },
+          pool: true,
+          maxConnections: 3,
+          maxMessages: 100,
+          connectionTimeout: 15000,
+          greetingTimeout: 15000,
+          socketTimeout: 20000
+        })
+      );
       return {
         isConfigured: true,
         transporter,
@@ -217,29 +272,26 @@ export function isSyntheticOrTestEmail(email: string): boolean {
     return true;
   }
 
-  // 2. Synthetic and automated test local-part patterns
-  // Prevents dummy addresses (e.g. resend.442953169@dut.udn.vn, test.mem.123@dut.udn.vn) from hitting live SMTP
-  if (
-    // Prefixes followed by dots, hyphens, underscores, or digits
-    /^(resend|test|tester|recovery|ratelimit|fake|mock|dummy|sample|demo|temp|nonatt|nonexistent|disabled|stranger|spoof|exploit)[\.\-_0-9]/i.test(localPart) ||
-    // Standalone synthetic usernames
-    /^(resend|test|tester|fake|mock|dummy|sample|demo|temp|nonexistent)$/i.test(localPart) ||
-    // Sub-namespaces used in tests: test.mem.*, pic.mem.*, member.*, bn.*, bdh.*, btv.*
-    localPart.startsWith('test.') ||
-    localPart.startsWith('pic.mem.') ||
-    localPart.startsWith('test.mem.') ||
-    localPart.startsWith('member.test') ||
-    localPart.startsWith('user.test') ||
-    localPart.startsWith('admin.test') ||
-    /^(member|bn|bdh|btv)\.\d+/i.test(localPart) ||
-    // Generic keywords inside address indicative of non-real accounts
-    localPart.includes('.test.') ||
-    localPart.endsWith('.test') ||
-    localPart.includes('fake') ||
-    localPart.includes('dummy') ||
-    localPart.includes('nonexistent')
-  ) {
-    return true;
+  // 2. Synthetic patterns strictly in automated test suite environment (NODE_ENV === 'test')
+  if (process.env.NODE_ENV === 'test') {
+    if (
+      /^(resend|test|tester|recovery|ratelimit|fake|mock|dummy|sample|demo|temp|nonatt|nonexistent|disabled|stranger|spoof|exploit)[\.\-_0-9]/i.test(localPart) ||
+      /^(resend|test|tester|fake|mock|dummy|sample|demo|temp|nonexistent)$/i.test(localPart) ||
+      localPart.startsWith('test.') ||
+      localPart.startsWith('pic.mem.') ||
+      localPart.startsWith('test.mem.') ||
+      localPart.startsWith('member.test') ||
+      localPart.startsWith('user.test') ||
+      localPart.startsWith('admin.test') ||
+      /^(member|bn|bdh|btv)\.\d+/i.test(localPart) ||
+      localPart.includes('.test.') ||
+      localPart.endsWith('.test') ||
+      localPart.includes('fake') ||
+      localPart.includes('dummy') ||
+      localPart.includes('nonexistent')
+    ) {
+      return true;
+    }
   }
 
   return false;
@@ -384,14 +436,19 @@ async function dispatchEmail(options: DispatchOptions): Promise<DispatchEmailRes
 
   // 4. Real SMTP Transmission via Nodemailer (Requirements 4)
   try {
-    // Determine clean envelope from address
-    const fromAddressMatch = smtp.from.match(/<([^>]+)>/);
-    const envelopeFrom = (fromAddressMatch ? fromAddressMatch[1] : smtp.user || smtp.from).trim();
+    // Determine clean envelope and sender address
+    const rawFrom = smtp.from;
+    const fromAddressMatch = rawFrom.match(/<([^>]+)>/);
+    const fromEmail = fromAddressMatch ? fromAddressMatch[1] : (smtp.user || rawFrom);
+    const envelopeFrom = (smtp.user || fromEmail).trim();
+    const plainText = htmlToPlainText(htmlContent);
 
     const info = await smtp.transporter.sendMail({
-      from: smtp.from,
+      from: rawFrom,
       to: normalizedTo,
+      replyTo: fromEmail,
       subject,
+      text: plainText,
       html: htmlContent,
       envelope: {
         from: envelopeFrom,
@@ -980,17 +1037,9 @@ export async function sendTestSmtpEmail(
     await transporter.verify();
 
     const fromAddressMatch = from.match(/<([^>]+)>/);
-    const envelopeFrom = (fromAddressMatch ? fromAddressMatch[1] : customConfig?.user || from).trim();
-
-    const info = await transporter.sendMail({
-      from,
-      to: normalizedTo,
-      subject: '[BK-IC Digital Hub] Thư kiểm tra kết nối máy chủ gửi email SMTP thành công',
-      envelope: {
-        from: envelopeFrom,
-        to: [normalizedTo]
-      },
-      html: `
+    const fromEmail = fromAddressMatch ? fromAddressMatch[1] : (customConfig?.user || from);
+    const envelopeFrom = (customConfig?.user || fromEmail).trim();
+    const testHtml = `
         <div style="font-family: Arial, sans-serif; padding: 24px; background: #f8fafc; border-radius: 12px; max-width: 500px;">
           <h3 style="color: #059669;">✓ Kết nối SMTP thành công!</h3>
           <p>Xin chào,</p>
@@ -1000,7 +1049,20 @@ export async function sendTestSmtpEmail(
             Người gửi: ${from}
           </div>
         </div>
-      `
+      `.trim();
+    const testPlain = htmlToPlainText(testHtml);
+
+    const info = await transporter.sendMail({
+      from,
+      to: normalizedTo,
+      replyTo: fromEmail,
+      subject: '[BK-IC Digital Hub] Thư kiểm tra kết nối máy chủ gửi email SMTP thành công',
+      text: testPlain,
+      html: testHtml,
+      envelope: {
+        from: envelopeFrom,
+        to: [normalizedTo]
+      }
     });
 
     const rejectedList = Array.isArray(info.rejected) ? info.rejected : [];
