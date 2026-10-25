@@ -10,7 +10,8 @@ import {
   generateSecureVerificationToken,
   generateSecureTemporaryPassword,
   hashToken,
-  checkRateLimit
+  checkRateLimit,
+  getPublicAppUrl
 } from '../services/authSecurity.ts';
 import {
   sendPasswordResetEmail,
@@ -356,6 +357,16 @@ authRouter.post('/register', async (req, res) => {
     });
   }
 
+  // Rate limit registration by IP address (15 requests per 15 minutes)
+  const clientIp = req.ip || req.socket?.remoteAddress || 'unknown';
+  const ipRate = checkRateLimit(`register-ip-${clientIp}`, 15, 15 * 60 * 1000);
+  if (!ipRate.allowed) {
+    return res.status(429).json({
+      success: false,
+      message: 'Quá nhiều yêu cầu đăng ký tài khoản từ địa chỉ mạng của bạn. Vui lòng thử lại sau 15 phút.'
+    });
+  }
+
   // Enforce password policy: minimum 8 chars, uppercase, lowercase, number, special char
   const policyCheck = validatePasswordPolicy(password);
   if (!policyCheck.isValid) {
@@ -488,11 +499,8 @@ authRouter.post('/register', async (req, res) => {
 
   db.save();
 
-  // Determine verification link host
-  const originHeader = (req.headers.origin as string) || (req.headers.referer as string);
-  const host = process.env.APP_URL
-    ? process.env.APP_URL.replace(/\/$/, '')
-    : (originHeader ? originHeader.replace(/\/$/, '') : `http://${req.headers.host || 'localhost:3000'}`);
+  // Determine verification link host safely
+  const host = getPublicAppUrl(req);
   const verificationLink = `${host}/verify-email?token=${verificationRawToken}`;
 
   // Dispatch confirmation / verification email
@@ -637,10 +645,7 @@ authRouter.post('/resend-verification', async (req, res) => {
   user.verificationTokenHash = tokenHash;
   user.verificationTokenExpiresAt = expiresAt;
 
-  const originHeader = (req.headers.origin as string) || (req.headers.referer as string);
-  const host = process.env.APP_URL
-    ? process.env.APP_URL.replace(/\/$/, '')
-    : (originHeader ? originHeader.replace(/\/$/, '') : `http://${req.headers.host || 'localhost:3000'}`);
+  const host = getPublicAppUrl(req);
   const verificationLink = `${host}/verify-email?token=${rawToken}`;
 
   const sendResult = await sendAccountVerificationEmail({
@@ -771,10 +776,7 @@ authRouter.post('/request-temp-password', async (req, res) => {
   delete user.resetTokenHash;
   delete user.resetTokenExpiresAt;
 
-  const originHeader = (req.headers.origin as string) || (req.headers.referer as string);
-  const host = process.env.APP_URL
-    ? process.env.APP_URL.replace(/\/$/, '')
-    : (originHeader ? originHeader.replace(/\/$/, '') : `http://${req.headers.host || 'localhost:3000'}`);
+  const host = getPublicAppUrl(req);
   const loginUrl = `${host}/login`;
 
   try {
@@ -925,10 +927,7 @@ authRouter.post('/forgot-password', async (req, res) => {
   user.resetTokenHash = tokenHash;
   user.resetTokenExpiresAt = expiresAt;
 
-  const originHeader = (req.headers.origin as string) || (req.headers.referer as string);
-  const host = process.env.APP_URL
-    ? process.env.APP_URL.replace(/\/$/, '')
-    : (originHeader ? originHeader.replace(/\/$/, '') : `http://${req.headers.host || 'localhost:3000'}`);
+  const host = getPublicAppUrl(req);
   const loginUrl = `${host}/login`;
 
   try {
@@ -1042,8 +1041,10 @@ authRouter.post('/complete-recovery-password', requireAuth, (req, res) => {
   user.mustChangePassword = false;
   user.isRecoverySession = false;
 
-  // Activate account and confirm email verification
-  user.accountStatus = 'active';
+  // Activate account and confirm email verification (preserve disabled status if set by admin)
+  if (user.accountStatus !== 'disabled') {
+    user.accountStatus = 'active';
+  }
   user.emailVerified = true;
 
   // Upgrade active session from recovery session to normal authenticated session
@@ -1164,8 +1165,10 @@ authRouter.post('/reset-password', (req, res) => {
   user.mustChangePassword = false;
   user.isRecoverySession = false;
 
-  // Activate account and confirm email verification
-  user.accountStatus = 'active';
+  // Activate account and confirm email verification (preserve disabled status if set by admin)
+  if (user.accountStatus !== 'disabled') {
+    user.accountStatus = 'active';
+  }
   user.emailVerified = true;
 
   // Invalidate all existing sessions
@@ -1286,6 +1289,13 @@ authRouter.post('/switch-account', requireAuth, requireAdmin, (req, res) => {
 // GET /api/auth/email-outbox - View delivered emails (P0.4: strictly Admin-only)
 authRouter.get('/email-outbox', requireAuth, requireAdmin, (req, res) => {
   const outbox = getEmailOutbox();
+  if (process.env.NODE_ENV === 'production') {
+    const sanitized = outbox.map(item => {
+      const { tempPassword, resetLink, verificationLink, ...rest } = item as any;
+      return rest;
+    });
+    return res.json({ success: true, emails: sanitized });
+  }
   res.json({ success: true, emails: outbox });
 });
 
@@ -1318,8 +1328,7 @@ authRouter.post('/send-member-invite', requireAuth, requireUnitOrRole(['BN', 'BT
   target.resetTokenHash = tokenHash;
   target.resetTokenExpiresAt = expiresAt;
 
-  const originHeader = (req.headers.origin as string) || (req.headers.referer as string);
-  const host = originHeader ? originHeader.replace(/\/$/, '') : `http://${req.headers.host || 'localhost:3000'}`;
+  const host = getPublicAppUrl(req);
   const inviteLink = `${host}/reset-password?token=${rawToken}`;
 
   const unitName =

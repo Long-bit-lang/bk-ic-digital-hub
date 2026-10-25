@@ -2,7 +2,7 @@ import { Router } from 'express';
 import { db } from '../db.ts';
 import type { User, MemberStatus, StatusHistoryEntry, UnitId } from '../../src/types/index.ts';
 import { sanitizeUser } from './auth.ts';
-import { generateSecureResetToken, hashPassword, validatePasswordPolicy } from '../services/authSecurity.ts';
+import { generateSecureResetToken, hashPassword, validatePasswordPolicy, getPublicAppUrl } from '../services/authSecurity.ts';
 import { sendAccountInviteEmail, sendPasswordResetEmail, isValidEmailFormat } from '../services/emailService.ts';
 import { requireAuth, requireNormalSession } from '../middleware/auth.ts';
 
@@ -342,10 +342,7 @@ membersRouter.post('/', (req, res) => {
   let expiresAt: string | undefined;
   let inviteLink: string | undefined;
 
-  const originHeader = (req.headers.origin as string) || (req.headers.referer as string);
-  const host = process.env.APP_URL
-    ? process.env.APP_URL.replace(/\/$/, '')
-    : (originHeader ? originHeader.replace(/\/$/, '') : `http://${req.headers.host || 'localhost:3000'}`);
+  const host = getPublicAppUrl(req);
 
   if (password && typeof password === 'string' && password.trim()) {
     const policy = validatePasswordPolicy(password.trim());
@@ -473,10 +470,7 @@ membersRouter.post('/:id/reset-password', async (req, res) => {
   member.resetTokenHash = tokenHash;
   member.resetTokenExpiresAt = expiresAt;
 
-  const originHeader = (req.headers.origin as string) || (req.headers.referer as string);
-  const host = process.env.APP_URL
-    ? process.env.APP_URL.replace(/\/$/, '')
-    : (originHeader ? originHeader.replace(/\/$/, '') : `http://${req.headers.host || 'localhost:3000'}`);
+  const host = getPublicAppUrl(req);
   const resetLink = `${host}/reset-password?token=${rawToken}`;
 
   try {

@@ -460,6 +460,8 @@ export const api = {
       body: JSON.stringify(payload)
     }),
     resetDemo: () => request<{ success: boolean; message: string }>('/api/system/reset-demo', { method: 'POST' }),
+    cleanTestData: () => request<{ success: boolean; message: string; data?: any }>('/api/system/clean-test-data', { method: 'POST' }),
+    reloadDb: () => request<{ success: boolean; message: string }>('/api/system/reload-db', { method: 'POST' }),
     getServerTime: () => request<{ success: boolean; iso: string; currentTimeVN: string; currentDateVN: string; timestamp: number; timezone: string }>('/api/system/time')
   }
 };

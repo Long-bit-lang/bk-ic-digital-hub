@@ -1,0 +1,19 @@
+services:
+  bkic-hub:
+    build: .
+    container_name: bkic-digital-hub
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - APP_URL=http://localhost:3000
+      - SMTP_HOST=smtp.gmail.com
+      - SMTP_PORT=465
+      - SMTP_SECURE=true
+      - SMTP_USER=${SMTP_USER:-hoanglong280907@gmail.com}
+      - SMTP_PASS=${SMTP_PASS:-xbcc vzbc emhn qrzu}
+      - SMTP_FROM=${SMTP_FROM:-BK-IC Digital Hub <hoanglong280907@gmail.com>}
+    volumes:
+      - ./data:/app/data

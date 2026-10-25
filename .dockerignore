@@ -1,0 +1,7 @@
+node_modules
+dist
+data/backups/archive-synthetic
+.git
+*.log
+*.tmp
+.env

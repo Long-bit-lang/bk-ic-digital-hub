@@ -108,7 +108,7 @@ export const PortalPreviewSection: React.FC = () => {
           </div>
           <div className="font-mono text-[11px] text-slate-400 flex items-center gap-1.5">
             <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
-            <span>hub.bkic.dut.udn.vn/portal</span>
+            <span>hub.bkic.dut.udn.vn/portal · Mô phỏng giao diện</span>
           </div>
           {/* Interactive Mock Tabs */}
           <div className="flex items-center gap-1 bg-slate-800/80 p-0.5 rounded-lg text-[10px]">
@@ -143,8 +143,9 @@ export const PortalPreviewSection: React.FC = () => {
         <div className="bg-[#F8FAFC] rounded-2xl p-6 sm:p-8 space-y-6 text-[#111318]">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200/80 pb-4">
             <div>
-              <div className="text-[11px] font-semibold uppercase text-blue-600 font-mono">
-                CỔNG THÀNH VIÊN BK-IC
+              <div className="text-[11px] font-semibold uppercase text-blue-600 font-mono flex items-center gap-2">
+                <span>MÔ PHỎNG TÍNH NĂNG · CỔNG THÀNH VIÊN BK-IC</span>
+                <span className="text-[10px] bg-blue-100 text-blue-700 px-1.5 py-0.2 rounded font-normal normal-case">Bản mẫu minh họa</span>
               </div>
               <div className="text-xl font-bold text-slate-900">
                 Trần Thị Bích Ngọc (K23 · Điện tử Viễn thông)
@@ -229,7 +230,7 @@ export const PortalPreviewSection: React.FC = () => {
               <div className="p-4 rounded-2xl bg-white border border-slate-200 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 <div className="space-y-1">
                   <span className="text-[10px] bg-blue-100 text-blue-700 px-2 py-0.5 rounded font-mono font-bold uppercase">
-                    Chủ nhật này
+                    Lịch họp minh họa
                   </span>
                   <h4 className="text-sm font-bold text-slate-900">
                     Workshop: Thiết kế mạch nhúng & Kết nối vi điều khiển ESP32

@@ -33,7 +33,7 @@ export const PortalDashboardPage: React.FC = () => {
   const attendedCount = memberAttendance.filter(a => a.status === 'present' || a.status === 'late').length;
   const attendanceRate = totalSessionsCompleted > 0 
     ? Math.round((attendedCount / totalSessionsCompleted) * 100) 
-    : 100;
+    : null;
 
   // Member's evaluation score
   const myEval = evaluations.find(e => e.memberId === currentUser.id && e.status === 'approved');
@@ -132,10 +132,12 @@ export const PortalDashboardPage: React.FC = () => {
             <TrendingUp className="h-4 w-4 text-emerald-500" />
           </div>
           <div className="text-3xl font-bold font-mono text-slate-900 tabular-nums">
-            {attendanceRate}%
+            {attendanceRate !== null ? `${attendanceRate}%` : '—'}
           </div>
           <p className="text-[11px] text-slate-400 mt-1">
-            Đã tham gia {attendedCount}/{Math.max(attendedCount, totalSessionsCompleted)} phiên sinh hoạt
+            {totalSessionsCompleted > 0 
+              ? `Đã tham gia ${attendedCount}/${totalSessionsCompleted} phiên sinh hoạt`
+              : 'Chưa có phiên sinh hoạt nào hoàn tất'}
           </p>
         </div>
 

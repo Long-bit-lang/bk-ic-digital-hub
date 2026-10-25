@@ -156,6 +156,7 @@ interface AppContextType {
   auditLogs: AuditLog[];
   reloadAuditLogs: () => Promise<void>;
   resetToDefaultData: () => Promise<void>;
+  cleanTestData: () => Promise<void>;
 
   // Authoritative Server Time
   serverTime: { iso: string; currentTimeVN: string; currentDateVN: string } | null;
@@ -949,6 +950,12 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     await syncAllData();
   };
 
+  const cleanTestData = async () => {
+    const res = await api.cms.cleanTestData();
+    alert(res.message);
+    await syncAllData();
+  };
+
   const currentRole: UserRole = currentUser ? currentUser.role : 'guest';
   const currentUnit: UnitId | null = currentUser?.unit ? currentUser.unit : null;
 
@@ -1068,6 +1075,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
         auditLogs,
         reloadAuditLogs,
         resetToDefaultData,
+        cleanTestData,
 
         serverTime,
         refreshServerTime

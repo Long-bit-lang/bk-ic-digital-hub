@@ -143,7 +143,7 @@ export const AdminDashboardPage: React.FC = () => {
           <div className="flex items-center justify-between">
             <h3 className="text-sm font-bold text-white flex items-center gap-2">
               <Layers className="h-4 w-4 text-blue-400" />
-              <span>Phân bổ Nhân sự theo 5 Ban Chuyên trách</span>
+              <span>Phân bổ Nhân sự theo các Ban Chuyên trách</span>
             </h3>
             <Link to="/admin/members" className="text-xs text-blue-400 hover:underline">
               Quản lý chi tiết

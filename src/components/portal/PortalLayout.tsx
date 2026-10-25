@@ -1,7 +1,7 @@
 // BK-IC Member Portal Layout (Clean Linear / Apple Productivity Style)
 // Fully optimized for Desktop, Tablet, and Mobile (<768px)
 import React, { useState, useEffect } from 'react';
-import { NavLink, Outlet, Link, useNavigate, useLocation } from 'react-router-dom';
+import { NavLink, Outlet, Link, useNavigate, useLocation, Navigate } from 'react-router-dom';
 import { useApp } from '../../context/AppContext';
 import { Logo } from '../brand/Logo';
 import { QRScannerModal } from '../qr/QRScannerModal';
@@ -70,8 +70,7 @@ export const PortalLayout: React.FC = () => {
 
   // If user is applicant, redirect to pending
   if (currentUser.role === 'applicant') {
-    navigate('/pending-approval');
-    return null;
+    return <Navigate to="/pending-approval" replace />;
   }
 
   const portalNav = [

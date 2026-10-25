@@ -49,8 +49,9 @@ interface OutboxItem {
 }
 
 export const AdminSettingsPage: React.FC = () => {
-  const { siteSettings, resetToDefaultData } = useApp();
+  const { siteSettings, resetToDefaultData, cleanTestData } = useApp();
   const [resetDone, setResetDone] = useState(false);
+  const [isCleaning, setIsCleaning] = useState(false);
 
   // SMTP & Outbox states
   const [smtpStatus, setSmtpStatus] = useState<SmtpStatusState | null>(null);
@@ -135,6 +136,21 @@ export const AdminSettingsPage: React.FC = () => {
       resetToDefaultData();
       setResetDone(true);
       setTimeout(() => setResetDone(false), 3000);
+    }
+  };
+
+  const handleCleanTestData = async () => {
+    if (window.confirm('XÁC NHẬN: Bạn có chắc chắn muốn dọn dẹp sạch toàn bộ tài khoản thử nghiệm và các buổi họp giả lập? Hệ thống sẽ bảo toàn tài khoản Quản trị viên Master Admin và cấu hình website.')) {
+      setIsCleaning(true);
+      try {
+        await cleanTestData();
+        setResetDone(true);
+        setTimeout(() => setResetDone(false), 3000);
+      } catch (err: any) {
+        alert(err.message || 'Lỗi khi dọn dẹp dữ liệu');
+      } finally {
+        setIsCleaning(false);
+      }
     }
   };
 
@@ -471,6 +487,15 @@ export const AdminSettingsPage: React.FC = () => {
           >
             <Download className="h-4 w-4" />
             <span>Tải tệp Sao lưu (JSON)</span>
+          </button>
+
+          <button
+            onClick={handleCleanTestData}
+            disabled={isCleaning}
+            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-amber-600/30 text-amber-300 border border-amber-500/40 text-xs font-semibold hover:bg-amber-600 hover:text-white transition disabled:opacity-50"
+          >
+            <Trash2 className="h-4 w-4" />
+            <span>{isCleaning ? 'Đang dọn dẹp...' : 'Dọn dẹp sạch Dữ liệu & Buổi họp thử nghiệm'}</span>
           </button>
 
           <button

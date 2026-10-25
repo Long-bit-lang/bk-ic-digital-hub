@@ -87,7 +87,7 @@ export function checkUserAttendanceEligibility(session: any, user: any): { eligi
   }
 
   // Must be an official member (or approved account)
-  if (user.role === 'guest' || (user.role === 'applicant' && user.accountStatus !== 'active')) {
+  if (user.role === 'guest' || user.role === 'applicant') {
     return {
       eligible: false,
       message: 'Tài khoản chưa được kết nạp thành viên chính thức để điểm danh.'
@@ -202,7 +202,7 @@ attendanceRouter.get('/', (req, res) => {
   const store = db.get();
   const actor = req.user!;
 
-  let records = Array.isArray(store.attendance) 
+  let records: AttendanceRecord[] = Array.isArray(store.attendance) 
     ? store.attendance 
     : (Array.isArray((store as any).attendanceRecords) ? (store as any).attendanceRecords : []);
 

@@ -66,6 +66,7 @@ export interface DatabaseSchema {
   users: User[];
   sessions: TrainingSession[];
   attendance: AttendanceRecord[];
+  attendanceRecords?: AttendanceRecord[];
   attendanceRequests: AttendanceRequest[];
   feedbackEligibility: FeedbackEligibility[];
   feedbacks: DecoupledFeedback[];
@@ -182,6 +183,16 @@ class DatabaseManager {
     try {
       if (!fs.existsSync(DATA_DIR)) {
         fs.mkdirSync(DATA_DIR, { recursive: true });
+      } else {
+        // Clean up any stale temporary files from previous unexpected halts
+        try {
+          const files = fs.readdirSync(DATA_DIR);
+          for (const f of files) {
+            if (f.endsWith('.tmp')) {
+              try { fs.unlinkSync(path.join(DATA_DIR, f)); } catch {}
+            }
+          }
+        } catch {}
       }
 
       if (fs.existsSync(DB_FILE)) {
@@ -262,19 +273,26 @@ class DatabaseManager {
     }
 
     this.isWriting = true;
+    let tempFile: string | null = null;
     try {
       if (!fs.existsSync(DATA_DIR)) {
         fs.mkdirSync(DATA_DIR, { recursive: true });
       }
       const serialized = JSON.stringify(this.data, null, 2);
-      const tempFile = `${DB_FILE}.${Date.now()}.${Math.random().toString(36).substring(2, 6)}.tmp`;
+      tempFile = `${DB_FILE}.${Date.now()}.${Math.random().toString(36).substring(2, 6)}.tmp`;
       fs.writeFileSync(tempFile, serialized, 'utf-8');
       fs.renameSync(tempFile, DB_FILE);
+      tempFile = null;
       
       // Auto-create rotating backup periodically (at most once every 10 minutes)
       this.maybeCreatePeriodicBackup();
     } catch (err) {
       console.error('Failed to persist database to file:', err);
+      if (tempFile) {
+        try {
+          if (fs.existsSync(tempFile)) fs.unlinkSync(tempFile);
+        } catch {}
+      }
     } finally {
       this.isWriting = false;
       if (this.pendingWrite) {
@@ -284,7 +302,7 @@ class DatabaseManager {
     }
   }
 
-  private lastBackupTime = 0;
+  private lastBackupTime = Date.now();
 
   private maybeCreatePeriodicBackup(): void {
     const now = Date.now();
@@ -352,6 +370,75 @@ class DatabaseManager {
       console.error('[DatabaseManager] Failed to restore from backup:', err);
       return false;
     }
+  }
+
+  public reload(): void {
+    try {
+      if (fs.existsSync(DB_FILE)) {
+        const raw = fs.readFileSync(DB_FILE, 'utf-8');
+        const parsed = JSON.parse(raw);
+        if (parsed && Array.isArray(parsed.users)) {
+          this.normalizeData(parsed);
+          this.data = parsed;
+          console.log('[DatabaseManager] Database reloaded successfully from disk.');
+        }
+      }
+    } catch (err) {
+      console.error('[DatabaseManager] Failed to reload database from disk:', err);
+    }
+  }
+
+  public cleanSyntheticTestData(): { removedUsers: number; removedSessions: number } {
+    if (!this.data) this.init();
+    const data = this.data!;
+
+    const initialUsersCount = data.users.length;
+    const initialSessionsCount = data.sessions.length;
+
+    // Keep ONLY master admin
+    data.users = (data.users || []).filter((u: any) => u.id === 'usr-admin' || u.role === 'admin');
+
+    // Reset sessions and all session-related collections
+    data.sessions = [];
+    data.attendance = [];
+    data.attendanceRecords = [];
+    data.attendanceRequests = [];
+    data.feedbackEligibility = [];
+    data.feedbacks = [];
+    data.tasks = [];
+    data.evaluations = [];
+    data.notifications = [];
+    data.applications = [];
+    data.exportLogs = [];
+    data.projects = [];
+    data.events = [];
+    data.articles = [];
+
+    // Ensure 3 units structure
+    data.units = INITIAL_UNITS;
+
+    // Clean audit logs
+    data.auditLogs = [
+      {
+        id: `audit-clean-${Date.now()}`,
+        timestamp: new Date().toISOString(),
+        actorId: 'usr-admin',
+        actorName: 'Quản trị viên Hệ thống (Admin)',
+        actorRole: 'admin',
+        actorUnit: 'BN',
+        action: 'Dọn dẹp toàn bộ dữ liệu giả lập',
+        targetType: 'System',
+        targetId: 'BKIC-Hub-Clean',
+        details: 'Đã xóa toàn bộ tài khoản thử nghiệm và buổi họp giả lập. Hệ thống sẵn sàng vận hành chính thức.'
+      }
+    ];
+
+    this.save();
+    console.log(`[DatabaseManager] Cleaned synthetic test data: removed ${initialUsersCount - data.users.length} users, ${initialSessionsCount} sessions.`);
+    return {
+      removedUsers: initialUsersCount - data.users.length,
+      removedSessions: initialSessionsCount - data.sessions.length
+    };
   }
 
   public resetToDefaults(): DatabaseSchema {

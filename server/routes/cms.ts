@@ -203,16 +203,10 @@ cmsRouter.get('/events', (req, res) => {
   res.json({ success: true, events: store.events });
 });
 
-// GET /api/settings (Public site settings with masked SMTP password)
+// GET /api/settings (Public site settings - strictly excluding internal SMTP configuration)
 cmsRouter.get('/settings', (req, res) => {
   const store = db.get();
-  const safeSettings = { ...store.siteSettings };
-  if (safeSettings.smtpConfig) {
-    safeSettings.smtpConfig = {
-      ...safeSettings.smtpConfig,
-      pass: safeSettings.smtpConfig.pass ? '••••••••' : ''
-    };
-  }
+  const { smtpConfig, ...safeSettings } = (store.siteSettings || {}) as any;
   res.json({ success: true, settings: safeSettings });
 });
 
@@ -232,8 +226,33 @@ cmsRouter.patch('/settings', requireAuth, requireNormalSession, requireUnitOrRol
   res.json({ success: true, settings: store.siteSettings });
 });
 
-// POST /api/system/reset-demo - Reset data to initial verified baseline (Strictly Admin only)
+// POST /api/system/clean-test-data - Clean synthetic test accounts and mock sessions (Strictly Admin only)
+cmsRouter.post('/system/clean-test-data', requireAuth, requireNormalSession, requireAdmin, (req, res) => {
+  const result = db.cleanSyntheticTestData();
+  res.json({
+    success: true,
+    message: `Đã dọn dẹp sạch toàn bộ dữ liệu thử nghiệm! Đã xóa ${result.removedUsers} tài khoản thử nghiệm và ${result.removedSessions} buổi họp giả lập.`,
+    data: result
+  });
+});
+
+// POST /api/system/reload-db - Reload database from disk (Strictly Admin only)
+cmsRouter.post('/system/reload-db', requireAuth, requireNormalSession, requireAdmin, (req, res) => {
+  db.reload();
+  res.json({
+    success: true,
+    message: 'Đã tải lại cơ sở dữ liệu từ đĩa thành công!'
+  });
+});
+
+// POST /api/system/reset-demo - Reset data to initial verified baseline (Strictly Admin only, disabled in production)
 cmsRouter.post('/system/reset-demo', requireAuth, requireNormalSession, requireAdmin, (req, res) => {
+  if (process.env.NODE_ENV === 'production') {
+    return res.status(403).json({
+      success: false,
+      message: 'Thao tác reset demo bị vô hiệu hóa trên môi trường Production để bảo toàn dữ liệu.'
+    });
+  }
   const actor = req.user!;
   const fresh = db.resetToDefaults();
   res.json({ success: true, message: 'Đã khôi phục dữ liệu hệ thống về trạng thái ban đầu!', data: fresh });

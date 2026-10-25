@@ -151,3 +151,27 @@ export function generateSecureTemporaryPassword(): string {
   return chars.join('');
 }
 
+/**
+ * Safely resolves the public application base URL for sensitive links (email verification, password reset, invite).
+ * Prioritizes configured APP_URL or VITE_APP_URL.
+ * In development, allows verified localhost/127.0.0.1.
+ * Prevents Host Header Injection / Reset Poisoning from untrusted external Origin/Host headers.
+ */
+export function getPublicAppUrl(req?: any): string {
+  const envUrl = process.env.APP_URL || process.env.VITE_APP_URL;
+  if (envUrl && typeof envUrl === 'string' && envUrl.trim()) {
+    return envUrl.trim().replace(/\/$/, '');
+  }
+
+  if (process.env.NODE_ENV !== 'production' && req) {
+    const rawHost = req.headers ? (req.headers['host'] as string) : '';
+    if (rawHost && /^(localhost|127\.0\.0\.1)(:\d+)?$/i.test(rawHost)) {
+      const proto = req.secure || req.headers['x-forwarded-proto'] === 'https' ? 'https' : 'http';
+      return `${proto}://${rawHost}`;
+    }
+  }
+
+  const defaultPort = process.env.PORT || '3000';
+  return `http://localhost:${defaultPort}`;
+}
+

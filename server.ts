@@ -43,10 +43,34 @@ async function startServer() {
   const PORT = parseInt(process.env.PORT || '3000', 10);
   const isProduction = process.env.NODE_ENV === 'production';
 
-  // Global Middlewares
-  app.use(cors());
-  app.use(express.json());
-  app.use(express.urlencoded({ extended: true }));
+  // Trust proxy for secure cookies and reverse proxies (Nginx, Caddy, Cloudflare, Traefik, Cloud Run)
+  app.set('trust proxy', 1);
+
+  // CORS Configuration - Restrict origins in production, support APP_URL and CORS_ORIGIN
+  const allowedOrigins = [
+    process.env.APP_URL?.replace(/\/$/, ''),
+    process.env.VITE_APP_URL?.replace(/\/$/, ''),
+    ...(process.env.CORS_ORIGIN ? process.env.CORS_ORIGIN.split(',').map(s => s.trim().replace(/\/$/, '')) : [])
+  ].filter(Boolean) as string[];
+
+  app.use(cors({
+    origin: (origin, callback) => {
+      // Allow requests with no origin (mobile apps, curl, server-to-server)
+      if (!origin) return callback(null, true);
+      // In development, allow localhost origins
+      if (!isProduction && /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin)) {
+        return callback(null, true);
+      }
+      if (allowedOrigins.length === 0 || allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+      return callback(new Error(`CORS policy does not allow access from origin ${origin}`));
+    },
+    credentials: true
+  }));
+
+  app.use(express.json({ limit: '10mb' }));
+  app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
   // System Health Check Endpoint (Public for Cloud Run / uptime monitors)
   app.get('/api/health', (req, res) => {
@@ -137,6 +161,15 @@ async function startServer() {
     });
     console.log('[BK-IC Server] Serving static production build from /dist with SPA fallback.');
   }
+
+  // Global Error Handler - Prevents stack trace leak in production
+  app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
+    console.error('[BK-IC Server] Unhandled error:', err.message || err);
+    res.status(err.status || 500).json({
+      success: false,
+      message: isProduction ? 'Đã xảy ra lỗi máy chủ nội bộ. Vui lòng liên hệ Quản trị viên.' : (err.message || 'Lỗi hệ thống')
+    });
+  });
 
   const server = app.listen(PORT, '0.0.0.0', () => {
     console.log(`[BK-IC Server] Running on http://0.0.0.0:${PORT} (ENV: ${process.env.NODE_ENV || 'development'})`);
