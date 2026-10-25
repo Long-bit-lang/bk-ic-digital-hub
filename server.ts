@@ -72,8 +72,8 @@ async function startServer() {
   app.use(express.json({ limit: '10mb' }));
   app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
-  // System Health Check Endpoint (Public for Cloud Run / uptime monitors)
-  app.get('/api/health', (req, res) => {
+  // System Health Check Endpoint (Public for Cloud Run / Render / uptime monitors)
+  app.get(['/api/health', '/healthz'], (req, res) => {
     const store = db.get();
     res.json({
       status: 'ok',
