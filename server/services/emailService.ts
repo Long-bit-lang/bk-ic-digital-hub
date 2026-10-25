@@ -9,6 +9,7 @@ export interface OutboxEmail {
   subject: string;
   htmlContent: string;
   resetLink?: string;
+  verificationLink?: string;
   tempPassword?: string;
   type: 'password_reset' | 'account_invitation' | 'verification' | 'test' | 'temporary_password';
   sentAt: string;
@@ -77,6 +78,22 @@ export function sanitizeSmtpPass(rawPass: unknown): string {
   return cleaned;
 }
 
+export function isPlaceholderValue(val: unknown): boolean {
+  if (!val || typeof val !== 'string') return true;
+  const lower = val.trim().toLowerCase();
+  const placeholders = [
+    'example@dut.udn.vn',
+    'your_secure_smtp_app_password',
+    'your_smtp_app_password',
+    'your_password_here',
+    'smtp.example.com',
+    'example.com',
+    'change_me',
+    'placeholder'
+  ];
+  return placeholders.some(p => lower.includes(p));
+}
+
 // Transporter caching and connection pooling
 let cachedTransporter: Transporter | null = null;
 let cachedTransporterKey = '';
@@ -142,7 +159,7 @@ export function getActiveSmtpConfig(): {
     const envSecure = process.env.SMTP_SECURE === 'true' || process.env.SMTP_PORT === '465';
     const envPort = sanitizeSmtpPort(process.env.SMTP_PORT, envSecure);
 
-    const isPlaceholder = envUser === 'example@dut.udn.vn' || envPass === 'your_secure_smtp_app_password';
+    const isPlaceholder = isPlaceholderValue(envUser) || isPlaceholderValue(envPass) || isPlaceholderValue(envHost);
     if (isPlaceholder) {
       return {
         isConfigured: false,
@@ -315,14 +332,16 @@ export interface DispatchEmailResult {
   messageId?: string;
 }
 
-interface DispatchOptions {
-  id: string;
+export interface DispatchOptions {
+  id?: string;
   to: string;
-  recipientName: string;
+  recipientName?: string;
   subject: string;
-  htmlContent: string;
+  htmlContent?: string;
+  html?: string;
   type: OutboxEmail['type'];
   resetLink?: string;
+  verificationLink?: string;
   tempPassword?: string;
   expiresAt?: string;
 }
@@ -331,8 +350,17 @@ interface DispatchOptions {
  * Core email dispatcher with strict recipient validation, Nodemailer result inspection,
  * safe logging, and explicit error categorization.
  */
-async function dispatchEmail(options: DispatchOptions): Promise<DispatchEmailResult> {
-  const { id, to, recipientName, subject, htmlContent, type, resetLink, tempPassword, expiresAt } = options;
+export async function dispatchEmail(options: DispatchOptions): Promise<DispatchEmailResult> {
+  const id = options.id || `msg_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
+  const to = options.to;
+  const recipientName = options.recipientName || '';
+  const subject = options.subject;
+  const htmlContent = options.htmlContent || options.html || '';
+  const type = options.type;
+  const resetLink = options.resetLink;
+  const verificationLink = options.verificationLink || (options.type === 'verification' ? options.resetLink : undefined);
+  const tempPassword = options.tempPassword;
+  const expiresAt = options.expiresAt;
   const normalizedTo = (to || '').trim().toLowerCase();
 
   // 1. Strict Recipient Validation (Requirement 2 & 4)
@@ -345,6 +373,7 @@ async function dispatchEmail(options: DispatchOptions): Promise<DispatchEmailRes
       subject,
       htmlContent,
       resetLink,
+      verificationLink,
       tempPassword,
       type,
       sentAt: new Date().toISOString(),
@@ -379,6 +408,7 @@ async function dispatchEmail(options: DispatchOptions): Promise<DispatchEmailRes
       subject,
       htmlContent,
       resetLink,
+      verificationLink,
       tempPassword,
       type,
       sentAt: new Date().toISOString(),
@@ -412,11 +442,12 @@ async function dispatchEmail(options: DispatchOptions): Promise<DispatchEmailRes
       subject,
       htmlContent,
       resetLink,
+      verificationLink,
       tempPassword,
       type,
       sentAt: new Date().toISOString(),
       expiresAt,
-      status: 'delivered',
+      status: 'failed',
       deliveryMethod: 'outbox_fallback',
       deliveryError
     };
@@ -425,12 +456,13 @@ async function dispatchEmail(options: DispatchOptions): Promise<DispatchEmailRes
 
     console.log(`[EmailService] ℹ No active SMTP configured -> message stored in Admin Outbox for ${normalizedTo}`);
     return {
-      success: true,
+      success: false,
       emailId: id,
-      status: 'delivered',
+      status: 'failed',
       deliveryMethod: 'outbox_fallback',
       deliveryCategory: 'outbox_only',
-      message: `Hệ thống đã lưu thông tin vào Hộp thư thử nghiệm nội bộ (Do máy chủ SMTP chưa được kích hoạt).`
+      message: `Máy chủ gửi thư SMTP chưa được kích hoạt. Thư đã được lưu trữ an toàn trong Hộp thư Quản trị (Admin Outbox).`,
+      deliveryError
     };
   }
 
@@ -469,6 +501,7 @@ async function dispatchEmail(options: DispatchOptions): Promise<DispatchEmailRes
         subject,
         htmlContent,
         resetLink,
+        verificationLink,
         tempPassword,
         type,
         sentAt: new Date().toISOString(),
@@ -501,6 +534,7 @@ async function dispatchEmail(options: DispatchOptions): Promise<DispatchEmailRes
       subject,
       htmlContent,
       resetLink,
+      verificationLink,
       tempPassword,
       type,
       sentAt: new Date().toISOString(),
@@ -553,11 +587,12 @@ async function dispatchEmail(options: DispatchOptions): Promise<DispatchEmailRes
       subject,
       htmlContent,
       resetLink,
+      verificationLink,
       tempPassword,
       type,
       sentAt: new Date().toISOString(),
       expiresAt,
-      status: 'delivered',
+      status: 'failed',
       deliveryMethod: 'outbox_fallback',
       deliveryError
     };
@@ -566,9 +601,9 @@ async function dispatchEmail(options: DispatchOptions): Promise<DispatchEmailRes
 
     console.warn(`[EmailService] ⚠ SMTP delivery attempt for ${normalizedTo} encountered issue (${deliveryError}). Safely preserved in Admin Outbox fallback.`);
     return {
-      success: true,
+      success: false,
       emailId: id,
-      status: 'delivered',
+      status: 'failed',
       deliveryMethod: 'outbox_fallback',
       deliveryCategory,
       message: friendlyMessage,
@@ -782,6 +817,7 @@ export async function sendAccountVerificationEmail({
     subject,
     htmlContent,
     type: 'verification',
+    verificationLink,
     resetLink: verificationLink,
     expiresAt
   });

@@ -204,7 +204,7 @@ export const LoginPage: React.FC = () => {
     setIsSubmittingForgot(true);
     setForgotMessage(null);
 
-    const res = await requestTempPassword(forgotEmail.trim());
+    const res = await forgotPassword(trimmedForgotEmail);
     setIsSubmittingForgot(false);
 
     if (res.success) {

@@ -495,7 +495,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
   // Forgot Password / Request Reset Email (Requirement B & C)
   const forgotPassword = async (email: string): Promise<{ success: boolean; message: string; deliveryMethod?: string }> => {
     try {
-      const res = await api.auth.requestTempPassword(email);
+      const res = await api.auth.forgotPassword(email);
       return res;
     } catch (err: any) {
       return { success: false, message: err.message || 'Không thể gửi yêu cầu đặt lại mật khẩu.' };

@@ -1,5 +1,5 @@
 // Real Authentication & User Management Routes for BK-IC Digital Hub
-import { Router } from 'express';
+import { Router, type Request, type Response } from 'express';
 import { db } from '../db.ts';
 import type { User, UserRole, UnitId, Application, AccountStatus } from '../../src/types/index.ts';
 import {
@@ -504,16 +504,15 @@ authRouter.post('/register', async (req, res) => {
   const verificationLink = `${host}/verify-email?token=${verificationRawToken}`;
 
   // Dispatch confirmation / verification email
-  let deliveryMethod: 'smtp' | 'outbox_fallback' = 'outbox_fallback';
+  let sendResult: any = null;
   try {
-    const sendResult = await sendAccountVerificationEmail({
+    sendResult = await sendAccountVerificationEmail({
       to: newAccount.email,
       fullName: newAccount.fullName,
       studentId: newAccount.studentId,
       verificationLink,
       expiresAt: verificationExpiresAt
     });
-    deliveryMethod = sendResult.deliveryMethod;
   } catch (err) {
     console.warn('[Auth] Lỗi khi phát hành email xác nhận tài khoản:', err);
   }
@@ -525,18 +524,24 @@ authRouter.post('/register', async (req, res) => {
     ttlMs: 24 * 60 * 60 * 1000
   });
 
+  const emailSentViaSmtp = Boolean(sendResult?.success && sendResult?.deliveryMethod === 'smtp');
+
   res.json({
     success: true,
-    message: 'Đăng ký tài khoản thành công! Thư xác nhận tài khoản đã được gửi đến email sinh viên của bạn (hiệu lực 24 giờ).',
+    message: emailSentViaSmtp
+      ? 'Đăng ký tài khoản thành công! Thư xác nhận tài khoản đã được chuyển phát qua máy chủ email đến hòm thư sinh viên của bạn (hiệu lực 24 giờ). Vui lòng kiểm tra Hộp thư đến hoặc Thư rác (Spam).'
+      : 'Đăng ký tài khoản thành công! Lưu ý: Hệ thống đang lưu thư nội bộ trong Hộp thư Quản trị do máy chủ gửi thư SMTP chưa kích hoạt hoặc đang thử nghiệm.',
     token: sessionToken,
     user: sanitizeUser(newAccount),
-    deliveryMethod
+    deliveryMethod: sendResult?.deliveryMethod || 'outbox_fallback',
+    deliveryStatus: sendResult?.status || 'failed',
+    deliveryCategory: sendResult?.deliveryCategory || 'outbox_only'
   });
 });
 
-// GET /api/auth/verify-email - Verify email address using secure token
-authRouter.get('/verify-email', (req, res) => {
-  const token = req.query.token as string;
+// GET & POST /api/auth/verify-email - Verify email address using secure token
+const handleVerifyEmail = (req: Request, res: Response) => {
+  const token = ((req.query?.token as string) || req.body?.token) as string;
   if (!token || typeof token !== 'string') {
     return res.status(400).json({
       success: false,
@@ -593,7 +598,10 @@ authRouter.get('/verify-email', (req, res) => {
     message: 'Xác nhận địa chỉ email sinh viên thành công! Tài khoản của bạn đã được kích hoạt hoàn toàn.',
     user: sanitizeUser(user)
   });
-});
+};
+
+authRouter.get('/verify-email', handleVerifyEmail);
+authRouter.post('/verify-email', handleVerifyEmail);
 
 // POST /api/auth/resend-verification - Resend verification email (rate limited)
 authRouter.post('/resend-verification', async (req, res) => {
@@ -670,10 +678,15 @@ authRouter.post('/resend-verification', async (req, res) => {
 
   db.save();
 
+  const emailSentViaSmtp = Boolean(sendResult?.success && sendResult?.deliveryMethod === 'smtp');
   return res.json({
     success: true,
-    message: genericMsg,
-    deliveryMethod: sendResult.deliveryMethod
+    message: emailSentViaSmtp
+      ? genericMsg
+      : 'Yêu cầu gửi lại đã được ghi nhận. Lưu ý: Máy chủ gửi thư SMTP chưa kích hoạt hoặc đang thử nghiệm nội bộ, liên kết xác nhận đã được lưu an toàn trong Hộp thư Quản trị.',
+    deliveryMethod: sendResult.deliveryMethod,
+    deliveryStatus: sendResult.status,
+    deliveryCategory: sendResult.deliveryCategory
   });
 });
 
@@ -911,33 +924,23 @@ authRouter.post('/forgot-password', async (req, res) => {
     return res.json({ success: true, message: genericSuccessMessage });
   }
 
-  // Generate cryptographically secure temporary password
-  const tempPassword = generateSecureTemporaryPassword();
-  const { hash: tempHash, salt: tempSalt } = hashPassword(tempPassword);
-
   const expiresAt = new Date(Date.now() + 15 * 60 * 1000).toISOString();
-  user.tempPasswordHash = tempHash;
-  user.tempPasswordSalt = tempSalt;
-  user.tempPasswordExpiresAt = expiresAt;
-  user.tempPasswordAttempts = 0;
-  user.tempPasswordUsed = false;
 
-  // Also support resetToken for link verification compatibility
+  // Support secure single-use resetToken for /reset-password?token=...
   const { rawToken, tokenHash } = generateSecureResetToken();
   user.resetTokenHash = tokenHash;
   user.resetTokenExpiresAt = expiresAt;
 
   const host = getPublicAppUrl(req);
-  const loginUrl = `${host}/login`;
+  const resetLink = `${host}/reset-password?token=${rawToken}`;
 
   try {
     // Deliver strictly to user's registered email from the database
-    const sendResult = await sendTemporaryPasswordEmail({
+    const sendResult = await sendPasswordResetEmail({
       to: user.email.trim().toLowerCase(),
       fullName: user.fullName,
-      tempPassword,
-      expiresAt,
-      loginUrl
+      resetLink,
+      expiresAt
     });
 
     // Check if transmission failed over active SMTP
@@ -956,19 +959,24 @@ authRouter.post('/forgot-password', async (req, res) => {
       actorName: user.fullName,
       actorRole: user.role,
       actorUnit: user.unit,
-      action: 'Gửi mật khẩu tạm thời khôi phục tài khoản',
+      action: 'Yêu cầu đặt lại mật khẩu',
       targetType: 'User',
       targetId: user.id,
-      details: `Đã phát hành mật khẩu tạm thời bảo mật đến email ${maskEmail(user.email)} (Thời hạn 15 phút, 1 lần sử dụng).`
+      details: `Đã phát hành liên kết đặt lại mật khẩu bảo mật đến email ${maskEmail(user.email)} (Thời hạn 15 phút, 1 lần sử dụng).`
     });
 
     db.save();
 
-    // Security: Do NOT expose tempPassword, raw tokens, or reset links in public response!
+    // Security: Do NOT expose raw tokens or reset links in public response!
+    const emailSentViaSmtp = Boolean(sendResult?.success && sendResult?.deliveryMethod === 'smtp');
     return res.json({
       success: true,
-      message: genericSuccessMessage,
-      deliveryMethod: sendResult.deliveryMethod
+      message: emailSentViaSmtp
+        ? genericSuccessMessage
+        : 'Yêu cầu đã được ghi nhận. Lưu ý: Máy chủ gửi thư SMTP chưa kích hoạt hoặc đang thử nghiệm nội bộ, liên kết đặt lại mật khẩu đã được lưu an toàn trong Hộp thư Quản trị.',
+      deliveryMethod: sendResult.deliveryMethod,
+      deliveryStatus: sendResult.status,
+      deliveryCategory: sendResult.deliveryCategory
     });
   } catch (err: any) {
     console.error('Lỗi khi gửi email khôi phục mật khẩu:', err);
