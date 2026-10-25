@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { useApp } from '../../context/AppContext';
 import { api } from '../../services/api';
+import { extractAcademicYear, formatAcademicYearDisplay } from '../../utils/academicYear';
 import { 
   User, 
   GraduationCap, 
@@ -39,6 +40,7 @@ export const PortalProfilePage: React.FC = () => {
       fullName: formData.fullName,
       phone: formData.phone,
       classId: formData.classId,
+      academicYear: extractAcademicYear(formData.classId),
       faculty: formData.faculty
     });
     setIsEditing(false);
@@ -161,12 +163,20 @@ export const PortalProfilePage: React.FC = () => {
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-slate-500 mb-1">
-                Lớp sinh hoạt
-              </label>
+              <div className="flex items-center justify-between mb-1">
+                <label className="block text-xs font-semibold text-slate-500">
+                  Lớp sinh hoạt
+                </label>
+                {isEditing && (
+                  <span className="text-[11px] font-medium text-blue-600 bg-blue-50 px-2 py-0.5 rounded-md">
+                    Khóa {extractAcademicYear(formData.classId)}
+                  </span>
+                )}
+              </div>
               {isEditing ? (
                 <input
                   type="text"
+                  placeholder="VD: 25T_KHDL, 22TDH1..."
                   value={formData.classId}
                   onChange={(e) => setFormData({ ...formData, classId: e.target.value })}
                   className="w-full rounded-xl border border-slate-300 px-3 py-2 text-xs text-slate-800 focus:border-blue-500 focus:outline-none"
@@ -174,6 +184,19 @@ export const PortalProfilePage: React.FC = () => {
               ) : (
                 <div className="text-sm font-semibold text-slate-800">{currentUser.classId}</div>
               )}
+            </div>
+
+            <div>
+              <label className="block text-xs font-semibold text-slate-500 mb-1">
+                Khóa học
+              </label>
+              <div className="text-sm font-semibold text-slate-800">
+                {formatAcademicYearDisplay(
+                  isEditing ? extractAcademicYear(formData.classId) : currentUser.academicYear,
+                  isEditing ? formData.classId : currentUser.classId,
+                  currentUser.role
+                )}
+              </div>
             </div>
 
             <div>

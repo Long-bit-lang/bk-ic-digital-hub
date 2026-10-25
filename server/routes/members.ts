@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { db } from '../db.ts';
 import type { User, MemberStatus, StatusHistoryEntry, UnitId } from '../../src/types/index.ts';
-import { sanitizeUser } from './auth.ts';
+import { sanitizeUser, extractAcademicYear } from './auth.ts';
 import { generateSecureResetToken, hashPassword, validatePasswordPolicy, getPublicAppUrl } from '../services/authSecurity.ts';
 import { sendAccountInviteEmail, sendPasswordResetEmail, isValidEmailFormat } from '../services/emailService.ts';
 import { requireAuth, requireNormalSession } from '../middleware/auth.ts';
@@ -253,7 +253,10 @@ membersRouter.patch('/:id', (req, res) => {
   if (fullName && (isBnOrAdmin || isBtv)) member.fullName = fullName.trim();
   if (phone !== undefined) member.phone = phone.trim();
   if (faculty) member.faculty = faculty;
-  if (classId) member.classId = classId;
+  if (classId) {
+    member.classId = classId;
+    member.academicYear = extractAcademicYear(classId, member.academicYear);
+  }
   if (avatarUrl) member.avatarUrl = avatarUrl;
 
   store.auditLogs.unshift({
@@ -372,7 +375,9 @@ membersRouter.post('/', async (req, res) => {
     phone: phone ? phone.trim() : '',
     faculty: faculty || 'Khoa Công nghệ Thông tin',
     classId: classId || '24T_CLC',
-    academicYear: academicYear || 'K24 (2024-2029)',
+    academicYear: academicYear && academicYear !== 'K24 (2024-2029)'
+      ? (academicYear.match(/^(?:k|khóa\s*)?(\d{2})/i)?.[1] || academicYear)
+      : extractAcademicYear(classId, '24'),
     role: role || 'member',
     unit: assignedUnit,
     committee: assignedUnit,

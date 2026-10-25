@@ -8,3 +8,6 @@ coverage/
 data/backups/
 .env*
 !.env.example
+*service-account*.json
+*serviceAccount*.json
+firebase-adminsdk*.json

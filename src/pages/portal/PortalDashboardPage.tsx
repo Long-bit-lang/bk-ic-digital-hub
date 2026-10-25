@@ -5,6 +5,7 @@ import { useApp } from '../../context/AppContext';
 import { QRScannerModal } from '../../components/qr/QRScannerModal';
 import { DynamicQRProjector } from '../../components/qr/DynamicQRProjector';
 import { Session } from '../../types';
+import { formatAcademicYearDisplay } from '../../utils/academicYear';
 import { 
   Calendar, 
   Clock, 
@@ -72,7 +73,7 @@ export const PortalDashboardPage: React.FC = () => {
             Xin chào, {currentUser.fullName}!
           </h1>
           <p className="text-xs sm:text-sm text-slate-500 mt-1">
-            {currentUser.faculty} · Khóa {currentUser.academicYear} · {currentUser.position}
+            {currentUser.faculty} · {formatAcademicYearDisplay(currentUser.academicYear, currentUser.classId, currentUser.role)} · {currentUser.position}
           </p>
         </div>
 

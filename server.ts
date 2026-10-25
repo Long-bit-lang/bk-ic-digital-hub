@@ -177,6 +177,13 @@ async function startServer() {
   });
 
   // Synchronize training session status and attendance lifecycle on server startup
+  // Synchronize database with Cloud Firestore (if configured)
+  try {
+    await db.syncWithCloud();
+  } catch (err) {
+    console.error('[BK-IC Server] Initial Cloud Firestore sync error:', err);
+  }
+
   const initialStore = db.get();
   if (syncSessionsLifecycle(initialStore)) {
     db.save();

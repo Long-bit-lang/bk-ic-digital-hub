@@ -2,6 +2,7 @@
 import { Router } from 'express';
 import { db } from '../db.ts';
 import type { Application, UnitId, User } from '../../src/types/index.ts';
+import { extractAcademicYear } from './auth.ts';
 import { getVNCurrentTimeStr, getVNCurrentDateStr, getNowISO } from '../timeUtils.ts';
 import { requireAuth, requireNormalSession, requireAdmin, requireUnitOrRole } from '../middleware/auth.ts';
 
@@ -58,7 +59,9 @@ cmsRouter.post('/applications', (req, res) => {
     phone: phone.trim(),
     faculty: faculty || 'Khoa Công nghệ Thông tin',
     classId: classId || 'DUT-2026',
-    academicYear: academicYear || 'K24',
+    academicYear: academicYear && academicYear !== 'K24'
+      ? (academicYear.match(/^(?:k|khóa\s*)?(\d{2})/i)?.[1] || academicYear)
+      : extractAcademicYear(classId, '24'),
     interestTrack,
     motivation: motivation || '',
     skills: skills || '',

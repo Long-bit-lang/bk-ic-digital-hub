@@ -59,6 +59,17 @@ export function sanitizeUser(user: User): User {
   return safe as User;
 }
 
+// Helper to automatically extract cohort (Khóa) from classId (e.g. 25T_KHDL -> 25, 22TDH1 -> 22)
+export function extractAcademicYear(classId?: string, fallback: string = '24'): string {
+  if (!classId) return fallback;
+  const trimmed = classId.trim();
+  const match = trimmed.match(/^(?:k|khóa\s*)?(\d{2})/i) || trimmed.match(/\b(\d{2})[A-Za-z_]/);
+  if (match) {
+    return match[1];
+  }
+  return fallback;
+}
+
 // Mask email for public display (e.g. n***@dut.udn.vn)
 function maskEmail(email: string): string {
   const [local, domain] = email.split('@');
@@ -428,7 +439,9 @@ authRouter.post('/register', async (req, res) => {
     phone: phone ? phone.trim() : '',
     faculty: faculty || 'Khoa Công nghệ Thông tin',
     classId: classId || '24T_CLC',
-    academicYear: academicYear || 'K24 (2024-2029)',
+    academicYear: academicYear && academicYear !== 'K24 (2024-2029)'
+      ? (academicYear.match(/^(?:k|khóa\s*)?(\d{2})/i)?.[1] || academicYear)
+      : extractAcademicYear(classId, '24'),
     role: 'applicant', // Governance rule: strictly applicant
     unit: assignedUnit,
     committee: assignedUnit,

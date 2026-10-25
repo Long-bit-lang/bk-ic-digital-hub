@@ -20,6 +20,8 @@ import type {
   ClubUnit
 } from '../src/types/index.ts';
 
+import { loadCloudData, saveCloudData } from './services/firestoreSync.ts';
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const DATA_DIR = path.resolve(__dirname, '../data');
@@ -265,6 +267,21 @@ class DatabaseManager {
     return this.data!;
   }
 
+  public async syncWithCloud(): Promise<void> {
+    if (!this.data) {
+      this.init();
+    }
+    const synced = await loadCloudData(this.data!);
+    this.data = synced;
+    this.normalizeData(this.data);
+    try {
+      const serialized = JSON.stringify(this.data, null, 2);
+      fs.writeFileSync(DB_FILE, serialized, 'utf-8');
+    } catch (err) {
+      console.error('[DatabaseManager] Failed to cache cloud data locally:', err);
+    }
+  }
+
   public save(): void {
     if (!this.data) return;
     if (this.isWriting) {
@@ -286,6 +303,9 @@ class DatabaseManager {
       
       // Auto-create rotating backup periodically (at most once every 10 minutes)
       this.maybeCreatePeriodicBackup();
+
+      // Asynchronously synchronize with Google Cloud Firestore
+      saveCloudData(this.data);
     } catch (err) {
       console.error('Failed to persist database to file:', err);
       if (tempFile) {

@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import confetti from 'canvas-confetti';
 import { useApp } from '../context/AppContext';
+import { extractAcademicYear } from '../utils/academicYear';
 import { 
   Sparkles, 
   Send, 
@@ -308,31 +309,39 @@ export const JoinPage: React.FC = () => {
 
                     <div className="grid grid-cols-2 gap-2">
                       <div>
-                        <label className="block text-xs font-semibold text-slate-700 mb-1">
-                          Lớp sinh hoạt
-                        </label>
+                        <div className="flex items-center justify-between mb-1">
+                          <label className="block text-xs font-semibold text-slate-700">
+                            Lớp sinh hoạt
+                          </label>
+                          <span className="text-[11px] font-medium text-blue-600 bg-blue-50 px-2 py-0.5 rounded-md">
+                            Khóa {extractAcademicYear(formData.classId)}
+                          </span>
+                        </div>
                         <input
                           type="text"
-                          placeholder="24T_KHDL"
+                          placeholder="VD: 25T_KHDL, 22TDH1..."
                           value={formData.classId}
-                          onChange={(e) => setFormData({ ...formData, classId: e.target.value })}
+                          onChange={(e) => {
+                            const val = e.target.value;
+                            setFormData({ 
+                              ...formData, 
+                              classId: val,
+                              academicYear: extractAcademicYear(val)
+                            });
+                          }}
                           className="w-full rounded-xl border border-slate-300 px-3 py-2 text-xs text-slate-800 focus:border-blue-500 focus:outline-none"
                         />
                       </div>
                       <div>
                         <label className="block text-xs font-semibold text-slate-700 mb-1">
-                          Khóa học
+                          Khóa học (Nhận diện tự động)
                         </label>
-                        <select
-                          value={formData.academicYear}
-                          onChange={(e) => setFormData({ ...formData, academicYear: e.target.value })}
-                          className="w-full rounded-xl border border-slate-300 bg-white px-2 py-2 text-xs text-slate-800 focus:border-blue-500 focus:outline-none"
-                        >
-                          <option value="K24 (Năm nhất)">K24 (Năm nhất)</option>
-                          <option value="K23 (Năm hai)">K23 (Năm hai)</option>
-                          <option value="K22 (Năm ba)">K22 (Năm ba)</option>
-                          <option value="K21 (Năm tư)">K21 (Năm tư)</option>
-                        </select>
+                        <input
+                          type="text"
+                          readOnly
+                          value={`Khóa ${extractAcademicYear(formData.classId)}`}
+                          className="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-xs text-slate-600 font-medium focus:outline-none cursor-not-allowed"
+                        />
                       </div>
                     </div>
                   </div>

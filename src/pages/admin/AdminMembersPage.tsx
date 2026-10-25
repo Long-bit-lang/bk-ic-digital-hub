@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { useApp } from '../../context/AppContext';
 import { User, UserRole, MemberStatus, UnitId, AccountStatus } from '../../types';
 import { api } from '../../services/api';
+import { extractAcademicYear } from '../../utils/academicYear';
 import { 
   Users, 
   Search, 
@@ -1411,13 +1412,26 @@ export const AdminMembersPage: React.FC = () => {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-slate-400 mb-1">
-                    Lớp sinh hoạt
-                  </label>
+                  <div className="flex items-center justify-between mb-1">
+                    <label className="block text-xs font-semibold text-slate-400">
+                      Lớp sinh hoạt
+                    </label>
+                    <span className="text-[11px] font-medium text-blue-400 bg-blue-500/10 px-2 py-0.5 rounded-md border border-blue-500/20">
+                      Khóa {extractAcademicYear(formData.classId)}
+                    </span>
+                  </div>
                   <input
                     type="text"
+                    placeholder="VD: 25T_KHDL, 22TDH1..."
                     value={formData.classId}
-                    onChange={(e) => setFormData({ ...formData, classId: e.target.value })}
+                    onChange={(e) => {
+                      const val = e.target.value;
+                      setFormData({ 
+                        ...formData, 
+                        classId: val,
+                        academicYear: extractAcademicYear(val)
+                      });
+                    }}
                     className="w-full rounded-xl border border-slate-700 bg-slate-800 px-3 py-2 text-xs text-white focus:outline-none focus:border-blue-500"
                   />
                 </div>
