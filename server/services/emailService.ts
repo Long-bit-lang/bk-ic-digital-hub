@@ -142,11 +142,30 @@ export function getActiveSmtpConfig(): {
   isConfigured: boolean;
   transporter: Transporter | null;
   from: string;
-  source: 'env' | 'db' | 'none';
+  source: 'env' | 'db' | 'resend' | 'none';
   host?: string;
   port?: number;
   user?: string;
+  provider?: 'smtp' | 'resend';
+  resendApiKey?: string;
 } {
+  // 0. Check Resend API (Recommended for Render Free tier over port 443 HTTPS)
+  const rawResendKey = process.env.RESEND_API_KEY;
+  if (rawResendKey && !isPlaceholderValue(rawResendKey)) {
+    const resendKey = rawResendKey.trim();
+    return {
+      isConfigured: true,
+      transporter: null,
+      from: process.env.SMTP_FROM || 'BK-IC Digital Hub <onboarding@resend.dev>',
+      source: 'resend',
+      provider: 'resend',
+      host: 'api.resend.com (HTTPS Port 443)',
+      port: 443,
+      user: 'Resend API Key',
+      resendApiKey: resendKey
+    };
+  }
+
   // 1. Check environment variables
   const rawEnvHost = process.env.SMTP_HOST;
   const rawEnvUser = process.env.SMTP_USER;
@@ -184,19 +203,21 @@ export function getActiveSmtpConfig(): {
             user: envUser,
             pass: envPass
           },
+          family: 4,
           pool: true,
           maxConnections: 3,
           maxMessages: 100,
-          connectionTimeout: 15000,
-          greetingTimeout: 15000,
-          socketTimeout: 20000
-        })
+          connectionTimeout: 10000,
+          greetingTimeout: 10000,
+          socketTimeout: 15000
+        } as any)
       );
       return {
         isConfigured: true,
         transporter,
         from: process.env.SMTP_FROM || `"BK-IC Digital Hub" <${envUser}>`,
         source: 'env',
+        provider: 'smtp',
         host: envHost,
         port: envPort,
         user: envUser
@@ -466,6 +487,103 @@ export async function dispatchEmail(options: DispatchOptions): Promise<DispatchE
     };
   }
 
+  // 3.5. If Resend HTTP API is configured, dispatch via HTTPS (Port 443 - works on Render Free)
+  if (smtp.provider === 'resend' && smtp.resendApiKey) {
+    try {
+      const plainText = htmlToPlainText(htmlContent);
+      const resendRes = await fetch('https://api.resend.com/emails', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${smtp.resendApiKey}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          from: smtp.from,
+          to: [normalizedTo],
+          subject,
+          html: htmlContent,
+          text: plainText
+        })
+      });
+      const resendData = await resendRes.json();
+      if (!resendRes.ok) {
+        throw new Error(resendData?.message || resendData?.error?.message || `HTTP ${resendRes.status}`);
+      }
+
+      const outboxEntry: OutboxEmail = {
+        id,
+        to: normalizedTo,
+        recipientName,
+        subject,
+        htmlContent,
+        resetLink,
+        verificationLink,
+        tempPassword,
+        type,
+        sentAt: new Date().toISOString(),
+        expiresAt,
+        status: 'delivered',
+        deliveryMethod: 'smtp'
+      };
+      emailOutbox.unshift(outboxEntry);
+      if (emailOutbox.length > 50) emailOutbox.pop();
+
+      console.log(`[EmailService] ✓ Resend HTTP API accepted email for delivery to ${normalizedTo} (Id: ${resendData?.id})`);
+      return {
+        success: true,
+        emailId: id,
+        status: 'delivered',
+        deliveryMethod: 'smtp',
+        deliveryCategory: 'smtp_accepted',
+        message: `Email đã được gửi thành công qua dịch vụ Resend HTTP API (Port 443) đến ${normalizedTo}.`,
+        messageId: resendData?.id
+      };
+    } catch (err: any) {
+      console.warn(`[EmailService] ✗ Resend API delivery failed for ${normalizedTo}:`, err?.message || err);
+      const deliveryError = `Gửi qua Resend API thất bại: ${err?.message || err}`;
+      const outboxEntry: OutboxEmail = {
+        id,
+        to: normalizedTo,
+        recipientName,
+        subject,
+        htmlContent,
+        resetLink,
+        verificationLink,
+        tempPassword,
+        type,
+        sentAt: new Date().toISOString(),
+        expiresAt,
+        status: 'failed',
+        deliveryMethod: 'outbox_fallback',
+        deliveryError
+      };
+      emailOutbox.unshift(outboxEntry);
+      if (emailOutbox.length > 50) emailOutbox.pop();
+
+      return {
+        success: false,
+        emailId: id,
+        status: 'failed',
+        deliveryMethod: 'outbox_fallback',
+        deliveryCategory: 'smtp_connection_auth_error',
+        message: `Không thể gửi qua Resend API: ${err?.message || 'Lỗi kết nối'}.`,
+        deliveryError
+      };
+    }
+  }
+
+  if (!smtp.transporter) {
+    return {
+      success: false,
+      emailId: id,
+      status: 'failed',
+      deliveryMethod: 'outbox_fallback',
+      deliveryCategory: 'outbox_only',
+      message: 'Chưa cấu hình bộ gửi thư SMTP hợp lệ.',
+      deliveryError: 'Transporter null'
+    };
+  }
+
   // 4. Real SMTP Transmission via Nodemailer (Requirements 4)
   try {
     // Determine clean envelope and sender address
@@ -568,8 +686,13 @@ export async function dispatchEmail(options: DispatchOptions): Promise<DispatchE
       friendlyMessage = 'Không thể xác thực với máy chủ gửi thư SMTP. Vui lòng kiểm tra lại Mật khẩu ứng dụng (Google App Password 16 chữ cái) trong cấu hình SMTP.';
     } else if (errCode === 'ECONNREFUSED' || errCode === 'ETIMEDOUT' || errCode === 'ENOTFOUND' || /connect|timeout|dns/i.test(errMsg)) {
       deliveryCategory = 'smtp_connection_auth_error';
-      deliveryError = `Gửi thất bại do kết nối hoặc xác thực SMTP: Không thể kết nối tới máy chủ gửi thư (${errCode || 'Network error'}).`;
-      friendlyMessage = 'Không thể kết nối đến máy chủ gửi thư SMTP. Vui lòng kiểm tra đường truyền mạng hoặc cấu hình máy chủ.';
+      const isTimeout = /timeout|etimedout/i.test(errMsg);
+      deliveryError = isTimeout
+        ? 'Gửi thất bại do kết nối hoặc xác thực SMTP: Connection timeout. (Lưu ý: Nền tảng hosting Render gói Free Web Service chặn toàn bộ cổng SMTP 25, 465, 587. Để gửi thư trên Render Free, hãy sử dụng biến môi trường RESEND_API_KEY qua cổng HTTPS 443 hoặc nâng cấp gói Render trả phí).'
+        : `Gửi thất bại do kết nối hoặc xác thực SMTP: Không thể kết nối tới máy chủ gửi thư (${errCode || 'Network error'}).`;
+      friendlyMessage = isTimeout
+        ? 'Kết nối máy chủ SMTP bị quá hạn (Connection timeout). Nếu bạn đang triển khai trên Render Free, nền tảng này chặn các cổng SMTP 25/465/587. Giải pháp: Thêm biến RESEND_API_KEY để gửi qua cổng HTTPS 443 miễn phí hoặc nâng cấp gói Render.'
+        : 'Không thể kết nối đến máy chủ gửi thư SMTP. Vui lòng kiểm tra đường truyền mạng hoặc cấu hình máy chủ.';
     } else if (/recipient|address|550|553|syntax|user unknown/i.test(errMsg)) {
       deliveryCategory = 'smtp_rejected';
       deliveryError = `Có người nhận bị từ chối: Địa chỉ không tồn tại hoặc bị chặn trên hệ thống máy chủ (${errMsg}).`;
@@ -1057,6 +1180,52 @@ export async function sendTestSmtpEmail(
     from = `"${customConfig.fromName || 'BK-IC Digital Hub'}" <${customConfig.fromEmail || cleanUser}>`;
   } else {
     const active = getActiveSmtpConfig();
+    if (active.provider === 'resend' && active.resendApiKey) {
+      try {
+        const testHtml = `
+          <div style="font-family: Arial, sans-serif; padding: 24px; background: #f8fafc; border-radius: 12px; max-width: 500px;">
+            <h3 style="color: #059669;">✓ Kết nối Resend HTTP API thành công!</h3>
+            <p>Xin chào,</p>
+            <p>Hệ thống <strong>BK-IC Digital Hub</strong> đã kết nối thành công với dịch vụ Resend HTTP API qua cổng 443 (HTTPS). Email thử nghiệm đã được phát hành thành công tới <strong>${normalizedTo}</strong>.</p>
+            <div style="margin-top: 16px; font-size: 12px; color: #64748b;">
+              Thời gian gửi: ${new Date().toLocaleString('vi-VN')}<br/>
+              Người gửi: ${active.from}
+            </div>
+          </div>
+        `.trim();
+        const testPlain = htmlToPlainText(testHtml);
+
+        const resendRes = await fetch('https://api.resend.com/emails', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${active.resendApiKey}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            from: active.from,
+            to: [normalizedTo],
+            subject: '[BK-IC Digital Hub] Thư kiểm tra kết nối email qua Resend HTTP API thành công',
+            html: testHtml,
+            text: testPlain
+          })
+        });
+        const resData = await resendRes.json();
+        if (!resendRes.ok) {
+          throw new Error(resData?.message || resData?.error?.message || `HTTP ${resendRes.status}`);
+        }
+        return {
+          success: true,
+          deliveryCategory: 'smtp_accepted',
+          message: `Dịch vụ Resend HTTP API (Port 443) đã gửi thư kiểm tra thành công tới "${normalizedTo}".`
+        };
+      } catch (err: any) {
+        return {
+          success: false,
+          deliveryCategory: 'smtp_connection_auth_error',
+          message: `Gửi qua Resend API thất bại: ${err?.message || err}`
+        };
+      }
+    }
     transporter = active.transporter;
     from = active.from;
   }
@@ -1127,6 +1296,14 @@ export async function sendTestSmtpEmail(
         success: false,
         deliveryCategory,
         message: `Có người nhận bị từ chối: ${errMsg}`
+      };
+    }
+
+    if (/timeout|etimedout/i.test(errMsg)) {
+      return {
+        success: false,
+        deliveryCategory: 'smtp_connection_auth_error',
+        message: 'Gửi thất bại do kết nối hoặc xác thực SMTP: Connection timeout. (Nguyên nhân: Hosting Render gói Free chặn toàn bộ các cổng SMTP 25, 465, 587. Để gửi email khi deploy trên Render Free, hãy sử dụng biến môi trường RESEND_API_KEY để gửi qua cổng HTTPS 443, hoặc nâng cấp gói Render trả phí, hoặc kiểm tra khi chạy cục bộ localhost).'
       };
     }
 

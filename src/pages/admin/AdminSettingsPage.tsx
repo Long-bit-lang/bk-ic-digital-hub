@@ -258,6 +258,9 @@ export const AdminSettingsPage: React.FC = () => {
               <p className="text-slate-300">
                 • <strong>Email thử nghiệm nội bộ:</strong> Các email kiểm thử tự động (tiền tố <code className="bg-slate-800 px-1 py-0.5 rounded text-sky-300">resend.*</code>, <code className="bg-slate-800 px-1 py-0.5 rounded text-sky-300">test.*</code>, <code className="bg-slate-800 px-1 py-0.5 rounded text-sky-300">recovery.*</code>) được tự động chặn và lưu an toàn vào <em>Hộp thư Hệ thống bên dưới</em>, tuyệt đối không gửi ra ngoài để ngăn Google Mailer-Daemon báo lỗi 550 Recipient Blocked.
               </p>
+              <div className="pt-1.5 border-t border-slate-700/60 text-amber-300/90">
+                • <strong>Lưu ý khi chạy trên Render (Gói Free Web Service):</strong> Render chặn hoàn toàn các cổng gửi thư SMTP (25, 465, 587) trên gói Free dẫn đến lỗi <em>Connection timeout</em>. Nếu triển khai trên Render Free, bạn có thể thêm biến môi trường <code className="bg-slate-800 px-1 py-0.5 rounded text-amber-200">RESEND_API_KEY</code> (miễn phí tại resend.com) để gửi thư qua cổng HTTPS 443 không bị chặn, hoặc nâng cấp Render lên gói trả phí.
+              </div>
             </div>
           </div>
         </div>
