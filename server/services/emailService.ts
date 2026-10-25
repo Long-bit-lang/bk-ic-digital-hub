@@ -356,26 +356,27 @@ export function isSyntheticOrTestEmail(email: string): boolean {
     return true;
   }
 
-  // 2. Synthetic patterns strictly in automated test suite environment (NODE_ENV === 'test')
-  if (process.env.NODE_ENV === 'test') {
-    if (
-      /^(resend|test|tester|recovery|ratelimit|fake|mock|dummy|sample|demo|temp|nonatt|nonexistent|disabled|stranger|spoof|exploit)[\.\-_0-9]/i.test(localPart) ||
-      /^(resend|test|tester|fake|mock|dummy|sample|demo|temp|nonexistent)$/i.test(localPart) ||
-      localPart.startsWith('test.') ||
-      localPart.startsWith('pic.mem.') ||
-      localPart.startsWith('test.mem.') ||
-      localPart.startsWith('member.test') ||
-      localPart.startsWith('user.test') ||
-      localPart.startsWith('admin.test') ||
-      /^(member|bn|bdh|btv)\.\d+/i.test(localPart) ||
-      localPart.includes('.test.') ||
-      localPart.endsWith('.test') ||
-      localPart.includes('fake') ||
-      localPart.includes('dummy') ||
-      localPart.includes('nonexistent')
-    ) {
-      return true;
-    }
+  // 2. Synthetic and automated test patterns
+  // ALWAYS intercepted across all environments to prevent live SMTP / Brevo dispatch to non-existent mailboxes
+  // which causes Google / Outlook to queue and return 'Delivery Status Notification (Failure)' bounce emails.
+  if (
+    /^(resend|test|tester|recovery|ratelimit|fake|mock|dummy|sample|demo|temp|nonatt|nonexistent|disabled|stranger|spoof|exploit|unverified)[\.\-_0-9]/i.test(localPart) ||
+    /^(resend|test|tester|fake|mock|dummy|sample|demo|temp|nonexistent|unverified)$/i.test(localPart) ||
+    localPart.startsWith('test.') ||
+    localPart.startsWith('pic.mem.') ||
+    localPart.startsWith('test.mem.') ||
+    localPart.startsWith('member.test') ||
+    localPart.startsWith('user.test') ||
+    localPart.startsWith('admin.test') ||
+    /^student\.\d+/i.test(localPart) ||
+    /^(member|bn|bdh|btv)\.\d+/i.test(localPart) ||
+    localPart.includes('.test.') ||
+    localPart.endsWith('.test') ||
+    localPart.includes('fake') ||
+    localPart.includes('dummy') ||
+    localPart.includes('nonexistent')
+  ) {
+    return true;
   }
 
   return false;
@@ -578,39 +579,7 @@ export async function dispatchEmail(options: DispatchOptions): Promise<DispatchE
     };
   }
 
-  // 2. Reserved Test / Synthetic Domains (RFC 2606 & RFC 6761)
-  // Safely intercept test domains or synthetic addresses so live SMTP does not attempt external delivery
-  if (isSyntheticOrTestEmail(normalizedTo)) {
-    const note = `Địa chỉ thử nghiệm nội bộ (${normalizedTo}) - lưu trữ vào Hộp thư thử nghiệm (Admin Outbox), không phát tán qua máy chủ SMTP bên ngoài.`;
-    recordOutbox({
-      id,
-      to: normalizedTo,
-      recipientName,
-      subject,
-      htmlContent,
-      resetLink,
-      verificationLink,
-      tempPassword,
-      type,
-      sentAt: new Date().toISOString(),
-      expiresAt,
-      status: 'delivered',
-      deliveryMethod: 'outbox_fallback',
-      deliveryError: note
-    });
-
-    console.log(`[EmailService] ℹ Intercepted synthetic/test recipient ${normalizedTo} -> Admin Outbox fallback.`);
-    return {
-      success: true,
-      emailId: id,
-      status: 'delivered',
-      deliveryMethod: 'outbox_fallback',
-      deliveryCategory: 'outbox_only',
-      message: `Đã phát hành thông tin và lưu an toàn vào Hộp thư thử nghiệm cho địa chỉ thử nghiệm: ${normalizedTo}.`
-    };
-  }
-
-  // 3. Check active configuration
+  // 2. Check active configuration
   const smtp = getActiveSmtpConfig();
   if (!smtp.isConfigured) {
     const deliveryError = 'Chưa cấu hình tài khoản gửi thư (như Brevo API Key hoặc Gmail App Password). Thư đã được lưu vào Hộp thư thử nghiệm nội bộ.';
@@ -640,6 +609,38 @@ export async function dispatchEmail(options: DispatchOptions): Promise<DispatchE
       deliveryCategory: 'outbox_only',
       message: `Máy chủ gửi thư chưa được kích hoạt. Thư đã được lưu trữ an toàn trong Hộp thư Quản trị (Admin Outbox).`,
       deliveryError
+    };
+  }
+
+  // 3. Reserved Test / Synthetic Domains & Patterns (RFC 2606 & RFC 6761)
+  // Safely intercept test domains or synthetic addresses so live SMTP does not attempt external delivery to fake mailboxes
+  if (isSyntheticOrTestEmail(normalizedTo)) {
+    const note = `Địa chỉ thử nghiệm nội bộ (${normalizedTo}) - lưu trữ vào Hộp thư thử nghiệm (Admin Outbox), không phát tán qua máy chủ SMTP bên ngoài.`;
+    recordOutbox({
+      id,
+      to: normalizedTo,
+      recipientName,
+      subject,
+      htmlContent,
+      resetLink,
+      verificationLink,
+      tempPassword,
+      type,
+      sentAt: new Date().toISOString(),
+      expiresAt,
+      status: 'delivered',
+      deliveryMethod: 'outbox_fallback',
+      deliveryError: note
+    });
+
+    console.log(`[EmailService] ℹ Intercepted synthetic/test recipient ${normalizedTo} -> Admin Outbox fallback.`);
+    return {
+      success: true,
+      emailId: id,
+      status: 'delivered',
+      deliveryMethod: 'outbox_fallback',
+      deliveryCategory: 'outbox_only',
+      message: `Đã phát hành thông tin và lưu an toàn vào Hộp thư thử nghiệm cho địa chỉ thử nghiệm: ${normalizedTo}.`
     };
   }
 
