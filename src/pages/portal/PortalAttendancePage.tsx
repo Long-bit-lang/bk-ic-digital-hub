@@ -11,7 +11,6 @@ import {
   AlertCircle, 
   FileText, 
   X,
-  Filter,
   Send,
   Plus
 } from 'lucide-react';

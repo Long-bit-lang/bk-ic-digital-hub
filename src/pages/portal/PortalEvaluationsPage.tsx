@@ -6,8 +6,7 @@ import {
   CheckCircle2, 
   AlertCircle, 
   ShieldCheck, 
-  HelpCircle,
-  FileText
+  HelpCircle
 } from 'lucide-react';
 
 export const PortalEvaluationsPage: React.FC = () => {

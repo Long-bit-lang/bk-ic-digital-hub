@@ -7,13 +7,11 @@ import {
   CheckCircle2, 
   Sparkles, 
   Globe, 
-  ExternalLink,
-  Plus,
-  Trash2
+  ExternalLink
 } from 'lucide-react';
 
 export const AdminContentPage: React.FC = () => {
-  const { siteSettings, updateSiteSettings, projects, events, addProject, addEvent } = useApp();
+  const { siteSettings, updateSiteSettings } = useApp();
 
   const [savedSuccess, setSavedSuccess] = useState(false);
   const [formData, setFormData] = useState({

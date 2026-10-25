@@ -10,9 +10,7 @@ import {
   Lock, 
   Edit3, 
   X, 
-  Save, 
-  Sliders,
-  ShieldCheck
+  Save
 } from 'lucide-react';
 
 export const AdminEvaluationsPage: React.FC = () => {

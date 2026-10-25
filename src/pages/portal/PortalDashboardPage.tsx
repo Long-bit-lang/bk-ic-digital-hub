@@ -21,7 +21,7 @@ import {
 } from 'lucide-react';
 
 export const PortalDashboardPage: React.FC = () => {
-  const { currentUser, sessions, attendance, evaluations, siteSettings } = useApp();
+  const { currentUser, sessions, attendance, evaluations } = useApp();
   const [showQR, setShowQR] = useState(false);
   const [projectingSession, setProjectingSession] = useState<Session | null>(null);
 

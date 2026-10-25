@@ -14,7 +14,6 @@ import {
   Clock,
   AlertCircle,
   CheckCircle2,
-  Lock,
   Unlock
 } from 'lucide-react';
 import { api } from '../../services/api';

@@ -12,7 +12,7 @@
     "cleanup": "tsx scripts/safeCleanup.ts",
     "cleanup:execute": "tsx scripts/safeCleanup.ts --execute",
     "lint": "tsc --noEmit",
-    "test": "tsx tests/emailAuthDeepDebug.test.ts && tsx tests/meetingQRAttendance.test.ts && tsx tests/securityAudit.test.ts && tsx tests/feedbackAndAttendance.test.ts && tsx tests/picMeetingPermissions.test.ts && tsx tests/productionReadiness.test.ts && tsx scripts/safeCleanup.ts --execute"
+    "test": "tsx tests/emailAuthDeepDebug.test.ts && tsx tests/meetingQRAttendance.test.ts && tsx tests/securityAudit.test.ts && tsx tests/feedbackAndAttendance.test.ts && tsx tests/picMeetingPermissions.test.ts && tsx tests/productionReadiness.test.ts"
   },
   "dependencies": {
     "@google/genai": "^2.4.0",

@@ -13,7 +13,6 @@ import {
   AlertCircle,
   Clock,
   Edit3,
-  Calendar,
   Lock
 } from 'lucide-react';
 import { api } from '../../services/api';

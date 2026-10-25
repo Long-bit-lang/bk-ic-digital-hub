@@ -9,7 +9,6 @@ import {
   Award, 
   FileText, 
   TrendingUp, 
-  Clock, 
   ShieldCheck, 
   ArrowRight,
   Activity,

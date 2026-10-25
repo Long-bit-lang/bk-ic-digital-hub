@@ -17,7 +17,6 @@ import {
   X, 
   Save, 
   CheckCircle2,
-  FileSpreadsheet,
   KeyRound,
   HelpCircle,
   AlertCircle,
