@@ -59,7 +59,7 @@
       ],
       "mustChangePassword": false,
       "isRecoverySession": false,
-      "lastLoginAt": "2026-10-25T04:50:01.797Z",
+      "lastLoginAt": "2026-10-25T07:32:29.291Z",
       "resetTokenHash": "7f745d51bc826458289b3acd808a9fa58948843c9f4c9f5672bc8c30e6396837",
       "resetTokenExpiresAt": "2026-10-25T04:41:39.728Z"
     },
@@ -100,6 +100,41 @@
       "mustChangePassword": false,
       "isRecoverySession": false,
       "lastLoginAt": "2026-10-25T04:49:30.953Z"
+    },
+    {
+      "id": "usr-1792913768249",
+      "memberId": "BKIC-BDH-fjlkfj",
+      "email": "nminhtri1408@gmail.com",
+      "fullName": "wfkjl",
+      "studentId": "fjlkfj",
+      "phone": "480248",
+      "faculty": "Khoa Công nghệ Thông tin",
+      "classId": "24T_CLC",
+      "academicYear": "K24 (2024-2029)",
+      "role": "member",
+      "unit": "BDH",
+      "committee": "BDH",
+      "position": "Thành viên Ban Điều hành",
+      "joinDate": "2026-10-25",
+      "status": "active",
+      "statusEffectiveDate": "2026-10-25",
+      "accountStatus": "pending_setup",
+      "emailVerified": false,
+      "createdAt": "2026-10-25T07:36:08.249Z",
+      "resetTokenHash": "f7c3d8b0d406279fec8629b4b8a581ce9e890eba17a906c0f90faf351a5b4d05",
+      "resetTokenExpiresAt": "2026-10-25T07:51:08.249Z",
+      "statusHistory": [
+        {
+          "id": "sh-1792913768249",
+          "previousStatus": "active",
+          "newStatus": "active",
+          "effectiveDate": "2026-10-25",
+          "reason": "Khởi tạo tài khoản trực tiếp bởi Ban Chủ nhiệm/Admin",
+          "approvedBy": "Quản trị viên Hệ thống (Admin)",
+          "updatedBy": "Quản trị viên Hệ thống (Admin)",
+          "timestamp": "2026-10-25T07:36:08.249Z"
+        }
+      ]
     }
   ],
   "sessions": [],
@@ -113,6 +148,76 @@
   "notifications": [],
   "exportLogs": [],
   "auditLogs": [
+    {
+      "id": "audit-1792913768253",
+      "timestamp": "2026-10-25T07:36:08.249Z",
+      "actorId": "usr-admin",
+      "actorName": "Quản trị viên Hệ thống (Admin)",
+      "actorRole": "admin",
+      "actorUnit": "BN",
+      "action": "Cấp tài khoản mới",
+      "targetType": "User",
+      "targetId": "usr-1792913768249",
+      "details": "Tạo tài khoản mới cho wfkjl (fjlkfj, nminhtri1408@gmail.com) với vai trò member - Ban BDH."
+    },
+    {
+      "id": "audit-1792913702985",
+      "timestamp": "2026-10-25T07:35:02.985Z",
+      "actorId": "usr-admin",
+      "actorName": "Quản trị viên Hệ thống (Admin)",
+      "actorRole": "admin",
+      "action": "Xóa tài khoản thành viên",
+      "targetType": "User",
+      "targetId": "usr-1792913694843",
+      "details": "Đã xóa tài khoản của Ngô Minh Trí (nminhtri1408@gmail.com) khỏi hệ thống"
+    },
+    {
+      "id": "audit-1792913694847",
+      "timestamp": "2026-10-25T07:34:54.842Z",
+      "actorId": "usr-admin",
+      "actorName": "Quản trị viên Hệ thống (Admin)",
+      "actorRole": "admin",
+      "actorUnit": "BN",
+      "action": "Cấp tài khoản mới",
+      "targetType": "User",
+      "targetId": "usr-1792913694843",
+      "details": "Tạo tài khoản mới cho Ngô Minh Trí (102250374, nminhtri1408@gmail.com) với vai trò member - Ban BDH."
+    },
+    {
+      "id": "audit-1792913576320",
+      "timestamp": "2026-10-25T07:32:56.320Z",
+      "actorId": "usr-admin",
+      "actorName": "Quản trị viên Hệ thống (Admin)",
+      "actorRole": "admin",
+      "action": "Xóa tài khoản thành viên",
+      "targetType": "User",
+      "targetId": "usr-1792913571708",
+      "details": "Đã xóa tài khoản của sjdlkfslk (hlong2308xx@gmail.com) khỏi hệ thống"
+    },
+    {
+      "id": "audit-1792913571735",
+      "timestamp": "2026-10-25T07:32:51.707Z",
+      "actorId": "usr-admin",
+      "actorName": "Quản trị viên Hệ thống (Admin)",
+      "actorRole": "admin",
+      "actorUnit": "BN",
+      "action": "Cấp tài khoản mới",
+      "targetType": "User",
+      "targetId": "usr-1792913571708",
+      "details": "Tạo tài khoản mới cho sjdlkfslk (fklsjfsdklj, hlong2308xx@gmail.com) với vai trò member - Ban BDH."
+    },
+    {
+      "id": "audit-1792913549291",
+      "timestamp": "2026-10-25T07:32:29.291Z",
+      "actorId": "usr-admin",
+      "actorName": "Quản trị viên Hệ thống (Admin)",
+      "actorRole": "admin",
+      "actorUnit": "BN",
+      "action": "Đăng nhập hệ thống",
+      "targetType": "User",
+      "targetId": "usr-admin",
+      "details": "Đăng nhập thành công với email admin.bkic@dut.udn.vn (Vai trò: admin)"
+    },
     {
       "id": "audit-1792903801797",
       "timestamp": "2026-10-25T04:50:01.797Z",

@@ -153,25 +153,34 @@ export function generateSecureTemporaryPassword(): string {
 
 /**
  * Safely resolves the public application base URL for sensitive links (email verification, password reset, invite).
- * Prioritizes configured APP_URL or VITE_APP_URL.
- * In development, allows verified localhost/127.0.0.1.
- * Prevents Host Header Injection / Reset Poisoning from untrusted external Origin/Host headers.
+ * Prioritizes configured APP_URL, VITE_APP_URL, or platform env like RENDER_EXTERNAL_URL.
+ * If not explicitly configured, dynamically derives from incoming request Host/Proto headers.
+ * Falls back to localhost in dev.
  */
 export function getPublicAppUrl(req?: any): string {
-  const envUrl = process.env.APP_URL || process.env.VITE_APP_URL;
+  // 1. Explicitly configured public URL (custom domain, .env, or cloud platform variable like Render)
+  const envUrl = process.env.APP_URL || process.env.VITE_APP_URL || process.env.RENDER_EXTERNAL_URL;
   if (envUrl && typeof envUrl === 'string' && envUrl.trim()) {
-    return envUrl.trim().replace(/\/$/, '');
+    let clean = envUrl.trim().replace(/\/$/, '');
+    if (!clean.startsWith('http://') && !clean.startsWith('https://')) {
+      clean = `https://${clean}`;
+    }
+    return clean;
   }
 
-  if (process.env.NODE_ENV !== 'production' && req) {
-    const rawHost = req.headers ? (req.headers['host'] as string) : '';
-    if (rawHost && /^(localhost|127\.0\.0\.1)(:\d+)?$/i.test(rawHost)) {
-      const proto = req.secure || req.headers['x-forwarded-proto'] === 'https' ? 'https' : 'http';
-      return `${proto}://${rawHost}`;
+  // 2. Derive automatically from incoming HTTP request
+  if (req) {
+    const rawHost = req.headers ? (req.headers['x-forwarded-host'] || req.headers['host']) : (req.get ? req.get('host') : '');
+    if (rawHost && typeof rawHost === 'string' && rawHost.trim()) {
+      const hostClean = rawHost.trim().split(',')[0].trim();
+      const proto = req.headers?.['x-forwarded-proto'] || (req.secure ? 'https' : (/^(localhost|127\.0\.0\.1)(:\d+)?$/i.test(hostClean) ? 'http' : 'https'));
+      return `${proto}://${hostClean}`;
     }
   }
 
+  // 3. Fallback
   const defaultPort = process.env.PORT || '3000';
   return `http://localhost:${defaultPort}`;
 }
+
 
