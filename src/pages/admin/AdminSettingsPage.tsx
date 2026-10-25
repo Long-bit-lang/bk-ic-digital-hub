@@ -258,8 +258,24 @@ export const AdminSettingsPage: React.FC = () => {
               <p className="text-slate-300">
                 • <strong>Email thử nghiệm nội bộ:</strong> Các email kiểm thử tự động (tiền tố <code className="bg-slate-800 px-1 py-0.5 rounded text-sky-300">resend.*</code>, <code className="bg-slate-800 px-1 py-0.5 rounded text-sky-300">test.*</code>, <code className="bg-slate-800 px-1 py-0.5 rounded text-sky-300">recovery.*</code>) được tự động chặn và lưu an toàn vào <em>Hộp thư Hệ thống bên dưới</em>, tuyệt đối không gửi ra ngoài để ngăn Google Mailer-Daemon báo lỗi 550 Recipient Blocked.
               </p>
-              <div className="pt-1.5 border-t border-slate-700/60 text-amber-300/90">
-                • <strong>Lưu ý khi chạy trên Render (Gói Free Web Service):</strong> Render chặn hoàn toàn các cổng gửi thư SMTP (25, 465, 587) trên gói Free dẫn đến lỗi <em>Connection timeout</em>. Nếu triển khai trên Render Free, bạn có thể thêm biến môi trường <code className="bg-slate-800 px-1 py-0.5 rounded text-amber-200">RESEND_API_KEY</code> (miễn phí tại resend.com) để gửi thư qua cổng HTTPS 443 không bị chặn, hoặc nâng cấp Render lên gói trả phí.
+              <div className="pt-2 border-t border-slate-700/60 text-slate-300 space-y-1.5">
+                <div className="text-amber-300 font-semibold">
+                  • Lưu ý đường truyền khi triển khai trên Render (Gói Free Web Service):
+                </div>
+                <p className="text-slate-300">
+                  Render Free chặn toàn bộ các cổng SMTP (25, 465, 587) dẫn đến lỗi <em>Connection timeout</em> khi kết nối thẳng tới <code className="bg-slate-800 px-1 py-0.5 rounded text-amber-200">smtp.gmail.com</code>. Để khắc phục, bạn có 3 giải pháp:
+                </p>
+                <ul className="list-disc pl-4 space-y-1 text-slate-300">
+                  <li>
+                    <strong className="text-emerald-300">Cách 1 (Khuyên dùng - Không cần tên miền riêng):</strong> Thêm biến môi trường <code className="bg-slate-800 px-1 py-0.5 rounded text-emerald-200">BREVO_API_KEY</code> (miễn phí 300 email/ngày tại <em>brevo.com</em>). Brevo cho phép dùng trực tiếp địa chỉ <code className="bg-slate-800 px-1 py-0.5 rounded text-sky-200">@gmail.com</code> để gửi đến <strong>mọi sinh viên</strong> qua cổng HTTPS 443 mà không cần mua tên miền riêng.
+                  </li>
+                  <li>
+                    <strong className="text-sky-300">Cách 2 (Resend API):</strong> Thêm biến môi trường <code className="bg-slate-800 px-1 py-0.5 rounded text-sky-200">RESEND_API_KEY</code>. Lưu ý: Khi chưa xác thực tên miền riêng, Resend chỉ cho phép gửi thử nghiệm từ <code className="bg-slate-800 px-1 py-0.5 rounded text-sky-200">onboarding@resend.dev</code> đến <strong>chính email bạn đã dùng để đăng ký tài khoản Resend</strong>. Để gửi đến mọi sinh viên (@dut.udn.vn), bạn cần thêm và xác thực domain tại <em>resend.com/domains</em>.
+                  </li>
+                  <li>
+                    <strong className="text-indigo-300">Cách 3 (Nâng cấp Render):</strong> Nâng cấp dịch vụ web Render lên gói Starter ($7/tháng) để Render mở toàn bộ các cổng SMTP 465/587, khi đó gửi qua Gmail SMTP bình thường.
+                  </li>
+                </ul>
               </div>
             </div>
           </div>

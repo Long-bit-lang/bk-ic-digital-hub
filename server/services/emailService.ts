@@ -142,27 +142,63 @@ export function getActiveSmtpConfig(): {
   isConfigured: boolean;
   transporter: Transporter | null;
   from: string;
-  source: 'env' | 'db' | 'resend' | 'none';
+  source: 'env' | 'db' | 'resend' | 'brevo' | 'none';
   host?: string;
   port?: number;
   user?: string;
-  provider?: 'smtp' | 'resend';
+  provider?: 'smtp' | 'resend' | 'brevo';
   resendApiKey?: string;
+  brevoApiKey?: string;
+  replyTo?: string;
 } {
-  // 0. Check Resend API (Recommended for Render Free tier over port 443 HTTPS)
-  const rawResendKey = process.env.RESEND_API_KEY;
-  if (rawResendKey && !isPlaceholderValue(rawResendKey)) {
-    const resendKey = rawResendKey.trim();
+  // 0. Check Brevo API (Recommended for sending from @gmail.com to ANY recipient over Port 443 HTTPS without custom domain)
+  const rawBrevoKey = process.env.BREVO_API_KEY;
+  if (rawBrevoKey && !isPlaceholderValue(rawBrevoKey)) {
+    const brevoKey = rawBrevoKey.trim();
+    const brevoSender = (process.env.SMTP_USER || process.env.BREVO_SENDER_EMAIL || 'hoanglong280907@gmail.com').trim();
+    const brevoName = (process.env.SMTP_FROM_NAME || 'BK-IC Digital Hub').trim();
     return {
       isConfigured: true,
       transporter: null,
-      from: process.env.SMTP_FROM || 'BK-IC Digital Hub <onboarding@resend.dev>',
+      from: `"${brevoName}" <${brevoSender}>`,
+      source: 'brevo',
+      provider: 'brevo',
+      host: 'api.brevo.com (HTTPS Port 443)',
+      port: 443,
+      user: brevoSender,
+      brevoApiKey: brevoKey,
+      replyTo: brevoSender
+    };
+  }
+
+  // 0.5. Check Resend API (Recommended for Render Free tier over port 443 HTTPS)
+  const rawResendKey = process.env.RESEND_API_KEY;
+  if (rawResendKey && !isPlaceholderValue(rawResendKey)) {
+    const resendKey = rawResendKey.trim();
+    let resendFrom = (process.env.SMTP_FROM || '').trim();
+    const match = resendFrom.match(/<([^>]+)>/);
+    const emailInFrom = match ? match[1].toLowerCase() : resendFrom.toLowerCase();
+
+    // Resend strictly forbids sending from public webmail domains (@gmail.com, @yahoo.com, etc.)
+    // If not using a verified custom domain, default to Resend onboarding sandbox domain
+    const isPublicWebmail = !emailInFrom || /@(gmail\.com|googlemail\.com|yahoo\.com|hotmail\.com|outlook\.com|live\.com|icloud\.com)$/i.test(emailInFrom);
+    if (isPublicWebmail) {
+      resendFrom = 'BK-IC Digital Hub <onboarding@resend.dev>';
+    }
+
+    const replyToEmail = (process.env.SMTP_USER || (match ? match[1] : resendFrom) || 'hoanglong280907@gmail.com').trim();
+
+    return {
+      isConfigured: true,
+      transporter: null,
+      from: resendFrom,
       source: 'resend',
       provider: 'resend',
       host: 'api.resend.com (HTTPS Port 443)',
       port: 443,
       user: 'Resend API Key',
-      resendApiKey: resendKey
+      resendApiKey: resendKey,
+      replyTo: replyToEmail
     };
   }
 
@@ -487,27 +523,156 @@ export async function dispatchEmail(options: DispatchOptions): Promise<DispatchE
     };
   }
 
-  // 3.5. If Resend HTTP API is configured, dispatch via HTTPS (Port 443 - works on Render Free)
-  if (smtp.provider === 'resend' && smtp.resendApiKey) {
+  // 3.5. If Brevo HTTP API is configured, dispatch via HTTPS (Port 443 - works on Render Free & supports @gmail.com)
+  if (smtp.provider === 'brevo' && smtp.brevoApiKey) {
     try {
       const plainText = htmlToPlainText(htmlContent);
+      const rawFrom = smtp.from;
+      const match = rawFrom.match(/^(?:"?([^"]*)"?\s)?(?:<([^>]+)>)?$/);
+      const senderName = (match && match[1]) ? match[1].trim() : 'BK-IC Digital Hub';
+      const senderEmail = (match && match[2]) ? match[2].trim() : (smtp.user || 'hoanglong280907@gmail.com');
+
+      const brevoRes = await fetch('https://api.brevo.com/v3/smtp/email', {
+        method: 'POST',
+        headers: {
+          'api-key': smtp.brevoApiKey,
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+          sender: {
+            name: senderName,
+            email: senderEmail
+          },
+          to: [
+            {
+              email: normalizedTo,
+              name: recipientName || normalizedTo
+            }
+          ],
+          replyTo: {
+            email: smtp.replyTo || senderEmail,
+            name: senderName
+          },
+          subject,
+          htmlContent,
+          textContent: plainText
+        })
+      });
+
+      const brevoData = await brevoRes.json();
+      if (!brevoRes.ok) {
+        const rawErrMsg = brevoData?.message || `HTTP ${brevoRes.status}`;
+        if (/sender.*not.*verified|unverified/i.test(rawErrMsg)) {
+          throw new Error(`Email người gửi "${senderEmail}" chưa được xác minh trên Brevo. Vui lòng vào trang Brevo -> Senders & IP -> thêm email "${senderEmail}" và bấm link xác nhận gửi về hộp thư Gmail.`);
+        }
+        throw new Error(rawErrMsg);
+      }
+
+      const outboxEntry: OutboxEmail = {
+        id,
+        to: normalizedTo,
+        recipientName,
+        subject,
+        htmlContent,
+        resetLink,
+        verificationLink,
+        tempPassword,
+        type,
+        sentAt: new Date().toISOString(),
+        expiresAt,
+        status: 'delivered',
+        deliveryMethod: 'smtp'
+      };
+      emailOutbox.unshift(outboxEntry);
+      if (emailOutbox.length > 50) emailOutbox.pop();
+
+      console.log(`[EmailService] ✓ Brevo HTTP API accepted email for delivery to ${normalizedTo} (MessageId: ${brevoData?.messageId})`);
+      return {
+        success: true,
+        emailId: id,
+        status: 'delivered',
+        deliveryMethod: 'smtp',
+        deliveryCategory: 'smtp_accepted',
+        message: `Email đã được gửi thành công qua dịch vụ Brevo HTTP API (Port 443) đến ${normalizedTo}.`,
+        messageId: brevoData?.messageId
+      };
+    } catch (err: any) {
+      console.warn(`[EmailService] ✗ Brevo API delivery failed for ${normalizedTo}:`, err?.message || err);
+      const deliveryError = `Gửi qua Brevo API thất bại: ${err?.message || err}`;
+      const outboxEntry: OutboxEmail = {
+        id,
+        to: normalizedTo,
+        recipientName,
+        subject,
+        htmlContent,
+        resetLink,
+        verificationLink,
+        tempPassword,
+        type,
+        sentAt: new Date().toISOString(),
+        expiresAt,
+        status: 'failed',
+        deliveryMethod: 'outbox_fallback',
+        deliveryError
+      };
+      emailOutbox.unshift(outboxEntry);
+      if (emailOutbox.length > 50) emailOutbox.pop();
+
+      return {
+        success: false,
+        emailId: id,
+        status: 'failed',
+        deliveryMethod: 'outbox_fallback',
+        deliveryCategory: 'smtp_connection_auth_error',
+        message: `Không thể gửi qua Brevo API: ${err?.message || 'Lỗi kết nối'}.`,
+        deliveryError
+      };
+    }
+  }
+
+  // 3.6. If Resend HTTP API is configured, dispatch via HTTPS (Port 443 - works on Render Free)
+  if (smtp.provider === 'resend' && smtp.resendApiKey) {
+    try {
+      let resendFrom = smtp.from;
+      const fromMatch = resendFrom.match(/<([^>]+)>/);
+      const emailInFrom = fromMatch ? fromMatch[1].toLowerCase() : resendFrom.toLowerCase();
+      if (/@(gmail\.com|googlemail\.com|yahoo\.com|hotmail\.com|outlook\.com|live\.com|icloud\.com)$/i.test(emailInFrom)) {
+        resendFrom = 'BK-IC Digital Hub <onboarding@resend.dev>';
+      }
+
+      const plainText = htmlToPlainText(htmlContent);
+      const payload: any = {
+        from: resendFrom,
+        to: [normalizedTo],
+        subject,
+        html: htmlContent,
+        text: plainText
+      };
+      if (smtp.replyTo) {
+        payload.reply_to = [smtp.replyTo];
+      }
+
       const resendRes = await fetch('https://api.resend.com/emails', {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${smtp.resendApiKey}`,
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({
-          from: smtp.from,
-          to: [normalizedTo],
-          subject,
-          html: htmlContent,
-          text: plainText
-        })
+        body: JSON.stringify(payload)
       });
       const resendData = await resendRes.json();
       if (!resendRes.ok) {
-        throw new Error(resendData?.message || resendData?.error?.message || `HTTP ${resendRes.status}`);
+        const rawErrMsg = resendData?.message || resendData?.error?.message || `HTTP ${resendRes.status}`;
+        if (/domain is not verified/i.test(rawErrMsg)) {
+          throw new Error(`Tên miền người gửi chưa được xác thực trên Resend. Khi chưa có domain riêng, Resend yêu cầu gửi từ địa chỉ mặc định "BK-IC Digital Hub <onboarding@resend.dev>". Để gửi bằng domain riêng, vui lòng thêm và xác thực domain tại https://resend.com/domains.`);
+        }
+        if (/only send testing emails to your own email/i.test(rawErrMsg)) {
+          const ownerMatch = rawErrMsg.match(/\(([^)]+)\)/);
+          const ownerEmail = ownerMatch ? ownerMatch[1] : 'email chủ tài khoản Resend';
+          throw new Error(`Giới hạn chế độ thử nghiệm Resend: Vì chưa xác thực tên miền riêng trên Resend, bạn chỉ có thể gửi thử nghiệm đến CHÍNH email đã dùng đăng ký tài khoản Resend (${ownerEmail}). Để gửi đến sinh viên hoặc email khác (@dut.udn.vn), bạn cần xác thực tên miền tại https://resend.com/domains HOẶC chuyển sang dùng BREVO_API_KEY (gửi đến mọi email không cần tên miền).`);
+        }
+        throw new Error(rawErrMsg);
       }
 
       const outboxEntry: OutboxEmail = {
@@ -1180,13 +1345,13 @@ export async function sendTestSmtpEmail(
     from = `"${customConfig.fromName || 'BK-IC Digital Hub'}" <${customConfig.fromEmail || cleanUser}>`;
   } else {
     const active = getActiveSmtpConfig();
-    if (active.provider === 'resend' && active.resendApiKey) {
+    if (active.provider === 'brevo' && active.brevoApiKey) {
       try {
         const testHtml = `
           <div style="font-family: Arial, sans-serif; padding: 24px; background: #f8fafc; border-radius: 12px; max-width: 500px;">
-            <h3 style="color: #059669;">✓ Kết nối Resend HTTP API thành công!</h3>
+            <h3 style="color: #059669;">✓ Kết nối Brevo HTTP API thành công!</h3>
             <p>Xin chào,</p>
-            <p>Hệ thống <strong>BK-IC Digital Hub</strong> đã kết nối thành công với dịch vụ Resend HTTP API qua cổng 443 (HTTPS). Email thử nghiệm đã được phát hành thành công tới <strong>${normalizedTo}</strong>.</p>
+            <p>Hệ thống <strong>BK-IC Digital Hub</strong> đã kết nối thành công với dịch vụ Brevo HTTP API qua cổng 443 (HTTPS). Email thử nghiệm đã được phát hành thành công tới <strong>${normalizedTo}</strong>.</p>
             <div style="margin-top: 16px; font-size: 12px; color: #64748b;">
               Thời gian gửi: ${new Date().toLocaleString('vi-VN')}<br/>
               Người gửi: ${active.from}
@@ -1195,23 +1360,111 @@ export async function sendTestSmtpEmail(
         `.trim();
         const testPlain = htmlToPlainText(testHtml);
 
+        const rawFrom = active.from;
+        const match = rawFrom.match(/^(?:"?([^"]*)"?\s)?(?:<([^>]+)>)?$/);
+        const senderName = (match && match[1]) ? match[1].trim() : 'BK-IC Digital Hub';
+        const senderEmail = (match && match[2]) ? match[2].trim() : (active.user || 'hoanglong280907@gmail.com');
+
+        const brevoRes = await fetch('https://api.brevo.com/v3/smtp/email', {
+          method: 'POST',
+          headers: {
+            'api-key': active.brevoApiKey,
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
+          body: JSON.stringify({
+            sender: {
+              name: senderName,
+              email: senderEmail
+            },
+            to: [
+              {
+                email: normalizedTo,
+                name: normalizedTo
+              }
+            ],
+            subject: '[BK-IC Digital Hub] Thư kiểm tra kết nối email qua Brevo HTTP API thành công',
+            htmlContent: testHtml,
+            textContent: testPlain
+          })
+        });
+
+        const resData = await brevoRes.json();
+        if (!brevoRes.ok) {
+          const rawErrMsg = resData?.message || `HTTP ${brevoRes.status}`;
+          if (/sender.*not.*verified|unverified/i.test(rawErrMsg)) {
+            throw new Error(`Email người gửi "${senderEmail}" chưa được xác minh trên Brevo. Vui lòng vào trang Brevo -> Senders & IP -> thêm email "${senderEmail}" và bấm link xác nhận gửi về hộp thư Gmail.`);
+          }
+          throw new Error(rawErrMsg);
+        }
+
+        return {
+          success: true,
+          deliveryCategory: 'smtp_accepted',
+          message: `Dịch vụ Brevo HTTP API (Port 443) đã gửi thư kiểm tra thành công tới "${normalizedTo}".`
+        };
+      } catch (err: any) {
+        return {
+          success: false,
+          deliveryCategory: 'smtp_connection_auth_error',
+          message: `Gửi qua Brevo API thất bại: ${err?.message || err}`
+        };
+      }
+    }
+
+    if (active.provider === 'resend' && active.resendApiKey) {
+      try {
+        let resendFrom = active.from;
+        const fromMatch = resendFrom.match(/<([^>]+)>/);
+        const emailInFrom = fromMatch ? fromMatch[1].toLowerCase() : resendFrom.toLowerCase();
+        if (/@(gmail\.com|googlemail\.com|yahoo\.com|hotmail\.com|outlook\.com|live\.com|icloud\.com)$/i.test(emailInFrom)) {
+          resendFrom = 'BK-IC Digital Hub <onboarding@resend.dev>';
+        }
+
+        const testHtml = `
+          <div style="font-family: Arial, sans-serif; padding: 24px; background: #f8fafc; border-radius: 12px; max-width: 500px;">
+            <h3 style="color: #059669;">✓ Kết nối Resend HTTP API thành công!</h3>
+            <p>Xin chào,</p>
+            <p>Hệ thống <strong>BK-IC Digital Hub</strong> đã kết nối thành công với dịch vụ Resend HTTP API qua cổng 443 (HTTPS). Email thử nghiệm đã được phát hành thành công tới <strong>${normalizedTo}</strong>.</p>
+            <div style="margin-top: 16px; font-size: 12px; color: #64748b;">
+              Thời gian gửi: ${new Date().toLocaleString('vi-VN')}<br/>
+              Người gửi: ${resendFrom}
+            </div>
+          </div>
+        `.trim();
+        const testPlain = htmlToPlainText(testHtml);
+
+        const payload: any = {
+          from: resendFrom,
+          to: [normalizedTo],
+          subject: '[BK-IC Digital Hub] Thư kiểm tra kết nối email qua Resend HTTP API thành công',
+          html: testHtml,
+          text: testPlain
+        };
+        if (active.replyTo) {
+          payload.reply_to = [active.replyTo];
+        }
+
         const resendRes = await fetch('https://api.resend.com/emails', {
           method: 'POST',
           headers: {
             'Authorization': `Bearer ${active.resendApiKey}`,
             'Content-Type': 'application/json'
           },
-          body: JSON.stringify({
-            from: active.from,
-            to: [normalizedTo],
-            subject: '[BK-IC Digital Hub] Thư kiểm tra kết nối email qua Resend HTTP API thành công',
-            html: testHtml,
-            text: testPlain
-          })
+          body: JSON.stringify(payload)
         });
         const resData = await resendRes.json();
         if (!resendRes.ok) {
-          throw new Error(resData?.message || resData?.error?.message || `HTTP ${resendRes.status}`);
+          const rawErrMsg = resData?.message || resData?.error?.message || `HTTP ${resendRes.status}`;
+          if (/domain is not verified/i.test(rawErrMsg)) {
+            throw new Error(`Tên miền người gửi chưa được xác thực trên Resend. Khi chưa có domain riêng, Resend yêu cầu gửi từ địa chỉ mặc định "BK-IC Digital Hub <onboarding@resend.dev>". Để gửi bằng domain riêng, vui lòng thêm và xác thực domain tại https://resend.com/domains.`);
+          }
+          if (/only send testing emails to your own email/i.test(rawErrMsg)) {
+            const ownerMatch = rawErrMsg.match(/\(([^)]+)\)/);
+            const ownerEmail = ownerMatch ? ownerMatch[1] : 'email chủ tài khoản Resend';
+            throw new Error(`Giới hạn chế độ thử nghiệm Resend: Vì chưa xác thực tên miền riêng trên Resend, bạn chỉ có thể gửi thử nghiệm đến CHÍNH email đã dùng đăng ký tài khoản Resend (${ownerEmail}). Để gửi đến sinh viên hoặc email khác (@dut.udn.vn), bạn cần xác thực tên miền tại https://resend.com/domains HOẶC chuyển sang dùng BREVO_API_KEY (gửi đến mọi email không cần tên miền).`);
+          }
+          throw new Error(rawErrMsg);
         }
         return {
           success: true,

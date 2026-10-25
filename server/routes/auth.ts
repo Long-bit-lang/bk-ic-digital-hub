@@ -1390,7 +1390,7 @@ authRouter.get('/smtp-status', requireAuth, requireAdmin, (req, res) => {
     source: smtp.source,
     host: smtp.host || 'smtp.gmail.com',
     port: smtp.port || 587,
-    user: smtp.user ? `${smtp.user.substring(0, 3)}***@${smtp.user.split('@')[1] || ''}` : '',
+    user: smtp.user ? (smtp.user.includes('@') ? `${smtp.user.substring(0, 3)}***@${smtp.user.split('@')[1] || ''}` : smtp.user) : '',
     from: smtp.from
   });
 });
