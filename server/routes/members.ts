@@ -274,7 +274,7 @@ membersRouter.patch('/:id', (req, res) => {
 });
 
 // POST /api/members - Admin or BN creates a new member account directly
-membersRouter.post('/', (req, res) => {
+membersRouter.post('/', async (req, res) => {
   const actor = req.user!;
   if (actor.role !== 'admin' && actor.unit !== 'BN') {
     return res.status(403).json({
