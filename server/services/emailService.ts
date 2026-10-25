@@ -488,10 +488,10 @@ export async function dispatchEmail(options: DispatchOptions): Promise<DispatchE
     };
   }
 
-  // 3. Check active SMTP configuration
+  // 3. Check active configuration
   const smtp = getActiveSmtpConfig();
-  if (!smtp.isConfigured || !smtp.transporter) {
-    const deliveryError = 'Chưa cấu hình tài khoản gửi thư SMTP (như Gmail App Password). Thư đã được lưu vào Hộp thư thử nghiệm nội bộ.';
+  if (!smtp.isConfigured) {
+    const deliveryError = 'Chưa cấu hình tài khoản gửi thư (như Brevo API Key hoặc Gmail App Password). Thư đã được lưu vào Hộp thư thử nghiệm nội bộ.';
     const outboxEntry: OutboxEmail = {
       id,
       to: normalizedTo,
@@ -511,14 +511,14 @@ export async function dispatchEmail(options: DispatchOptions): Promise<DispatchE
     emailOutbox.unshift(outboxEntry);
     if (emailOutbox.length > 50) emailOutbox.pop();
 
-    console.log(`[EmailService] ℹ No active SMTP configured -> message stored in Admin Outbox for ${normalizedTo}`);
+    console.log(`[EmailService] ℹ No active email service configured -> message stored in Admin Outbox for ${normalizedTo}`);
     return {
       success: false,
       emailId: id,
       status: 'failed',
       deliveryMethod: 'outbox_fallback',
       deliveryCategory: 'outbox_only',
-      message: `Máy chủ gửi thư SMTP chưa được kích hoạt. Thư đã được lưu trữ an toàn trong Hộp thư Quản trị (Admin Outbox).`,
+      message: `Máy chủ gửi thư chưa được kích hoạt. Thư đã được lưu trữ an toàn trong Hộp thư Quản trị (Admin Outbox).`,
       deliveryError
     };
   }

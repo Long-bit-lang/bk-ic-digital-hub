@@ -1530,9 +1530,25 @@ export const AdminMembersPage: React.FC = () => {
                   <div key={email.id} className="p-3.5 rounded-2xl bg-slate-800/80 border border-slate-700/80 space-y-2 text-xs">
                     <div className="flex items-start justify-between gap-2">
                       <div>
-                        <span className="font-semibold text-white">{email.recipientName}</span>{' '}
-                        <span className="text-slate-400 font-mono">({email.to})</span>
+                        <div className="flex flex-wrap items-center gap-2">
+                          <span className="font-semibold text-white">{email.recipientName}</span>{' '}
+                          <span className="text-slate-400 font-mono">({email.to})</span>
+                          {email.deliveryMethod === 'smtp' ? (
+                            <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/20 border border-emerald-500/30 text-emerald-300 font-medium">
+                              ✓ Đã gửi qua máy chủ
+                            </span>
+                          ) : (
+                            <span className="text-[10px] px-2 py-0.5 rounded-full bg-amber-500/20 border border-amber-500/30 text-amber-300 font-medium">
+                              Lưu trữ Outbox
+                            </span>
+                          )}
+                        </div>
                         <div className="text-[11px] text-blue-400 font-medium mt-0.5">{email.subject}</div>
+                        {email.deliveryError && email.deliveryMethod !== 'smtp' && (
+                          <div className="text-[10.5px] text-amber-300/90 font-mono mt-1">
+                            Lý do: {email.deliveryError}
+                          </div>
+                        )}
                       </div>
                       <span className="text-[10px] text-slate-500 font-mono shrink-0">
                         {formatDateTime(email.sentAt)}
