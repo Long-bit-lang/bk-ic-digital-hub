@@ -839,6 +839,37 @@ attendanceRouter.post('/absence-explanation', (req, res) => {
 
   store.attendanceRequests.unshift(newRequest);
 
+  // Notify PIC and Admins/BN
+  if (Array.isArray(store.notifications)) {
+    const notifyTargets: string[] = [];
+    if (session.personInChargeId) notifyTargets.push(session.personInChargeId);
+    const adminUsers = store.users.filter(u => u.role === 'admin' || u.role === 'sysadmin' || u.unit === 'BN');
+    adminUsers.forEach(adm => {
+      if (!notifyTargets.includes(adm.id) && adm.id !== actor.id) {
+        notifyTargets.push(adm.id);
+      }
+    });
+
+    notifyTargets.forEach(targetId => {
+      const targetUser = store.users.find(u => u.id === targetId);
+      store.notifications.unshift({
+        id: `notif-${Date.now()}-abs-${targetId}`,
+        userId: targetId,
+        recipientId: targetId,
+        recipientEmail: targetUser?.email || '',
+        title: 'Đơn xin vắng mới cần duyệt',
+        content: `Thành viên ${actor.fullName} (${actor.studentId}) vừa gửi đơn xin vắng cho buổi "${session.title}".`,
+        message: `Thành viên ${actor.fullName} (${actor.studentId}) vừa gửi đơn xin vắng cho buổi "${session.title}".`,
+        type: 'approval_required',
+        referenceType: 'attendance',
+        referenceId: newRequest.id,
+        isRead: false,
+        createdAt: new Date().toISOString(),
+        emailSent: false
+      } as any);
+    });
+  }
+
   store.auditLogs.unshift({
     id: `audit-${Date.now()}`,
     timestamp: new Date().toISOString(),
@@ -898,6 +929,37 @@ attendanceRouter.post('/correction-request', (req, res) => {
   };
 
   store.attendanceRequests.unshift(newRequest);
+
+  // Notify PIC and Admins/BN
+  if (Array.isArray(store.notifications)) {
+    const notifyTargets: string[] = [];
+    if (session.personInChargeId) notifyTargets.push(session.personInChargeId);
+    const adminUsers = store.users.filter(u => u.role === 'admin' || u.role === 'sysadmin' || u.unit === 'BN');
+    adminUsers.forEach(adm => {
+      if (!notifyTargets.includes(adm.id) && adm.id !== actor.id) {
+        notifyTargets.push(adm.id);
+      }
+    });
+
+    notifyTargets.forEach(targetId => {
+      const targetUser = store.users.find(u => u.id === targetId);
+      store.notifications.unshift({
+        id: `notif-${Date.now()}-cor-${targetId}`,
+        userId: targetId,
+        recipientId: targetId,
+        recipientEmail: targetUser?.email || '',
+        title: 'Khiếu nại điểm danh mới cần duyệt',
+        content: `Thành viên ${actor.fullName} (${actor.studentId}) vừa gửi đơn đính chính điểm danh cho buổi "${session.title}".`,
+        message: `Thành viên ${actor.fullName} (${actor.studentId}) vừa gửi đơn đính chính điểm danh cho buổi "${session.title}".`,
+        type: 'approval_required',
+        referenceType: 'attendance',
+        referenceId: newRequest.id,
+        isRead: false,
+        createdAt: new Date().toISOString(),
+        emailSent: false
+      } as any);
+    });
+  }
 
   store.auditLogs.unshift({
     id: `audit-${Date.now()}`,
@@ -1006,6 +1068,28 @@ attendanceRouter.post('/requests/:id/decide', (req, res) => {
     targetId: request.id,
     details: `${actor.fullName} đã ${decision === 'approved' ? 'chấp thuận' : 'từ chối'} đơn của ${request.memberName}. Ghi chú: ${notes || 'Không'}`
   });
+
+  // Notify student of decision
+  if (Array.isArray(store.notifications)) {
+    const studentUser = store.users.find(u => u.id === request.memberId);
+    store.notifications.unshift({
+      id: `notif-${Date.now()}-dec`,
+      userId: request.memberId,
+      recipientId: request.memberId,
+      recipientEmail: studentUser?.email || '',
+      title: decision === 'approved' 
+        ? (request.type === 'absence_explanation' ? 'Đơn xin vắng đã được duyệt' : 'Khiếu nại điểm danh đã được duyệt')
+        : (request.type === 'absence_explanation' ? 'Đơn xin vắng bị từ chối' : 'Khiếu nại điểm danh bị từ chối'),
+      content: `Đơn của bạn cho buổi "${request.sessionTitle}" đã được ${actor.fullName} ${decision === 'approved' ? 'chấp thuận (Cập nhật kết quả: Vắng có phép)' : 'từ chối'}.${notes ? ` Ghi chú: ${notes}` : ''}`,
+      message: `Đơn của bạn cho buổi "${request.sessionTitle}" đã được ${actor.fullName} ${decision === 'approved' ? 'chấp thuận (Cập nhật kết quả: Vắng có phép)' : 'từ chối'}.${notes ? ` Ghi chú: ${notes}` : ''}`,
+      type: 'status_change',
+      referenceType: 'attendance',
+      referenceId: request.id,
+      isRead: false,
+      createdAt: new Date().toISOString(),
+      emailSent: false
+    } as any);
+  }
 
   db.save();
 

@@ -1,6 +1,7 @@
 // BK-IC Member Sessions Schedule & Management Page
 // Supports both attendee view and Person-in-Charge (PIC) meeting & QR projection controls
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useApp } from '../../context/AppContext';
 import { Session } from '../../types';
 import { DynamicQRProjector } from '../../components/qr/DynamicQRProjector';
@@ -12,23 +13,25 @@ import {
   User, 
   CheckCircle2, 
   QrCode, 
-  AlertCircle,
-  Maximize2,
-  Play,
-  Square,
-  Lock,
-  Sparkles,
-  Users,
-  ShieldCheck,
-  Check,
-  Info,
-  X,
-  ExternalLink,
-  ShieldAlert,
-  RotateCw
+  AlertCircle, 
+  Maximize2, 
+  Play, 
+  Square, 
+  Lock, 
+  Sparkles, 
+  Users, 
+  ShieldCheck, 
+  Check, 
+  Info, 
+  X, 
+  ExternalLink, 
+  ShieldAlert, 
+  RotateCw,
+  FileText
 } from 'lucide-react';
 
 export const PortalSessionsPage: React.FC = () => {
+  const navigate = useNavigate();
   const { 
     sessions, 
     attendance, 
@@ -401,6 +404,18 @@ export const PortalSessionsPage: React.FC = () => {
                       <Info className="h-3.5 w-3.5 text-slate-500" />
                       <span>{canManage ? 'Quản lý điểm danh' : 'Chi tiết meeting'}</span>
                     </button>
+
+                    {/* Button Gửi đơn xin vắng / khiếu nại */}
+                    {!isPic && s.status !== 'cancelled' && (
+                      <button
+                        onClick={() => navigate(`/portal/attendance?action=absence&sessionId=${s.id}`)}
+                        className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-white border border-slate-200 text-slate-700 hover:bg-slate-100 text-xs font-semibold transition shadow-xs"
+                        title="Gửi đơn xin phép vắng mặt hoặc đính chính điểm danh cho buổi này"
+                      >
+                        <FileText className="h-3.5 w-3.5 text-blue-600" />
+                        <span>Xin vắng / Khiếu nại</span>
+                      </button>
+                    )}
                   </div>
 
                   <div className="text-[11px] text-slate-500 font-medium">
@@ -586,6 +601,30 @@ export const PortalSessionsPage: React.FC = () => {
                       </button>
                     )}
                   </div>
+                </div>
+              )}
+
+              {!isUserPic(selectedMeetingDetail) && selectedMeetingDetail.status !== 'cancelled' && (
+                <div className="pt-3 border-t border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-blue-50/50 p-3.5 rounded-2xl border border-blue-100">
+                  <div>
+                    <div className="font-bold text-slate-800 text-xs">
+                      Không thể tham dự hoặc cần khiếu nại điểm danh?
+                    </div>
+                    <div className="text-[11px] text-slate-500 mt-0.5">
+                      Gửi đơn xin phép trước buổi họp hoặc trong vòng 48h để được BCN duyệt có phép.
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => {
+                      const sId = selectedMeetingDetail.id;
+                      setSelectedMeetingDetail(null);
+                      navigate(`/portal/attendance?action=absence&sessionId=${sId}`);
+                    }}
+                    className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs transition shadow-2xs shrink-0"
+                  >
+                    <FileText className="h-4 w-4" />
+                    <span>Nộp đơn xin vắng</span>
+                  </button>
                 </div>
               )}
             </div>

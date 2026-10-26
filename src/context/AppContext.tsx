@@ -731,6 +731,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     const res = await api.attendance.submitAbsenceExplanation({ sessionId, reason, evidenceUrl });
     alert(res.message);
     await reloadAttendance();
+    await reloadNotifications();
     await reloadAuditLogs();
   };
 
@@ -738,6 +739,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     const res = await api.attendance.submitCorrectionRequest({ sessionId, reason, evidenceUrl });
     alert(res.message);
     await reloadAttendance();
+    await reloadNotifications();
     await reloadAuditLogs();
   };
 
@@ -750,6 +752,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     const res = await api.attendance.decideRequest(id, { decision, notes, newAttendanceStatus });
     alert(res.message);
     await reloadAttendance();
+    await reloadNotifications();
     await reloadAuditLogs();
   };
 
