@@ -72,6 +72,7 @@ export function initFirestore(): Firestore | null {
     }
 
     firestoreInstance = getFirestore(app);
+    firestoreInstance.settings({ ignoreUndefinedProperties: true });
     console.log(`[FirestoreSync] ✓ Connected to Cloud Firestore database for project: ${credentials.project_id}`);
     return firestoreInstance;
   } catch (err) {
