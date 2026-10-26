@@ -59,12 +59,12 @@
       ],
       "mustChangePassword": false,
       "isRecoverySession": false,
-      "lastLoginAt": "2026-10-25T07:32:29.291Z",
+      "lastLoginAt": "2026-10-26T02:56:14.879Z",
       "resetTokenHash": "7f745d51bc826458289b3acd808a9fa58948843c9f4c9f5672bc8c30e6396837",
       "resetTokenExpiresAt": "2026-10-25T04:41:39.728Z"
     },
     {
-      "id": "usr-1792982443692",
+      "id": "usr-1792983281484",
       "memberId": "BKIC-BN-105220278",
       "email": "phamletu80@gmail.com",
       "fullName": "Phạm Lê Tú",
@@ -82,9 +82,9 @@
       "statusEffectiveDate": "2026-10-26",
       "accountStatus": "active",
       "emailVerified": true,
-      "createdAt": "2026-10-26T02:40:43.592Z",
-      "passwordHash": "430cd3ec5ec0f26b962049fc361bfdd18b26485715ba8e2ef0ccff0cedf5a0f47de8d30d63997b8180d04eb6cc9f280bae4a4fdda309a1d45bd4d226507719db",
-      "passwordSalt": "4b29f50c50d9125e7c7476cdc0843848",
+      "createdAt": "2026-10-26T02:54:41.382Z",
+      "passwordHash": "287da227fd02973c771ec8509e4a95d37241febfb8a5f8eeba5019a42d01477f9254d0baac8cb2af16ef1dee2647d0e06016b843e7c36a8a29a7cb6285366f11",
+      "passwordSalt": "3360a0a15959ce9f47d8ae9524702daa",
       "mustChangePassword": false,
       "isRecoverySession": false,
       "statusHistory": [
@@ -96,12 +96,12 @@
           "reason": "Khởi tạo tài khoản và kích hoạt chính thức",
           "approvedBy": "Quản trị viên Hệ thống (Admin)",
           "updatedBy": "Quản trị viên Hệ thống (Admin)",
-          "timestamp": "2026-10-26T02:40:43.592Z"
+          "timestamp": "2026-10-26T02:54:41.382Z"
         }
       ]
     },
     {
-      "id": "usr-1792982443694",
+      "id": "usr-1792983281486",
       "memberId": "BKIC-BN-123220065",
       "email": "quocnguyenthien2020@gmail.com",
       "fullName": "Nguyễn Thiện Quốc",
@@ -119,9 +119,9 @@
       "statusEffectiveDate": "2026-10-26",
       "accountStatus": "active",
       "emailVerified": true,
-      "createdAt": "2026-10-26T02:40:43.592Z",
-      "passwordHash": "430cd3ec5ec0f26b962049fc361bfdd18b26485715ba8e2ef0ccff0cedf5a0f47de8d30d63997b8180d04eb6cc9f280bae4a4fdda309a1d45bd4d226507719db",
-      "passwordSalt": "4b29f50c50d9125e7c7476cdc0843848",
+      "createdAt": "2026-10-26T02:54:41.382Z",
+      "passwordHash": "287da227fd02973c771ec8509e4a95d37241febfb8a5f8eeba5019a42d01477f9254d0baac8cb2af16ef1dee2647d0e06016b843e7c36a8a29a7cb6285366f11",
+      "passwordSalt": "3360a0a15959ce9f47d8ae9524702daa",
       "mustChangePassword": false,
       "isRecoverySession": false,
       "statusHistory": [
@@ -133,12 +133,12 @@
           "reason": "Khởi tạo tài khoản và kích hoạt chính thức",
           "approvedBy": "Quản trị viên Hệ thống (Admin)",
           "updatedBy": "Quản trị viên Hệ thống (Admin)",
-          "timestamp": "2026-10-26T02:40:43.592Z"
+          "timestamp": "2026-10-26T02:54:41.382Z"
         }
       ]
     },
     {
-      "id": "usr-1792982443695",
+      "id": "usr-1792983281487",
       "memberId": "BKIC-BN-118230004",
       "email": "quynhhchauu2005@gmail.com",
       "fullName": "Nguyễn Quỳnh Châu",
@@ -156,9 +156,9 @@
       "statusEffectiveDate": "2026-10-26",
       "accountStatus": "active",
       "emailVerified": true,
-      "createdAt": "2026-10-26T02:40:43.592Z",
-      "passwordHash": "430cd3ec5ec0f26b962049fc361bfdd18b26485715ba8e2ef0ccff0cedf5a0f47de8d30d63997b8180d04eb6cc9f280bae4a4fdda309a1d45bd4d226507719db",
-      "passwordSalt": "4b29f50c50d9125e7c7476cdc0843848",
+      "createdAt": "2026-10-26T02:54:41.382Z",
+      "passwordHash": "287da227fd02973c771ec8509e4a95d37241febfb8a5f8eeba5019a42d01477f9254d0baac8cb2af16ef1dee2647d0e06016b843e7c36a8a29a7cb6285366f11",
+      "passwordSalt": "3360a0a15959ce9f47d8ae9524702daa",
       "mustChangePassword": false,
       "isRecoverySession": false,
       "statusHistory": [
@@ -170,12 +170,12 @@
           "reason": "Khởi tạo tài khoản và kích hoạt chính thức",
           "approvedBy": "Quản trị viên Hệ thống (Admin)",
           "updatedBy": "Quản trị viên Hệ thống (Admin)",
-          "timestamp": "2026-10-26T02:40:43.592Z"
+          "timestamp": "2026-10-26T02:54:41.382Z"
         }
       ]
     },
     {
-      "id": "usr-1792982443696",
+      "id": "usr-1792983281488",
       "memberId": "BKIC-BDH-105230195",
       "email": "leanhkhoa572005@gmail.com",
       "fullName": "Lê Anh Khoa",
@@ -193,9 +193,9 @@
       "statusEffectiveDate": "2026-10-26",
       "accountStatus": "active",
       "emailVerified": true,
-      "createdAt": "2026-10-26T02:40:43.592Z",
-      "passwordHash": "430cd3ec5ec0f26b962049fc361bfdd18b26485715ba8e2ef0ccff0cedf5a0f47de8d30d63997b8180d04eb6cc9f280bae4a4fdda309a1d45bd4d226507719db",
-      "passwordSalt": "4b29f50c50d9125e7c7476cdc0843848",
+      "createdAt": "2026-10-26T02:54:41.382Z",
+      "passwordHash": "287da227fd02973c771ec8509e4a95d37241febfb8a5f8eeba5019a42d01477f9254d0baac8cb2af16ef1dee2647d0e06016b843e7c36a8a29a7cb6285366f11",
+      "passwordSalt": "3360a0a15959ce9f47d8ae9524702daa",
       "mustChangePassword": false,
       "isRecoverySession": false,
       "statusHistory": [
@@ -207,12 +207,12 @@
           "reason": "Khởi tạo tài khoản và kích hoạt chính thức",
           "approvedBy": "Quản trị viên Hệ thống (Admin)",
           "updatedBy": "Quản trị viên Hệ thống (Admin)",
-          "timestamp": "2026-10-26T02:40:43.592Z"
+          "timestamp": "2026-10-26T02:54:41.382Z"
         }
       ]
     },
     {
-      "id": "usr-1792982443697",
+      "id": "usr-1792983281489",
       "memberId": "BKIC-BDH-106240046",
       "email": "nguyendoananhthucpvm@gmail.com",
       "fullName": "Nguyễn Đoàn Anh Thư",
@@ -230,9 +230,9 @@
       "statusEffectiveDate": "2026-10-26",
       "accountStatus": "active",
       "emailVerified": true,
-      "createdAt": "2026-10-26T02:40:43.592Z",
-      "passwordHash": "430cd3ec5ec0f26b962049fc361bfdd18b26485715ba8e2ef0ccff0cedf5a0f47de8d30d63997b8180d04eb6cc9f280bae4a4fdda309a1d45bd4d226507719db",
-      "passwordSalt": "4b29f50c50d9125e7c7476cdc0843848",
+      "createdAt": "2026-10-26T02:54:41.382Z",
+      "passwordHash": "287da227fd02973c771ec8509e4a95d37241febfb8a5f8eeba5019a42d01477f9254d0baac8cb2af16ef1dee2647d0e06016b843e7c36a8a29a7cb6285366f11",
+      "passwordSalt": "3360a0a15959ce9f47d8ae9524702daa",
       "mustChangePassword": false,
       "isRecoverySession": false,
       "statusHistory": [
@@ -244,12 +244,12 @@
           "reason": "Khởi tạo tài khoản và kích hoạt chính thức",
           "approvedBy": "Quản trị viên Hệ thống (Admin)",
           "updatedBy": "Quản trị viên Hệ thống (Admin)",
-          "timestamp": "2026-10-26T02:40:43.592Z"
+          "timestamp": "2026-10-26T02:54:41.382Z"
         }
       ]
     },
     {
-      "id": "usr-1792982443698",
+      "id": "usr-1792983281490",
       "memberId": "BKIC-BDH-121240105",
       "email": "thuctrangltk@gmail.com",
       "fullName": "Nguyễn Thị Thục Trang",
@@ -267,9 +267,9 @@
       "statusEffectiveDate": "2026-10-26",
       "accountStatus": "active",
       "emailVerified": true,
-      "createdAt": "2026-10-26T02:40:43.592Z",
-      "passwordHash": "430cd3ec5ec0f26b962049fc361bfdd18b26485715ba8e2ef0ccff0cedf5a0f47de8d30d63997b8180d04eb6cc9f280bae4a4fdda309a1d45bd4d226507719db",
-      "passwordSalt": "4b29f50c50d9125e7c7476cdc0843848",
+      "createdAt": "2026-10-26T02:54:41.382Z",
+      "passwordHash": "287da227fd02973c771ec8509e4a95d37241febfb8a5f8eeba5019a42d01477f9254d0baac8cb2af16ef1dee2647d0e06016b843e7c36a8a29a7cb6285366f11",
+      "passwordSalt": "3360a0a15959ce9f47d8ae9524702daa",
       "mustChangePassword": false,
       "isRecoverySession": false,
       "statusHistory": [
@@ -281,12 +281,12 @@
           "reason": "Khởi tạo tài khoản và kích hoạt chính thức",
           "approvedBy": "Quản trị viên Hệ thống (Admin)",
           "updatedBy": "Quản trị viên Hệ thống (Admin)",
-          "timestamp": "2026-10-26T02:40:43.592Z"
+          "timestamp": "2026-10-26T02:54:41.382Z"
         }
       ]
     },
     {
-      "id": "usr-1792982443699",
+      "id": "usr-1792983281491",
       "memberId": "BKIC-BDH-101250260",
       "email": "duongnvt2411@gmail.com",
       "fullName": "Nguyễn Văn Tùng Dương",
@@ -304,9 +304,9 @@
       "statusEffectiveDate": "2026-10-26",
       "accountStatus": "active",
       "emailVerified": true,
-      "createdAt": "2026-10-26T02:40:43.592Z",
-      "passwordHash": "430cd3ec5ec0f26b962049fc361bfdd18b26485715ba8e2ef0ccff0cedf5a0f47de8d30d63997b8180d04eb6cc9f280bae4a4fdda309a1d45bd4d226507719db",
-      "passwordSalt": "4b29f50c50d9125e7c7476cdc0843848",
+      "createdAt": "2026-10-26T02:54:41.382Z",
+      "passwordHash": "287da227fd02973c771ec8509e4a95d37241febfb8a5f8eeba5019a42d01477f9254d0baac8cb2af16ef1dee2647d0e06016b843e7c36a8a29a7cb6285366f11",
+      "passwordSalt": "3360a0a15959ce9f47d8ae9524702daa",
       "mustChangePassword": false,
       "isRecoverySession": false,
       "statusHistory": [
@@ -318,12 +318,12 @@
           "reason": "Khởi tạo tài khoản và kích hoạt chính thức",
           "approvedBy": "Quản trị viên Hệ thống (Admin)",
           "updatedBy": "Quản trị viên Hệ thống (Admin)",
-          "timestamp": "2026-10-26T02:40:43.592Z"
+          "timestamp": "2026-10-26T02:54:41.382Z"
         }
       ]
     },
     {
-      "id": "usr-1792982443700",
+      "id": "usr-1792983281492",
       "memberId": "BKIC-BDH-118250119",
       "email": "nguyenthiquetrankupe@gmail.com",
       "fullName": "Nguyễn Thị Quế Trân",
@@ -341,9 +341,9 @@
       "statusEffectiveDate": "2026-10-26",
       "accountStatus": "active",
       "emailVerified": true,
-      "createdAt": "2026-10-26T02:40:43.592Z",
-      "passwordHash": "430cd3ec5ec0f26b962049fc361bfdd18b26485715ba8e2ef0ccff0cedf5a0f47de8d30d63997b8180d04eb6cc9f280bae4a4fdda309a1d45bd4d226507719db",
-      "passwordSalt": "4b29f50c50d9125e7c7476cdc0843848",
+      "createdAt": "2026-10-26T02:54:41.382Z",
+      "passwordHash": "287da227fd02973c771ec8509e4a95d37241febfb8a5f8eeba5019a42d01477f9254d0baac8cb2af16ef1dee2647d0e06016b843e7c36a8a29a7cb6285366f11",
+      "passwordSalt": "3360a0a15959ce9f47d8ae9524702daa",
       "mustChangePassword": false,
       "isRecoverySession": false,
       "statusHistory": [
@@ -355,7 +355,7 @@
           "reason": "Khởi tạo tài khoản và kích hoạt chính thức",
           "approvedBy": "Quản trị viên Hệ thống (Admin)",
           "updatedBy": "Quản trị viên Hệ thống (Admin)",
-          "timestamp": "2026-10-26T02:40:43.592Z"
+          "timestamp": "2026-10-26T02:54:41.382Z"
         }
       ]
     },
@@ -383,7 +383,7 @@
       "passwordSalt": "37abc61bda4010c9a06d68c58411a081",
       "mustChangePassword": false,
       "isRecoverySession": false,
-      "lastLoginAt": "2026-10-25T04:49:30.953Z",
+      "lastLoginAt": "2026-10-25T17:10:46.516Z",
       "statusHistory": [
         {
           "id": "sh-1792903694464",
@@ -398,7 +398,7 @@
       ]
     },
     {
-      "id": "usr-1792982443702",
+      "id": "usr-1792983281494",
       "memberId": "BKIC-BTV-106220169",
       "email": "nguyentuandung2608@gmail.com",
       "fullName": "Nguyễn Tuấn Dũng",
@@ -416,9 +416,9 @@
       "statusEffectiveDate": "2026-10-26",
       "accountStatus": "active",
       "emailVerified": true,
-      "createdAt": "2026-10-26T02:40:43.592Z",
-      "passwordHash": "430cd3ec5ec0f26b962049fc361bfdd18b26485715ba8e2ef0ccff0cedf5a0f47de8d30d63997b8180d04eb6cc9f280bae4a4fdda309a1d45bd4d226507719db",
-      "passwordSalt": "4b29f50c50d9125e7c7476cdc0843848",
+      "createdAt": "2026-10-26T02:54:41.382Z",
+      "passwordHash": "287da227fd02973c771ec8509e4a95d37241febfb8a5f8eeba5019a42d01477f9254d0baac8cb2af16ef1dee2647d0e06016b843e7c36a8a29a7cb6285366f11",
+      "passwordSalt": "3360a0a15959ce9f47d8ae9524702daa",
       "mustChangePassword": false,
       "isRecoverySession": false,
       "statusHistory": [
@@ -430,12 +430,12 @@
           "reason": "Khởi tạo tài khoản và kích hoạt chính thức",
           "approvedBy": "Quản trị viên Hệ thống (Admin)",
           "updatedBy": "Quản trị viên Hệ thống (Admin)",
-          "timestamp": "2026-10-26T02:40:43.592Z"
+          "timestamp": "2026-10-26T02:54:41.382Z"
         }
       ]
     },
     {
-      "id": "usr-1792982443703",
+      "id": "usr-1792983281495",
       "memberId": "BKIC-BTV-118240268",
       "email": "sn195206@gmail.com",
       "fullName": "Nguyễn Trọng Sang",
@@ -453,9 +453,9 @@
       "statusEffectiveDate": "2026-10-26",
       "accountStatus": "active",
       "emailVerified": true,
-      "createdAt": "2026-10-26T02:40:43.592Z",
-      "passwordHash": "430cd3ec5ec0f26b962049fc361bfdd18b26485715ba8e2ef0ccff0cedf5a0f47de8d30d63997b8180d04eb6cc9f280bae4a4fdda309a1d45bd4d226507719db",
-      "passwordSalt": "4b29f50c50d9125e7c7476cdc0843848",
+      "createdAt": "2026-10-26T02:54:41.382Z",
+      "passwordHash": "287da227fd02973c771ec8509e4a95d37241febfb8a5f8eeba5019a42d01477f9254d0baac8cb2af16ef1dee2647d0e06016b843e7c36a8a29a7cb6285366f11",
+      "passwordSalt": "3360a0a15959ce9f47d8ae9524702daa",
       "mustChangePassword": false,
       "isRecoverySession": false,
       "statusHistory": [
@@ -467,12 +467,12 @@
           "reason": "Khởi tạo tài khoản và kích hoạt chính thức",
           "approvedBy": "Quản trị viên Hệ thống (Admin)",
           "updatedBy": "Quản trị viên Hệ thống (Admin)",
-          "timestamp": "2026-10-26T02:40:43.592Z"
+          "timestamp": "2026-10-26T02:54:41.382Z"
         }
       ]
     },
     {
-      "id": "usr-1792982443705",
+      "id": "usr-1792983281496",
       "memberId": "BKIC-BTV-101230361",
       "email": "tranhoaithuong2310@gmail.com",
       "fullName": "Trần Hoài Thương",
@@ -490,9 +490,9 @@
       "statusEffectiveDate": "2026-10-26",
       "accountStatus": "active",
       "emailVerified": true,
-      "createdAt": "2026-10-26T02:40:43.592Z",
-      "passwordHash": "430cd3ec5ec0f26b962049fc361bfdd18b26485715ba8e2ef0ccff0cedf5a0f47de8d30d63997b8180d04eb6cc9f280bae4a4fdda309a1d45bd4d226507719db",
-      "passwordSalt": "4b29f50c50d9125e7c7476cdc0843848",
+      "createdAt": "2026-10-26T02:54:41.382Z",
+      "passwordHash": "287da227fd02973c771ec8509e4a95d37241febfb8a5f8eeba5019a42d01477f9254d0baac8cb2af16ef1dee2647d0e06016b843e7c36a8a29a7cb6285366f11",
+      "passwordSalt": "3360a0a15959ce9f47d8ae9524702daa",
       "mustChangePassword": false,
       "isRecoverySession": false,
       "statusHistory": [
@@ -504,12 +504,12 @@
           "reason": "Khởi tạo tài khoản và kích hoạt chính thức",
           "approvedBy": "Quản trị viên Hệ thống (Admin)",
           "updatedBy": "Quản trị viên Hệ thống (Admin)",
-          "timestamp": "2026-10-26T02:40:43.592Z"
+          "timestamp": "2026-10-26T02:54:41.382Z"
         }
       ]
     },
     {
-      "id": "usr-1792982443706",
+      "id": "usr-1792983281497",
       "memberId": "BKIC-BTV-101260318",
       "email": "annhien25043001@gmail.com",
       "fullName": "Lê Thanh Hằng",
@@ -527,9 +527,9 @@
       "statusEffectiveDate": "2026-10-26",
       "accountStatus": "active",
       "emailVerified": true,
-      "createdAt": "2026-10-26T02:40:43.592Z",
-      "passwordHash": "430cd3ec5ec0f26b962049fc361bfdd18b26485715ba8e2ef0ccff0cedf5a0f47de8d30d63997b8180d04eb6cc9f280bae4a4fdda309a1d45bd4d226507719db",
-      "passwordSalt": "4b29f50c50d9125e7c7476cdc0843848",
+      "createdAt": "2026-10-26T02:54:41.382Z",
+      "passwordHash": "287da227fd02973c771ec8509e4a95d37241febfb8a5f8eeba5019a42d01477f9254d0baac8cb2af16ef1dee2647d0e06016b843e7c36a8a29a7cb6285366f11",
+      "passwordSalt": "3360a0a15959ce9f47d8ae9524702daa",
       "mustChangePassword": false,
       "isRecoverySession": false,
       "statusHistory": [
@@ -541,12 +541,12 @@
           "reason": "Khởi tạo tài khoản và kích hoạt chính thức",
           "approvedBy": "Quản trị viên Hệ thống (Admin)",
           "updatedBy": "Quản trị viên Hệ thống (Admin)",
-          "timestamp": "2026-10-26T02:40:43.592Z"
+          "timestamp": "2026-10-26T02:54:41.382Z"
         }
       ]
     },
     {
-      "id": "usr-1792982443707",
+      "id": "usr-1792983281498",
       "memberId": "BKIC-BTV-102250213",
       "email": "nguyenquanhchienpp2303@gmail.com",
       "fullName": "Nguyễn Quang Chiến",
@@ -564,9 +564,9 @@
       "statusEffectiveDate": "2026-10-26",
       "accountStatus": "active",
       "emailVerified": true,
-      "createdAt": "2026-10-26T02:40:43.592Z",
-      "passwordHash": "430cd3ec5ec0f26b962049fc361bfdd18b26485715ba8e2ef0ccff0cedf5a0f47de8d30d63997b8180d04eb6cc9f280bae4a4fdda309a1d45bd4d226507719db",
-      "passwordSalt": "4b29f50c50d9125e7c7476cdc0843848",
+      "createdAt": "2026-10-26T02:54:41.382Z",
+      "passwordHash": "287da227fd02973c771ec8509e4a95d37241febfb8a5f8eeba5019a42d01477f9254d0baac8cb2af16ef1dee2647d0e06016b843e7c36a8a29a7cb6285366f11",
+      "passwordSalt": "3360a0a15959ce9f47d8ae9524702daa",
       "mustChangePassword": false,
       "isRecoverySession": false,
       "statusHistory": [
@@ -578,12 +578,12 @@
           "reason": "Khởi tạo tài khoản và kích hoạt chính thức",
           "approvedBy": "Quản trị viên Hệ thống (Admin)",
           "updatedBy": "Quản trị viên Hệ thống (Admin)",
-          "timestamp": "2026-10-26T02:40:43.592Z"
+          "timestamp": "2026-10-26T02:54:41.382Z"
         }
       ]
     },
     {
-      "id": "usr-1792982443708",
+      "id": "usr-1792983281500",
       "memberId": "BKIC-BTV-105250318",
       "email": "huynhhoangmy1110@gmail.com",
       "fullName": "Huỳnh Phạm Hoàng My",
@@ -601,9 +601,9 @@
       "statusEffectiveDate": "2026-10-26",
       "accountStatus": "active",
       "emailVerified": true,
-      "createdAt": "2026-10-26T02:40:43.592Z",
-      "passwordHash": "430cd3ec5ec0f26b962049fc361bfdd18b26485715ba8e2ef0ccff0cedf5a0f47de8d30d63997b8180d04eb6cc9f280bae4a4fdda309a1d45bd4d226507719db",
-      "passwordSalt": "4b29f50c50d9125e7c7476cdc0843848",
+      "createdAt": "2026-10-26T02:54:41.382Z",
+      "passwordHash": "287da227fd02973c771ec8509e4a95d37241febfb8a5f8eeba5019a42d01477f9254d0baac8cb2af16ef1dee2647d0e06016b843e7c36a8a29a7cb6285366f11",
+      "passwordSalt": "3360a0a15959ce9f47d8ae9524702daa",
       "mustChangePassword": false,
       "isRecoverySession": false,
       "statusHistory": [
@@ -615,12 +615,12 @@
           "reason": "Khởi tạo tài khoản và kích hoạt chính thức",
           "approvedBy": "Quản trị viên Hệ thống (Admin)",
           "updatedBy": "Quản trị viên Hệ thống (Admin)",
-          "timestamp": "2026-10-26T02:40:43.592Z"
+          "timestamp": "2026-10-26T02:54:41.382Z"
         }
       ]
     },
     {
-      "id": "usr-1792982443709",
+      "id": "usr-1792983281501",
       "memberId": "BKIC-BTV-102240308",
       "email": "ndlhoangndl@gmail.com",
       "fullName": "Nguyễn Đăng Lê Hoàng",
@@ -638,9 +638,9 @@
       "statusEffectiveDate": "2026-10-26",
       "accountStatus": "active",
       "emailVerified": true,
-      "createdAt": "2026-10-26T02:40:43.592Z",
-      "passwordHash": "430cd3ec5ec0f26b962049fc361bfdd18b26485715ba8e2ef0ccff0cedf5a0f47de8d30d63997b8180d04eb6cc9f280bae4a4fdda309a1d45bd4d226507719db",
-      "passwordSalt": "4b29f50c50d9125e7c7476cdc0843848",
+      "createdAt": "2026-10-26T02:54:41.382Z",
+      "passwordHash": "287da227fd02973c771ec8509e4a95d37241febfb8a5f8eeba5019a42d01477f9254d0baac8cb2af16ef1dee2647d0e06016b843e7c36a8a29a7cb6285366f11",
+      "passwordSalt": "3360a0a15959ce9f47d8ae9524702daa",
       "mustChangePassword": false,
       "isRecoverySession": false,
       "statusHistory": [
@@ -652,12 +652,12 @@
           "reason": "Khởi tạo tài khoản và kích hoạt chính thức",
           "approvedBy": "Quản trị viên Hệ thống (Admin)",
           "updatedBy": "Quản trị viên Hệ thống (Admin)",
-          "timestamp": "2026-10-26T02:40:43.592Z"
+          "timestamp": "2026-10-26T02:54:41.382Z"
         }
       ]
     },
     {
-      "id": "usr-1792982443710",
+      "id": "usr-1792983281502",
       "memberId": "BKIC-BTV-110250035",
       "email": "phamhungphat2727@gmail.com",
       "fullName": "Phạm Hưng Phát",
@@ -675,9 +675,9 @@
       "statusEffectiveDate": "2026-10-26",
       "accountStatus": "active",
       "emailVerified": true,
-      "createdAt": "2026-10-26T02:40:43.592Z",
-      "passwordHash": "430cd3ec5ec0f26b962049fc361bfdd18b26485715ba8e2ef0ccff0cedf5a0f47de8d30d63997b8180d04eb6cc9f280bae4a4fdda309a1d45bd4d226507719db",
-      "passwordSalt": "4b29f50c50d9125e7c7476cdc0843848",
+      "createdAt": "2026-10-26T02:54:41.382Z",
+      "passwordHash": "287da227fd02973c771ec8509e4a95d37241febfb8a5f8eeba5019a42d01477f9254d0baac8cb2af16ef1dee2647d0e06016b843e7c36a8a29a7cb6285366f11",
+      "passwordSalt": "3360a0a15959ce9f47d8ae9524702daa",
       "mustChangePassword": false,
       "isRecoverySession": false,
       "statusHistory": [
@@ -689,12 +689,12 @@
           "reason": "Khởi tạo tài khoản và kích hoạt chính thức",
           "approvedBy": "Quản trị viên Hệ thống (Admin)",
           "updatedBy": "Quản trị viên Hệ thống (Admin)",
-          "timestamp": "2026-10-26T02:40:43.592Z"
+          "timestamp": "2026-10-26T02:54:41.382Z"
         }
       ]
     },
     {
-      "id": "usr-1792982443711",
+      "id": "usr-1792983281503",
       "memberId": "BKIC-BTV-123260202",
       "email": "trinhkay299@gmail.com",
       "fullName": "Trịnh Thị Hồng Hương",
@@ -712,9 +712,9 @@
       "statusEffectiveDate": "2026-10-26",
       "accountStatus": "active",
       "emailVerified": true,
-      "createdAt": "2026-10-26T02:40:43.592Z",
-      "passwordHash": "430cd3ec5ec0f26b962049fc361bfdd18b26485715ba8e2ef0ccff0cedf5a0f47de8d30d63997b8180d04eb6cc9f280bae4a4fdda309a1d45bd4d226507719db",
-      "passwordSalt": "4b29f50c50d9125e7c7476cdc0843848",
+      "createdAt": "2026-10-26T02:54:41.382Z",
+      "passwordHash": "287da227fd02973c771ec8509e4a95d37241febfb8a5f8eeba5019a42d01477f9254d0baac8cb2af16ef1dee2647d0e06016b843e7c36a8a29a7cb6285366f11",
+      "passwordSalt": "3360a0a15959ce9f47d8ae9524702daa",
       "mustChangePassword": false,
       "isRecoverySession": false,
       "statusHistory": [
@@ -726,12 +726,12 @@
           "reason": "Khởi tạo tài khoản và kích hoạt chính thức",
           "approvedBy": "Quản trị viên Hệ thống (Admin)",
           "updatedBy": "Quản trị viên Hệ thống (Admin)",
-          "timestamp": "2026-10-26T02:40:43.592Z"
+          "timestamp": "2026-10-26T02:54:41.382Z"
         }
       ]
     },
     {
-      "id": "usr-1792982443712",
+      "id": "usr-1792983281504",
       "memberId": "BKIC-BTV-101240005",
       "email": "baovuitinh1234@gmail.com",
       "fullName": "Nguyễn Thành Bảo",
@@ -749,9 +749,9 @@
       "statusEffectiveDate": "2026-10-26",
       "accountStatus": "active",
       "emailVerified": true,
-      "createdAt": "2026-10-26T02:40:43.592Z",
-      "passwordHash": "430cd3ec5ec0f26b962049fc361bfdd18b26485715ba8e2ef0ccff0cedf5a0f47de8d30d63997b8180d04eb6cc9f280bae4a4fdda309a1d45bd4d226507719db",
-      "passwordSalt": "4b29f50c50d9125e7c7476cdc0843848",
+      "createdAt": "2026-10-26T02:54:41.382Z",
+      "passwordHash": "287da227fd02973c771ec8509e4a95d37241febfb8a5f8eeba5019a42d01477f9254d0baac8cb2af16ef1dee2647d0e06016b843e7c36a8a29a7cb6285366f11",
+      "passwordSalt": "3360a0a15959ce9f47d8ae9524702daa",
       "mustChangePassword": false,
       "isRecoverySession": false,
       "statusHistory": [
@@ -763,12 +763,12 @@
           "reason": "Khởi tạo tài khoản và kích hoạt chính thức",
           "approvedBy": "Quản trị viên Hệ thống (Admin)",
           "updatedBy": "Quản trị viên Hệ thống (Admin)",
-          "timestamp": "2026-10-26T02:40:43.592Z"
+          "timestamp": "2026-10-26T02:54:41.382Z"
         }
       ]
     },
     {
-      "id": "usr-1792982443713",
+      "id": "usr-1792983281505",
       "memberId": "BKIC-BTV-102250216",
       "email": "huynhngocthuydungdng@gmail.com",
       "fullName": "Huỳnh Ngọc Thuỳ Dung",
@@ -786,9 +786,9 @@
       "statusEffectiveDate": "2026-10-26",
       "accountStatus": "active",
       "emailVerified": true,
-      "createdAt": "2026-10-26T02:40:43.592Z",
-      "passwordHash": "430cd3ec5ec0f26b962049fc361bfdd18b26485715ba8e2ef0ccff0cedf5a0f47de8d30d63997b8180d04eb6cc9f280bae4a4fdda309a1d45bd4d226507719db",
-      "passwordSalt": "4b29f50c50d9125e7c7476cdc0843848",
+      "createdAt": "2026-10-26T02:54:41.382Z",
+      "passwordHash": "287da227fd02973c771ec8509e4a95d37241febfb8a5f8eeba5019a42d01477f9254d0baac8cb2af16ef1dee2647d0e06016b843e7c36a8a29a7cb6285366f11",
+      "passwordSalt": "3360a0a15959ce9f47d8ae9524702daa",
       "mustChangePassword": false,
       "isRecoverySession": false,
       "statusHistory": [
@@ -800,12 +800,12 @@
           "reason": "Khởi tạo tài khoản và kích hoạt chính thức",
           "approvedBy": "Quản trị viên Hệ thống (Admin)",
           "updatedBy": "Quản trị viên Hệ thống (Admin)",
-          "timestamp": "2026-10-26T02:40:43.592Z"
+          "timestamp": "2026-10-26T02:54:41.382Z"
         }
       ]
     },
     {
-      "id": "usr-1792982443714",
+      "id": "usr-1792983281506",
       "memberId": "BKIC-BTV-118260013",
       "email": "giangkelly2008@gmail.com",
       "fullName": "Nguyễn Hương Giang",
@@ -823,9 +823,9 @@
       "statusEffectiveDate": "2026-10-26",
       "accountStatus": "active",
       "emailVerified": true,
-      "createdAt": "2026-10-26T02:40:43.592Z",
-      "passwordHash": "430cd3ec5ec0f26b962049fc361bfdd18b26485715ba8e2ef0ccff0cedf5a0f47de8d30d63997b8180d04eb6cc9f280bae4a4fdda309a1d45bd4d226507719db",
-      "passwordSalt": "4b29f50c50d9125e7c7476cdc0843848",
+      "createdAt": "2026-10-26T02:54:41.382Z",
+      "passwordHash": "287da227fd02973c771ec8509e4a95d37241febfb8a5f8eeba5019a42d01477f9254d0baac8cb2af16ef1dee2647d0e06016b843e7c36a8a29a7cb6285366f11",
+      "passwordSalt": "3360a0a15959ce9f47d8ae9524702daa",
       "mustChangePassword": false,
       "isRecoverySession": false,
       "statusHistory": [
@@ -837,12 +837,12 @@
           "reason": "Khởi tạo tài khoản và kích hoạt chính thức",
           "approvedBy": "Quản trị viên Hệ thống (Admin)",
           "updatedBy": "Quản trị viên Hệ thống (Admin)",
-          "timestamp": "2026-10-26T02:40:43.592Z"
+          "timestamp": "2026-10-26T02:54:41.382Z"
         }
       ]
     },
     {
-      "id": "usr-1792982443715",
+      "id": "usr-1792983281507",
       "memberId": "BKIC-BTV-102230313",
       "email": "dhtphu05@gmail.com",
       "fullName": "Đoàn Hoàng Thiên Phú",
@@ -860,9 +860,9 @@
       "statusEffectiveDate": "2026-10-26",
       "accountStatus": "active",
       "emailVerified": true,
-      "createdAt": "2026-10-26T02:40:43.592Z",
-      "passwordHash": "430cd3ec5ec0f26b962049fc361bfdd18b26485715ba8e2ef0ccff0cedf5a0f47de8d30d63997b8180d04eb6cc9f280bae4a4fdda309a1d45bd4d226507719db",
-      "passwordSalt": "4b29f50c50d9125e7c7476cdc0843848",
+      "createdAt": "2026-10-26T02:54:41.382Z",
+      "passwordHash": "287da227fd02973c771ec8509e4a95d37241febfb8a5f8eeba5019a42d01477f9254d0baac8cb2af16ef1dee2647d0e06016b843e7c36a8a29a7cb6285366f11",
+      "passwordSalt": "3360a0a15959ce9f47d8ae9524702daa",
       "mustChangePassword": false,
       "isRecoverySession": false,
       "statusHistory": [
@@ -874,12 +874,12 @@
           "reason": "Khởi tạo tài khoản và kích hoạt chính thức",
           "approvedBy": "Quản trị viên Hệ thống (Admin)",
           "updatedBy": "Quản trị viên Hệ thống (Admin)",
-          "timestamp": "2026-10-26T02:40:43.592Z"
+          "timestamp": "2026-10-26T02:54:41.382Z"
         }
       ]
     },
     {
-      "id": "usr-1792982443716",
+      "id": "usr-1792983281508",
       "memberId": "BKIC-BTV-101250111",
       "email": "tdnh1492006@gmail.com",
       "fullName": "Trần Đại Nhật Hải",
@@ -897,9 +897,9 @@
       "statusEffectiveDate": "2026-10-26",
       "accountStatus": "active",
       "emailVerified": true,
-      "createdAt": "2026-10-26T02:40:43.592Z",
-      "passwordHash": "430cd3ec5ec0f26b962049fc361bfdd18b26485715ba8e2ef0ccff0cedf5a0f47de8d30d63997b8180d04eb6cc9f280bae4a4fdda309a1d45bd4d226507719db",
-      "passwordSalt": "4b29f50c50d9125e7c7476cdc0843848",
+      "createdAt": "2026-10-26T02:54:41.382Z",
+      "passwordHash": "287da227fd02973c771ec8509e4a95d37241febfb8a5f8eeba5019a42d01477f9254d0baac8cb2af16ef1dee2647d0e06016b843e7c36a8a29a7cb6285366f11",
+      "passwordSalt": "3360a0a15959ce9f47d8ae9524702daa",
       "mustChangePassword": false,
       "isRecoverySession": false,
       "statusHistory": [
@@ -911,12 +911,12 @@
           "reason": "Khởi tạo tài khoản và kích hoạt chính thức",
           "approvedBy": "Quản trị viên Hệ thống (Admin)",
           "updatedBy": "Quản trị viên Hệ thống (Admin)",
-          "timestamp": "2026-10-26T02:40:43.592Z"
+          "timestamp": "2026-10-26T02:54:41.382Z"
         }
       ]
     },
     {
-      "id": "usr-1792982443717",
+      "id": "usr-1792983281509",
       "memberId": "BKIC-BTV-123250056",
       "email": "trannguyenbinh14@gmail.com",
       "fullName": "Trần Nguyên Bình",
@@ -934,9 +934,9 @@
       "statusEffectiveDate": "2026-10-26",
       "accountStatus": "active",
       "emailVerified": true,
-      "createdAt": "2026-10-26T02:40:43.592Z",
-      "passwordHash": "430cd3ec5ec0f26b962049fc361bfdd18b26485715ba8e2ef0ccff0cedf5a0f47de8d30d63997b8180d04eb6cc9f280bae4a4fdda309a1d45bd4d226507719db",
-      "passwordSalt": "4b29f50c50d9125e7c7476cdc0843848",
+      "createdAt": "2026-10-26T02:54:41.382Z",
+      "passwordHash": "287da227fd02973c771ec8509e4a95d37241febfb8a5f8eeba5019a42d01477f9254d0baac8cb2af16ef1dee2647d0e06016b843e7c36a8a29a7cb6285366f11",
+      "passwordSalt": "3360a0a15959ce9f47d8ae9524702daa",
       "mustChangePassword": false,
       "isRecoverySession": false,
       "statusHistory": [
@@ -948,12 +948,12 @@
           "reason": "Khởi tạo tài khoản và kích hoạt chính thức",
           "approvedBy": "Quản trị viên Hệ thống (Admin)",
           "updatedBy": "Quản trị viên Hệ thống (Admin)",
-          "timestamp": "2026-10-26T02:40:43.592Z"
+          "timestamp": "2026-10-26T02:54:41.382Z"
         }
       ]
     },
     {
-      "id": "usr-1792982443718",
+      "id": "usr-1792983281510",
       "memberId": "BKIC-BTV-105250375",
       "email": "lehongngan.tk1@gmail.com",
       "fullName": "Lê Hồng Ngân",
@@ -971,9 +971,9 @@
       "statusEffectiveDate": "2026-10-26",
       "accountStatus": "active",
       "emailVerified": true,
-      "createdAt": "2026-10-26T02:40:43.592Z",
-      "passwordHash": "430cd3ec5ec0f26b962049fc361bfdd18b26485715ba8e2ef0ccff0cedf5a0f47de8d30d63997b8180d04eb6cc9f280bae4a4fdda309a1d45bd4d226507719db",
-      "passwordSalt": "4b29f50c50d9125e7c7476cdc0843848",
+      "createdAt": "2026-10-26T02:54:41.382Z",
+      "passwordHash": "287da227fd02973c771ec8509e4a95d37241febfb8a5f8eeba5019a42d01477f9254d0baac8cb2af16ef1dee2647d0e06016b843e7c36a8a29a7cb6285366f11",
+      "passwordSalt": "3360a0a15959ce9f47d8ae9524702daa",
       "mustChangePassword": false,
       "isRecoverySession": false,
       "statusHistory": [
@@ -985,12 +985,12 @@
           "reason": "Khởi tạo tài khoản và kích hoạt chính thức",
           "approvedBy": "Quản trị viên Hệ thống (Admin)",
           "updatedBy": "Quản trị viên Hệ thống (Admin)",
-          "timestamp": "2026-10-26T02:40:43.592Z"
+          "timestamp": "2026-10-26T02:54:41.382Z"
         }
       ]
     },
     {
-      "id": "usr-1792982443719",
+      "id": "usr-1792983281511",
       "memberId": "BKIC-BTV-102230094",
       "email": "phuh15521@gmail.com",
       "fullName": "Huỳnh Phước Phú",
@@ -1008,9 +1008,9 @@
       "statusEffectiveDate": "2026-10-26",
       "accountStatus": "active",
       "emailVerified": true,
-      "createdAt": "2026-10-26T02:40:43.592Z",
-      "passwordHash": "430cd3ec5ec0f26b962049fc361bfdd18b26485715ba8e2ef0ccff0cedf5a0f47de8d30d63997b8180d04eb6cc9f280bae4a4fdda309a1d45bd4d226507719db",
-      "passwordSalt": "4b29f50c50d9125e7c7476cdc0843848",
+      "createdAt": "2026-10-26T02:54:41.382Z",
+      "passwordHash": "287da227fd02973c771ec8509e4a95d37241febfb8a5f8eeba5019a42d01477f9254d0baac8cb2af16ef1dee2647d0e06016b843e7c36a8a29a7cb6285366f11",
+      "passwordSalt": "3360a0a15959ce9f47d8ae9524702daa",
       "mustChangePassword": false,
       "isRecoverySession": false,
       "statusHistory": [
@@ -1022,12 +1022,12 @@
           "reason": "Khởi tạo tài khoản và kích hoạt chính thức",
           "approvedBy": "Quản trị viên Hệ thống (Admin)",
           "updatedBy": "Quản trị viên Hệ thống (Admin)",
-          "timestamp": "2026-10-26T02:40:43.592Z"
+          "timestamp": "2026-10-26T02:54:41.382Z"
         }
       ]
     },
     {
-      "id": "usr-1792982443720",
+      "id": "usr-1792983281512",
       "memberId": "BKIC-BTV-107250108",
       "email": "huynthien665@gmail.com",
       "fullName": "Huỳnh Gia Thiên",
@@ -1045,9 +1045,9 @@
       "statusEffectiveDate": "2026-10-26",
       "accountStatus": "active",
       "emailVerified": true,
-      "createdAt": "2026-10-26T02:40:43.592Z",
-      "passwordHash": "430cd3ec5ec0f26b962049fc361bfdd18b26485715ba8e2ef0ccff0cedf5a0f47de8d30d63997b8180d04eb6cc9f280bae4a4fdda309a1d45bd4d226507719db",
-      "passwordSalt": "4b29f50c50d9125e7c7476cdc0843848",
+      "createdAt": "2026-10-26T02:54:41.382Z",
+      "passwordHash": "287da227fd02973c771ec8509e4a95d37241febfb8a5f8eeba5019a42d01477f9254d0baac8cb2af16ef1dee2647d0e06016b843e7c36a8a29a7cb6285366f11",
+      "passwordSalt": "3360a0a15959ce9f47d8ae9524702daa",
       "mustChangePassword": false,
       "isRecoverySession": false,
       "statusHistory": [
@@ -1059,12 +1059,12 @@
           "reason": "Khởi tạo tài khoản và kích hoạt chính thức",
           "approvedBy": "Quản trị viên Hệ thống (Admin)",
           "updatedBy": "Quản trị viên Hệ thống (Admin)",
-          "timestamp": "2026-10-26T02:40:43.592Z"
+          "timestamp": "2026-10-26T02:54:41.382Z"
         }
       ]
     },
     {
-      "id": "usr-1792982443721",
+      "id": "usr-1792983281513",
       "memberId": "BKIC-BTV-102250369",
       "email": "thongbin26@gmail.com",
       "fullName": "Nguyễn Thái Minh Thông",
@@ -1082,9 +1082,9 @@
       "statusEffectiveDate": "2026-10-26",
       "accountStatus": "active",
       "emailVerified": true,
-      "createdAt": "2026-10-26T02:40:43.592Z",
-      "passwordHash": "430cd3ec5ec0f26b962049fc361bfdd18b26485715ba8e2ef0ccff0cedf5a0f47de8d30d63997b8180d04eb6cc9f280bae4a4fdda309a1d45bd4d226507719db",
-      "passwordSalt": "4b29f50c50d9125e7c7476cdc0843848",
+      "createdAt": "2026-10-26T02:54:41.382Z",
+      "passwordHash": "287da227fd02973c771ec8509e4a95d37241febfb8a5f8eeba5019a42d01477f9254d0baac8cb2af16ef1dee2647d0e06016b843e7c36a8a29a7cb6285366f11",
+      "passwordSalt": "3360a0a15959ce9f47d8ae9524702daa",
       "mustChangePassword": false,
       "isRecoverySession": false,
       "statusHistory": [
@@ -1096,12 +1096,12 @@
           "reason": "Khởi tạo tài khoản và kích hoạt chính thức",
           "approvedBy": "Quản trị viên Hệ thống (Admin)",
           "updatedBy": "Quản trị viên Hệ thống (Admin)",
-          "timestamp": "2026-10-26T02:40:43.592Z"
+          "timestamp": "2026-10-26T02:54:41.382Z"
         }
       ]
     },
     {
-      "id": "usr-1792982443722",
+      "id": "usr-1792983281514",
       "memberId": "BKIC-BTV-123250015",
       "email": "phoa49900@gmail.com",
       "fullName": "Nguyễn Thị Phương Hoà",
@@ -1119,9 +1119,9 @@
       "statusEffectiveDate": "2026-10-26",
       "accountStatus": "active",
       "emailVerified": true,
-      "createdAt": "2026-10-26T02:40:43.592Z",
-      "passwordHash": "430cd3ec5ec0f26b962049fc361bfdd18b26485715ba8e2ef0ccff0cedf5a0f47de8d30d63997b8180d04eb6cc9f280bae4a4fdda309a1d45bd4d226507719db",
-      "passwordSalt": "4b29f50c50d9125e7c7476cdc0843848",
+      "createdAt": "2026-10-26T02:54:41.382Z",
+      "passwordHash": "287da227fd02973c771ec8509e4a95d37241febfb8a5f8eeba5019a42d01477f9254d0baac8cb2af16ef1dee2647d0e06016b843e7c36a8a29a7cb6285366f11",
+      "passwordSalt": "3360a0a15959ce9f47d8ae9524702daa",
       "mustChangePassword": false,
       "isRecoverySession": false,
       "statusHistory": [
@@ -1133,12 +1133,12 @@
           "reason": "Khởi tạo tài khoản và kích hoạt chính thức",
           "approvedBy": "Quản trị viên Hệ thống (Admin)",
           "updatedBy": "Quản trị viên Hệ thống (Admin)",
-          "timestamp": "2026-10-26T02:40:43.592Z"
+          "timestamp": "2026-10-26T02:54:41.382Z"
         }
       ]
     },
     {
-      "id": "usr-1792982443723",
+      "id": "usr-1792983281515",
       "memberId": "BKIC-BTV-118230121",
       "email": "hothimyly26@gmail.com",
       "fullName": "Hồ Thị Mỹ Ly",
@@ -1156,9 +1156,9 @@
       "statusEffectiveDate": "2026-10-26",
       "accountStatus": "active",
       "emailVerified": true,
-      "createdAt": "2026-10-26T02:40:43.592Z",
-      "passwordHash": "430cd3ec5ec0f26b962049fc361bfdd18b26485715ba8e2ef0ccff0cedf5a0f47de8d30d63997b8180d04eb6cc9f280bae4a4fdda309a1d45bd4d226507719db",
-      "passwordSalt": "4b29f50c50d9125e7c7476cdc0843848",
+      "createdAt": "2026-10-26T02:54:41.382Z",
+      "passwordHash": "287da227fd02973c771ec8509e4a95d37241febfb8a5f8eeba5019a42d01477f9254d0baac8cb2af16ef1dee2647d0e06016b843e7c36a8a29a7cb6285366f11",
+      "passwordSalt": "3360a0a15959ce9f47d8ae9524702daa",
       "mustChangePassword": false,
       "isRecoverySession": false,
       "statusHistory": [
@@ -1170,7 +1170,7 @@
           "reason": "Khởi tạo tài khoản và kích hoạt chính thức",
           "approvedBy": "Quản trị viên Hệ thống (Admin)",
           "updatedBy": "Quản trị viên Hệ thống (Admin)",
-          "timestamp": "2026-10-26T02:40:43.592Z"
+          "timestamp": "2026-10-26T02:54:41.382Z"
         }
       ]
     }
@@ -1187,86 +1187,331 @@
   "exportLogs": [],
   "auditLogs": [
     {
-      "id": "audit-1792982669624",
-      "timestamp": "2026-10-26T02:44:29.624Z",
-      "actorId": "usr-1792982669309",
+      "id": "audit-1792983374894",
+      "timestamp": "2026-10-26T02:56:14.894Z",
+      "actorId": "usr-admin",
+      "actorName": "Quản trị viên Hệ thống (Admin)",
+      "actorRole": "admin",
+      "actorUnit": "BN",
+      "action": "Đăng nhập hệ thống",
+      "targetType": "User",
+      "targetId": "usr-admin",
+      "details": "Đăng nhập thành công với email admin.bkic@dut.udn.vn (Vai trò: admin)"
+    },
+    {
+      "id": "audit-1792983195450",
+      "timestamp": "2026-10-26T02:53:15.450Z",
+      "actorId": "usr-admin",
+      "actorName": "Quản trị viên Hệ thống (Admin)",
+      "actorRole": "admin",
+      "actorUnit": "BN",
+      "action": "Đăng nhập hệ thống",
+      "targetType": "User",
+      "targetId": "usr-admin",
+      "details": "Đăng nhập thành công với email admin.bkic@dut.udn.vn (Vai trò: admin)"
+    },
+    {
+      "id": "audit-1792982937035",
+      "timestamp": "2026-10-26T02:48:57.035Z",
+      "actorId": "usr-admin",
+      "actorName": "Quản trị viên Hệ thống (Admin)",
+      "actorRole": "admin",
+      "actorUnit": "BN",
+      "action": "Đăng nhập hệ thống",
+      "targetType": "User",
+      "targetId": "usr-admin",
+      "details": "Đăng nhập thành công với email admin.bkic@dut.udn.vn (Vai trò: admin)"
+    },
+    {
+      "id": "audit-1792981415700",
+      "timestamp": "2026-10-26T02:23:35.700Z",
+      "actorId": "usr-admin",
+      "actorName": "Quản trị viên Hệ thống (Admin)",
+      "actorRole": "admin",
+      "actorUnit": "BN",
+      "action": "Cập nhật thông tin thành viên",
+      "targetType": "User",
+      "targetId": "usr-1792903694464",
+      "details": "Cập nhật hồ sơ thành viên Nguyễn Hoàng Long (102250342)"
+    },
+    {
+      "id": "audit-1792981360442",
+      "timestamp": "2026-10-26T02:22:40.442Z",
+      "actorId": "usr-admin",
+      "actorName": "Quản trị viên Hệ thống (Admin)",
+      "actorRole": "admin",
+      "actorUnit": "BN",
+      "action": "Đăng nhập hệ thống",
+      "targetType": "User",
+      "targetId": "usr-admin",
+      "details": "Đăng nhập thành công với email admin.bkic@dut.udn.vn (Vai trò: admin)"
+    },
+    {
+      "id": "audit-1792948725824",
+      "timestamp": "2026-10-25T17:18:45.824Z",
+      "actorId": "usr-admin",
+      "actorName": "Quản trị viên Hệ thống (Admin)",
+      "actorRole": "admin",
+      "action": "Xóa tài khoản thành viên",
+      "targetType": "User",
+      "targetId": "usr-1792948321002",
+      "details": "Đã xóa tài khoản của Tri (hlong2308xx@gmail.com) khỏi hệ thống"
+    },
+    {
+      "id": "audit-1792948697414",
+      "timestamp": "2026-10-25T17:18:17.414Z",
+      "actorId": "usr-admin",
+      "actorName": "Quản trị viên Hệ thống (Admin)",
+      "actorRole": "admin",
+      "actorUnit": "BN",
+      "action": "Đăng nhập hệ thống",
+      "targetType": "User",
+      "targetId": "usr-admin",
+      "details": "Đăng nhập thành công với email admin.bkic@dut.udn.vn (Vai trò: admin)"
+    },
+    {
+      "id": "audit-1792948683611",
+      "timestamp": "2026-10-25T17:18:03.611Z",
+      "actorId": "usr-1792948321002",
+      "actorName": "Tri",
+      "actorRole": "member",
+      "actorUnit": "BDH",
+      "action": "Đăng nhập hệ thống",
+      "targetType": "User",
+      "targetId": "usr-1792948321002",
+      "details": "Đăng nhập thành công với email hlong2308xx@gmail.com (Vai trò: member)"
+    },
+    {
+      "id": "audit-1792948677017",
+      "timestamp": "2026-10-25T17:17:57.017Z",
+      "actorId": "usr-1792948321002",
+      "actorName": "Tri",
+      "actorRole": "member",
+      "action": "Đặt lại mật khẩu thành công",
+      "targetType": "User",
+      "targetId": "usr-1792948321002",
+      "details": "Tài khoản hlong2308xx@gmail.com đã đặt lại mật khẩu thành công qua liên kết xác thực an toàn."
+    },
+    {
+      "id": "audit-1792948655212",
+      "timestamp": "2026-10-25T17:17:35.212Z",
+      "actorId": "usr-1792948321002",
+      "actorName": "Tri",
+      "actorRole": "member",
+      "actorUnit": "BDH",
+      "action": "Yêu cầu đặt lại mật khẩu",
+      "targetType": "User",
+      "targetId": "usr-1792948321002",
+      "details": "Đã phát hành liên kết đặt lại mật khẩu bảo mật đến email h****x@gmail.com (Thời hạn 15 phút, 1 lần sử dụng)."
+    },
+    {
+      "id": "audit-1792948624716",
+      "timestamp": "2026-10-25T17:17:04.716Z",
+      "actorId": "usr-admin",
+      "actorName": "Quản trị viên Hệ thống (Admin)",
+      "actorRole": "admin",
+      "actorUnit": "BN",
+      "action": "Đăng nhập hệ thống",
+      "targetType": "User",
+      "targetId": "usr-admin",
+      "details": "Đăng nhập thành công với email admin.bkic@dut.udn.vn (Vai trò: admin)"
+    },
+    {
+      "id": "audit-1792948331518",
+      "timestamp": "2026-10-25T17:12:11.518Z",
+      "actorId": "usr-admin",
+      "actorName": "Quản trị viên Hệ thống (Admin)",
+      "actorRole": "admin",
+      "action": "Xác thực email thành viên",
+      "targetType": "User",
+      "targetId": "usr-1792948321002",
+      "details": "Quản trị viên đã xác thực email thành công cho tài khoản Tri (hlong2308xx@gmail.com)."
+    },
+    {
+      "id": "audit-1792948326987",
+      "timestamp": "2026-10-25T17:12:06.987Z",
+      "actorId": "usr-admin",
+      "actorName": "Quản trị viên Hệ thống (Admin)",
+      "actorRole": "admin",
+      "action": "Gửi thư mời thiết lập tài khoản",
+      "targetType": "User",
+      "targetId": "usr-1792948321002",
+      "details": "Đã gửi thư mời kèm liên kết bảo mật kích hoạt tài khoản tới hlong2308xx@gmail.com"
+    },
+    {
+      "id": "audit-1792948321607",
+      "timestamp": "2026-10-25T17:12:01.002Z",
+      "actorId": "usr-admin",
+      "actorName": "Quản trị viên Hệ thống (Admin)",
+      "actorRole": "admin",
+      "actorUnit": "BN",
+      "action": "Cấp tài khoản mới",
+      "targetType": "User",
+      "targetId": "usr-1792948321002",
+      "details": "Tạo tài khoản mới cho Tri (12310, hlong2308xx@gmail.com) với vai trò member - Ban BDH."
+    },
+    {
+      "id": "audit-1792948277122",
+      "timestamp": "2026-10-25T17:11:17.122Z",
+      "actorId": "usr-admin",
+      "actorName": "Quản trị viên Hệ thống (Admin)",
+      "actorRole": "admin",
+      "actorUnit": "BN",
+      "action": "Đăng nhập hệ thống",
+      "targetType": "User",
+      "targetId": "usr-admin",
+      "details": "Đăng nhập thành công với email admin.bkic@dut.udn.vn (Vai trò: admin)"
+    },
+    {
+      "id": "audit-1792948246516",
+      "timestamp": "2026-10-25T17:10:46.516Z",
+      "actorId": "usr-1792903694464",
+      "actorName": "Nguyễn Hoàng Long",
+      "actorRole": "member",
+      "actorUnit": "BTV",
+      "action": "Đăng nhập hệ thống",
+      "targetType": "User",
+      "targetId": "usr-1792903694464",
+      "details": "Đăng nhập thành công với email hoanglong280907@gmail.com (Vai trò: member)"
+    },
+    {
+      "id": "audit-1792948232175",
+      "timestamp": "2026-10-25T17:10:32.175Z",
+      "actorId": "usr-admin",
+      "actorName": "Quản trị viên Hệ thống (Admin)",
+      "actorRole": "admin",
+      "action": "Xóa tài khoản thành viên",
+      "targetType": "User",
+      "targetId": "usr-1792947836486",
+      "details": "Đã xóa tài khoản của Chưa Xác Minh (unverified.1792947836415@dut.udn.vn) khỏi hệ thống"
+    },
+    {
+      "id": "audit-1792948228795",
+      "timestamp": "2026-10-25T17:10:28.795Z",
+      "actorId": "usr-admin",
+      "actorName": "Quản trị viên Hệ thống (Admin)",
+      "actorRole": "admin",
+      "action": "Xóa tài khoản thành viên",
+      "targetType": "User",
+      "targetId": "usr-1792947836367",
+      "details": "Đã xóa tài khoản của Sinh Viên Kiểm Thử (student.1792947836293@dut.udn.vn) khỏi hệ thống"
+    },
+    {
+      "id": "audit-1792948223712",
+      "timestamp": "2026-10-25T17:10:23.712Z",
+      "actorId": "usr-admin",
+      "actorName": "Quản trị viên Hệ thống (Admin)",
+      "actorRole": "admin",
+      "action": "Xóa tài khoản thành viên",
+      "targetType": "User",
+      "targetId": "usr-1792913768249",
+      "details": "Đã xóa tài khoản của wfkjl (nminhtri1408@gmail.com) khỏi hệ thống"
+    },
+    {
+      "id": "audit-1792948212215",
+      "timestamp": "2026-10-25T17:10:12.215Z",
+      "actorId": "usr-admin",
+      "actorName": "Quản trị viên Hệ thống (Admin)",
+      "actorRole": "admin",
+      "actorUnit": "BN",
+      "action": "Đăng nhập hệ thống",
+      "targetType": "User",
+      "targetId": "usr-admin",
+      "details": "Đăng nhập thành công với email admin.bkic@dut.udn.vn (Vai trò: admin)"
+    },
+    {
+      "id": "audit-1792947836829",
+      "timestamp": "2026-10-25T17:03:56.829Z",
+      "actorId": "usr-1792947836367",
       "actorName": "Sinh Viên Kiểm Thử",
       "actorRole": "applicant",
       "actorUnit": "BDH",
       "action": "Đăng nhập hệ thống",
       "targetType": "User",
-      "targetId": "usr-1792982669309",
-      "details": "Đăng nhập thành công với email student.1792982669226@dut.udn.vn (Vai trò: applicant)"
+      "targetId": "usr-1792947836367",
+      "details": "Đăng nhập thành công với email student.1792947836293@dut.udn.vn (Vai trò: applicant)"
     },
     {
-      "id": "audit-1792982669490",
-      "timestamp": "2026-10-26T02:44:29.490Z",
-      "actorId": "usr-1792982669309",
+      "id": "audit-1792947836635",
+      "timestamp": "2026-10-25T17:03:56.635Z",
+      "actorId": "usr-1792947836367",
       "actorName": "Sinh Viên Kiểm Thử",
       "actorRole": "applicant",
       "action": "Đặt lại mật khẩu thành công",
       "targetType": "User",
-      "targetId": "usr-1792982669309",
-      "details": "Tài khoản student.1792982669226@dut.udn.vn đã đặt lại mật khẩu thành công qua liên kết xác thực an toàn."
+      "targetId": "usr-1792947836367",
+      "details": "Tài khoản student.1792947836293@dut.udn.vn đã đặt lại mật khẩu thành công qua liên kết xác thực an toàn."
     },
     {
-      "id": "audit-1792982669410",
-      "timestamp": "2026-10-26T02:44:29.410Z",
-      "actorId": "usr-1792982669309",
+      "id": "audit-1792947836539",
+      "timestamp": "2026-10-25T17:03:56.539Z",
+      "actorId": "usr-1792947836367",
       "actorName": "Sinh Viên Kiểm Thử",
       "actorRole": "applicant",
       "actorUnit": "BDH",
       "action": "Yêu cầu đặt lại mật khẩu",
       "targetType": "User",
-      "targetId": "usr-1792982669309",
-      "details": "Đã phát hành liên kết đặt lại mật khẩu bảo mật đến email s****6@dut.udn.vn (Thời hạn 15 phút, 1 lần sử dụng)."
+      "targetId": "usr-1792947836367",
+      "details": "Đã phát hành liên kết đặt lại mật khẩu bảo mật đến email s****3@dut.udn.vn (Thời hạn 15 phút, 1 lần sử dụng)."
     },
     {
-      "id": "audit-1792982669404",
-      "timestamp": "2026-10-26T02:44:29.404Z",
-      "actorId": "usr-1792982669399",
+      "id": "audit-1792947836505",
+      "timestamp": "2026-10-25T17:03:56.505Z",
+      "actorId": "usr-1792947836486",
       "actorName": "Chưa Xác Minh",
       "actorRole": "applicant",
       "action": "Gửi lại thư xác nhận email",
       "targetType": "User",
-      "targetId": "usr-1792982669399",
-      "details": "Đã phát hành lại liên kết xác nhận email tới unverified.1792982669334@dut.udn.vn (Thời hạn 24 giờ)."
+      "targetId": "usr-1792947836486",
+      "details": "Đã phát hành lại liên kết xác nhận email tới unverified.1792947836415@dut.udn.vn (Thời hạn 24 giờ)."
     },
     {
-      "id": "audit-1792982669399",
-      "timestamp": "2026-10-26T02:44:29.399Z",
-      "actorId": "usr-1792982669399",
+      "id": "audit-1792947836486",
+      "timestamp": "2026-10-25T17:03:56.486Z",
+      "actorId": "usr-1792947836486",
       "actorName": "Chưa Xác Minh",
       "actorRole": "applicant",
       "actorUnit": "BDH",
       "action": "Đăng ký tài khoản mới",
       "targetType": "User",
-      "targetId": "usr-1792982669399",
-      "details": "Tạo tài khoản thật cho ứng viên Chưa Xác Minh (MSSV: 989334, Email: unverified.1792982669334@dut.udn.vn)"
+      "targetId": "usr-1792947836486",
+      "details": "Tạo tài khoản thật cho ứng viên Chưa Xác Minh (MSSV: 986415, Email: unverified.1792947836415@dut.udn.vn)"
     },
     {
-      "id": "audit-1792982669327",
-      "timestamp": "2026-10-26T02:44:29.327Z",
-      "actorId": "usr-1792982669309",
+      "id": "audit-1792947836406",
+      "timestamp": "2026-10-25T17:03:56.406Z",
+      "actorId": "usr-1792947836367",
       "actorName": "Sinh Viên Kiểm Thử",
       "actorRole": "applicant",
       "actorUnit": "BDH",
       "action": "Xác minh email thành công",
       "targetType": "User",
-      "targetId": "usr-1792982669309",
-      "details": "Tài khoản student.1792982669226@dut.udn.vn (MSSV: 102229226) đã hoàn tất xác minh địa chỉ email sinh viên."
+      "targetId": "usr-1792947836367",
+      "details": "Tài khoản student.1792947836293@dut.udn.vn (MSSV: 102226293) đã hoàn tất xác minh địa chỉ email sinh viên."
     },
     {
-      "id": "audit-1792982669309",
-      "timestamp": "2026-10-26T02:44:29.308Z",
-      "actorId": "usr-1792982669309",
+      "id": "audit-1792947836368",
+      "timestamp": "2026-10-25T17:03:56.367Z",
+      "actorId": "usr-1792947836367",
       "actorName": "Sinh Viên Kiểm Thử",
       "actorRole": "applicant",
       "actorUnit": "BDH",
       "action": "Đăng ký tài khoản mới",
       "targetType": "User",
-      "targetId": "usr-1792982669309",
-      "details": "Tạo tài khoản thật cho ứng viên Sinh Viên Kiểm Thử (MSSV: 102229226, Email: student.1792982669226@dut.udn.vn)"
+      "targetId": "usr-1792947836367",
+      "details": "Tạo tài khoản thật cho ứng viên Sinh Viên Kiểm Thử (MSSV: 102226293, Email: student.1792947836293@dut.udn.vn)"
+    },
+    {
+      "id": "audit-1792947836287",
+      "timestamp": "2026-10-25T17:03:56.287Z",
+      "actorId": "usr-admin",
+      "actorName": "Quản trị viên Hệ thống (Admin)",
+      "actorRole": "admin",
+      "actorUnit": "BN",
+      "action": "Đăng nhập hệ thống",
+      "targetType": "User",
+      "targetId": "usr-admin",
+      "details": "Đăng nhập thành công với email admin.bkic@dut.udn.vn (Vai trò: admin)"
     },
     {
       "id": "audit-1792913768253",
@@ -5693,10 +5938,10 @@
   ],
   "applications": [
     {
-      "id": "app-1792982669399",
+      "id": "app-1792947836486",
       "fullName": "Chưa Xác Minh",
-      "studentId": "989334",
-      "email": "unverified.1792982669334@dut.udn.vn",
+      "studentId": "986415",
+      "email": "unverified.1792947836415@dut.udn.vn",
       "phone": "",
       "faculty": "Khoa Công nghệ Thông tin",
       "classId": "24T_CLC",
@@ -5705,13 +5950,13 @@
       "motivation": "Đăng ký tham gia Câu lạc bộ Sáng tạo Khởi nghiệp BK-IC",
       "skills": "Đăng ký qua cổng trực tuyến BK-IC",
       "status": "pending",
-      "submittedAt": "2026-10-26T02:44:29.399Z"
+      "submittedAt": "2026-10-25T17:03:56.486Z"
     },
     {
-      "id": "app-1792982669309",
+      "id": "app-1792947836368",
       "fullName": "Sinh Viên Kiểm Thử",
-      "studentId": "102229226",
-      "email": "student.1792982669226@dut.udn.vn",
+      "studentId": "102226293",
+      "email": "student.1792947836293@dut.udn.vn",
       "phone": "0905123456",
       "faculty": "Khoa Công nghệ Thông tin",
       "classId": "24T_CLC",
@@ -5720,7 +5965,7 @@
       "motivation": "Đăng ký tham gia Câu lạc bộ Sáng tạo Khởi nghiệp BK-IC",
       "skills": "Đăng ký qua cổng trực tuyến BK-IC",
       "status": "pending",
-      "submittedAt": "2026-10-26T02:44:29.308Z"
+      "submittedAt": "2026-10-25T17:03:56.367Z"
     }
   ],
   "projects": [],
