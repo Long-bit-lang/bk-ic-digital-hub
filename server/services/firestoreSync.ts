@@ -107,7 +107,23 @@ export async function loadCloudData(localFallback: DatabaseSchema): Promise<Data
       }
     });
 
-    console.log(`[FirestoreSync] ✓ Successfully loaded and synced ${snapshot.size} collections from Cloud Firestore.`);
+    // Also check root "users" collection to ensure all member profiles are loaded
+    try {
+      const usersSnap = await db.collection('users').get();
+      if (!usersSnap.empty) {
+        const rootUsers: any[] = [];
+        usersSnap.forEach(uDoc => {
+          rootUsers.push(uDoc.data());
+        });
+        if (rootUsers.length > (merged.users?.length || 0)) {
+          merged.users = rootUsers as any;
+        }
+      }
+    } catch (uErr) {
+      console.warn('[FirestoreSync] Could not read root users collection:', uErr);
+    }
+
+    console.log(`[FirestoreSync] ✓ Successfully loaded and synced ${snapshot.size} collections from Cloud Firestore (users: ${merged.users?.length || 0}).`);
     return merged as DatabaseSchema;
   } catch (err) {
     console.error('[FirestoreSync] ⚠ Failed to load data from Cloud Firestore, using local data:', err);
@@ -150,8 +166,18 @@ export async function saveCloudData(data: DatabaseSchema): Promise<void> {
         });
       }
 
+      // Also mirror each user into root "users" collection for immediate visibility in Firebase Console
+      if (Array.isArray(currentData.users)) {
+        for (const u of currentData.users) {
+          if (u && u.id) {
+            const userDocRef = db.collection('users').doc(u.id);
+            batch.set(userDocRef, JSON.parse(JSON.stringify(u)));
+          }
+        }
+      }
+
       await batch.commit();
-      console.log(`[FirestoreSync] ✓ Cloud Firestore updated successfully (${keys.length} sections synchronized).`);
+      console.log(`[FirestoreSync] ✓ Cloud Firestore updated successfully (${keys.length} sections and ${currentData.users?.length || 0} users synchronized).`);
     } catch (err) {
       console.error('[FirestoreSync] ⚠ Error committing batch update to Cloud Firestore:', err);
     }

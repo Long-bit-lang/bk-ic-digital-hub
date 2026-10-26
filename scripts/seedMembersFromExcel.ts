@@ -542,8 +542,14 @@ async function main() {
       });
     }
 
+    // Also mirror to root 'users' collection
+    for (const u of processedUsers) {
+      const userRef = firestore.collection('users').doc(u.id);
+      batch.set(userRef, JSON.parse(JSON.stringify(u)));
+    }
+
     await batch.commit();
-    console.log(`✓ Đã đồng bộ toàn bộ ${keys.length} phân vùng dữ liệu lên Cloud Firestore thành công!`);
+    console.log(`✓ Đã đồng bộ toàn bộ ${keys.length} phân vùng dữ liệu và ${processedUsers.length} hồ sơ người dùng lên Cloud Firestore thành công!`);
 
     // Verify Firestore users
     const verifyDoc = await colRef.doc('users').get();
