@@ -20,7 +20,11 @@ import {
   KeyRound,
   CheckCircle,
   XCircle,
-  Info
+  Info,
+  UserPlus,
+  ExternalLink,
+  Save,
+  FileText
 } from 'lucide-react';
 
 interface SmtpStatusState {
@@ -49,9 +53,49 @@ interface OutboxItem {
 }
 
 export const AdminSettingsPage: React.FC = () => {
-  const { siteSettings, resetToDefaultData, cleanTestData } = useApp();
+  const { siteSettings, updateSiteSettings, resetToDefaultData, cleanTestData } = useApp();
   const [resetDone, setResetDone] = useState(false);
   const [isCleaning, setIsCleaning] = useState(false);
+
+  // Recruitment settings state
+  const [recruitmentForm, setRecruitmentForm] = useState({
+    recruitmentStatus: siteSettings.recruitmentStatus || 'closed',
+    recruitmentStartDate: siteSettings.recruitmentStartDate || '',
+    recruitmentDeadline: siteSettings.recruitmentDeadline || '',
+    recruitmentFormUrl: siteSettings.recruitmentFormUrl || '',
+    recruitmentFanpageUrl: siteSettings.recruitmentFanpageUrl || 'https://www.facebook.com/dut.bkic',
+    recruitmentTitle: siteSettings.recruitmentTitle || '',
+    recruitmentDescription: siteSettings.recruitmentDescription || ''
+  });
+  const [savingRecruitment, setSavingRecruitment] = useState(false);
+  const [recruitmentSaveSuccess, setRecruitmentSaveSuccess] = useState(false);
+
+  useEffect(() => {
+    setRecruitmentForm({
+      recruitmentStatus: siteSettings.recruitmentStatus || 'closed',
+      recruitmentStartDate: siteSettings.recruitmentStartDate || '',
+      recruitmentDeadline: siteSettings.recruitmentDeadline || '',
+      recruitmentFormUrl: siteSettings.recruitmentFormUrl || '',
+      recruitmentFanpageUrl: siteSettings.recruitmentFanpageUrl || 'https://www.facebook.com/dut.bkic',
+      recruitmentTitle: siteSettings.recruitmentTitle || '',
+      recruitmentDescription: siteSettings.recruitmentDescription || ''
+    });
+  }, [siteSettings]);
+
+  const handleSaveRecruitment = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setSavingRecruitment(true);
+    setRecruitmentSaveSuccess(false);
+    try {
+      await updateSiteSettings(recruitmentForm);
+      setRecruitmentSaveSuccess(true);
+      setTimeout(() => setRecruitmentSaveSuccess(false), 3000);
+    } catch (err: any) {
+      alert(err.message || 'Lỗi khi lưu cấu hình tuyển thành viên');
+    } finally {
+      setSavingRecruitment(false);
+    }
+  };
 
   // SMTP & Outbox states
   const [smtpStatus, setSmtpStatus] = useState<SmtpStatusState | null>(null);
@@ -199,6 +243,139 @@ export const AdminSettingsPage: React.FC = () => {
           <span>Đã hoàn tất khôi phục dữ liệu ban đầu!</span>
         </div>
       )}
+
+      {/* SECTION: Tuyển thành viên BK-IC */}
+      <div className="rounded-3xl border border-slate-800 bg-slate-900 p-6 sm:p-8 space-y-6">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-800/80 pb-4">
+          <div>
+            <div className="flex items-center gap-2 text-xs font-bold text-blue-400 uppercase tracking-wider">
+              <UserPlus className="h-4 w-4" />
+              <span>Cấu hình Tuyển Thành Viên Mới</span>
+            </div>
+            <p className="text-xs text-slate-400 mt-1">
+              Quản lý trạng thái mở/đóng đợt tuyển, thời hạn đăng ký, liên kết biểu mẫu và trang Fanpage chính thức.
+            </p>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <span className={`px-3 py-1 rounded-full text-xs font-semibold border ${
+              recruitmentForm.recruitmentStatus === 'open'
+                ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30'
+                : 'bg-slate-800 text-slate-400 border-slate-700'
+            }`}>
+              {recruitmentForm.recruitmentStatus === 'open' ? '🟢 Đang Mở Tuyển' : '⚪ Đang Đóng Tuyển'}
+            </span>
+          </div>
+        </div>
+
+        {recruitmentSaveSuccess && (
+          <div className="rounded-2xl bg-emerald-500/20 border border-emerald-500/30 p-3 text-xs text-emerald-400 flex items-center gap-2">
+            <CheckCircle2 className="h-4 w-4" />
+            <span>Đã lưu thành công cấu hình tuyển thành viên!</span>
+          </div>
+        )}
+
+        <form onSubmit={handleSaveRecruitment} className="space-y-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-xs font-medium text-slate-400 mb-1">
+                Trạng thái đợt tuyển *
+              </label>
+              <select
+                value={recruitmentForm.recruitmentStatus}
+                onChange={e => setRecruitmentForm({ ...recruitmentForm, recruitmentStatus: e.target.value as 'open' | 'closed' })}
+                className="w-full px-3.5 py-2 rounded-xl bg-slate-800 border border-slate-700 text-xs text-white focus:outline-none focus:border-blue-500"
+              >
+                <option value="closed">Đóng đợt tuyển (Mặc định)</option>
+                <option value="open">Mở đợt tuyển thành viên</option>
+              </select>
+              <p className="text-[11px] text-slate-500 mt-1">
+                Khi đóng, website hiển thị thông báo chưa đến thời gian tuyển và nút theo dõi Fanpage.
+              </p>
+            </div>
+
+            <div>
+              <label className="block text-xs font-medium text-slate-400 mb-1">
+                Tiêu đề đợt tuyển
+              </label>
+              <input
+                type="text"
+                placeholder="VD: Đợt Tuyển Thành Viên BK-IC — Khóa 2026"
+                value={recruitmentForm.recruitmentTitle}
+                onChange={e => setRecruitmentForm({ ...recruitmentForm, recruitmentTitle: e.target.value })}
+                className="w-full px-3.5 py-2 rounded-xl bg-slate-800 border border-slate-700 text-xs text-white focus:outline-none focus:border-blue-500"
+              />
+            </div>
+
+            <div>
+              <label className="block text-xs font-medium text-slate-400 mb-1">
+                Thời gian bắt đầu mở đơn
+              </label>
+              <input
+                type="date"
+                value={recruitmentForm.recruitmentStartDate}
+                onChange={e => setRecruitmentForm({ ...recruitmentForm, recruitmentStartDate: e.target.value })}
+                className="w-full px-3.5 py-2 rounded-xl bg-slate-800 border border-slate-700 text-xs text-white focus:outline-none focus:border-blue-500"
+              />
+            </div>
+
+            <div>
+              <label className="block text-xs font-medium text-slate-400 mb-1">
+                Hạn chót kết thúc nhận đơn
+              </label>
+              <input
+                type="date"
+                value={recruitmentForm.recruitmentDeadline}
+                onChange={e => setRecruitmentForm({ ...recruitmentForm, recruitmentDeadline: e.target.value })}
+                className="w-full px-3.5 py-2 rounded-xl bg-slate-800 border border-slate-700 text-xs text-white focus:outline-none focus:border-blue-500"
+              />
+              <p className="text-[11px] text-slate-500 mt-1">
+                Hệ thống tự động đóng đơn khi quá ngày kết thúc này.
+              </p>
+            </div>
+
+            <div className="sm:col-span-2">
+              <label className="block text-xs font-medium text-slate-400 mb-1">
+                Đường dẫn Biểu mẫu Đăng ký chính thức (Google Form / Microsoft Form / URL bên ngoài)
+              </label>
+              <input
+                type="url"
+                placeholder="https://forms.gle/... hoặc link biểu mẫu chính thức"
+                value={recruitmentForm.recruitmentFormUrl}
+                onChange={e => setRecruitmentForm({ ...recruitmentForm, recruitmentFormUrl: e.target.value })}
+                className="w-full px-3.5 py-2 rounded-xl bg-slate-800 border border-slate-700 text-xs text-white focus:outline-none focus:border-blue-500 font-mono"
+              />
+              <p className="text-[11px] text-slate-500 mt-1">
+                Khi ứng viên nhấn "Đăng ký ngay", trình duyệt sẽ mở liên kết này.
+              </p>
+            </div>
+
+            <div className="sm:col-span-2">
+              <label className="block text-xs font-medium text-slate-400 mb-1">
+                Đường dẫn Fanpage chính thức của BK-IC
+              </label>
+              <input
+                type="url"
+                placeholder="https://www.facebook.com/dut.bkic"
+                value={recruitmentForm.recruitmentFanpageUrl}
+                onChange={e => setRecruitmentForm({ ...recruitmentForm, recruitmentFanpageUrl: e.target.value })}
+                className="w-full px-3.5 py-2 rounded-xl bg-slate-800 border border-slate-700 text-xs text-white focus:outline-none focus:border-blue-500 font-mono"
+              />
+            </div>
+          </div>
+
+          <div className="pt-2 flex justify-end">
+            <button
+              type="submit"
+              disabled={savingRecruitment}
+              className="inline-flex items-center gap-2 px-5 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold transition disabled:opacity-50"
+            >
+              <Save className="h-4 w-4" />
+              <span>{savingRecruitment ? 'Đang lưu...' : 'Lưu cấu hình tuyển thành viên'}</span>
+            </button>
+          </div>
+        </form>
+      </div>
 
       {/* SECTION: Email SMTP & System Outbox */}
       <div className="rounded-3xl border border-slate-800 bg-slate-900 p-6 sm:p-8 space-y-6">

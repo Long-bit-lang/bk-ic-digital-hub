@@ -157,6 +157,20 @@ export interface TrainingSession {
   feedbackReopenedAt?: string;
   timeHistory?: SessionTimeHistory[];
 
+  // Cancellation and recurrence
+  cancellationReason?: string;
+  cancelledBy?: string;
+  cancelledById?: string;
+  cancelledAt?: string;
+  cancellationHistory?: {
+    cancelledBy: string;
+    cancelledById?: string;
+    cancelledAt: string;
+    reason: string;
+  }[];
+  isRecurring?: boolean;
+  recurrenceRule?: string;
+
   // Backwards compatibility & operational properties
   manualGate?: 'open' | 'closed';
   manualGateUntilMs?: number;
@@ -520,6 +534,11 @@ export interface SiteSettings {
   englishTagline: string;
   recruitmentStatus: 'open' | 'closed';
   recruitmentDeadline: string;
+  recruitmentStartDate?: string;
+  recruitmentFormUrl?: string;
+  recruitmentFanpageUrl?: string;
+  recruitmentTitle?: string;
+  recruitmentDescription?: string;
   contactEmail: string;
   contactAddress: string;
   isDemoMode: boolean;

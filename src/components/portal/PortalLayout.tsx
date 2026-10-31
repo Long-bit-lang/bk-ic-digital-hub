@@ -21,6 +21,8 @@ import {
   MoreHorizontal
 } from 'lucide-react';
 
+import { getUnitShortName } from '../../utils/unitDisplay';
+
 export const PortalLayout: React.FC = () => {
   const { currentUser, currentRole, logout } = useApp();
   const [showQRScanner, setShowQRScanner] = useState(false);
@@ -94,9 +96,7 @@ export const PortalLayout: React.FC = () => {
                            location.pathname.startsWith('/portal/feedback') ||
                            mobileMenuOpen;
 
-  const displayUnit = currentUser.committee 
-    ? currentUser.committee.replace('ban-', 'Ban ').toUpperCase() 
-    : (currentUser.unit || 'BK-IC MEMBER');
+  const displayUnit = getUnitShortName(currentUser.unit);
 
   const canAccessAdmin = currentUser.role === 'admin' || 
                          currentUser.role === 'sysadmin' || 

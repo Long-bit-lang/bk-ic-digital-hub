@@ -213,6 +213,9 @@ export const api = {
       method: 'POST',
       body: JSON.stringify({ reason })
     }),
+    restore: (id: string) => request<{ success: boolean; message: string; session: TrainingSession }>(`/api/sessions/${id}/restore`, {
+      method: 'POST'
+    }),
     reopenFeedback: (id: string, reason: string) => request<{ success: boolean; message: string; session: TrainingSession }>(`/api/sessions/${id}/reopen-feedback`, {
       method: 'POST',
       body: JSON.stringify({ reason })

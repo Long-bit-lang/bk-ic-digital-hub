@@ -25,6 +25,7 @@ import {
   ChevronRight,
   UserCheck
 } from 'lucide-react';
+import { getUnitShortName, getUnitFullName } from '../../utils/unitDisplay';
 
 export const AdminLayout: React.FC = () => {
   const { currentUser, currentRole, logout } = useApp();
@@ -70,7 +71,7 @@ export const AdminLayout: React.FC = () => {
           </div>
           <h2 className="text-xl font-bold">Khu vực Giới hạn Quyền Quản trị</h2>
           <p className="text-xs text-slate-400 leading-relaxed">
-            Bạn cần tài khoản thuộc Ban Quản trị (Admin) hoặc Ban Chủ nhiệm (Leader) của BK-IC để truy cập trang này.
+            Bạn cần tài khoản thuộc Ban Quản trị (Admin) hoặc BCN (Leader) của BK-IC để truy cập trang này.
           </p>
           <div className="pt-2 flex justify-center gap-3">
             <Link to="/" className="px-4 py-2 bg-slate-800 text-white rounded-xl text-xs font-semibold hover:bg-slate-700">
@@ -114,11 +115,11 @@ export const AdminLayout: React.FC = () => {
 
   const roleTitle = currentRole === 'admin' || currentUser.role === 'admin'
     ? 'Quản trị viên Cấp cao'
-    : (currentUser.unit === 'BN' || currentRole === 'leader' ? 'Ban Chủ nhiệm (BN)' : 'Ban Điều hành (BĐH)');
+    : getUnitFullName(currentUser.unit);
 
   const roleBadgeShort = currentRole === 'admin' || currentUser.role === 'admin'
     ? 'Admin'
-    : (currentUser.unit || 'Leader');
+    : getUnitShortName(currentUser.unit);
 
   return (
     <div className="min-h-screen md:h-screen bg-slate-950 text-slate-100 flex flex-col md:flex-row md:overflow-hidden">

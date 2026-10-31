@@ -50,7 +50,7 @@ async function runCleanup() {
   ]);
 
   const testUsers = (db.users || []).filter((u: any) => !authenticUserIds.has(u.id));
-  const testUserIds = new Set(testUsers.map((u: any) => u.id));
+  const testUserIds = new Set<string>(testUsers.map((u: any) => String(u.id)));
   db.users = (db.users || []).filter((u: any) => authenticUserIds.has(u.id));
 
   console.log(`[CleanUp] Kept ${db.users.length} authentic users. Removed ${testUsers.length} test users.`);

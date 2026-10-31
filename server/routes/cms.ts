@@ -28,6 +28,37 @@ cmsRouter.get('/applications', requireAuth, requireNormalSession, requireUnitOrR
 
 // POST /api/applications - Submit new recruitment application (Public)
 cmsRouter.post('/applications', (req, res) => {
+  const store = db.get();
+  const settings = store.siteSettings;
+  const todayVN = getVNCurrentDateStr();
+
+  // 1. Check if recruitment is explicitly closed
+  if (settings.recruitmentStatus !== 'open') {
+    return res.status(403).json({
+      success: false,
+      message: 'Hiện tại chưa đến thời gian tuyển thành viên mới. Hãy theo dõi Fanpage chính thức của BK-IC để cập nhật thông tin về đợt tuyển tiếp theo!'
+    });
+  }
+
+  // 2. Check if recruitment has not started yet
+  if (settings.recruitmentStartDate && todayVN < settings.recruitmentStartDate) {
+    return res.status(403).json({
+      success: false,
+      message: 'Hiện tại chưa đến thời gian tuyển thành viên mới. Hãy theo dõi Fanpage chính thức của BK-IC để cập nhật thông tin về đợt tuyển tiếp theo!'
+    });
+  }
+
+  // 3. Check if recruitment has ended
+  if (settings.recruitmentDeadline && todayVN > settings.recruitmentDeadline) {
+    // Automatically close status
+    settings.recruitmentStatus = 'closed';
+    db.save();
+    return res.status(403).json({
+      success: false,
+      message: 'Đợt tuyển thành viên mới đã kết thúc. Hãy theo dõi Fanpage chính thức của BK-IC để cập nhật thông tin về đợt tuyển tiếp theo!'
+    });
+  }
+
   const {
     fullName,
     studentId,
@@ -49,8 +80,6 @@ cmsRouter.post('/applications', (req, res) => {
       message: 'Vui lòng điền đầy đủ các trường thông tin bắt buộc trong đơn đăng ký.'
     });
   }
-
-  const store = db.get();
   const newApp: Application = {
     id: `app-${Date.now()}`,
     fullName: fullName.trim(),
@@ -209,12 +238,21 @@ cmsRouter.get('/events', (req, res) => {
 // GET /api/settings (Public site settings - strictly excluding internal SMTP configuration)
 cmsRouter.get('/settings', (req, res) => {
   const store = db.get();
+  const todayVN = getVNCurrentDateStr();
+  if (
+    store.siteSettings.recruitmentStatus === 'open' &&
+    store.siteSettings.recruitmentDeadline &&
+    todayVN > store.siteSettings.recruitmentDeadline
+  ) {
+    store.siteSettings.recruitmentStatus = 'closed';
+    db.save();
+  }
   const { smtpConfig, ...safeSettings } = (store.siteSettings || {}) as any;
   res.json({ success: true, settings: safeSettings });
 });
 
-// PATCH /api/settings (Admin or BN only)
-cmsRouter.patch('/settings', requireAuth, requireNormalSession, requireUnitOrRole(['BN'], ['admin']), (req, res) => {
+// PATCH /api/settings (Admin, BN, or BTV for recruitment and site settings)
+cmsRouter.patch('/settings', requireAuth, requireNormalSession, requireUnitOrRole(['BN', 'BTV'], ['admin']), (req, res) => {
   const actor = req.user!;
   const store = db.get();
   
@@ -224,6 +262,20 @@ cmsRouter.patch('/settings', requireAuth, requireNormalSession, requireUnitOrRol
     ...store.siteSettings,
     ...rest
   };
+
+  store.auditLogs.unshift({
+    id: `audit-${Date.now()}`,
+    timestamp: new Date().toISOString(),
+    actorId: actor.id,
+    actorName: actor.fullName,
+    actorRole: actor.role,
+    actorUnit: actor.unit,
+    action: 'Cập nhật cấu hình hệ thống / tuyển dụng',
+    targetType: 'SystemSettings',
+    targetId: 'siteSettings',
+    details: `${actor.fullName} cập nhật cấu hình: trạng thái tuyển ${store.siteSettings.recruitmentStatus}`
+  });
+
   db.save();
 
   res.json({ success: true, settings: store.siteSettings });

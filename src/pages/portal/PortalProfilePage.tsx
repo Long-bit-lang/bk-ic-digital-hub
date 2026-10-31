@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { useApp } from '../../context/AppContext';
 import { api } from '../../services/api';
 import { extractAcademicYear, formatAcademicYearDisplay } from '../../utils/academicYear';
+import { getUnitFullName, getUnitShortName, formatMemberPosition } from '../../utils/unitDisplay';
 import { 
   User, 
   GraduationCap, 
@@ -81,7 +82,7 @@ export const PortalProfilePage: React.FC = () => {
               <div className="text-xs text-slate-500 font-mono mt-0.5">MSSV: {currentUser.studentId}</div>
               <div className="mt-1 flex items-center gap-1.5 text-xs text-emerald-700 font-medium">
                 <ShieldCheck className="h-3.5 w-3.5 text-emerald-600" />
-                <span>Thành viên chính thức · Đã xác minh</span>
+                <span>Thành viên {getUnitShortName(currentUser.unit)} · Đã xác minh</span>
               </div>
             </div>
           </div>
@@ -204,7 +205,7 @@ export const PortalProfilePage: React.FC = () => {
                 Ban phân công
               </label>
               <div className="text-sm font-semibold text-blue-700">
-                {currentUser.committee ? currentUser.committee.replace('ban-', 'Ban ').toUpperCase() : 'Chưa phân ban'}
+                {getUnitFullName(currentUser.unit)}
               </div>
             </div>
 
@@ -212,7 +213,9 @@ export const PortalProfilePage: React.FC = () => {
               <label className="block text-xs font-semibold text-slate-500 mb-1">
                 Vị trí đảm nhiệm
               </label>
-              <div className="text-sm font-semibold text-slate-800">{currentUser.position}</div>
+              <div className="text-sm font-semibold text-slate-800">
+                {formatMemberPosition(currentUser.position, currentUser.unit, currentUser.role)}
+              </div>
             </div>
 
             <div>

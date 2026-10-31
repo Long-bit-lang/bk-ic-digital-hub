@@ -19,11 +19,35 @@ import {
   Maximize2,
   Sparkles,
   Zap,
-  Info
+  Info,
+  RotateCcw,
+  AlertTriangle,
+  XCircle
 } from 'lucide-react';
 
 export const AdminSessionsPage: React.FC = () => {
-  const { sessions, createSession, updateSession, deleteSession, attendance, users, currentUser } = useApp();
+  const { sessions, createSession, updateSession, deleteSession, cancelSession, restoreSession, attendance, users, currentUser } = useApp();
+
+  const handleCancelSession = async (s: Session) => {
+    const reason = window.prompt(`Nhập lý do hủy buổi sinh hoạt "${s.title}" (${s.date}):`, 'Nghỉ lễ / Trùng lịch thi học kỳ');
+    if (reason && reason.trim()) {
+      try {
+        await cancelSession(s.id, reason.trim());
+      } catch (err: any) {
+        alert(err.message || 'Lỗi khi hủy buổi sinh hoạt');
+      }
+    }
+  };
+
+  const handleRestoreSession = async (s: Session) => {
+    if (window.confirm(`Xác nhận khôi phục buổi sinh hoạt "${s.title}" (${s.date}) về trạng thái Đã lên lịch?`)) {
+      try {
+        await restoreSession(s.id);
+      } catch (err: any) {
+        alert(err.message || 'Lỗi khi khôi phục buổi sinh hoạt');
+      }
+    }
+  };
 
   const sessionList = Array.isArray(sessions) ? sessions : [];
   const attendanceList = Array.isArray(attendance) ? attendance : [];
@@ -343,6 +367,24 @@ export const AdminSessionsPage: React.FC = () => {
                 </p>
               </div>
 
+              {/* Cancellation Notice Banner */}
+              {s.status === 'cancelled' && (
+                <div className="rounded-2xl bg-rose-500/10 border border-rose-500/30 p-3.5 text-xs text-rose-300 space-y-1">
+                  <div className="flex items-center gap-2 font-bold text-rose-400">
+                    <AlertTriangle className="h-4 w-4 shrink-0" />
+                    <span>Buổi sinh hoạt này đã được Hủy</span>
+                  </div>
+                  <p className="text-rose-200/90 pl-6">
+                    <strong>Lý do hủy:</strong> {s.cancellationReason || 'Chưa cung cấp lý do'}
+                  </p>
+                  {s.cancelledBy && (
+                    <div className="text-[11px] text-rose-400/80 pl-6">
+                      Người hủy: {s.cancelledBy} {s.cancelledAt ? `· Lúc ${new Date(s.cancelledAt).toLocaleString('vi-VN')}` : ''}
+                    </div>
+                  )}
+                </div>
+              )}
+
               <div className="grid grid-cols-1 sm:grid-cols-4 gap-3 text-xs text-slate-400 pt-2 border-t border-slate-800/80">
                 <div className="flex items-center gap-2">
                   <Clock className="h-4 w-4 text-slate-500 shrink-0" />
@@ -372,37 +414,60 @@ export const AdminSessionsPage: React.FC = () => {
               {/* Action Buttons Row */}
               <div className="pt-3 border-t border-slate-800/80 flex flex-wrap items-center justify-between gap-3">
                 <div className="flex items-center gap-2">
-                  {/* Trình chiếu QR lên màn hình lớn */}
-                  <button
-                    onClick={() => setProjectingSession(s)}
-                    className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-blue-600 text-white text-xs font-semibold hover:bg-blue-500 transition shadow-xs"
-                    title="Mở màn hình chiếu mã QR xoay vòng lên máy chiếu"
-                  >
-                    <Maximize2 className="h-3.5 w-3.5" />
-                    <span>Trình chiếu QR Lên Máy Chiếu</span>
-                  </button>
+                  {s.status === 'cancelled' ? (
+                    <button
+                      onClick={() => handleRestoreSession(s)}
+                      className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-emerald-600 text-white text-xs font-semibold hover:bg-emerald-500 transition shadow-xs"
+                      title="Khôi phục buổi sinh hoạt đã hủy"
+                    >
+                      <RotateCcw className="h-3.5 w-3.5" />
+                      <span>Khôi phục buổi sinh hoạt</span>
+                    </button>
+                  ) : (
+                    <>
+                      {/* Trình chiếu QR lên màn hình lớn */}
+                      <button
+                        onClick={() => setProjectingSession(s)}
+                        className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-blue-600 text-white text-xs font-semibold hover:bg-blue-500 transition shadow-xs"
+                        title="Mở màn hình chiếu mã QR xoay vòng lên máy chiếu"
+                      >
+                        <Maximize2 className="h-3.5 w-3.5" />
+                        <span>Trình chiếu QR Lên Máy Chiếu</span>
+                      </button>
 
-                  {/* Toggle Open/Close Gate */}
-                  <button
-                    onClick={() => handleToggleStatus(s)}
-                    className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-semibold transition ${
-                      isGateOpen
-                        ? 'bg-amber-500/20 text-amber-400 border border-amber-500/30 hover:bg-amber-500/30'
-                        : 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 hover:bg-emerald-500/30'
-                    }`}
-                  >
-                    {isGateOpen ? (
-                      <>
-                        <Square className="h-3 w-3" />
-                        <span>Đóng cổng điểm danh</span>
-                      </>
-                    ) : (
-                      <>
-                        <Play className="h-3 w-3" />
-                        <span>Mở cổng điểm danh ngay</span>
-                      </>
-                    )}
-                  </button>
+                      {/* Toggle Open/Close Gate */}
+                      <button
+                        onClick={() => handleToggleStatus(s)}
+                        className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-semibold transition ${
+                          isGateOpen
+                            ? 'bg-amber-500/20 text-amber-400 border border-amber-500/30 hover:bg-amber-500/30'
+                            : 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 hover:bg-emerald-500/30'
+                        }`}
+                      >
+                        {isGateOpen ? (
+                          <>
+                            <Square className="h-3 w-3" />
+                            <span>Đóng cổng điểm danh</span>
+                          </>
+                        ) : (
+                          <>
+                            <Play className="h-3 w-3" />
+                            <span>Mở cổng điểm danh ngay</span>
+                          </>
+                        )}
+                      </button>
+
+                      {/* Nút Hủy buổi */}
+                      <button
+                        onClick={() => handleCancelSession(s)}
+                        className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-rose-500/15 text-rose-400 border border-rose-500/30 hover:bg-rose-500/25 text-xs font-semibold transition"
+                        title="Hủy buổi sinh hoạt cụ thể này (yêu cầu lý do)"
+                      >
+                        <XCircle className="h-3.5 w-3.5" />
+                        <span>Hủy buổi</span>
+                      </button>
+                    </>
+                  )}
                 </div>
 
                 <div className="flex items-center gap-1">

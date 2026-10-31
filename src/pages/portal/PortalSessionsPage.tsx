@@ -310,6 +310,22 @@ export const PortalSessionsPage: React.FC = () => {
                   </p>
                 </div>
 
+                {/* Hiển thị lý do hủy buổi nếu có */}
+                {s.status === 'cancelled' && (
+                  <div className="rounded-xl bg-rose-50 border border-rose-200 p-3 text-xs text-rose-800 space-y-1">
+                    <div className="flex items-center gap-1.5 font-bold text-rose-900">
+                      <AlertCircle className="h-4 w-4 shrink-0 text-rose-600" />
+                      <span>Buổi sinh hoạt này đã được Hủy</span>
+                    </div>
+                    <p className="pl-5 text-rose-800">
+                      <strong>Lý do hủy:</strong> {s.cancellationReason || 'Chưa cung cấp lý do'}
+                    </p>
+                    <p className="pl-5 text-[11px] text-rose-600">
+                      Thành viên không bị ghi nhận vắng mặt đối với buổi sinh hoạt đã hủy.
+                    </p>
+                  </div>
+                )}
+
                 {/* Session Metadata Grid */}
                 <div className="grid grid-cols-1 sm:grid-cols-4 gap-3 pt-2 text-xs text-slate-500">
                   <div className="flex items-center gap-2">
@@ -531,6 +547,26 @@ export const PortalSessionsPage: React.FC = () => {
                   </span>
                 </div>
               </div>
+
+              {selectedMeetingDetail.status === 'cancelled' && (
+                <div className="rounded-xl bg-rose-50 border border-rose-200 p-3.5 text-xs text-rose-800 space-y-1.5">
+                  <div className="font-bold text-rose-900 flex items-center gap-1.5">
+                    <AlertCircle className="h-4 w-4 text-rose-600 shrink-0" />
+                    <span>Phiên sinh hoạt này đã được hủy</span>
+                  </div>
+                  <p className="text-rose-800 pl-5">
+                    <strong>Lý do hủy:</strong> {selectedMeetingDetail.cancellationReason || 'Chưa cung cấp lý do'}
+                  </p>
+                  {selectedMeetingDetail.cancelledBy && (
+                    <div className="text-[11px] text-rose-600 pl-5">
+                      Người hủy: {selectedMeetingDetail.cancelledBy} {selectedMeetingDetail.cancelledAt ? `· Lúc ${new Date(selectedMeetingDetail.cancelledAt).toLocaleString('vi-VN')}` : ''}
+                    </div>
+                  )}
+                  <p className="text-[11px] text-rose-600 pl-5">
+                    Thành viên không bị ghi nhận vắng mặt đối với phiên đã hủy.
+                  </p>
+                </div>
+              )}
 
               {/* PIC Exclusive Action Section inside Modal */}
               {(isUserPic(selectedMeetingDetail) || isAdminOrBn) && (

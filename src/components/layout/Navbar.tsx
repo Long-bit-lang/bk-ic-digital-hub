@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { NavLink, Link, useNavigate, useLocation } from 'react-router-dom';
 import { useApp } from '../../context/AppContext';
 import { Logo } from '../brand/Logo';
+import { getUnitShortName } from '../../utils/unitDisplay';
 import { 
   Menu, 
   X, 
@@ -20,6 +21,7 @@ export const Navbar: React.FC = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { currentUser, currentRole, logout } = useApp();
   const location = useLocation();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -34,18 +36,26 @@ export const Navbar: React.FC = () => {
   }, [location.pathname]);
 
   const navLinks = [
-    { to: '/about', label: 'Giới thiệu' },
-    { to: '/activities', label: 'Hoạt động' },
-    { to: '/projects', label: 'Dự án' },
-    { to: '/#gallery', label: 'Khoảnh khắc' },
-    { to: '/join', label: 'Tham gia' }
+    { to: '/#gallery', label: 'Giới thiệu & Khoảnh khắc' },
+    { to: '/#activities', label: 'Hoạt động' },
+    { to: '/#organization', label: 'Cơ cấu tổ chức' },
+    { to: '/#recruitment', label: 'Tuyển thành viên' },
+    { to: '/contact', label: 'Liên hệ' }
   ];
 
-  const handleNavClick = (to: string) => {
+  const handleNavClick = (e: React.MouseEvent, to: string) => {
     if (to.startsWith('/#')) {
-      const el = document.getElementById(to.replace('/#', ''));
-      if (el) {
-        el.scrollIntoView({ behavior: 'smooth' });
+      e.preventDefault();
+      const targetId = to.replace('/#', '');
+      if (location.pathname !== '/') {
+        navigate('/#' + targetId);
+        setTimeout(() => {
+          const el = document.getElementById(targetId);
+          if (el) el.scrollIntoView({ behavior: 'smooth' });
+        }, 120);
+      } else {
+        const el = document.getElementById(targetId);
+        if (el) el.scrollIntoView({ behavior: 'smooth' });
       }
     }
   };
@@ -73,8 +83,8 @@ export const Navbar: React.FC = () => {
                   <a
                     key={link.to}
                     href={link.to}
-                    onClick={() => handleNavClick(link.to)}
-                    className="relative py-1 text-slate-600 hover:text-[#245BFA] transition-colors whitespace-nowrap shrink-0 group"
+                    onClick={(e) => handleNavClick(e, link.to)}
+                    className="relative py-1 text-slate-600 hover:text-[#245BFA] transition-colors whitespace-nowrap shrink-0 group cursor-pointer"
                   >
                     <span>{link.label}</span>
                     <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-[#245BFA] transition-all duration-200 group-hover:w-full"></span>
@@ -114,11 +124,11 @@ export const Navbar: React.FC = () => {
                     </span>
                     <span className="text-[10px] font-medium text-blue-600">
                       {currentRole === 'admin'
-                        ? 'Ban Chủ nhiệm (Admin)'
+                        ? 'BCN (Admin)'
                         : currentRole === 'leader'
-                        ? `Trưởng ${currentUser.unit || 'Ban'}`
+                        ? `Trưởng ${getUnitShortName(currentUser.unit)}`
                         : currentRole === 'member'
-                        ? `Thành viên (${currentUser.unit || 'BK-IC'})`
+                        ? `Thành viên (${getUnitShortName(currentUser.unit)})`
                         : 'Ứng viên chờ duyệt'}
                     </span>
                   </div>

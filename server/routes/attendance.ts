@@ -703,6 +703,10 @@ attendanceRouter.post('/finalize', (req, res) => {
     return res.status(404).json({ success: false, message: 'Không tìm thấy buổi training.' });
   }
 
+  if (session.status === 'cancelled') {
+    return res.status(400).json({ success: false, message: 'Buổi sinh hoạt đã bị hủy. Không thể chốt danh sách điểm danh.' });
+  }
+
   const isPic = isUserSessionPic(session, actor);
   const isBn = actor.unit === 'BN';
   const isAdmin = actor.role === 'admin' || actor.role === 'sysadmin';

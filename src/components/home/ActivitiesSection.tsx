@@ -59,7 +59,7 @@ export const ActivitiesSection: React.FC = () => {
   );
 
   return (
-    <section ref={sectionRef} className="py-24 sm:py-32 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto overflow-hidden">
+    <section id="activities" ref={sectionRef} className="py-24 sm:py-32 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto overflow-hidden">
       {/* Section Header */}
       <div ref={headerRef} className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
         <div className="max-w-xl space-y-3">

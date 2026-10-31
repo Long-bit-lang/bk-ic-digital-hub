@@ -104,40 +104,66 @@ export const AboutPage: React.FC = () => {
           </div>
         </div>
 
-        {/* 5 Committees Organizational Structure */}
+        {/* 3 Units Organizational Structure */}
         <div className="space-y-6">
           <div>
-            <div className="text-xs font-semibold uppercase tracking-wider text-[#245BFA] mb-2">
-              Bộ máy tổ chức
+            <div className="inline-flex items-center gap-2 rounded-full border border-blue-200 bg-blue-50 px-3.5 py-1 text-xs font-semibold text-[#245BFA] mb-2">
+              <Users className="h-3.5 w-3.5" />
+              <span>BỘ MÁY TỔ CHỨC CHÍNH THỨC</span>
             </div>
             <h2 className="text-2xl sm:text-3xl font-extrabold text-[#101828] tracking-tight">
-              5 Ban Chuyên trách vận hành BK-IC
+              Cơ cấu 3 Ban Vận hành BK-IC
             </h2>
             <p className="text-sm text-slate-600 mt-2">
-              Mỗi ban giữ vai trò trụ cột trong việc duy trì kỷ luật, kết nối và nâng tầm chất lượng các dự án của câu lạc bộ.
+              Cơ cấu tổ chức tinh gọn gồm 3 ban chức năng đảm bảo tính minh bạch, chuyên môn hóa và hiệu quả vận hành tối đa.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {committees.map((com) => (
-              <div
-                key={com.id}
-                className="rounded-2xl border border-slate-200 bg-white p-6 shadow-xs space-y-3"
-              >
-                <div className="flex items-center justify-between">
-                  <span className="font-mono text-xs font-bold text-[#245BFA] bg-blue-50 px-2 py-0.5 rounded">
-                    {com.shortName}
-                  </span>
-                  <span className="text-xs text-slate-400">Trưởng ban: {com.leaderName}</span>
-                </div>
-                <h3 className="text-base font-bold text-slate-900">
-                  {com.name}
-                </h3>
-                <p className="text-xs text-slate-600 leading-relaxed">
-                  {com.description}
-                </p>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-xs space-y-3">
+              <div className="flex items-center justify-between">
+                <span className="font-mono text-xs font-bold text-[#245BFA] bg-blue-50 px-2 py-0.5 rounded">
+                  BCN
+                </span>
+                <span className="text-xs text-slate-400 font-medium">Trưởng ban: Phạm Lê Tú</span>
               </div>
-            ))}
+              <h3 className="text-base font-bold text-slate-900">
+                1. Ban Chủ nhiệm (BCN)
+              </h3>
+              <p className="text-xs text-slate-600 leading-relaxed">
+                Quản lý chung và đưa ra quyết định phê duyệt cuối cùng theo thẩm quyền.
+              </p>
+            </div>
+
+            <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-xs space-y-3">
+              <div className="flex items-center justify-between">
+                <span className="font-mono text-xs font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded">
+                  BĐH
+                </span>
+                <span className="text-xs text-slate-400 font-medium">Trưởng ban: Lê Anh Khoa</span>
+              </div>
+              <h3 className="text-base font-bold text-slate-900">
+                2. Ban Điều hành (BĐH)
+              </h3>
+              <p className="text-xs text-slate-600 leading-relaxed">
+                Tổ chức hoạt động, phối hợp giữa các ban và điều phối công việc theo phân quyền.
+              </p>
+            </div>
+
+            <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-xs space-y-3">
+              <div className="flex items-center justify-between">
+                <span className="font-mono text-xs font-bold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded">
+                  BTV
+                </span>
+                <span className="text-xs text-slate-400 font-medium">Trưởng ban: Nguyễn Hoàng Long</span>
+              </div>
+              <h3 className="text-base font-bold text-slate-900">
+                3. Ban Thành viên (BTV)
+              </h3>
+              <p className="text-xs text-slate-600 leading-relaxed">
+                Quản lý hồ sơ thành viên, theo dõi tình trạng thành viên và thực hiện các nghiệp vụ nhân sự, điểm danh theo quyền được giao.
+              </p>
+            </div>
           </div>
         </div>
 

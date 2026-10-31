@@ -59,26 +59,27 @@ export const JoinPage: React.FC = () => {
 
   const tracks = [
     {
-      id: 'Tech & Innovation',
-      name: 'Ban Chuyên môn & Dự án (Tech & DeepTech)',
-      desc: 'Nghiên cứu phần cứng, lập trình phần mềm, AI, IoT, Robotics và phát triển prototype.'
+      id: 'BDH',
+      name: 'Ban Điều hành (BĐH)',
+      desc: 'Tổ chức hoạt động chuyên môn, phối hợp giữa các ban và điều phối dự án đổi mới sáng tạo.'
     },
     {
-      id: 'Startup & Business Model',
-      name: 'Mô hình Kinh doanh & Quản trị Dự án',
-      desc: 'Xây dựng Lean Canvas, nghiên cứu thị trường, định giá chi phí và lập kế hoạch gọi vốn.'
+      id: 'BTV',
+      name: 'Ban Thành viên (BTV)',
+      desc: 'Quản lý hồ sơ thành viên, theo dõi tình trạng thành viên và thực hiện các nghiệp vụ nhân sự, điểm danh.'
     },
     {
-      id: 'Media & Community',
-      name: 'Ban Truyền thông & Thương hiệu',
-      desc: 'Sáng tạo nội dung số, thiết kế visual thương hiệu, chụp ảnh sự kiện và quản trị mạng xã hội.'
-    },
-    {
-      id: 'External Relations',
-      name: 'Ban Đối ngoại & Kết nối Doanh nghiệp',
-      desc: 'Kết nối mạng lưới cựu sinh viên, tìm kiếm tài trợ và điều phối hợp tác với doanh nghiệp công nghệ.'
+      id: 'BN',
+      name: 'Ban Chủ nhiệm (BCN)',
+      desc: 'Quản lý chung và đưa ra quyết định phê duyệt cuối cùng theo thẩm quyền.'
     }
   ];
+
+  const todayStr = new Date().toISOString().split('T')[0];
+  const isStarted = !siteSettings.recruitmentStartDate || todayStr >= siteSettings.recruitmentStartDate;
+  const isExpired = !!siteSettings.recruitmentDeadline && todayStr > siteSettings.recruitmentDeadline;
+  const isOpen = siteSettings.recruitmentStatus === 'open' && isStarted && !isExpired;
+  const fanpageUrl = siteSettings.recruitmentFanpageUrl || 'https://www.facebook.com/dut.bkic';
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -165,7 +166,39 @@ export const JoinPage: React.FC = () => {
         {/* TAB 1: APPLICATION FORM */}
         {activeTab === 'apply' && (
           <div className="rounded-3xl border border-slate-200 bg-white p-6 sm:p-10 shadow-sm">
-            {submittedAppId ? (
+            {!isOpen ? (
+              <div className="text-center py-10 space-y-6">
+                <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-blue-100 text-[#245BFA]">
+                  <Clock className="h-8 w-8" />
+                </div>
+                <div className="space-y-3 max-w-lg mx-auto">
+                  <h2 className="text-2xl font-bold text-slate-900">
+                    Chưa mở đợt tuyển thành viên mới
+                  </h2>
+                  <div className="rounded-2xl border border-blue-200 bg-blue-50/70 p-5 text-sm sm:text-base text-slate-800 leading-relaxed font-medium">
+                    Hiện tại chưa đến thời gian tuyển thành viên mới. Hãy theo dõi Fanpage chính thức của BK-IC để cập nhật thông tin về đợt tuyển tiếp theo!
+                  </div>
+                </div>
+
+                <div className="pt-4 flex flex-col sm:flex-row items-center justify-center gap-3">
+                  <a
+                    href={fanpageUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center gap-2 rounded-xl bg-[#245BFA] px-7 py-3 text-xs font-bold text-white hover:bg-blue-700 transition shadow-xs"
+                  >
+                    <span>Theo dõi Fanpage chính thức</span>
+                  </a>
+                  <button
+                    onClick={() => setActiveTab('track')}
+                    className="inline-flex items-center gap-2 rounded-xl border border-slate-300 px-6 py-3 text-xs font-semibold text-slate-700 hover:bg-slate-50 transition"
+                  >
+                    <Search className="h-4 w-4" />
+                    <span>Tra cứu hồ sơ đã nộp</span>
+                  </button>
+                </div>
+              </div>
+            ) : submittedAppId ? (
               <div className="text-center py-8 space-y-5">
                 <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-emerald-100 text-emerald-600">
                   <CheckCircle2 className="h-10 w-10" />
@@ -195,7 +228,7 @@ export const JoinPage: React.FC = () => {
                         faculty: 'Khoa Công nghệ Thông tin',
                         classId: '',
                         academicYear: 'K24 (Năm nhất)',
-                        interestTrack: 'Tech & Innovation',
+                        interestTrack: 'BDH',
                         motivation: '',
                         skills: '',
                         experience: '',
@@ -224,7 +257,7 @@ export const JoinPage: React.FC = () => {
                 <div className="rounded-xl bg-blue-50 border border-blue-200 p-4 text-xs text-blue-900 leading-relaxed flex items-start gap-2.5">
                   <ShieldCheck className="h-4 w-4 text-blue-600 shrink-0 mt-0.5" />
                   <div>
-                    <strong>Quy trình tuyển dụng minh bạch:</strong> Tất cả sinh viên đang theo học tại Trường ĐH Bách khoa - ĐHĐN đều có cơ hội bình đẳng. Đơn ứng tuyển sẽ được xem xét kỹ lưỡng bởi Ban Chủ nhiệm và Ban Nhân sự trước khi xếp lịch phỏng vấn.
+                    <strong>Quy trình tuyển dụng minh bạch:</strong> Tất cả sinh viên đang theo học tại Trường ĐH Bách khoa - ĐHĐN đều có cơ hội bình đẳng. Đơn ứng tuyển sẽ được xem xét kỹ lưỡng bởi Ban Chủ nhiệm (BCN) và Ban Thành viên (BTV) trước khi xếp lịch phỏng vấn.
                   </div>
                 </div>
 

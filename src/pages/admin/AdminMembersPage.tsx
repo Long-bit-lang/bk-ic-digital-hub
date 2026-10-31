@@ -6,6 +6,7 @@ import { useApp } from '../../context/AppContext';
 import { User, UserRole, MemberStatus, UnitId, AccountStatus } from '../../types';
 import { api } from '../../services/api';
 import { extractAcademicYear } from '../../utils/academicYear';
+import { getUnitShortName, getUnitFullName, formatMemberPosition } from '../../utils/unitDisplay';
 import { 
   Users, 
   Search, 
@@ -595,10 +596,10 @@ export const AdminMembersPage: React.FC = () => {
             onChange={(e) => setCommitteeFilter(e.target.value)}
             className="rounded-xl border border-slate-700 bg-slate-800 px-3 py-1.5 text-xs text-slate-200 focus:outline-none"
           >
-            <option value="all">Tất cả các Ban (BN, BDH, BTV)</option>
-            <option value="BN">Ban Chủ nhiệm (BN)</option>
-            <option value="BDH">Ban Điều hành (BDH)</option>
-            <option value="BTV">Ban Thành viên (BTV)</option>
+            <option value="all">Tất cả các Ban (BCN, BĐH, BTV)</option>
+            <option value="BN">BCN (Ban Chủ nhiệm)</option>
+            <option value="BDH">BĐH (Ban Điều hành)</option>
+            <option value="BTV">BTV (Ban Thành viên)</option>
           </select>
 
           <select
@@ -744,9 +745,9 @@ export const AdminMembersPage: React.FC = () => {
                       {/* Ban & Vị trí */}
                       <td className="py-3 px-4">
                         <span className="font-semibold text-slate-200">
-                          {u.unit === 'BN' ? 'Ban Chủ nhiệm' : u.unit === 'BDH' ? 'Ban Điều hành' : u.unit === 'BTV' ? 'Ban Thành viên' : (u.committee || 'Ban Điều hành')}
+                          {getUnitFullName(u.unit)}
                         </span>
-                        <div className="text-[11px] text-slate-400">{u.position}</div>
+                        <div className="text-[11px] text-slate-400">{formatMemberPosition(u.position, u.unit, u.role)}</div>
                       </td>
 
                       {/* Vai trò */}
@@ -1447,9 +1448,9 @@ export const AdminMembersPage: React.FC = () => {
                     onChange={(e) => setFormData({ ...formData, unit: e.target.value as UnitId })}
                     className="w-full rounded-xl border border-slate-700 bg-slate-800 px-3 py-2 text-xs text-white focus:outline-none"
                   >
-                    <option value="BDH">Ban Điều hành (BDH)</option>
+                    <option value="BN">Ban Chủ nhiệm (BCN)</option>
+                    <option value="BDH">Ban Điều hành (BĐH)</option>
                     <option value="BTV">Ban Thành viên (BTV)</option>
-                    <option value="BN">Ban Chủ nhiệm (BN)</option>
                   </select>
                 </div>
 

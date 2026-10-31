@@ -19,61 +19,47 @@ export const INITIAL_UNITS: ClubUnit[] = [
   {
     id: 'BN',
     name: 'Ban Chủ nhiệm',
-    shortName: 'BN',
-    description: 'Chỉ đạo chiến lược, điều hành tổng thể, phê duyệt quyết định nhân sự, đánh giá và đối ngoại cấp cao.',
-    leaderName: ''
+    shortName: 'BCN',
+    description: 'Quản lý chung và đưa ra quyết định phê duyệt cuối cùng theo thẩm quyền.',
+    leaderName: 'Phạm Lê Tú'
   },
   {
     id: 'BDH',
     name: 'Ban Điều hành',
     shortName: 'BĐH',
-    description: 'Tổ chức các hoạt động chuyên môn, các buổi training, quản lý dự án đổi mới sáng tạo và điều phối liên đơn vị.',
-    leaderName: ''
+    description: 'Tổ chức hoạt động, phối hợp giữa các ban và điều phối công việc theo phân quyền.',
+    leaderName: 'Lê Anh Khoa'
   },
   {
     id: 'BTV',
     name: 'Ban Thành viên',
     shortName: 'BTV',
-    description: 'Quản lý hồ sơ nhân sự, ghi nhận điểm danh, cập nhật trạng thái thành viên và hỗ trợ nội bộ.',
-    leaderName: ''
+    description: 'Quản lý hồ sơ thành viên, theo dõi tình trạng thành viên và thực hiện các nghiệp vụ nhân sự, điểm danh theo quyền được giao.',
+    leaderName: 'Nguyễn Hoàng Long'
   }
 ];
 
 export const INITIAL_COMMITTEES: Committee[] = [
   {
-    id: 'ban-chu-nhiem',
+    id: 'BN',
     name: 'Ban Chủ nhiệm',
     shortName: 'BCN',
-    description: 'Chỉ đạo chiến lược, điều phối tổng thể và làm cầu nối với Nhà trường, Giảng viên Cố vấn.',
-    leaderName: ''
+    description: 'Quản lý chung và đưa ra quyết định phê duyệt cuối cùng theo thẩm quyền.',
+    leaderName: 'Phạm Lê Tú'
   },
   {
-    id: 'ban-chuyen-mon',
-    name: 'Ban Chuyên môn & Dự án',
-    shortName: 'Chuyên môn',
-    description: 'Phát triển giải pháp công nghệ, ươm mầm các dự án khởi nghiệp sinh viên, tổ chức Hackathon.',
-    leaderName: ''
+    id: 'BDH',
+    name: 'Ban Điều hành',
+    shortName: 'BĐH',
+    description: 'Tổ chức hoạt động, phối hợp giữa các ban và điều phối công việc theo phân quyền.',
+    leaderName: 'Lê Anh Khoa'
   },
   {
-    id: 'ban-truyen-thong',
-    name: 'Ban Truyền thông & Thương hiệu',
-    shortName: 'Truyền thông',
-    description: 'Xây dựng hình ảnh, lan tỏa văn hóa đổi mới sáng tạo và quản lý các kênh thông tin câu lạc bộ.',
-    leaderName: ''
-  },
-  {
-    id: 'ban-doi-ngoai',
-    name: 'Ban Đối ngoại & Kết nối Doanh nghiệp',
-    shortName: 'Đối ngoại',
-    description: 'Kết nối mạng lưới cựu sinh viên, quỹ đầu tư thiên thần, doanh nghiệp công nghệ và đối tác khởi nghiệp.',
-    leaderName: ''
-  },
-  {
-    id: 'ban-nhan-su',
-    name: 'Ban Nhân sự & Phát triển Thành viên',
-    shortName: 'Nhân sự',
-    description: 'Tuyển dụng, điểm danh, tổ chức đào tạo nội bộ, đánh giá rèn luyện và xây dựng tinh thần đồng đội.',
-    leaderName: ''
+    id: 'BTV',
+    name: 'Ban Thành viên',
+    shortName: 'BTV',
+    description: 'Quản lý hồ sơ thành viên, theo dõi tình trạng thành viên và thực hiện các nghiệp vụ nhân sự, điểm danh theo quyền được giao.',
+    leaderName: 'Nguyễn Hoàng Long'
   }
 ];
 
@@ -121,8 +107,13 @@ export const INITIAL_SITE_SETTINGS: SiteSettings = {
   heroSubheadline: 'Nơi sinh viên Bách khoa gặp gỡ, học hỏi và cùng nhau biến những ý tưởng sáng tạo thành giải pháp mang giá trị thực tiễn.',
   heroTagline: 'Think. Build. Impact.',
   englishTagline: 'Empowering Student Innovation & Entrepreneurship at Danang University of Science and Technology',
-  recruitmentStatus: 'open',
+  recruitmentStatus: 'closed',
   recruitmentDeadline: '2026-11-15',
+  recruitmentStartDate: '',
+  recruitmentFormUrl: '',
+  recruitmentFanpageUrl: 'https://www.facebook.com/dut.bkic',
+  recruitmentTitle: 'Đợt tuyển thành viên mới',
+  recruitmentDescription: 'Gia nhập BK-IC để cùng nhau phát triển các dự án công nghệ, sáng tạo và khởi nghiệp.',
   contactEmail: 'bkic@dut.udn.vn',
   contactAddress: '54 Nguyễn Lương Bằng, Phường Hòa Khánh Bắc, Quận Liên Chiểu, TP. Đà Nẵng',
   isDemoMode: false

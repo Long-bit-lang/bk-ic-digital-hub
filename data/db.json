@@ -3,22 +3,22 @@
     {
       "id": "BN",
       "name": "Ban Chủ nhiệm",
-      "shortName": "BN",
-      "description": "Chỉ đạo chiến lược, điều hành tổng thể, phê duyệt quyết định nhân sự, đánh giá và đối ngoại cấp cao.",
+      "shortName": "BCN",
+      "description": "Quản lý chung và đưa ra quyết định phê duyệt cuối cùng theo thẩm quyền.",
       "leaderName": "Phạm Lê Tú"
     },
     {
       "id": "BDH",
       "name": "Ban Điều hành",
       "shortName": "BĐH",
-      "description": "Tổ chức các hoạt động chuyên môn, các buổi training, quản lý dự án đổi mới sáng tạo và điều phối liên đơn vị.",
+      "description": "Tổ chức hoạt động, phối hợp giữa các ban và điều phối công việc theo phân quyền.",
       "leaderName": "Lê Anh Khoa"
     },
     {
       "id": "BTV",
       "name": "Ban Thành viên",
       "shortName": "BTV",
-      "description": "Quản lý hồ sơ nhân sự, ghi nhận điểm danh, cập nhật trạng thái thành viên và hỗ trợ nội bộ.",
+      "description": "Quản lý hồ sơ thành viên, theo dõi tình trạng thành viên và thực hiện các nghiệp vụ nhân sự, điểm danh theo quyền được giao.",
       "leaderName": "Nguyễn Hoàng Long"
     }
   ],
@@ -47,7 +47,7 @@
       "passwordSalt": "142c8638f413bfc2d6366433fcaf5e81",
       "mustChangePassword": false,
       "isRecoverySession": false,
-      "lastLoginAt": "2026-10-26T03:51:40.839Z",
+      "lastLoginAt": "2026-10-31T09:35:35.704Z",
       "statusHistory": [
         {
           "id": "sh-1792903694464",
@@ -96,7 +96,10 @@
           "updatedBy": "Quản trị viên Hệ thống (Admin)",
           "timestamp": "2026-10-26T02:54:41.382Z"
         }
-      ]
+      ],
+      "lastLoginAt": "2026-10-27T11:16:50.458Z",
+      "resetTokenHash": "d44795d82c31b88b32823a65087cb47f754a2c8aa0955d3e071773888488ab63",
+      "resetTokenExpiresAt": "2026-10-27T11:31:13.691Z"
     },
     {
       "id": "usr-1792983281486",
@@ -133,7 +136,8 @@
           "updatedBy": "Quản trị viên Hệ thống (Admin)",
           "timestamp": "2026-10-26T02:54:41.382Z"
         }
-      ]
+      ],
+      "lastLoginAt": "2026-10-27T10:58:03.760Z"
     },
     {
       "id": "usr-1792983281487",
@@ -170,7 +174,8 @@
           "updatedBy": "Quản trị viên Hệ thống (Admin)",
           "timestamp": "2026-10-26T02:54:41.382Z"
         }
-      ]
+      ],
+      "lastLoginAt": "2026-10-27T10:50:37.052Z"
     },
     {
       "id": "usr-1792983281488",
@@ -208,7 +213,7 @@
           "timestamp": "2026-10-26T02:54:41.382Z"
         }
       ],
-      "lastLoginAt": "2026-10-26T03:28:02.890Z"
+      "lastLoginAt": "2026-10-28T00:55:29.346Z"
     },
     {
       "id": "usr-1792983281489",
@@ -245,7 +250,8 @@
           "updatedBy": "Quản trị viên Hệ thống (Admin)",
           "timestamp": "2026-10-26T02:54:41.382Z"
         }
-      ]
+      ],
+      "lastLoginAt": "2026-10-27T10:51:02.566Z"
     },
     {
       "id": "usr-1792983281490",
@@ -282,7 +288,8 @@
           "updatedBy": "Quản trị viên Hệ thống (Admin)",
           "timestamp": "2026-10-26T02:54:41.382Z"
         }
-      ]
+      ],
+      "lastLoginAt": "2026-10-27T10:46:46.753Z"
     },
     {
       "id": "usr-1792983281491",
@@ -319,7 +326,8 @@
           "updatedBy": "Quản trị viên Hệ thống (Admin)",
           "timestamp": "2026-10-26T02:54:41.382Z"
         }
-      ]
+      ],
+      "lastLoginAt": "2026-10-27T10:49:09.178Z"
     },
     {
       "id": "usr-1792983281492",
@@ -430,7 +438,8 @@
           "updatedBy": "Quản trị viên Hệ thống (Admin)",
           "timestamp": "2026-10-26T02:54:41.382Z"
         }
-      ]
+      ],
+      "lastLoginAt": "2026-10-27T10:42:46.057Z"
     },
     {
       "id": "usr-1792983281496",
@@ -452,8 +461,8 @@
       "accountStatus": "active",
       "emailVerified": true,
       "createdAt": "2026-10-26T02:54:41.382Z",
-      "passwordHash": "287da227fd02973c771ec8509e4a95d37241febfb8a5f8eeba5019a42d01477f9254d0baac8cb2af16ef1dee2647d0e06016b843e7c36a8a29a7cb6285366f11",
-      "passwordSalt": "3360a0a15959ce9f47d8ae9524702daa",
+      "passwordHash": "9f97cb663e8af520c978c65bf6b603bbf7d16c9a1123b22315c983156a3cf10b635804adcb5aa3753a680be60b5885c9e5a8d7f3e790f4801e0d98ae8e8ec4ac",
+      "passwordSalt": "92bcb5cfa3b48b400698e2707a73df60",
       "mustChangePassword": false,
       "isRecoverySession": false,
       "statusHistory": [
@@ -467,7 +476,8 @@
           "updatedBy": "Quản trị viên Hệ thống (Admin)",
           "timestamp": "2026-10-26T02:54:41.382Z"
         }
-      ]
+      ],
+      "lastLoginAt": "2026-10-27T08:09:32.357Z"
     },
     {
       "id": "usr-1792983281497",
@@ -578,7 +588,8 @@
           "updatedBy": "Quản trị viên Hệ thống (Admin)",
           "timestamp": "2026-10-26T02:54:41.382Z"
         }
-      ]
+      ],
+      "lastLoginAt": "2026-10-27T10:56:30.953Z"
     },
     {
       "id": "usr-1792983281501",
@@ -600,8 +611,8 @@
       "accountStatus": "active",
       "emailVerified": true,
       "createdAt": "2026-10-26T02:54:41.382Z",
-      "passwordHash": "287da227fd02973c771ec8509e4a95d37241febfb8a5f8eeba5019a42d01477f9254d0baac8cb2af16ef1dee2647d0e06016b843e7c36a8a29a7cb6285366f11",
-      "passwordSalt": "3360a0a15959ce9f47d8ae9524702daa",
+      "passwordHash": "ba9ba1f8afe4e53aadf9bf0be115b2ad3edd46cf3f6e35f888b20a273f3d312539eddd982f8768783eb4f7b08da2c7692a535c8f7560b984c4bf871f59ac2d02",
+      "passwordSalt": "c8b5f77bdc03af059ec321111a4a4fc4",
       "mustChangePassword": false,
       "isRecoverySession": false,
       "statusHistory": [
@@ -615,7 +626,8 @@
           "updatedBy": "Quản trị viên Hệ thống (Admin)",
           "timestamp": "2026-10-26T02:54:41.382Z"
         }
-      ]
+      ],
+      "lastLoginAt": "2026-10-27T10:36:59.151Z"
     },
     {
       "id": "usr-1792983281502",
@@ -727,7 +739,8 @@
           "updatedBy": "Quản trị viên Hệ thống (Admin)",
           "timestamp": "2026-10-26T02:54:41.382Z"
         }
-      ]
+      ],
+      "lastLoginAt": "2026-10-27T10:46:16.855Z"
     },
     {
       "id": "usr-1792983281505",
@@ -764,7 +777,8 @@
           "updatedBy": "Quản trị viên Hệ thống (Admin)",
           "timestamp": "2026-10-26T02:54:41.382Z"
         }
-      ]
+      ],
+      "lastLoginAt": "2026-10-29T16:35:44.021Z"
     },
     {
       "id": "usr-1792983281506",
@@ -801,7 +815,8 @@
           "updatedBy": "Quản trị viên Hệ thống (Admin)",
           "timestamp": "2026-10-26T02:54:41.382Z"
         }
-      ]
+      ],
+      "lastLoginAt": "2026-10-27T14:59:55.519Z"
     },
     {
       "id": "usr-1792983281507",
@@ -838,7 +853,8 @@
           "updatedBy": "Quản trị viên Hệ thống (Admin)",
           "timestamp": "2026-10-26T02:54:41.382Z"
         }
-      ]
+      ],
+      "lastLoginAt": "2026-10-27T10:34:46.155Z"
     },
     {
       "id": "usr-1792983281508",
@@ -860,8 +876,8 @@
       "accountStatus": "active",
       "emailVerified": true,
       "createdAt": "2026-10-26T02:54:41.382Z",
-      "passwordHash": "287da227fd02973c771ec8509e4a95d37241febfb8a5f8eeba5019a42d01477f9254d0baac8cb2af16ef1dee2647d0e06016b843e7c36a8a29a7cb6285366f11",
-      "passwordSalt": "3360a0a15959ce9f47d8ae9524702daa",
+      "passwordHash": "e61fd2f9d1d610397a7ab308cbe9cd8f6862cee86a31605811e10a3c5adbcce1ae0f2d811ae08c5c031af983ced6b68a6093f1e80f6d9dadf0b53e8c8010a7bd",
+      "passwordSalt": "f56d16edba3900eab76982e2da4ae483",
       "mustChangePassword": false,
       "isRecoverySession": false,
       "statusHistory": [
@@ -875,7 +891,8 @@
           "updatedBy": "Quản trị viên Hệ thống (Admin)",
           "timestamp": "2026-10-26T02:54:41.382Z"
         }
-      ]
+      ],
+      "lastLoginAt": "2026-10-27T10:49:36.657Z"
     },
     {
       "id": "usr-1792983281509",
@@ -912,7 +929,8 @@
           "updatedBy": "Quản trị viên Hệ thống (Admin)",
           "timestamp": "2026-10-26T02:54:41.382Z"
         }
-      ]
+      ],
+      "lastLoginAt": "2026-10-27T10:43:12.756Z"
     },
     {
       "id": "usr-1792983281510",
@@ -988,7 +1006,7 @@
           "timestamp": "2026-10-26T02:54:41.382Z"
         }
       ],
-      "lastLoginAt": "2026-10-26T03:27:47.100Z"
+      "lastLoginAt": "2026-10-27T10:57:22.460Z"
     },
     {
       "id": "usr-1792983281512",
@@ -1063,7 +1081,7 @@
           "timestamp": "2026-10-26T02:54:41.382Z"
         }
       ],
-      "lastLoginAt": "2026-10-26T03:23:47.294Z"
+      "lastLoginAt": "2026-10-27T11:01:51.571Z"
     },
     {
       "id": "usr-1792983281514",
@@ -1100,7 +1118,8 @@
           "updatedBy": "Quản trị viên Hệ thống (Admin)",
           "timestamp": "2026-10-26T02:54:41.382Z"
         }
-      ]
+      ],
+      "lastLoginAt": "2026-10-27T10:42:36.552Z"
     },
     {
       "id": "usr-1792983281515",
@@ -1175,7 +1194,7 @@
       ],
       "mustChangePassword": false,
       "isRecoverySession": false,
-      "lastLoginAt": "2026-10-26T03:51:59.724Z",
+      "lastLoginAt": "2026-10-31T09:50:08.658Z",
       "resetTokenHash": "7f745d51bc826458289b3acd808a9fa58948843c9f4c9f5672bc8c30e6396837",
       "resetTokenExpiresAt": "2026-10-25T04:41:39.728Z"
     }
@@ -1196,11 +1215,11 @@
       "startTime": "17:30",
       "endTime": "19:00",
       "location": "Phòng A136",
-      "status": "scheduled",
+      "status": "ended",
       "attendanceStatus": "closed",
       "attendanceOpenTime": "17:30",
-      "attendanceCloseTime": "18:00",
-      "lateThresholdTime": "17:40",
+      "attendanceCloseTime": "18:30",
+      "lateThresholdTime": "18:00",
       "category": "general_meeting",
       "organizer": "Ban Chuyên môn & Dự án",
       "qrIntervalSec": 20,
@@ -1210,18 +1229,1706 @@
       "feedbackStatus": "closed",
       "feedbackDeadline": "2026-10-28T12:00:00.000Z",
       "timeHistory": []
+    },
+    {
+      "id": "ses-tuesday-2026-11-03",
+      "title": "Sinh hoạt định kỳ CLB BK-IC (Thứ Ba 03/11/2026)",
+      "description": "Buổi sinh hoạt định kỳ thứ Ba hằng tuần của CLB Khởi nghiệp và Đổi mới sáng tạo BK-IC.",
+      "targetAudience": "Toàn thể thành viên chính thức",
+      "targetParticipants": "Toàn thể thành viên chính thức",
+      "date": "2026-11-03",
+      "startTime": "17:30",
+      "endTime": "19:00",
+      "location": "Văn phòng BK-IC / Trường Đại học Bách khoa – ĐHĐN",
+      "status": "scheduled",
+      "attendanceStatus": "closed",
+      "unit": "BDH",
+      "isRecurring": true,
+      "recurrenceRule": "FREQ=WEEKLY;BYDAY=TU;TIME=17:30-19:00;TZ=Asia/Ho_Chi_Minh",
+      "category": "general_meeting",
+      "createdById": "system-recurring",
+      "createdByName": "Hệ thống BK-IC (Lịch định kỳ)",
+      "personInChargeId": "usr-1792983281484",
+      "personInChargeName": "Phạm Lê Tú",
+      "feedbackStatus": "closed",
+      "cancellationHistory": [],
+      "feedbackDeadline": "2026-11-04T12:00:00.000Z",
+      "attendanceOpenTime": "17:30",
+      "attendanceCloseTime": "18:30",
+      "lateThresholdTime": "18:00",
+      "organizer": "Quản trị viên Hệ thống (Admin)"
+    },
+    {
+      "id": "ses-tuesday-2026-11-10",
+      "title": "Sinh hoạt định kỳ CLB BK-IC (Thứ Ba 10/11/2026)",
+      "description": "Buổi sinh hoạt định kỳ thứ Ba hằng tuần của CLB Khởi nghiệp và Đổi mới sáng tạo BK-IC.",
+      "targetAudience": "Toàn thể thành viên chính thức",
+      "targetParticipants": "Toàn thể thành viên chính thức",
+      "date": "2026-11-10",
+      "startTime": "17:30",
+      "endTime": "19:00",
+      "location": "Văn phòng BK-IC / Trường Đại học Bách khoa – ĐHĐN",
+      "status": "scheduled",
+      "attendanceStatus": "closed",
+      "unit": "BDH",
+      "isRecurring": true,
+      "recurrenceRule": "FREQ=WEEKLY;BYDAY=TU;TIME=17:30-19:00;TZ=Asia/Ho_Chi_Minh",
+      "category": "general_meeting",
+      "createdById": "system-recurring",
+      "createdByName": "Hệ thống BK-IC (Lịch định kỳ)",
+      "personInChargeId": "usr-admin",
+      "personInChargeName": "Quản trị viên Hệ thống (Admin)",
+      "feedbackStatus": "closed",
+      "cancellationHistory": [],
+      "feedbackDeadline": "2026-11-11T12:00:00.000Z"
+    },
+    {
+      "id": "ses-tuesday-2026-11-17",
+      "title": "Sinh hoạt định kỳ CLB BK-IC (Thứ Ba 17/11/2026)",
+      "description": "Buổi sinh hoạt định kỳ thứ Ba hằng tuần của CLB Khởi nghiệp và Đổi mới sáng tạo BK-IC.",
+      "targetAudience": "Toàn thể thành viên chính thức",
+      "targetParticipants": "Toàn thể thành viên chính thức",
+      "date": "2026-11-17",
+      "startTime": "17:30",
+      "endTime": "19:00",
+      "location": "Văn phòng BK-IC / Trường Đại học Bách khoa – ĐHĐN",
+      "status": "scheduled",
+      "attendanceStatus": "closed",
+      "unit": "BDH",
+      "isRecurring": true,
+      "recurrenceRule": "FREQ=WEEKLY;BYDAY=TU;TIME=17:30-19:00;TZ=Asia/Ho_Chi_Minh",
+      "category": "general_meeting",
+      "createdById": "system-recurring",
+      "createdByName": "Hệ thống BK-IC (Lịch định kỳ)",
+      "personInChargeId": "usr-admin",
+      "personInChargeName": "Quản trị viên Hệ thống (Admin)",
+      "feedbackStatus": "closed",
+      "cancellationHistory": [],
+      "feedbackDeadline": "2026-11-18T12:00:00.000Z"
+    },
+    {
+      "id": "ses-tuesday-2026-11-24",
+      "title": "Sinh hoạt định kỳ CLB BK-IC (Thứ Ba 24/11/2026)",
+      "description": "Buổi sinh hoạt định kỳ thứ Ba hằng tuần của CLB Khởi nghiệp và Đổi mới sáng tạo BK-IC.",
+      "targetAudience": "Toàn thể thành viên chính thức",
+      "targetParticipants": "Toàn thể thành viên chính thức",
+      "date": "2026-11-24",
+      "startTime": "17:30",
+      "endTime": "19:00",
+      "location": "Văn phòng BK-IC / Trường Đại học Bách khoa – ĐHĐN",
+      "status": "scheduled",
+      "attendanceStatus": "closed",
+      "unit": "BDH",
+      "isRecurring": true,
+      "recurrenceRule": "FREQ=WEEKLY;BYDAY=TU;TIME=17:30-19:00;TZ=Asia/Ho_Chi_Minh",
+      "category": "general_meeting",
+      "createdById": "system-recurring",
+      "createdByName": "Hệ thống BK-IC (Lịch định kỳ)",
+      "personInChargeId": "usr-admin",
+      "personInChargeName": "Quản trị viên Hệ thống (Admin)",
+      "feedbackStatus": "closed",
+      "cancellationHistory": [],
+      "feedbackDeadline": "2026-11-25T12:00:00.000Z"
     }
   ],
   "attendance": [],
   "attendanceRecords": [],
-  "attendanceRequests": [],
+  "attendanceRequests": [
+    {
+      "id": "req-abs-1793439239634",
+      "type": "absence_explanation",
+      "sessionId": "ses-tuesday-2026-11-03",
+      "sessionTitle": "Sinh hoạt định kỳ CLB BK-IC (Thứ Ba 03/11/2026)",
+      "memberId": "usr-1792903694464",
+      "memberName": "Nguyễn Hoàng Long",
+      "studentId": "102250342",
+      "reason": "Em sốt ạ",
+      "submittedAt": "2026-10-31T09:33:59.635Z",
+      "isLateSubmission": false,
+      "status": "rejected",
+      "decidedBy": "Quản trị viên Hệ thống (Admin)",
+      "decidedAt": "2026-10-31T09:35:20.145Z",
+      "decisionNotes": "Không được"
+    }
+  ],
   "feedbackEligibility": [],
   "feedbacks": [],
   "tasks": [],
   "evaluations": [],
-  "notifications": [],
+  "notifications": [
+    {
+      "id": "notif-1793439320145-dec",
+      "userId": "usr-1792903694464",
+      "recipientId": "usr-1792903694464",
+      "recipientEmail": "hoanglong280907@gmail.com",
+      "title": "Đơn xin vắng bị từ chối",
+      "content": "Đơn của bạn cho buổi \"Sinh hoạt định kỳ CLB BK-IC (Thứ Ba 03/11/2026)\" đã được Quản trị viên Hệ thống (Admin) từ chối. Ghi chú: Không được",
+      "message": "Đơn của bạn cho buổi \"Sinh hoạt định kỳ CLB BK-IC (Thứ Ba 03/11/2026)\" đã được Quản trị viên Hệ thống (Admin) từ chối. Ghi chú: Không được",
+      "type": "status_change",
+      "referenceType": "attendance",
+      "referenceId": "req-abs-1793439239634",
+      "isRead": false,
+      "createdAt": "2026-10-31T09:35:20.145Z",
+      "emailSent": false
+    },
+    {
+      "id": "notif-1793439239635-abs-usr-admin",
+      "userId": "usr-admin",
+      "recipientId": "usr-admin",
+      "recipientEmail": "admin.bkic@dut.udn.vn",
+      "title": "Đơn xin vắng mới cần duyệt",
+      "content": "Thành viên Nguyễn Hoàng Long (102250342) vừa gửi đơn xin vắng cho buổi \"Sinh hoạt định kỳ CLB BK-IC (Thứ Ba 03/11/2026)\".",
+      "message": "Thành viên Nguyễn Hoàng Long (102250342) vừa gửi đơn xin vắng cho buổi \"Sinh hoạt định kỳ CLB BK-IC (Thứ Ba 03/11/2026)\".",
+      "type": "approval_required",
+      "referenceType": "attendance",
+      "referenceId": "req-abs-1793439239634",
+      "isRead": false,
+      "createdAt": "2026-10-31T09:33:59.635Z",
+      "emailSent": false
+    },
+    {
+      "id": "notif-1793439239635-abs-usr-1792983281487",
+      "userId": "usr-1792983281487",
+      "recipientId": "usr-1792983281487",
+      "recipientEmail": "quynhhchauu2005@gmail.com",
+      "title": "Đơn xin vắng mới cần duyệt",
+      "content": "Thành viên Nguyễn Hoàng Long (102250342) vừa gửi đơn xin vắng cho buổi \"Sinh hoạt định kỳ CLB BK-IC (Thứ Ba 03/11/2026)\".",
+      "message": "Thành viên Nguyễn Hoàng Long (102250342) vừa gửi đơn xin vắng cho buổi \"Sinh hoạt định kỳ CLB BK-IC (Thứ Ba 03/11/2026)\".",
+      "type": "approval_required",
+      "referenceType": "attendance",
+      "referenceId": "req-abs-1793439239634",
+      "isRead": false,
+      "createdAt": "2026-10-31T09:33:59.635Z",
+      "emailSent": false
+    },
+    {
+      "id": "notif-1793439239635-abs-usr-1792983281486",
+      "userId": "usr-1792983281486",
+      "recipientId": "usr-1792983281486",
+      "recipientEmail": "quocnguyenthien2020@gmail.com",
+      "title": "Đơn xin vắng mới cần duyệt",
+      "content": "Thành viên Nguyễn Hoàng Long (102250342) vừa gửi đơn xin vắng cho buổi \"Sinh hoạt định kỳ CLB BK-IC (Thứ Ba 03/11/2026)\".",
+      "message": "Thành viên Nguyễn Hoàng Long (102250342) vừa gửi đơn xin vắng cho buổi \"Sinh hoạt định kỳ CLB BK-IC (Thứ Ba 03/11/2026)\".",
+      "type": "approval_required",
+      "referenceType": "attendance",
+      "referenceId": "req-abs-1793439239634",
+      "isRead": false,
+      "createdAt": "2026-10-31T09:33:59.635Z",
+      "emailSent": false
+    },
+    {
+      "id": "notif-1793439239635-abs-usr-1792983281484",
+      "userId": "usr-1792983281484",
+      "recipientId": "usr-1792983281484",
+      "recipientEmail": "phamletu80@gmail.com",
+      "title": "Đơn xin vắng mới cần duyệt",
+      "content": "Thành viên Nguyễn Hoàng Long (102250342) vừa gửi đơn xin vắng cho buổi \"Sinh hoạt định kỳ CLB BK-IC (Thứ Ba 03/11/2026)\".",
+      "message": "Thành viên Nguyễn Hoàng Long (102250342) vừa gửi đơn xin vắng cho buổi \"Sinh hoạt định kỳ CLB BK-IC (Thứ Ba 03/11/2026)\".",
+      "type": "approval_required",
+      "referenceType": "attendance",
+      "referenceId": "req-abs-1793439239634",
+      "isRead": false,
+      "createdAt": "2026-10-31T09:33:59.635Z",
+      "emailSent": false
+    }
+  ],
   "exportLogs": [],
   "auditLogs": [
+    {
+      "id": "audit-1793440208658",
+      "timestamp": "2026-10-31T09:50:08.658Z",
+      "actorId": "usr-admin",
+      "actorName": "Quản trị viên Hệ thống (Admin)",
+      "actorRole": "admin",
+      "actorUnit": "BN",
+      "action": "Đăng nhập hệ thống",
+      "targetType": "User",
+      "targetId": "usr-admin",
+      "details": "Đăng nhập thành công với email admin.bkic@dut.udn.vn (Vai trò: admin)"
+    },
+    {
+      "id": "audit-1793439586820",
+      "timestamp": "2026-10-31T09:39:46.820Z",
+      "actorId": "usr-admin",
+      "actorName": "Quản trị viên Hệ thống (Admin)",
+      "actorRole": "admin",
+      "actorUnit": "BN",
+      "action": "Đăng nhập hệ thống",
+      "targetType": "User",
+      "targetId": "usr-admin",
+      "details": "Đăng nhập thành công với email admin.bkic@dut.udn.vn (Vai trò: admin)"
+    },
+    {
+      "id": "audit-1793439335704",
+      "timestamp": "2026-10-31T09:35:35.704Z",
+      "actorId": "usr-1792903694464",
+      "actorName": "Nguyễn Hoàng Long",
+      "actorRole": "member",
+      "actorUnit": "BTV",
+      "action": "Đăng nhập hệ thống",
+      "targetType": "User",
+      "targetId": "usr-1792903694464",
+      "details": "Đăng nhập thành công với email hoanglong280907@gmail.com (Vai trò: member)"
+    },
+    {
+      "id": "audit-1793439320145",
+      "timestamp": "2026-10-31T09:35:20.145Z",
+      "actorId": "usr-admin",
+      "actorName": "Quản trị viên Hệ thống (Admin)",
+      "actorRole": "admin",
+      "actorUnit": "BN",
+      "action": "Quyết định đơn absence_explanation",
+      "targetType": "AttendanceRequest",
+      "targetId": "req-abs-1793439239634",
+      "details": "Quản trị viên Hệ thống (Admin) đã từ chối đơn của Nguyễn Hoàng Long. Ghi chú: Không được"
+    },
+    {
+      "id": "audit-1793439263179",
+      "timestamp": "2026-10-31T09:34:23.179Z",
+      "actorId": "usr-admin",
+      "actorName": "Quản trị viên Hệ thống (Admin)",
+      "actorRole": "admin",
+      "actorUnit": "BN",
+      "action": "Đăng nhập hệ thống",
+      "targetType": "User",
+      "targetId": "usr-admin",
+      "details": "Đăng nhập thành công với email admin.bkic@dut.udn.vn (Vai trò: admin)"
+    },
+    {
+      "id": "audit-1793439239635",
+      "timestamp": "2026-10-31T09:33:59.635Z",
+      "actorId": "usr-1792903694464",
+      "actorName": "Nguyễn Hoàng Long",
+      "actorRole": "member",
+      "actorUnit": "BTV",
+      "action": "Nộp giải trình vắng mặt",
+      "targetType": "AttendanceRequest",
+      "targetId": "req-abs-1793439239634",
+      "details": "Nguyễn Hoàng Long gửi giải trình vắng mặt buổi \"Sinh hoạt định kỳ CLB BK-IC (Thứ Ba 03/11/2026)\" (Nộp trễ hạn 48h: Không)"
+    },
+    {
+      "id": "audit-1793439217813",
+      "timestamp": "2026-10-31T09:33:37.813Z",
+      "actorId": "usr-1792903694464",
+      "actorName": "Nguyễn Hoàng Long",
+      "actorRole": "member",
+      "actorUnit": "BTV",
+      "action": "Đăng nhập hệ thống",
+      "targetType": "User",
+      "targetId": "usr-1792903694464",
+      "details": "Đăng nhập thành công với email hoanglong280907@gmail.com (Vai trò: member)"
+    },
+    {
+      "id": "audit-1793439176648",
+      "timestamp": "2026-10-31T09:32:56.648Z",
+      "actorId": "usr-1792983281484",
+      "actorName": "Phạm Lê Tú",
+      "actorRole": "admin",
+      "action": "Chuyển đổi phiên tài khoản (Admin Switch)",
+      "targetType": "User",
+      "targetId": "usr-1792983281486",
+      "details": "Quản trị viên Phạm Lê Tú đã chuyển phiên sang tài khoản Nguyễn Thiện Quốc (quocnguyenthien2020@gmail.com)"
+    },
+    {
+      "id": "audit-1793439166402",
+      "timestamp": "2026-10-31T09:32:46.402Z",
+      "actorId": "usr-admin",
+      "actorName": "Quản trị viên Hệ thống (Admin)",
+      "actorRole": "admin",
+      "action": "Chuyển đổi phiên tài khoản (Admin Switch)",
+      "targetType": "User",
+      "targetId": "usr-1792983281484",
+      "details": "Quản trị viên Quản trị viên Hệ thống (Admin) đã chuyển phiên sang tài khoản Phạm Lê Tú (phamletu80@gmail.com)"
+    },
+    {
+      "id": "audit-1793439157693",
+      "timestamp": "2026-10-31T09:32:37.693Z",
+      "actorId": "usr-admin",
+      "actorName": "Quản trị viên Hệ thống (Admin)",
+      "actorRole": "admin",
+      "actorUnit": "BN",
+      "action": "Đăng nhập hệ thống",
+      "targetType": "User",
+      "targetId": "usr-admin",
+      "details": "Đăng nhập thành công với email admin.bkic@dut.udn.vn (Vai trò: admin)"
+    },
+    {
+      "id": "audit-1793439111943",
+      "timestamp": "2026-10-31T09:31:51.943Z",
+      "actorId": "usr-admin",
+      "actorName": "Quản trị viên Hệ thống (Admin)",
+      "actorRole": "admin",
+      "actorUnit": "BN",
+      "action": "Cập nhật thông tin buổi training",
+      "targetType": "TrainingSession",
+      "targetId": "ses-tuesday-2026-11-03",
+      "details": "Cập nhật thông tin buổi \"Sinh hoạt định kỳ CLB BK-IC (Thứ Ba 03/11/2026)\". Đối tượng: \"Toàn thể thành viên chính thức\""
+    },
+    {
+      "id": "audit-1793439050358",
+      "timestamp": "2026-10-31T09:30:50.358Z",
+      "actorId": "usr-admin",
+      "actorName": "Quản trị viên Hệ thống (Admin)",
+      "actorRole": "admin",
+      "actorUnit": "BN",
+      "action": "Cập nhật thông tin buổi training",
+      "targetType": "TrainingSession",
+      "targetId": "ses-tuesday-2026-11-03",
+      "details": "Cập nhật thông tin buổi \"Sinh hoạt định kỳ CLB BK-IC (Thứ Ba 03/11/2026)\". Đối tượng: \"Toàn thể thành viên chính thức\""
+    },
+    {
+      "id": "audit-1793438995245",
+      "timestamp": "2026-10-31T09:29:55.245Z",
+      "actorId": "usr-admin",
+      "actorName": "Quản trị viên Hệ thống (Admin)",
+      "actorRole": "admin",
+      "actorUnit": "BN",
+      "action": "Đăng nhập hệ thống",
+      "targetType": "User",
+      "targetId": "usr-admin",
+      "details": "Đăng nhập thành công với email admin.bkic@dut.udn.vn (Vai trò: admin)"
+    },
+    {
+      "id": "audit-1793325739409",
+      "timestamp": "2026-10-30T02:02:19.409Z",
+      "actorId": "usr-admin",
+      "actorName": "Quản trị viên Hệ thống (Admin)",
+      "actorRole": "admin",
+      "actorUnit": "BN",
+      "action": "Đăng nhập hệ thống",
+      "targetType": "User",
+      "targetId": "usr-admin",
+      "details": "Đăng nhập thành công với email admin.bkic@dut.udn.vn (Vai trò: admin)"
+    },
+    {
+      "id": "audit-1793291744021",
+      "timestamp": "2026-10-29T16:35:44.021Z",
+      "actorId": "usr-1792983281505",
+      "actorName": "Huỳnh Ngọc Thuỳ Dung",
+      "actorRole": "member",
+      "actorUnit": "BTV",
+      "action": "Đăng nhập hệ thống",
+      "targetType": "User",
+      "targetId": "usr-1792983281505",
+      "details": "Đăng nhập thành công với email huynhngocthuydungdng@gmail.com (Vai trò: member)"
+    },
+    {
+      "id": "audit-1793290684317",
+      "timestamp": "2026-10-29T16:18:04.317Z",
+      "actorId": "usr-admin",
+      "actorName": "Quản trị viên Hệ thống (Admin)",
+      "actorRole": "admin",
+      "actorUnit": "BN",
+      "action": "Đăng nhập hệ thống",
+      "targetType": "User",
+      "targetId": "usr-admin",
+      "details": "Đăng nhập thành công với email admin.bkic@dut.udn.vn (Vai trò: admin)"
+    },
+    {
+      "id": "audit-1793278654427",
+      "timestamp": "2026-10-29T12:57:34.427Z",
+      "actorId": "usr-admin",
+      "actorName": "Quản trị viên Hệ thống (Admin)",
+      "actorRole": "admin",
+      "actorUnit": "BN",
+      "action": "Điểm danh thủ công",
+      "targetType": "Attendance",
+      "targetId": "att-1793278654427",
+      "details": "Quản trị viên Hệ thống (Admin) ghi nhận điểm danh thủ công cho Thành Viên Thử Nghiệm 5: late"
+    },
+    {
+      "id": "audit-1793278654421",
+      "timestamp": "2026-10-29T12:57:34.421Z",
+      "actorId": "usr-admin",
+      "actorName": "Quản trị viên Hệ thống (Admin)",
+      "actorRole": "admin",
+      "actorUnit": "BN",
+      "action": "Điểm danh thủ công",
+      "targetType": "Attendance",
+      "targetId": "att-1793278654421",
+      "details": "Quản trị viên Hệ thống (Admin) ghi nhận điểm danh thủ công cho Thành Viên Thử Nghiệm 4: present"
+    },
+    {
+      "id": "audit-1793278654414",
+      "timestamp": "2026-10-29T12:57:34.414Z",
+      "actorId": "usr-admin",
+      "actorName": "Quản trị viên Hệ thống (Admin)",
+      "actorRole": "admin",
+      "actorUnit": "BN",
+      "action": "Điểm danh thủ công",
+      "targetType": "Attendance",
+      "targetId": "att-1793278654414",
+      "details": "Quản trị viên Hệ thống (Admin) ghi nhận điểm danh thủ công cho Thành Viên Thử Nghiệm 4: present"
+    },
+    {
+      "id": "audit-1793278654408",
+      "timestamp": "2026-10-29T12:57:34.408Z",
+      "actorId": "usr-admin",
+      "actorName": "Quản trị viên Hệ thống (Admin)",
+      "actorRole": "admin",
+      "actorUnit": "BN",
+      "action": "Điểm danh thủ công",
+      "targetType": "Attendance",
+      "targetId": "att-1793278654408",
+      "details": "Quản trị viên Hệ thống (Admin) ghi nhận điểm danh thủ công cho Thành Viên Thử Nghiệm 3: present"
+    },
+    {
+      "id": "audit-1793278654403",
+      "timestamp": "2026-10-29T12:57:34.403Z",
+      "actorId": "usr-admin",
+      "actorName": "Quản trị viên Hệ thống (Admin)",
+      "actorRole": "admin",
+      "actorUnit": "BN",
+      "action": "Điểm danh thủ công",
+      "targetType": "Attendance",
+      "targetId": "att-1793278654403",
+      "details": "Quản trị viên Hệ thống (Admin) ghi nhận điểm danh thủ công cho Thành Viên Thử Nghiệm 3: present"
+    },
+    {
+      "id": "audit-1793278654398",
+      "timestamp": "2026-10-29T12:57:34.398Z",
+      "actorId": "usr-admin",
+      "actorName": "Quản trị viên Hệ thống (Admin)",
+      "actorRole": "admin",
+      "actorUnit": "BN",
+      "action": "Điểm danh thủ công",
+      "targetType": "Attendance",
+      "targetId": "att-1793278654398",
+      "details": "Quản trị viên Hệ thống (Admin) ghi nhận điểm danh thủ công cho Thành Viên Thử Nghiệm 2: present"
+    },
+    {
+      "id": "audit-1793278654393",
+      "timestamp": "2026-10-29T12:57:34.393Z",
+      "actorId": "usr-admin",
+      "actorName": "Quản trị viên Hệ thống (Admin)",
+      "actorRole": "admin",
+      "actorUnit": "BN",
+      "action": "Điểm danh thủ công",
+      "targetType": "Attendance",
+      "targetId": "att-1793278654393",
+      "details": "Quản trị viên Hệ thống (Admin) ghi nhận điểm danh thủ công cho Thành Viên Thử Nghiệm 2: present"
+    },
+    {
+      "id": "audit-1793278654387",
+      "timestamp": "2026-10-29T12:57:34.387Z",
+      "actorId": "usr-admin",
+      "actorName": "Quản trị viên Hệ thống (Admin)",
+      "actorRole": "admin",
+      "actorUnit": "BN",
+      "action": "Điểm danh thủ công",
+      "targetType": "Attendance",
+      "targetId": "att-1793278654387",
+      "details": "Quản trị viên Hệ thống (Admin) ghi nhận điểm danh thủ công cho Thành Viên Thử Nghiệm 1: present"
+    },
+    {
+      "id": "audit-1793278654381",
+      "timestamp": "2026-10-29T12:57:34.381Z",
+      "actorId": "usr-admin",
+      "actorName": "Quản trị viên Hệ thống (Admin)",
+      "actorRole": "admin",
+      "actorUnit": "BN",
+      "action": "Điểm danh thủ công",
+      "targetType": "Attendance",
+      "targetId": "att-1793278654381",
+      "details": "Quản trị viên Hệ thống (Admin) ghi nhận điểm danh thủ công cho Thành Viên Thử Nghiệm 1: present"
+    },
+    {
+      "id": "audit-1793278653045",
+      "timestamp": "2026-10-29T12:57:33.045Z",
+      "actorId": "usr-admin",
+      "actorName": "Quản trị viên Hệ thống (Admin)",
+      "actorRole": "admin",
+      "actorUnit": "BN",
+      "action": "Đăng nhập hệ thống",
+      "targetType": "User",
+      "targetId": "usr-admin",
+      "details": "Đăng nhập thành công với email admin.bkic@dut.udn.vn (Vai trò: admin)"
+    },
+    {
+      "id": "audit-1793278652095",
+      "timestamp": "2026-10-29T12:57:32.095Z",
+      "actorId": "usr-admin",
+      "actorName": "Quản trị viên Hệ thống (Admin)",
+      "actorRole": "admin",
+      "actorUnit": "BN",
+      "action": "Đăng nhập hệ thống",
+      "targetType": "User",
+      "targetId": "usr-admin",
+      "details": "Đăng nhập thành công với email admin.bkic@dut.udn.vn (Vai trò: admin)"
+    },
+    {
+      "id": "audit-1793278650937",
+      "timestamp": "2026-10-29T12:57:30.937Z",
+      "actorId": "usr-admin",
+      "actorName": "Quản trị viên Hệ thống (Admin)",
+      "actorRole": "admin",
+      "actorUnit": "BN",
+      "action": "Đăng nhập hệ thống",
+      "targetType": "User",
+      "targetId": "usr-admin",
+      "details": "Đăng nhập thành công với email admin.bkic@dut.udn.vn (Vai trò: admin)"
+    },
+    {
+      "id": "audit-1793278649912",
+      "timestamp": "2026-10-29T12:57:29.912Z",
+      "actorId": "usr-admin",
+      "actorName": "Quản trị viên Hệ thống (Admin)",
+      "actorRole": "admin",
+      "actorUnit": "BN",
+      "action": "Điểm danh thủ công",
+      "targetType": "Attendance",
+      "targetId": "att-1793278649912",
+      "details": "Quản trị viên Hệ thống (Admin) ghi nhận điểm danh thủ công cho Học Viên Quên Điện Thoại: present"
+    },
+    {
+      "id": "audit-1793278648009",
+      "timestamp": "2026-10-29T12:57:28.009Z",
+      "actorId": "usr-admin",
+      "actorName": "Quản trị viên Hệ thống (Admin)",
+      "actorRole": "admin",
+      "actorUnit": "BN",
+      "action": "Đăng nhập hệ thống",
+      "targetType": "User",
+      "targetId": "usr-admin",
+      "details": "Đăng nhập thành công với email admin.bkic@dut.udn.vn (Vai trò: admin)"
+    },
+    {
+      "id": "audit-1793200380896",
+      "timestamp": "2026-10-28T15:13:00.896Z",
+      "actorId": "usr-admin",
+      "actorName": "Quản trị viên Hệ thống (Admin)",
+      "actorRole": "admin",
+      "actorUnit": "BN",
+      "action": "Đăng nhập hệ thống",
+      "targetType": "User",
+      "targetId": "usr-admin",
+      "details": "Đăng nhập thành công với email admin.bkic@dut.udn.vn (Vai trò: admin)"
+    },
+    {
+      "id": "audit-1793168847338",
+      "timestamp": "2026-10-28T06:27:27.338Z",
+      "actorId": "usr-admin",
+      "actorName": "Quản trị viên Hệ thống (Admin)",
+      "actorRole": "admin",
+      "actorUnit": "BN",
+      "action": "Đăng nhập hệ thống",
+      "targetType": "User",
+      "targetId": "usr-admin",
+      "details": "Đăng nhập thành công với email admin.bkic@dut.udn.vn (Vai trò: admin)"
+    },
+    {
+      "id": "audit-1793154182478",
+      "timestamp": "2026-10-28T02:23:02.478Z",
+      "actorId": "usr-admin",
+      "actorName": "Quản trị viên Hệ thống (Admin)",
+      "actorRole": "admin",
+      "actorUnit": "BN",
+      "action": "Đăng nhập hệ thống",
+      "targetType": "User",
+      "targetId": "usr-admin",
+      "details": "Đăng nhập thành công với email admin.bkic@dut.udn.vn (Vai trò: admin)"
+    },
+    {
+      "id": "audit-1793148929346",
+      "timestamp": "2026-10-28T00:55:29.346Z",
+      "actorId": "usr-1792983281488",
+      "actorName": "Lê Anh Khoa",
+      "actorRole": "member",
+      "actorUnit": "BDH",
+      "action": "Đăng nhập hệ thống",
+      "targetType": "User",
+      "targetId": "usr-1792983281488",
+      "details": "Đăng nhập thành công với email leanhkhoa572005@gmail.com (Vai trò: member)"
+    },
+    {
+      "id": "audit-1793117037225",
+      "timestamp": "2026-10-27T16:03:57.225Z",
+      "actorId": "usr-admin",
+      "actorName": "Quản trị viên Hệ thống (Admin)",
+      "actorRole": "admin",
+      "actorUnit": "BN",
+      "action": "Đăng nhập hệ thống",
+      "targetType": "User",
+      "targetId": "usr-admin",
+      "details": "Đăng nhập thành công với email admin.bkic@dut.udn.vn (Vai trò: admin)"
+    },
+    {
+      "id": "audit-1793113327162",
+      "timestamp": "2026-10-27T15:02:07.162Z",
+      "actorId": "usr-1792983281506",
+      "actorName": "Nguyễn Hương Giang",
+      "actorRole": "member",
+      "actorUnit": "BTV",
+      "action": "Gửi phản hồi chất lượng buổi học",
+      "targetType": "TrainingFeedback",
+      "targetId": "ses-1792984308633",
+      "details": "Thành viên đã gửi phản hồi ẩn danh cho buổi \"Meeting ngày 27/10/2026\"."
+    },
+    {
+      "id": "audit-1793113195519",
+      "timestamp": "2026-10-27T14:59:55.519Z",
+      "actorId": "usr-1792983281506",
+      "actorName": "Nguyễn Hương Giang",
+      "actorRole": "member",
+      "actorUnit": "BTV",
+      "action": "Đăng nhập hệ thống",
+      "targetType": "User",
+      "targetId": "usr-1792983281506",
+      "details": "Đăng nhập thành công với email giangkelly2008@gmail.com (Vai trò: member)"
+    },
+    {
+      "id": "audit-1793112175131",
+      "timestamp": "2026-10-27T14:42:55.131Z",
+      "actorId": "usr-1792983281488",
+      "actorName": "Lê Anh Khoa",
+      "actorRole": "member",
+      "actorUnit": "BDH",
+      "action": "Đăng nhập hệ thống",
+      "targetType": "User",
+      "targetId": "usr-1792983281488",
+      "details": "Đăng nhập thành công với email leanhkhoa572005@gmail.com (Vai trò: member)"
+    },
+    {
+      "id": "audit-1793112093924",
+      "timestamp": "2026-10-27T14:41:33.924Z",
+      "actorId": "usr-admin",
+      "actorName": "Quản trị viên Hệ thống (Admin)",
+      "actorRole": "admin",
+      "actorUnit": "BN",
+      "action": "Đăng nhập hệ thống",
+      "targetType": "User",
+      "targetId": "usr-admin",
+      "details": "Đăng nhập thành công với email admin.bkic@dut.udn.vn (Vai trò: admin)"
+    },
+    {
+      "id": "audit-1793112065177",
+      "timestamp": "2026-10-27T14:41:05.177Z",
+      "actorId": "usr-1792903694464",
+      "actorName": "Nguyễn Hoàng Long",
+      "actorRole": "member",
+      "actorUnit": "BTV",
+      "action": "Gửi phản hồi chất lượng buổi học",
+      "targetType": "TrainingFeedback",
+      "targetId": "ses-1792984308633",
+      "details": "Thành viên đã gửi phản hồi ẩn danh cho buổi \"Meeting ngày 27/10/2026\"."
+    },
+    {
+      "id": "audit-1793111997915",
+      "timestamp": "2026-10-27T14:39:57.915Z",
+      "actorId": "usr-1792903694464",
+      "actorName": "Nguyễn Hoàng Long",
+      "actorRole": "member",
+      "actorUnit": "BTV",
+      "action": "Đăng nhập hệ thống",
+      "targetType": "User",
+      "targetId": "usr-1792903694464",
+      "details": "Đăng nhập thành công với email hoanglong280907@gmail.com (Vai trò: member)"
+    },
+    {
+      "id": "audit-1793111970920",
+      "timestamp": "2026-10-27T14:39:30.920Z",
+      "actorId": "usr-admin",
+      "actorName": "Quản trị viên Hệ thống (Admin)",
+      "actorRole": "admin",
+      "actorUnit": "BN",
+      "action": "Đăng nhập hệ thống",
+      "targetType": "User",
+      "targetId": "usr-admin",
+      "details": "Đăng nhập thành công với email admin.bkic@dut.udn.vn (Vai trò: admin)"
+    },
+    {
+      "id": "audit-1793111945514",
+      "timestamp": "2026-10-27T14:39:05.514Z",
+      "actorId": "usr-admin",
+      "actorName": "Quản trị viên Hệ thống (Admin)",
+      "actorRole": "admin",
+      "actorUnit": "BN",
+      "action": "Đăng nhập hệ thống",
+      "targetType": "User",
+      "targetId": "usr-admin",
+      "details": "Đăng nhập thành công với email admin.bkic@dut.udn.vn (Vai trò: admin)"
+    },
+    {
+      "id": "audit-1793104098215",
+      "timestamp": "2026-10-27T12:28:18.215Z",
+      "actorId": "usr-admin",
+      "actorName": "Quản trị viên Hệ thống (Admin)",
+      "actorRole": "admin",
+      "actorUnit": "BN",
+      "action": "Đăng nhập hệ thống",
+      "targetType": "User",
+      "targetId": "usr-admin",
+      "details": "Đăng nhập thành công với email admin.bkic@dut.udn.vn (Vai trò: admin)"
+    },
+    {
+      "id": "audit-1793099860778",
+      "timestamp": "2026-10-27T11:17:40.778Z",
+      "actorId": "usr-1792903694464",
+      "actorName": "Nguyễn Hoàng Long",
+      "actorRole": "member",
+      "actorUnit": "BTV",
+      "action": "Đăng nhập hệ thống",
+      "targetType": "User",
+      "targetId": "usr-1792903694464",
+      "details": "Đăng nhập thành công với email hoanglong280907@gmail.com (Vai trò: member)"
+    },
+    {
+      "id": "audit-1793099810459",
+      "timestamp": "2026-10-27T11:16:50.459Z",
+      "actorId": "usr-1792983281484",
+      "actorName": "Phạm Lê Tú",
+      "actorRole": "admin",
+      "actorUnit": "BN",
+      "action": "Đăng nhập hệ thống",
+      "targetType": "User",
+      "targetId": "usr-1792983281484",
+      "details": "Đăng nhập thành công với email phamletu80@gmail.com (Vai trò: admin)"
+    },
+    {
+      "id": "audit-1793099774368",
+      "timestamp": "2026-10-27T11:16:14.368Z",
+      "actorId": "usr-1792983281484",
+      "actorName": "Phạm Lê Tú",
+      "actorRole": "admin",
+      "actorUnit": "BN",
+      "action": "Yêu cầu đặt lại mật khẩu",
+      "targetType": "User",
+      "targetId": "usr-1792983281484",
+      "details": "Đã phát hành liên kết đặt lại mật khẩu bảo mật đến email p****0@gmail.com (Thời hạn 15 phút, 1 lần sử dụng)."
+    },
+    {
+      "id": "audit-1793099627356",
+      "timestamp": "2026-10-27T11:13:47.356Z",
+      "actorId": "usr-1792983281484",
+      "actorName": "Phạm Lê Tú",
+      "actorRole": "admin",
+      "actorUnit": "BN",
+      "action": "Đăng nhập hệ thống",
+      "targetType": "User",
+      "targetId": "usr-1792983281484",
+      "details": "Đăng nhập thành công với email phamletu80@gmail.com (Vai trò: admin)"
+    },
+    {
+      "id": "audit-1793098911943",
+      "timestamp": "2026-10-27T11:01:51.943Z",
+      "actorId": "usr-1792983281513",
+      "actorName": "Nguyễn Thái Minh Thông",
+      "actorRole": "member",
+      "actorUnit": "BTV",
+      "action": "Điểm danh QR thành công",
+      "targetType": "Attendance",
+      "targetId": "att-1793098911943",
+      "details": "Nguyễn Thái Minh Thông (102250369) điểm danh buổi \"Meeting ngày 27/10/2026\" - Trạng thái: late"
+    },
+    {
+      "id": "audit-1793098911648",
+      "timestamp": "2026-10-27T11:01:51.648Z",
+      "actorId": "usr-1792983281513",
+      "actorName": "Nguyễn Thái Minh Thông",
+      "actorRole": "member",
+      "actorUnit": "BTV",
+      "action": "Đăng nhập hệ thống",
+      "targetType": "User",
+      "targetId": "usr-1792983281513",
+      "details": "Đăng nhập thành công với email thongbin26@gmail.com (Vai trò: member)"
+    },
+    {
+      "id": "audit-1793098782260",
+      "timestamp": "2026-10-27T10:59:42.260Z",
+      "actorId": "usr-admin",
+      "actorName": "Quản trị viên Hệ thống (Admin)",
+      "actorRole": "admin",
+      "actorUnit": "BN",
+      "action": "Cập nhật thông tin buổi training",
+      "targetType": "TrainingSession",
+      "targetId": "ses-1792984308633",
+      "details": "Cập nhật thông tin buổi \"Meeting ngày 27/10/2026\". Đối tượng: \"Toàn thể thành viên chính thức\""
+    },
+    {
+      "id": "audit-1793098683983",
+      "timestamp": "2026-10-27T10:58:03.983Z",
+      "actorId": "usr-1792983281486",
+      "actorName": "Nguyễn Thiện Quốc",
+      "actorRole": "admin",
+      "actorUnit": "BN",
+      "action": "Điểm danh QR thành công",
+      "targetType": "Attendance",
+      "targetId": "att-1793098683983",
+      "details": "Nguyễn Thiện Quốc (123220065) điểm danh buổi \"Meeting ngày 27/10/2026\" - Trạng thái: present"
+    },
+    {
+      "id": "audit-1793098683760",
+      "timestamp": "2026-10-27T10:58:03.760Z",
+      "actorId": "usr-1792983281486",
+      "actorName": "Nguyễn Thiện Quốc",
+      "actorRole": "admin",
+      "actorUnit": "BN",
+      "action": "Đăng nhập hệ thống",
+      "targetType": "User",
+      "targetId": "usr-1792983281486",
+      "details": "Đăng nhập thành công với email quocnguyenthien2020@gmail.com (Vai trò: admin)"
+    },
+    {
+      "id": "audit-1793098662949",
+      "timestamp": "2026-10-27T10:57:42.949Z",
+      "actorId": "usr-1792983281486",
+      "actorName": "Nguyễn Thiện Quốc",
+      "actorRole": "admin",
+      "actorUnit": "BN",
+      "action": "Đăng nhập hệ thống",
+      "targetType": "User",
+      "targetId": "usr-1792983281486",
+      "details": "Đăng nhập thành công với email quocnguyenthien2020@gmail.com (Vai trò: admin)"
+    },
+    {
+      "id": "audit-1793098643795",
+      "timestamp": "2026-10-27T10:57:23.795Z",
+      "actorId": "usr-1792983281511",
+      "actorName": "Huỳnh Phước Phú",
+      "actorRole": "member",
+      "actorUnit": "BTV",
+      "action": "Điểm danh QR thành công",
+      "targetType": "Attendance",
+      "targetId": "att-1793098643795",
+      "details": "Huỳnh Phước Phú (102230094) điểm danh buổi \"Meeting ngày 27/10/2026\" - Trạng thái: present"
+    },
+    {
+      "id": "audit-1793098642460",
+      "timestamp": "2026-10-27T10:57:22.460Z",
+      "actorId": "usr-1792983281511",
+      "actorName": "Huỳnh Phước Phú",
+      "actorRole": "member",
+      "actorUnit": "BTV",
+      "action": "Đăng nhập hệ thống",
+      "targetType": "User",
+      "targetId": "usr-1792983281511",
+      "details": "Đăng nhập thành công với email phuh15521@gmail.com (Vai trò: member)"
+    },
+    {
+      "id": "audit-1793098591749",
+      "timestamp": "2026-10-27T10:56:31.749Z",
+      "actorId": "usr-1792983281500",
+      "actorName": "Huỳnh Phạm Hoàng My",
+      "actorRole": "member",
+      "actorUnit": "BTV",
+      "action": "Điểm danh QR thành công",
+      "targetType": "Attendance",
+      "targetId": "att-1793098591749",
+      "details": "Huỳnh Phạm Hoàng My (105250318) điểm danh buổi \"Meeting ngày 27/10/2026\" - Trạng thái: present"
+    },
+    {
+      "id": "audit-1793098590953",
+      "timestamp": "2026-10-27T10:56:30.953Z",
+      "actorId": "usr-1792983281500",
+      "actorName": "Huỳnh Phạm Hoàng My",
+      "actorRole": "member",
+      "actorUnit": "BTV",
+      "action": "Đăng nhập hệ thống",
+      "targetType": "User",
+      "targetId": "usr-1792983281500",
+      "details": "Đăng nhập thành công với email huynhhoangmy1110@gmail.com (Vai trò: member)"
+    },
+    {
+      "id": "audit-1793098472672",
+      "timestamp": "2026-10-27T10:54:32.672Z",
+      "actorId": "usr-1792983281500",
+      "actorName": "Huỳnh Phạm Hoàng My",
+      "actorRole": "member",
+      "actorUnit": "BTV",
+      "action": "Đăng nhập hệ thống",
+      "targetType": "User",
+      "targetId": "usr-1792983281500",
+      "details": "Đăng nhập thành công với email huynhhoangmy1110@gmail.com (Vai trò: member)"
+    },
+    {
+      "id": "audit-1793098371028",
+      "timestamp": "2026-10-27T10:52:51.028Z",
+      "actorId": "guest-applicant",
+      "actorName": "Huỳnh Phạm Hoàng My",
+      "actorRole": "applicant",
+      "action": "Nộp đơn tuyển dụng thành viên mới",
+      "targetType": "Application",
+      "targetId": "app-1793098371027",
+      "details": "Ứng viên Huỳnh Phạm Hoàng My (105250318) đăng ký vào mảng Tech & Innovation"
+    },
+    {
+      "id": "audit-1793098263962",
+      "timestamp": "2026-10-27T10:51:03.962Z",
+      "actorId": "usr-1792983281489",
+      "actorName": "Nguyễn Đoàn Anh Thư",
+      "actorRole": "member",
+      "actorUnit": "BDH",
+      "action": "Điểm danh QR thành công",
+      "targetType": "Attendance",
+      "targetId": "att-1793098263962",
+      "details": "Nguyễn Đoàn Anh Thư (106240046) điểm danh buổi \"Meeting ngày 27/10/2026\" - Trạng thái: present"
+    },
+    {
+      "id": "audit-1793098262566",
+      "timestamp": "2026-10-27T10:51:02.566Z",
+      "actorId": "usr-1792983281489",
+      "actorName": "Nguyễn Đoàn Anh Thư",
+      "actorRole": "member",
+      "actorUnit": "BDH",
+      "action": "Đăng nhập hệ thống",
+      "targetType": "User",
+      "targetId": "usr-1792983281489",
+      "details": "Đăng nhập thành công với email nguyendoananhthucpvm@gmail.com (Vai trò: member)"
+    },
+    {
+      "id": "audit-1793098239850",
+      "timestamp": "2026-10-27T10:50:39.850Z",
+      "actorId": "usr-1792983281489",
+      "actorName": "Nguyễn Đoàn Anh Thư",
+      "actorRole": "member",
+      "actorUnit": "BDH",
+      "action": "Đăng nhập hệ thống",
+      "targetType": "User",
+      "targetId": "usr-1792983281489",
+      "details": "Đăng nhập thành công với email nguyendoananhthucpvm@gmail.com (Vai trò: member)"
+    },
+    {
+      "id": "audit-1793098237332",
+      "timestamp": "2026-10-27T10:50:37.332Z",
+      "actorId": "usr-1792983281487",
+      "actorName": "Nguyễn Quỳnh Châu",
+      "actorRole": "admin",
+      "actorUnit": "BN",
+      "action": "Điểm danh QR thành công",
+      "targetType": "Attendance",
+      "targetId": "att-1793098237332",
+      "details": "Nguyễn Quỳnh Châu (118230004) điểm danh buổi \"Meeting ngày 27/10/2026\" - Trạng thái: present"
+    },
+    {
+      "id": "audit-1793098237053",
+      "timestamp": "2026-10-27T10:50:37.053Z",
+      "actorId": "usr-1792983281487",
+      "actorName": "Nguyễn Quỳnh Châu",
+      "actorRole": "admin",
+      "actorUnit": "BN",
+      "action": "Đăng nhập hệ thống",
+      "targetType": "User",
+      "targetId": "usr-1792983281487",
+      "details": "Đăng nhập thành công với email quynhhchauu2005@gmail.com (Vai trò: admin)"
+    },
+    {
+      "id": "audit-1793098176657",
+      "timestamp": "2026-10-27T10:49:36.657Z",
+      "actorId": "usr-1792983281508",
+      "actorName": "Trần Đại Nhật Hải",
+      "actorRole": "member",
+      "actorUnit": "BTV",
+      "action": "Đăng nhập hệ thống",
+      "targetType": "User",
+      "targetId": "usr-1792983281508",
+      "details": "Đăng nhập thành công với email tdnh1492006@gmail.com (Vai trò: member)"
+    },
+    {
+      "id": "audit-1793098149449",
+      "timestamp": "2026-10-27T10:49:09.449Z",
+      "actorId": "usr-1792983281491",
+      "actorName": "Nguyễn Văn Tùng Dương",
+      "actorRole": "member",
+      "actorUnit": "BDH",
+      "action": "Điểm danh QR thành công",
+      "targetType": "Attendance",
+      "targetId": "att-1793098149449",
+      "details": "Nguyễn Văn Tùng Dương (101250260) điểm danh buổi \"Meeting ngày 27/10/2026\" - Trạng thái: present"
+    },
+    {
+      "id": "audit-1793098149178",
+      "timestamp": "2026-10-27T10:49:09.178Z",
+      "actorId": "usr-1792983281491",
+      "actorName": "Nguyễn Văn Tùng Dương",
+      "actorRole": "member",
+      "actorUnit": "BDH",
+      "action": "Đăng nhập hệ thống",
+      "targetType": "User",
+      "targetId": "usr-1792983281491",
+      "details": "Đăng nhập thành công với email duongnvt2411@gmail.com (Vai trò: member)"
+    },
+    {
+      "id": "audit-1793098122255",
+      "timestamp": "2026-10-27T10:48:42.255Z",
+      "actorId": "usr-1792983281491",
+      "actorName": "Nguyễn Văn Tùng Dương",
+      "actorRole": "member",
+      "actorUnit": "BDH",
+      "action": "Đăng nhập hệ thống",
+      "targetType": "User",
+      "targetId": "usr-1792983281491",
+      "details": "Đăng nhập thành công với email duongnvt2411@gmail.com (Vai trò: member)"
+    },
+    {
+      "id": "audit-1793098007954",
+      "timestamp": "2026-10-27T10:46:47.954Z",
+      "actorId": "usr-1792983281490",
+      "actorName": "Nguyễn Thị Thục Trang",
+      "actorRole": "member",
+      "actorUnit": "BDH",
+      "action": "Điểm danh QR thành công",
+      "targetType": "Attendance",
+      "targetId": "att-1793098007953",
+      "details": "Nguyễn Thị Thục Trang (121240105) điểm danh buổi \"Meeting ngày 27/10/2026\" - Trạng thái: present"
+    },
+    {
+      "id": "audit-1793098006753",
+      "timestamp": "2026-10-27T10:46:46.753Z",
+      "actorId": "usr-1792983281490",
+      "actorName": "Nguyễn Thị Thục Trang",
+      "actorRole": "member",
+      "actorUnit": "BDH",
+      "action": "Đăng nhập hệ thống",
+      "targetType": "User",
+      "targetId": "usr-1792983281490",
+      "details": "Đăng nhập thành công với email thuctrangltk@gmail.com (Vai trò: member)"
+    },
+    {
+      "id": "audit-1793097977453",
+      "timestamp": "2026-10-27T10:46:17.453Z",
+      "actorId": "usr-1792983281504",
+      "actorName": "Nguyễn Thành Bảo",
+      "actorRole": "member",
+      "actorUnit": "BTV",
+      "action": "Điểm danh QR thành công",
+      "targetType": "Attendance",
+      "targetId": "att-1793097977453",
+      "details": "Nguyễn Thành Bảo (101240005) điểm danh buổi \"Meeting ngày 27/10/2026\" - Trạng thái: present"
+    },
+    {
+      "id": "audit-1793097976855",
+      "timestamp": "2026-10-27T10:46:16.855Z",
+      "actorId": "usr-1792983281504",
+      "actorName": "Nguyễn Thành Bảo",
+      "actorRole": "member",
+      "actorUnit": "BTV",
+      "action": "Đăng nhập hệ thống",
+      "targetType": "User",
+      "targetId": "usr-1792983281504",
+      "details": "Đăng nhập thành công với email baovuitinh1234@gmail.com (Vai trò: member)"
+    },
+    {
+      "id": "audit-1793097959363",
+      "timestamp": "2026-10-27T10:45:59.363Z",
+      "actorId": "usr-1792983281490",
+      "actorName": "Nguyễn Thị Thục Trang",
+      "actorRole": "member",
+      "actorUnit": "BDH",
+      "action": "Đăng nhập hệ thống",
+      "targetType": "User",
+      "targetId": "usr-1792983281490",
+      "details": "Đăng nhập thành công với email thuctrangltk@gmail.com (Vai trò: member)"
+    },
+    {
+      "id": "audit-1793097943957",
+      "timestamp": "2026-10-27T10:45:43.957Z",
+      "actorId": "usr-1792983281504",
+      "actorName": "Nguyễn Thành Bảo",
+      "actorRole": "member",
+      "actorUnit": "BTV",
+      "action": "Đăng nhập hệ thống",
+      "targetType": "User",
+      "targetId": "usr-1792983281504",
+      "details": "Đăng nhập thành công với email baovuitinh1234@gmail.com (Vai trò: member)"
+    },
+    {
+      "id": "audit-1793097921963",
+      "timestamp": "2026-10-27T10:45:21.963Z",
+      "actorId": "usr-1792983281489",
+      "actorName": "Nguyễn Đoàn Anh Thư",
+      "actorRole": "member",
+      "actorUnit": "BDH",
+      "action": "Đăng nhập hệ thống",
+      "targetType": "User",
+      "targetId": "usr-1792983281489",
+      "details": "Đăng nhập thành công với email nguyendoananhthucpvm@gmail.com (Vai trò: member)"
+    },
+    {
+      "id": "audit-1793097902763",
+      "timestamp": "2026-10-27T10:45:02.763Z",
+      "actorId": "usr-1792983281504",
+      "actorName": "Nguyễn Thành Bảo",
+      "actorRole": "member",
+      "actorUnit": "BTV",
+      "action": "Đăng nhập hệ thống",
+      "targetType": "User",
+      "targetId": "usr-1792983281504",
+      "details": "Đăng nhập thành công với email baovuitinh1234@gmail.com (Vai trò: member)"
+    },
+    {
+      "id": "audit-1793097856637",
+      "timestamp": "2026-10-27T10:44:16.637Z",
+      "actorId": "usr-1792983281484",
+      "actorName": "Phạm Lê Tú",
+      "actorRole": "admin",
+      "actorUnit": "BN",
+      "action": "Điểm danh QR thành công",
+      "targetType": "Attendance",
+      "targetId": "att-1793097856637",
+      "details": "Phạm Lê Tú (105220278) điểm danh buổi \"Meeting ngày 27/10/2026\" - Trạng thái: present"
+    },
+    {
+      "id": "audit-1793097856353",
+      "timestamp": "2026-10-27T10:44:16.353Z",
+      "actorId": "usr-1792983281484",
+      "actorName": "Phạm Lê Tú",
+      "actorRole": "admin",
+      "actorUnit": "BN",
+      "action": "Đăng nhập hệ thống",
+      "targetType": "User",
+      "targetId": "usr-1792983281484",
+      "details": "Đăng nhập thành công với email phamletu80@gmail.com (Vai trò: admin)"
+    },
+    {
+      "id": "audit-1793097813463",
+      "timestamp": "2026-10-27T10:43:33.463Z",
+      "actorId": "usr-1792983281489",
+      "actorName": "Nguyễn Đoàn Anh Thư",
+      "actorRole": "member",
+      "actorUnit": "BDH",
+      "action": "Đăng nhập hệ thống",
+      "targetType": "User",
+      "targetId": "usr-1792983281489",
+      "details": "Đăng nhập thành công với email nguyendoananhthucpvm@gmail.com (Vai trò: member)"
+    },
+    {
+      "id": "audit-1793097794059",
+      "timestamp": "2026-10-27T10:43:14.059Z",
+      "actorId": "usr-1792983281509",
+      "actorName": "Trần Nguyên Bình",
+      "actorRole": "member",
+      "actorUnit": "BTV",
+      "action": "Điểm danh QR thành công",
+      "targetType": "Attendance",
+      "targetId": "att-1793097794059",
+      "details": "Trần Nguyên Bình (123250056) điểm danh buổi \"Meeting ngày 27/10/2026\" - Trạng thái: present"
+    },
+    {
+      "id": "audit-1793097792756",
+      "timestamp": "2026-10-27T10:43:12.756Z",
+      "actorId": "usr-1792983281509",
+      "actorName": "Trần Nguyên Bình",
+      "actorRole": "member",
+      "actorUnit": "BTV",
+      "action": "Đăng nhập hệ thống",
+      "targetType": "User",
+      "targetId": "usr-1792983281509",
+      "details": "Đăng nhập thành công với email trannguyenbinh14@gmail.com (Vai trò: member)"
+    },
+    {
+      "id": "audit-1793097785556",
+      "timestamp": "2026-10-27T10:43:05.556Z",
+      "actorId": "usr-1792983281506",
+      "actorName": "Nguyễn Hương Giang",
+      "actorRole": "member",
+      "actorUnit": "BTV",
+      "action": "Điểm danh QR thành công",
+      "targetType": "Attendance",
+      "targetId": "att-1793097785556",
+      "details": "Nguyễn Hương Giang (118260013) điểm danh buổi \"Meeting ngày 27/10/2026\" - Trạng thái: present"
+    },
+    {
+      "id": "audit-1793097784350",
+      "timestamp": "2026-10-27T10:43:04.350Z",
+      "actorId": "usr-1792983281506",
+      "actorName": "Nguyễn Hương Giang",
+      "actorRole": "member",
+      "actorUnit": "BTV",
+      "action": "Đăng nhập hệ thống",
+      "targetType": "User",
+      "targetId": "usr-1792983281506",
+      "details": "Đăng nhập thành công với email giangkelly2008@gmail.com (Vai trò: member)"
+    },
+    {
+      "id": "audit-1793097779952",
+      "timestamp": "2026-10-27T10:42:59.952Z",
+      "actorId": "usr-1792903694464",
+      "actorName": "Nguyễn Hoàng Long",
+      "actorRole": "member",
+      "actorUnit": "BTV",
+      "action": "Điểm danh QR thành công",
+      "targetType": "Attendance",
+      "targetId": "att-1793097779952",
+      "details": "Nguyễn Hoàng Long (102250342) điểm danh buổi \"Meeting ngày 27/10/2026\" - Trạng thái: present"
+    },
+    {
+      "id": "audit-1793097778661",
+      "timestamp": "2026-10-27T10:42:58.661Z",
+      "actorId": "usr-1792903694464",
+      "actorName": "Nguyễn Hoàng Long",
+      "actorRole": "member",
+      "actorUnit": "BTV",
+      "action": "Đăng nhập hệ thống",
+      "targetType": "User",
+      "targetId": "usr-1792903694464",
+      "details": "Đăng nhập thành công với email hoanglong280907@gmail.com (Vai trò: member)"
+    },
+    {
+      "id": "audit-1793097774652",
+      "timestamp": "2026-10-27T10:42:54.652Z",
+      "actorId": "usr-1792983281509",
+      "actorName": "Trần Nguyên Bình",
+      "actorRole": "member",
+      "actorUnit": "BTV",
+      "action": "Đăng nhập hệ thống",
+      "targetType": "User",
+      "targetId": "usr-1792983281509",
+      "details": "Đăng nhập thành công với email trannguyenbinh14@gmail.com (Vai trò: member)"
+    },
+    {
+      "id": "audit-1793097766654",
+      "timestamp": "2026-10-27T10:42:46.654Z",
+      "actorId": "usr-1792983281495",
+      "actorName": "Nguyễn Trọng Sang",
+      "actorRole": "member",
+      "actorUnit": "BTV",
+      "action": "Điểm danh QR thành công",
+      "targetType": "Attendance",
+      "targetId": "att-1793097766654",
+      "details": "Nguyễn Trọng Sang (118240268) điểm danh buổi \"Meeting ngày 27/10/2026\" - Trạng thái: present"
+    },
+    {
+      "id": "audit-1793097766057",
+      "timestamp": "2026-10-27T10:42:46.057Z",
+      "actorId": "usr-1792983281495",
+      "actorName": "Nguyễn Trọng Sang",
+      "actorRole": "member",
+      "actorUnit": "BTV",
+      "action": "Đăng nhập hệ thống",
+      "targetType": "User",
+      "targetId": "usr-1792983281495",
+      "details": "Đăng nhập thành công với email sn195206@gmail.com (Vai trò: member)"
+    },
+    {
+      "id": "audit-1793097756553",
+      "timestamp": "2026-10-27T10:42:36.553Z",
+      "actorId": "usr-1792983281514",
+      "actorName": "Nguyễn Thị Phương Hoà",
+      "actorRole": "member",
+      "actorUnit": "BTV",
+      "action": "Đăng nhập hệ thống",
+      "targetType": "User",
+      "targetId": "usr-1792983281514",
+      "details": "Đăng nhập thành công với email phoa49900@gmail.com (Vai trò: member)"
+    },
+    {
+      "id": "audit-1793097755371",
+      "timestamp": "2026-10-27T10:42:35.371Z",
+      "actorId": "usr-1792903694464",
+      "actorName": "Nguyễn Hoàng Long",
+      "actorRole": "member",
+      "actorUnit": "BTV",
+      "action": "Đăng nhập hệ thống",
+      "targetType": "User",
+      "targetId": "usr-1792903694464",
+      "details": "Đăng nhập thành công với email hoanglong280907@gmail.com (Vai trò: member)"
+    },
+    {
+      "id": "audit-1793097747275",
+      "timestamp": "2026-10-27T10:42:27.275Z",
+      "actorId": "usr-1792983281488",
+      "actorName": "Lê Anh Khoa",
+      "actorRole": "member",
+      "actorUnit": "BDH",
+      "action": "Điểm danh QR thành công",
+      "targetType": "Attendance",
+      "targetId": "att-1793097747275",
+      "details": "Lê Anh Khoa (105230195) điểm danh buổi \"Meeting ngày 27/10/2026\" - Trạng thái: present"
+    },
+    {
+      "id": "audit-1793097747053",
+      "timestamp": "2026-10-27T10:42:27.053Z",
+      "actorId": "usr-1792983281488",
+      "actorName": "Lê Anh Khoa",
+      "actorRole": "member",
+      "actorUnit": "BDH",
+      "action": "Đăng nhập hệ thống",
+      "targetType": "User",
+      "targetId": "usr-1792983281488",
+      "details": "Đăng nhập thành công với email leanhkhoa572005@gmail.com (Vai trò: member)"
+    },
+    {
+      "id": "audit-1793097734838",
+      "timestamp": "2026-10-27T10:42:14.838Z",
+      "actorId": "usr-1792983281508",
+      "actorName": "Trần Đại Nhật Hải",
+      "actorRole": "member",
+      "actorUnit": "BTV",
+      "action": "Điểm danh QR thành công",
+      "targetType": "Attendance",
+      "targetId": "att-1793097734838",
+      "details": "Trần Đại Nhật Hải (101250111) điểm danh buổi \"Meeting ngày 27/10/2026\" - Trạng thái: present"
+    },
+    {
+      "id": "audit-1793097734560",
+      "timestamp": "2026-10-27T10:42:14.560Z",
+      "actorId": "usr-1792983281508",
+      "actorName": "Trần Đại Nhật Hải",
+      "actorRole": "member",
+      "actorUnit": "BTV",
+      "action": "Đăng nhập hệ thống",
+      "targetType": "User",
+      "targetId": "usr-1792983281508",
+      "details": "Đăng nhập thành công với email tdnh1492006@gmail.com (Vai trò: member)"
+    },
+    {
+      "id": "audit-1793097730560",
+      "timestamp": "2026-10-27T10:42:10.560Z",
+      "actorId": "usr-1792983281506",
+      "actorName": "Nguyễn Hương Giang",
+      "actorRole": "member",
+      "actorUnit": "BTV",
+      "action": "Đăng nhập hệ thống",
+      "targetType": "User",
+      "targetId": "usr-1792983281506",
+      "details": "Đăng nhập thành công với email giangkelly2008@gmail.com (Vai trò: member)"
+    },
+    {
+      "id": "audit-1793097717249",
+      "timestamp": "2026-10-27T10:41:57.249Z",
+      "actorId": "usr-1792983281490",
+      "actorName": "Nguyễn Thị Thục Trang",
+      "actorRole": "member",
+      "actorUnit": "BDH",
+      "action": "Đăng nhập hệ thống",
+      "targetType": "User",
+      "targetId": "usr-1792983281490",
+      "details": "Đăng nhập thành công với email thuctrangltk@gmail.com (Vai trò: member)"
+    },
+    {
+      "id": "audit-1793097705957",
+      "timestamp": "2026-10-27T10:41:45.957Z",
+      "actorId": "usr-1792983281508",
+      "actorName": "Trần Đại Nhật Hải",
+      "actorRole": "member",
+      "actorUnit": "BTV",
+      "action": "Đăng nhập hệ thống",
+      "targetType": "User",
+      "targetId": "usr-1792983281508",
+      "details": "Đăng nhập thành công với email tdnh1492006@gmail.com (Vai trò: member)"
+    },
+    {
+      "id": "audit-1793097636951",
+      "timestamp": "2026-10-27T10:40:36.951Z",
+      "actorId": "usr-1792983281484",
+      "actorName": "Phạm Lê Tú",
+      "actorRole": "admin",
+      "actorUnit": "BN",
+      "action": "Đăng nhập hệ thống",
+      "targetType": "User",
+      "targetId": "usr-1792983281484",
+      "details": "Đăng nhập thành công với email phamletu80@gmail.com (Vai trò: admin)"
+    },
+    {
+      "id": "audit-1793097419151",
+      "timestamp": "2026-10-27T10:36:59.151Z",
+      "actorId": "usr-1792983281501",
+      "actorName": "Nguyễn Đăng Lê Hoàng",
+      "actorRole": "member",
+      "actorUnit": "BTV",
+      "action": "Đăng nhập hệ thống",
+      "targetType": "User",
+      "targetId": "usr-1792983281501",
+      "details": "Đăng nhập thành công với email ndlhoangndl@gmail.com (Vai trò: member)"
+    },
+    {
+      "id": "audit-1793097286367",
+      "timestamp": "2026-10-27T10:34:46.367Z",
+      "actorId": "usr-1792983281507",
+      "actorName": "Đoàn Hoàng Thiên Phú",
+      "actorRole": "member",
+      "actorUnit": "BTV",
+      "action": "Điểm danh QR thành công",
+      "targetType": "Attendance",
+      "targetId": "att-1793097286367",
+      "details": "Đoàn Hoàng Thiên Phú (102230313) điểm danh buổi \"Meeting ngày 27/10/2026\" - Trạng thái: present"
+    },
+    {
+      "id": "audit-1793097286155",
+      "timestamp": "2026-10-27T10:34:46.155Z",
+      "actorId": "usr-1792983281507",
+      "actorName": "Đoàn Hoàng Thiên Phú",
+      "actorRole": "member",
+      "actorUnit": "BTV",
+      "action": "Đăng nhập hệ thống",
+      "targetType": "User",
+      "targetId": "usr-1792983281507",
+      "details": "Đăng nhập thành công với email dhtphu05@gmail.com (Vai trò: member)"
+    },
+    {
+      "id": "audit-1793097223258",
+      "timestamp": "2026-10-27T10:33:43.258Z",
+      "actorId": "usr-1792983281501",
+      "actorName": "Nguyễn Đăng Lê Hoàng",
+      "actorRole": "member",
+      "actorUnit": "BTV",
+      "action": "Điểm danh QR thành công",
+      "targetType": "Attendance",
+      "targetId": "att-1793097223258",
+      "details": "Nguyễn Đăng Lê Hoàng (102240308) điểm danh buổi \"Meeting ngày 27/10/2026\" - Trạng thái: present"
+    },
+    {
+      "id": "audit-1793097222557",
+      "timestamp": "2026-10-27T10:33:42.557Z",
+      "actorId": "usr-1792983281501",
+      "actorName": "Nguyễn Đăng Lê Hoàng",
+      "actorRole": "member",
+      "actorUnit": "BTV",
+      "action": "Đăng nhập hệ thống",
+      "targetType": "User",
+      "targetId": "usr-1792983281501",
+      "details": "Đăng nhập thành công với email ndlhoangndl@gmail.com (Vai trò: member)"
+    },
+    {
+      "id": "audit-1793097165751",
+      "timestamp": "2026-10-27T10:32:45.752Z",
+      "actorId": "usr-1792983281501",
+      "actorName": "Nguyễn Đăng Lê Hoàng",
+      "actorRole": "member",
+      "actorUnit": "BTV",
+      "action": "Đăng nhập hệ thống",
+      "targetType": "User",
+      "targetId": "usr-1792983281501",
+      "details": "Đăng nhập thành công với email ndlhoangndl@gmail.com (Vai trò: member)"
+    },
+    {
+      "id": "audit-1793097021100",
+      "timestamp": "2026-10-27T10:30:21.100Z",
+      "actorId": "usr-admin",
+      "actorName": "Quản trị viên Hệ thống (Admin)",
+      "actorRole": "admin",
+      "actorUnit": "BN",
+      "action": "Cập nhật thông tin buổi training",
+      "targetType": "TrainingSession",
+      "targetId": "ses-1792984308633",
+      "details": "Cập nhật thông tin buổi \"Meeting ngày 27/10/2026\". Đối tượng: \"Toàn thể thành viên chính thức\""
+    },
+    {
+      "id": "audit-1793096991249",
+      "timestamp": "2026-10-27T10:29:51.249Z",
+      "actorId": "usr-admin",
+      "actorName": "Quản trị viên Hệ thống (Admin)",
+      "actorRole": "admin",
+      "actorUnit": "BN",
+      "action": "Đăng nhập hệ thống",
+      "targetType": "User",
+      "targetId": "usr-admin",
+      "details": "Đăng nhập thành công với email admin.bkic@dut.udn.vn (Vai trò: admin)"
+    },
+    {
+      "id": "audit-1793096805055",
+      "timestamp": "2026-10-27T10:26:45.055Z",
+      "actorId": "usr-1792983281506",
+      "actorName": "Nguyễn Hương Giang",
+      "actorRole": "member",
+      "actorUnit": "BTV",
+      "action": "Đăng nhập hệ thống",
+      "targetType": "User",
+      "targetId": "usr-1792983281506",
+      "details": "Đăng nhập thành công với email giangkelly2008@gmail.com (Vai trò: member)"
+    },
+    {
+      "id": "audit-1793089965559",
+      "timestamp": "2026-10-27T08:32:45.559Z",
+      "actorId": "usr-1792983281513",
+      "actorName": "Nguyễn Thái Minh Thông",
+      "actorRole": "member",
+      "actorUnit": "BTV",
+      "action": "Đăng nhập hệ thống",
+      "targetType": "User",
+      "targetId": "usr-1792983281513",
+      "details": "Đăng nhập thành công với email thongbin26@gmail.com (Vai trò: member)"
+    },
+    {
+      "id": "audit-1793088572357",
+      "timestamp": "2026-10-27T08:09:32.357Z",
+      "actorId": "usr-1792983281496",
+      "actorName": "Trần Hoài Thương",
+      "actorRole": "member",
+      "actorUnit": "BTV",
+      "action": "Đăng nhập hệ thống",
+      "targetType": "User",
+      "targetId": "usr-1792983281496",
+      "details": "Đăng nhập thành công với email tranhoaithuong2310@gmail.com (Vai trò: member)"
+    },
+    {
+      "id": "audit-1793087807049",
+      "timestamp": "2026-10-27T07:56:47.049Z",
+      "actorId": "usr-1792983281513",
+      "actorName": "Nguyễn Thái Minh Thông",
+      "actorRole": "member",
+      "actorUnit": "BTV",
+      "action": "Đăng nhập hệ thống",
+      "targetType": "User",
+      "targetId": "usr-1792983281513",
+      "details": "Đăng nhập thành công với email thongbin26@gmail.com (Vai trò: member)"
+    },
+    {
+      "id": "audit-1793087790950",
+      "timestamp": "2026-10-27T07:56:30.950Z",
+      "actorId": "usr-1792983281513",
+      "actorName": "Nguyễn Thái Minh Thông",
+      "actorRole": "member",
+      "actorUnit": "BTV",
+      "action": "Đăng nhập hệ thống",
+      "targetType": "User",
+      "targetId": "usr-1792983281513",
+      "details": "Đăng nhập thành công với email thongbin26@gmail.com (Vai trò: member)"
+    },
+    {
+      "id": "audit-1793086266659",
+      "timestamp": "2026-10-27T07:31:06.659Z",
+      "actorId": "usr-1792983281490",
+      "actorName": "Nguyễn Thị Thục Trang",
+      "actorRole": "member",
+      "actorUnit": "BDH",
+      "action": "Đăng nhập hệ thống",
+      "targetType": "User",
+      "targetId": "usr-1792983281490",
+      "details": "Đăng nhập thành công với email thuctrangltk@gmail.com (Vai trò: member)"
+    },
+    {
+      "id": "audit-1793081234153",
+      "timestamp": "2026-10-27T06:07:14.153Z",
+      "actorId": "usr-1792983281513",
+      "actorName": "Nguyễn Thái Minh Thông",
+      "actorRole": "member",
+      "actorUnit": "BTV",
+      "action": "Đăng nhập hệ thống",
+      "targetType": "User",
+      "targetId": "usr-1792983281513",
+      "details": "Đăng nhập thành công với email thongbin26@gmail.com (Vai trò: member)"
+    },
+    {
+      "id": "audit-1793067386595",
+      "timestamp": "2026-10-27T02:16:26.595Z",
+      "actorId": "usr-1792983281508",
+      "actorName": "Trần Đại Nhật Hải",
+      "actorRole": "member",
+      "actorUnit": "BTV",
+      "action": "Đăng nhập hệ thống",
+      "targetType": "User",
+      "targetId": "usr-1792983281508",
+      "details": "Đăng nhập thành công với email tdnh1492006@gmail.com (Vai trò: member)"
+    },
+    {
+      "id": "audit-1793066135891",
+      "timestamp": "2026-10-27T01:55:35.891Z",
+      "actorId": "usr-1792983281508",
+      "actorName": "Trần Đại Nhật Hải",
+      "actorRole": "member",
+      "actorUnit": "BTV",
+      "action": "Đăng nhập hệ thống",
+      "targetType": "User",
+      "targetId": "usr-1792983281508",
+      "details": "Đăng nhập thành công với email tdnh1492006@gmail.com (Vai trò: member)"
+    },
+    {
+      "id": "audit-1793063782506",
+      "timestamp": "2026-10-27T01:16:22.506Z",
+      "actorId": "usr-1792903694464",
+      "actorName": "Nguyễn Hoàng Long",
+      "actorRole": "member",
+      "actorUnit": "BTV",
+      "action": "Đăng nhập hệ thống",
+      "targetType": "User",
+      "targetId": "usr-1792903694464",
+      "details": "Đăng nhập thành công với email hoanglong280907@gmail.com (Vai trò: member)"
+    },
+    {
+      "id": "audit-1793063728799",
+      "timestamp": "2026-10-27T01:15:28.799Z",
+      "actorId": "usr-admin",
+      "actorName": "Quản trị viên Hệ thống (Admin)",
+      "actorRole": "admin",
+      "actorUnit": "BN",
+      "action": "Đăng nhập hệ thống",
+      "targetType": "User",
+      "targetId": "usr-admin",
+      "details": "Đăng nhập thành công với email admin.bkic@dut.udn.vn (Vai trò: admin)"
+    },
+    {
+      "id": "audit-1793022068123",
+      "timestamp": "2026-10-26T13:41:08.123Z",
+      "actorId": "usr-1792983281496",
+      "actorName": "Trần Hoài Thương",
+      "actorRole": "member",
+      "actorUnit": "BTV",
+      "action": "Đăng nhập hệ thống",
+      "targetType": "User",
+      "targetId": "usr-1792983281496",
+      "details": "Đăng nhập thành công với email tranhoaithuong2310@gmail.com (Vai trò: member)"
+    },
+    {
+      "id": "audit-1792996332662",
+      "timestamp": "2026-10-26T06:32:12.662Z",
+      "actorId": "usr-1792983281514",
+      "actorName": "Nguyễn Thị Phương Hoà",
+      "actorRole": "member",
+      "actorUnit": "BTV",
+      "action": "Đăng nhập hệ thống",
+      "targetType": "User",
+      "targetId": "usr-1792983281514",
+      "details": "Đăng nhập thành công với email phoa49900@gmail.com (Vai trò: member)"
+    },
+    {
+      "id": "audit-1792994787655",
+      "timestamp": "2026-10-26T06:06:27.655Z",
+      "actorId": "usr-1792983281495",
+      "actorName": "Nguyễn Trọng Sang",
+      "actorRole": "member",
+      "actorUnit": "BTV",
+      "action": "Đăng nhập hệ thống",
+      "targetType": "User",
+      "targetId": "usr-1792983281495",
+      "details": "Đăng nhập thành công với email sn195206@gmail.com (Vai trò: member)"
+    },
+    {
+      "id": "audit-1792988770038",
+      "timestamp": "2026-10-26T04:26:10.038Z",
+      "actorId": "usr-1792983281484",
+      "actorName": "Phạm Lê Tú",
+      "actorRole": "admin",
+      "action": "Chuyển đổi phiên tài khoản (Admin Switch)",
+      "targetType": "User",
+      "targetId": "usr-1792903694464",
+      "details": "Quản trị viên Phạm Lê Tú đã chuyển phiên sang tài khoản Nguyễn Hoàng Long (hoanglong280907@gmail.com)"
+    },
+    {
+      "id": "audit-1792988764094",
+      "timestamp": "2026-10-26T04:26:04.094Z",
+      "actorId": "usr-admin",
+      "actorName": "Quản trị viên Hệ thống (Admin)",
+      "actorRole": "admin",
+      "action": "Chuyển đổi phiên tài khoản (Admin Switch)",
+      "targetType": "User",
+      "targetId": "usr-1792983281484",
+      "details": "Quản trị viên Quản trị viên Hệ thống (Admin) đã chuyển phiên sang tài khoản Phạm Lê Tú (phamletu80@gmail.com)"
+    },
+    {
+      "id": "audit-1792987354631",
+      "timestamp": "2026-10-26T04:02:34.631Z",
+      "actorId": "usr-admin",
+      "actorName": "Quản trị viên Hệ thống (Admin)",
+      "actorRole": "admin",
+      "actorUnit": "BN",
+      "action": "Đăng nhập hệ thống",
+      "targetType": "User",
+      "targetId": "usr-admin",
+      "details": "Đăng nhập thành công với email admin.bkic@dut.udn.vn (Vai trò: admin)"
+    },
+    {
+      "id": "audit-1792987324294",
+      "timestamp": "2026-10-26T04:02:04.294Z",
+      "actorId": "usr-1792903694464",
+      "actorName": "Nguyễn Hoàng Long",
+      "actorRole": "member",
+      "actorUnit": "BTV",
+      "action": "Đăng nhập hệ thống",
+      "targetType": "User",
+      "targetId": "usr-1792903694464",
+      "details": "Đăng nhập thành công với email hoanglong280907@gmail.com (Vai trò: member)"
+    },
     {
       "id": "audit-1792986719724",
       "timestamp": "2026-10-26T03:51:59.724Z",
@@ -6403,10 +8110,13 @@
     "heroSubheadline": "Nơi sinh viên Bách khoa gặp gỡ, học hỏi và cùng nhau biến những ý tưởng sáng tạo thành giải pháp mang giá trị thực tiễn.",
     "heroTagline": "Think. Build. Impact.",
     "englishTagline": "Empowering Student Innovation & Entrepreneurship at Danang University of Science and Technology",
-    "recruitmentStatus": "open",
+    "recruitmentStatus": "closed",
     "recruitmentDeadline": "2026-11-15",
     "contactEmail": "bkic@dut.udn.vn",
     "contactAddress": "54 Nguyễn Lương Bằng, Phường Hòa Khánh Bắc, Quận Liên Chiểu, TP. Đà Nẵng",
-    "isDemoMode": false
+    "isDemoMode": false,
+    "recruitmentFanpageUrl": "https://www.facebook.com/dut.bkic",
+    "recruitmentTitle": "Đợt Tuyển Thành Viên BK-IC — Khóa 2026",
+    "recruitmentDescription": "Chào mừng tân sinh viên gia nhập hệ sinh thái Khởi nghiệp và Đổi mới sáng tạo BK-IC."
   }
 }

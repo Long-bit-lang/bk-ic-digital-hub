@@ -89,23 +89,23 @@ export const INITIAL_UNITS: ClubUnit[] = [
   {
     id: 'BN',
     name: 'Ban Chủ nhiệm',
-    shortName: 'BN',
-    description: 'Chỉ đạo chiến lược, điều hành tổng thể, phê duyệt quyết định nhân sự, đánh giá và đối ngoại cấp cao.',
-    leaderName: ''
+    shortName: 'BCN',
+    description: 'Quản lý chung và đưa ra quyết định phê duyệt cuối cùng theo thẩm quyền.',
+    leaderName: 'Phạm Lê Tú'
   },
   {
     id: 'BDH',
     name: 'Ban Điều hành',
     shortName: 'BĐH',
-    description: 'Tổ chức các hoạt động chuyên môn, các buổi training, quản lý dự án đổi mới sáng tạo và điều phối liên đơn vị.',
-    leaderName: ''
+    description: 'Tổ chức hoạt động, phối hợp giữa các ban và điều phối công việc theo phân quyền.',
+    leaderName: 'Lê Anh Khoa'
   },
   {
     id: 'BTV',
     name: 'Ban Thành viên',
     shortName: 'BTV',
-    description: 'Quản lý hồ sơ nhân sự, ghi nhận điểm danh, cập nhật trạng thái thành viên và hỗ trợ nội bộ.',
-    leaderName: ''
+    description: 'Quản lý hồ sơ thành viên, theo dõi tình trạng thành viên và thực hiện các nghiệp vụ nhân sự, điểm danh theo quyền được giao.',
+    leaderName: 'Nguyễn Hoàng Long'
   }
 ];
 
@@ -166,8 +166,13 @@ export const INITIAL_SITE_SETTINGS: SiteSettings = {
   heroSubheadline: 'Nơi sinh viên Bách khoa gặp gỡ, học hỏi và cùng nhau biến những ý tưởng sáng tạo thành giải pháp mang giá trị thực tiễn.',
   heroTagline: 'Think. Build. Impact.',
   englishTagline: 'Empowering Student Innovation & Entrepreneurship at Danang University of Science and Technology',
-  recruitmentStatus: 'open',
+  recruitmentStatus: 'closed',
   recruitmentDeadline: '2026-11-15',
+  recruitmentStartDate: '',
+  recruitmentFormUrl: '',
+  recruitmentFanpageUrl: 'https://www.facebook.com/dut.bkic',
+  recruitmentTitle: 'Đợt tuyển thành viên mới',
+  recruitmentDescription: 'Gia nhập BK-IC để cùng nhau phát triển các dự án công nghệ, sáng tạo và khởi nghiệp.',
   contactEmail: 'bkic@dut.udn.vn',
   contactAddress: '54 Nguyễn Lương Bằng, Phường Hòa Khánh Bắc, Quận Liên Chiểu, TP. Đà Nẵng',
   isDemoMode: false

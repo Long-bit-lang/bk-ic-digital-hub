@@ -98,10 +98,10 @@ export const ActivitiesPage: React.FC = () => {
         <div className="rounded-2xl border border-blue-100 bg-blue-50/60 p-8 flex flex-col md:flex-row items-center justify-between gap-6">
           <div className="space-y-2 max-w-xl">
             <h3 className="text-lg font-bold text-slate-900">
-              Sinh hoạt định kỳ Thứ Bảy hàng tuần
+              Sinh hoạt định kỳ Thứ Ba hằng tuần (17:30 – 19:00)
             </h3>
             <p className="text-xs text-slate-600 leading-relaxed">
-              Tất cả thành viên chính thức tham gia sinh hoạt trực tiếp tại giảng đường DUT để báo cáo tiến độ dự án, trao đổi học thuật và điểm danh bằng hệ thống mã QR số hóa của Digital Hub.
+              Tất cả thành viên chính thức tham gia sinh hoạt định kỳ vào Thứ Ba hằng tuần lúc 17:30 – 19:00 tại Trường Đại học Bách khoa – ĐHĐN để báo cáo tiến độ dự án, trao đổi học thuật và điểm danh bằng hệ thống mã QR số hóa của Digital Hub.
             </p>
           </div>
           <Link

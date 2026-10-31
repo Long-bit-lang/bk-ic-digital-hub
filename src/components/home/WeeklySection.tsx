@@ -49,8 +49,13 @@ export const WeeklySection: React.FC = () => {
     <section ref={sectionRef} className="py-24 sm:py-32 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto overflow-hidden">
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
         <div ref={textColRef} className="lg:col-span-6 space-y-6">
-          <div className="text-xs font-bold uppercase tracking-wider text-[#245BFA] font-mono">
-            Nhịp sinh hoạt thường nhật
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="text-xs font-bold uppercase tracking-wider text-[#245BFA] font-mono">
+              Nhịp sinh hoạt thường nhật
+            </span>
+            <span className="inline-flex items-center gap-1.5 text-[11px] font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2.5 py-0.5 rounded-full font-mono">
+              Thứ Ba hằng tuần · 17:30 – 19:00
+            </span>
           </div>
           <h2 className="text-3xl sm:text-5xl font-extrabold text-[#111318] tracking-tight leading-tight">
             Mỗi tuần một cuộc gặp.
@@ -58,7 +63,7 @@ export const WeeklySection: React.FC = () => {
             Mỗi lần thêm một bước tiến.
           </h2>
           <p className="text-sm sm:text-base text-slate-600 leading-relaxed font-normal">
-            Các buổi sinh hoạt định kỳ là không gian để thành viên gặp gỡ, chia sẻ kiến thức, cùng thảo luận một chủ đề chuyên môn và gắn kết đồng đội. Thành viên có thể theo dõi lịch trên cổng nội bộ, điểm danh QR động và gửi góp ý để Ban Chủ nhiệm liên tục cải thiện chất lượng chương trình.
+            Các buổi sinh hoạt định kỳ diễn ra cố định vào <strong>Thứ Ba hằng tuần (17:30 – 19:00)</strong> tại Trường Đại học Bách khoa – ĐHĐN. Đây là không gian để thành viên gặp gỡ, chia sẻ kiến thức, cùng thảo luận một chủ đề chuyên môn và gắn kết đồng đội. Thành viên có thể theo dõi lịch trên cổng nội bộ, điểm danh QR động và gửi góp ý để BCN liên tục cải thiện chất lượng chương trình.
           </p>
 
           <div className="pt-2 flex items-center gap-4">
@@ -67,7 +72,7 @@ export const WeeklySection: React.FC = () => {
               className="inline-flex items-center gap-2 rounded-2xl bg-[#245BFA] px-6 py-3 text-xs font-semibold text-white hover:bg-blue-700 transition shadow-xs group"
             >
               <Calendar className="h-4 w-4" />
-              <span>Xem lịch sinh hoạt sắp tới</span>
+              <span>Xem lịch sinh hoạt thứ Ba</span>
               <ArrowRight className="h-3.5 w-3.5 group-hover:translate-x-1 transition-transform" />
             </Link>
           </div>

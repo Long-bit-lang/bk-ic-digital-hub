@@ -187,6 +187,7 @@ export const HeroSection: React.FC = () => {
 
   return (
     <section
+      id="hero"
       ref={containerRef}
       className="relative flex min-h-[92svh] flex-col justify-between overflow-hidden border-b border-slate-200/70 bg-gradient-to-b from-white via-[#F8FAFC] to-[#FAFAFA] px-4 pt-16 pb-12 sm:px-6 lg:px-8"
     >
@@ -275,7 +276,7 @@ export const HeroSection: React.FC = () => {
         >
           <div className="flex items-center gap-2">
             <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
-            <span>5 Ban chuyên môn & Vận hành</span>
+            <span>Cơ cấu 3 Ban: BCN · BĐH · BTV</span>
           </div>
           <div className="flex items-center gap-2">
             <span className="h-1.5 w-1.5 rounded-full bg-blue-500" />

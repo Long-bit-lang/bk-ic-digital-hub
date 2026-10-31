@@ -4,6 +4,7 @@ import { db } from '../db.ts';
 import type { TrainingSession, SessionStatus } from '../../src/types/index.ts';
 import { checkQRWindow, parseSessionDateTime, addHours, syncSessionsLifecycle, formatTimeFromMs, getSessionScheduleTimes } from '../timeUtils.ts';
 import { requireAuth, requireNormalSession } from '../middleware/auth.ts';
+import { syncRecurringTuesdaySessions } from '../services/recurringSchedule.ts';
 
 export const sessionsRouter = Router();
 
@@ -55,9 +56,12 @@ function enrichSession(session: TrainingSession) {
 sessionsRouter.get('/', (req, res) => {
   const store = db.get();
   
+  // Synchronize recurring Tuesday sessions (Asia/Ho_Chi_Minh 17:30 - 19:00)
+  const recurringChanged = syncRecurringTuesdaySessions(store);
+
   // Synchronize state machine based on authoritative server clock
   const changed = syncSessionsLifecycle(store);
-  if (changed) {
+  if (recurringChanged || changed) {
     db.save();
   }
 
@@ -397,47 +401,150 @@ sessionsRouter.post('/:id/cancel', (req, res) => {
   const actor = req.user!;
   const { reason } = req.body;
 
-  if (!reason) {
-    return res.status(400).json({ success: false, message: 'Vui lòng cung cấp lý do hủy buổi training.' });
+  if (!reason || !String(reason).trim()) {
+    return res.status(400).json({ success: false, message: 'Vui lòng cung cấp lý do hủy buổi sinh hoạt.' });
   }
 
   const store = db.get();
   const session = store.sessions.find(s => s.id === req.params.id);
 
   if (!session) {
-    return res.status(404).json({ success: false, message: 'Không tìm thấy buổi training.' });
+    return res.status(404).json({ success: false, message: 'Không tìm thấy buổi sinh hoạt.' });
   }
 
   const isPic = isUserSessionPic(session, actor);
   const isAuthorized = actor.unit === 'BN' || actor.unit === 'BDH' || isPic || actor.role === 'admin' || actor.role === 'sysadmin';
   if (!isAuthorized) {
-    return res.status(403).json({ success: false, message: 'Bạn không có thẩm quyền hủy buổi training này.' });
+    return res.status(403).json({ success: false, message: 'Bạn không có thẩm quyền hủy buổi sinh hoạt này.' });
   }
+
+  const cleanReason = String(reason).trim();
+  const nowISO = new Date().toISOString();
 
   session.status = 'cancelled';
   session.attendanceStatus = 'closed';
   session.feedbackStatus = 'closed';
+  session.cancellationReason = cleanReason;
+  session.cancelledBy = actor.fullName;
+  session.cancelledById = actor.id;
+  session.cancelledAt = nowISO;
+
+  if (!Array.isArray(session.cancellationHistory)) {
+    session.cancellationHistory = [];
+  }
+  session.cancellationHistory.push({
+    cancelledBy: actor.fullName,
+    cancelledById: actor.id,
+    cancelledAt: nowISO,
+    reason: cleanReason
+  });
+
+  // Notify active members of session cancellation
+  for (const u of store.users) {
+    if (u.status === 'active') {
+      store.notifications.unshift({
+        id: `notif-cancel-${Date.now()}-${Math.random().toString(36).substring(2, 6)}`,
+        recipientId: u.id,
+        recipientEmail: u.email,
+        title: `Thông báo hủy buổi: ${session.title}`,
+        message: `Buổi sinh hoạt "${session.title}" vào ngày ${session.date} (${session.startTime} - ${session.endTime}) đã được hủy bởi ${actor.fullName}. Lý do: ${cleanReason}`,
+        type: 'status_change',
+        referenceType: 'session',
+        referenceId: session.id,
+        isRead: false,
+        createdAt: nowISO,
+        emailSent: false
+      });
+    }
+  }
 
   store.auditLogs.unshift({
     id: `audit-${Date.now()}`,
-    timestamp: new Date().toISOString(),
+    timestamp: nowISO,
     actorId: actor.id,
     actorName: actor.fullName,
     actorRole: actor.role,
     actorUnit: actor.unit,
-    action: 'Hủy buổi training',
+    action: 'Hủy buổi sinh hoạt',
     targetType: 'TrainingSession',
     targetId: session.id,
-    reason,
-    details: `Hủy buổi "${session.title}". Vô hiệu hóa QR và form phản hồi. Không tính vắng mặt cho thành viên.`
+    reason: cleanReason,
+    details: `Hủy buổi "${session.title}". Lý do: ${cleanReason}. Vô hiệu hóa QR và form phản hồi. Không tính vắng mặt cho thành viên.`
   });
 
   db.save();
 
   res.json({
     success: true,
-    message: 'Đã hủy buổi training và vô hiệu hóa các biểu mẫu liên quan.',
-    session
+    message: 'Đã hủy buổi sinh hoạt, vô hiệu hóa mã QR và gửi thông báo đến các thành viên.',
+    session: enrichSession(session)
+  });
+});
+
+// POST /api/sessions/:id/restore - Restore/Reschedule a cancelled session
+sessionsRouter.post('/:id/restore', (req, res) => {
+  const actor = req.user!;
+
+  const store = db.get();
+  const session = store.sessions.find(s => s.id === req.params.id);
+
+  if (!session) {
+    return res.status(404).json({ success: false, message: 'Không tìm thấy buổi sinh hoạt.' });
+  }
+
+  if (session.status !== 'cancelled') {
+    return res.status(400).json({ success: false, message: 'Buổi sinh hoạt này không ở trạng thái đã hủy.' });
+  }
+
+  const isPic = isUserSessionPic(session, actor);
+  const isAuthorized = actor.unit === 'BN' || actor.unit === 'BDH' || isPic || actor.role === 'admin' || actor.role === 'sysadmin';
+  if (!isAuthorized) {
+    return res.status(403).json({ success: false, message: 'Bạn không có thẩm quyền khôi phục buổi sinh hoạt này.' });
+  }
+
+  const nowISO = new Date().toISOString();
+  session.status = 'scheduled';
+  session.attendanceStatus = 'closed';
+  // Keep cancellationReason and cancellationHistory intact for audit trail
+
+  // Notify active members that session has been restored
+  for (const u of store.users) {
+    if (u.status === 'active') {
+      store.notifications.unshift({
+        id: `notif-restore-${Date.now()}-${Math.random().toString(36).substring(2, 6)}`,
+        recipientId: u.id,
+        recipientEmail: u.email,
+        title: `Khôi phục lịch sinh hoạt: ${session.title}`,
+        message: `Buổi sinh hoạt "${session.title}" vào ngày ${session.date} (${session.startTime} - ${session.endTime}) đã được khôi phục tổ chức bởi ${actor.fullName}.`,
+        type: 'status_change',
+        referenceType: 'session',
+        referenceId: session.id,
+        isRead: false,
+        createdAt: nowISO,
+        emailSent: false
+      });
+    }
+  }
+
+  store.auditLogs.unshift({
+    id: `audit-${Date.now()}`,
+    timestamp: nowISO,
+    actorId: actor.id,
+    actorName: actor.fullName,
+    actorRole: actor.role,
+    actorUnit: actor.unit,
+    action: 'Khôi phục buổi sinh hoạt đã hủy',
+    targetType: 'TrainingSession',
+    targetId: session.id,
+    details: `${actor.fullName} khôi phục buổi sinh hoạt "${session.title}" (ngày ${session.date}). Lịch sử hủy trước đó vẫn được lưu trữ nguyên vẹn.`
+  });
+
+  db.save();
+
+  res.json({
+    success: true,
+    message: 'Đã khôi phục buổi sinh hoạt thành công!',
+    session: enrichSession(session)
   });
 });
 

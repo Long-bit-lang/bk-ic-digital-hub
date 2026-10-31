@@ -5,7 +5,7 @@ import { useGSAP } from '@gsap/react';
 import { gsap, ScrollTrigger } from '../../utils/gsapSetup';
 import { BKIC_MEDIA_ASSETS, MediaAsset } from '../../data/mediaAssets';
 import { SafeImage } from '../common/SafeImage';
-import { ExternalLink, ArrowRight, ChevronLeft, ChevronRight, X } from 'lucide-react';
+import { ExternalLink, ArrowRight, ChevronLeft, ChevronRight, X, ShieldCheck } from 'lucide-react';
 
 export const GallerySection: React.FC = () => {
   const sectionRef = useRef<HTMLElement | null>(null);
@@ -166,11 +166,69 @@ export const GallerySection: React.FC = () => {
       ref={sectionRef}
       className="border-t border-b border-slate-200/80 bg-white py-24 sm:py-32 px-4 sm:px-6 lg:px-8 overflow-hidden"
     >
+      <div id="about" className="scroll-mt-24" />
       <div className="mx-auto max-w-6xl">
+        {/* Integrated Intro Card (Requirement 1.2: Lồng ghép giới thiệu vào mục Khoảnh khắc) */}
+        <div className="mb-16 rounded-3xl border border-blue-100 bg-gradient-to-br from-blue-50/70 via-white to-slate-50 p-6 sm:p-10 shadow-xs">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+            <div className="lg:col-span-7 space-y-4">
+              <div className="inline-flex items-center gap-2 rounded-full border border-blue-200 bg-white px-3.5 py-1 text-xs font-semibold text-[#245BFA] font-mono">
+                <ShieldCheck className="h-3.5 w-3.5 text-blue-600" />
+                <span>GIỚI THIỆU CHÍNH THỨC VỀ BK-IC</span>
+              </div>
+              <h2 className="text-2xl sm:text-4xl font-extrabold text-[#111318] tracking-tight leading-snug">
+                Nơi kết nối đam mê khởi nghiệp & công nghệ tại Bách khoa Đà Nẵng.
+              </h2>
+              <div className="space-y-3 text-slate-600 text-sm leading-relaxed">
+                <p>
+                  <strong>Câu lạc bộ Khởi nghiệp và Đổi mới sáng tạo (Bách Khoa Innovation Club — BK-IC)</strong> trực thuộc <strong>Trường Đại học Bách khoa, Đại học Đà Nẵng</strong>. Đây là môi trường kết nối đa chuyên ngành, nơi các bạn sinh viên kỹ thuật cùng học hỏi, thực nghiệm công nghệ và hiện thực hóa các giải pháp hữu ích cho cộng đồng.
+                </p>
+                <p>
+                  CLB định hướng trở thành sân chơi sáng tạo lành mạnh, đồng hành cùng sinh viên qua các buổi sinh hoạt định kỳ, workshop chuyên đề và các dự án ươm tạo thực tế.
+                </p>
+              </div>
+
+              {/* Provenance badge */}
+              <div className="pt-2 flex flex-wrap items-center gap-3 text-xs text-slate-500">
+                <span className="font-semibold text-blue-900 bg-blue-100/80 px-2.5 py-1 rounded-md">
+                  Ghi nhận từ Báo Đà Nẵng (04/04/2026)
+                </span>
+                <a
+                  href="https://baodanang.vn/thuc-day-lien-ket-trong-khoi-nghiep-3330893.html"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center gap-1 font-semibold text-blue-600 hover:underline"
+                >
+                  <span>Đọc bài báo gốc</span>
+                  <ExternalLink className="h-3 w-3" />
+                </a>
+              </div>
+            </div>
+
+            <div className="lg:col-span-5">
+              <div className="rounded-2xl overflow-hidden border border-slate-200/90 shadow-md bg-white group">
+                <SafeImage
+                  src={BKIC_MEDIA_ASSETS.bkic_launch.localUrl}
+                  fallbackSrc={BKIC_MEDIA_ASSETS.bkic_launch.originalUrl}
+                  alt="Lễ ra mắt Câu lạc bộ Khởi nghiệp và Đổi mới sáng tạo - Bách Khoa Innovation Club"
+                  aspectRatio="aspect-16/10"
+                  title="Lễ ra mắt BK-IC tại Trường ĐH Bách khoa - ĐHĐN"
+                  tag="Tư liệu chính thức"
+                  className="group-hover:scale-102 transition duration-500"
+                />
+                <div className="p-3 text-[11px] text-slate-500 bg-white border-t border-slate-100 flex items-center justify-between">
+                  <span>{BKIC_MEDIA_ASSETS.bkic_launch.caption}</span>
+                  <span className="font-medium text-blue-600 font-mono">04/04/2026</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <div ref={headerRef} className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
           <div className="max-w-2xl space-y-3">
             <div className="text-xs font-bold uppercase tracking-wider text-[#245BFA] font-mono">
-              Khoảnh khắc BK-IC
+              Khoảnh khắc & Hoạt động thực tế
             </div>
             <h2 className="text-3xl sm:text-5xl font-extrabold text-[#111318] tracking-tight leading-tight">
               Những ý tưởng lớn luôn bắt đầu từ những con người.

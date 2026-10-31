@@ -73,6 +73,7 @@ interface AppContextType {
   createSession: (sessionData: any) => Promise<TrainingSession>;
   updateSession: (id: string, partial: any) => Promise<void>;
   cancelSession: (id: string, reason: string) => Promise<void>;
+  restoreSession: (id: string) => Promise<void>;
   deleteSession: (id: string) => Promise<void>; // Backwards compatibility
   reopenSessionFeedback: (id: string, reason: string) => Promise<void>;
   generateSessionToken: (sessionId: string) => { token: string; expiresIn: number; intervalSec: number };
@@ -649,6 +650,13 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     await reloadAuditLogs();
   };
 
+  const restoreSession = async (id: string) => {
+    const res = await api.sessions.restore(id);
+    alert(res.message);
+    await reloadSessions();
+    await reloadAuditLogs();
+  };
+
   const deleteSession = async (id: string) => {
     await cancelSession(id, 'Hủy phiên sinh hoạt');
   };
@@ -1001,6 +1009,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
         createSession,
         updateSession,
         cancelSession,
+        restoreSession,
         deleteSession,
         reopenSessionFeedback,
         generateSessionToken,
