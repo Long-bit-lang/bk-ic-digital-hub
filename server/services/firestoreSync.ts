@@ -103,7 +103,18 @@ export async function loadCloudData(localFallback: DatabaseSchema): Promise<Data
     snapshot.forEach(doc => {
       const docData = doc.data();
       if (docData && docData.items !== undefined) {
-        (merged as any)[doc.id] = docData.items;
+        // Prevent empty cloud collection from overwriting non-empty local collection
+        if (
+          Array.isArray(docData.items) &&
+          docData.items.length === 0 &&
+          Array.isArray((localFallback as any)[doc.id]) &&
+          (localFallback as any)[doc.id].length > 0
+        ) {
+          console.log(`[FirestoreSync] Preserving local collection "${doc.id}" (${(localFallback as any)[doc.id].length} items) because cloud collection is empty.`);
+          (merged as any)[doc.id] = (localFallback as any)[doc.id];
+        } else {
+          (merged as any)[doc.id] = docData.items;
+        }
       }
     });
 

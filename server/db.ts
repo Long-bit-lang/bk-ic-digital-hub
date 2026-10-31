@@ -348,14 +348,14 @@ class DatabaseManager {
       const backupPath = path.join(backupDir, `db.backup.${timestamp}.json`);
       fs.copyFileSync(DB_FILE, backupPath);
 
-      // Keep only 5 most recent backups
+      // Keep up to 30 most recent backups
       const files = fs.readdirSync(backupDir)
         .filter(f => f.startsWith('db.backup.') && f.endsWith('.json'))
         .sort()
         .reverse();
       
-      if (files.length > 5) {
-        for (const oldFile of files.slice(5)) {
+      if (files.length > 30) {
+        for (const oldFile of files.slice(30)) {
           try {
             fs.unlinkSync(path.join(backupDir, oldFile));
           } catch {}
