@@ -7,6 +7,7 @@ import { DynamicQRProjector } from '../../components/qr/DynamicQRProjector';
 import { Session } from '../../types';
 import { formatAcademicYearDisplay } from '../../utils/academicYear';
 import { formatMemberPosition } from '../../utils/unitDisplay';
+import { isSessionAttendanceOpen } from '../../utils/qrConfig';
 import { 
   Calendar, 
   Clock, 
@@ -41,7 +42,8 @@ export const PortalDashboardPage: React.FC = () => {
   const myEval = evaluations.find(e => e.memberId === currentUser.id && e.status === 'approved');
 
   // Next upcoming or currently open session
-  const activeSession = sessions.find(s => s.status === 'open') || 
+  const activeSession = sessions.find(s => isSessionAttendanceOpen(s)) ||
+                        sessions.find(s => s.status === 'ongoing') ||
                         sessions.find(s => s.status === 'scheduled');
 
   const isCheckedInActive = activeSession 
@@ -174,7 +176,7 @@ export const PortalDashboardPage: React.FC = () => {
       <div className="rounded-3xl border border-blue-200 bg-gradient-to-br from-blue-50/80 via-white to-slate-50 p-6 sm:p-8 shadow-xs space-y-4">
         <div className="flex items-center justify-between">
           <span className="text-xs font-bold text-blue-700 uppercase tracking-wider bg-blue-100/70 px-3 py-1 rounded-full">
-            {activeSession?.status === 'open' ? '🔴 Đang diễn ra điểm danh' : 'Phiên sinh hoạt tiếp theo'}
+            {activeSession && isSessionAttendanceOpen(activeSession) ? '🔴 Đang diễn ra điểm danh' : 'Phiên sinh hoạt tiếp theo'}
           </span>
           <span className="text-xs text-slate-500">
             {activeSession ? activeSession.date : 'Chưa có lịch mới'}
