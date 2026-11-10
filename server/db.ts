@@ -21,6 +21,7 @@ import type {
 } from '../src/types/index.ts';
 
 import { loadCloudData, saveCloudData } from './services/firestoreSync.ts';
+import { DEFAULT_QR_INTERVAL_SEC } from './timeUtils.ts';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -240,6 +241,11 @@ class DatabaseManager {
     data.units = Array.isArray(data.units) ? data.units : INITIAL_UNITS;
     data.users = Array.isArray(data.users) ? data.users : [];
     data.sessions = Array.isArray(data.sessions) ? data.sessions : [];
+    for (const s of data.sessions) {
+      if (s && (!s.qrIntervalSec || s.qrIntervalSec === 20)) {
+        s.qrIntervalSec = DEFAULT_QR_INTERVAL_SEC;
+      }
+    }
     
     // Support both attendance and attendanceRecords keys
     if (!Array.isArray(data.attendance)) {

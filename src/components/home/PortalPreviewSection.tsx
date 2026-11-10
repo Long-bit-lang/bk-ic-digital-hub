@@ -5,6 +5,7 @@ import { useGSAP } from '@gsap/react';
 import { gsap, ScrollTrigger } from '../../utils/gsapSetup';
 import { QRCodeSVG } from 'qrcode.react';
 import { Clock, Check, ArrowRight, ArrowUpRight } from 'lucide-react';
+import { DEFAULT_QR_INTERVAL_SEC } from '../../utils/qrConfig';
 
 export const PortalPreviewSection: React.FC = () => {
   const sectionRef = useRef<HTMLElement | null>(null);
@@ -16,7 +17,7 @@ export const PortalPreviewSection: React.FC = () => {
   const [osTab, setOsTab] = useState<'qr' | 'progress' | 'sessions'>('qr');
 
   // Live rotating QR code demo state
-  const [qrCountdown, setQrCountdown] = useState<number>(15);
+  const [qrCountdown, setQrCountdown] = useState<number>(DEFAULT_QR_INTERVAL_SEC);
   const [demoQrCode, setDemoQrCode] = useState<string>('BKIC-LIVE-8291');
 
   useEffect(() => {
@@ -25,7 +26,7 @@ export const PortalPreviewSection: React.FC = () => {
         if (prev <= 1) {
           const randomCode = `BKIC-LIVE-${Math.floor(1000 + Math.random() * 9000)}`;
           setDemoQrCode(randomCode);
-          return 15;
+          return DEFAULT_QR_INTERVAL_SEC;
         }
         return prev - 1;
       });
@@ -183,7 +184,7 @@ export const PortalPreviewSection: React.FC = () => {
                   <div className="text-xs font-bold text-blue-600 uppercase font-mono">Cơ chế điểm danh bảo mật</div>
                   <h4 className="text-base font-bold text-slate-900 mt-1">Mã QR xoay vòng liên tục</h4>
                   <p className="text-xs text-slate-600 mt-1 leading-relaxed">
-                    Mỗi buổi sinh hoạt, Ban Chủ nhiệm chiếu màn hình QR trên máy chiếu. Mã QR tự động thay đổi sau mỗi 15-30 giây, ngăn chặn việc chụp gửi mã từ xa và đảm bảo tính hiện diện thực tế.
+                    Mỗi buổi sinh hoạt, Ban Chủ nhiệm chiếu màn hình QR trên máy chiếu. Mã QR tự động thay đổi sau mỗi 1 phút (60 giây), ngăn chặn việc chụp gửi mã từ xa và đảm bảo tính hiện diện thực tế.
                   </p>
                 </div>
 

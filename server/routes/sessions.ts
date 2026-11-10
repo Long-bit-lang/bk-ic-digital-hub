@@ -2,7 +2,7 @@
 import { Router } from 'express';
 import { db } from '../db.ts';
 import type { TrainingSession, SessionStatus } from '../../src/types/index.ts';
-import { checkQRWindow, parseSessionDateTime, addHours, syncSessionsLifecycle, formatTimeFromMs, getSessionScheduleTimes } from '../timeUtils.ts';
+import { checkQRWindow, parseSessionDateTime, addHours, syncSessionsLifecycle, formatTimeFromMs, getSessionScheduleTimes, resolveQrIntervalSec } from '../timeUtils.ts';
 import { requireAuth, requireNormalSession } from '../middleware/auth.ts';
 import { syncRecurringTuesdaySessions } from '../services/recurringSchedule.ts';
 
@@ -42,6 +42,7 @@ function enrichSession(session: TrainingSession) {
 
   return {
     ...session,
+    qrIntervalSec: resolveQrIntervalSec(session.qrIntervalSec),
     targetAudience: target,
     targetParticipants: target,
     qrWindowDetails: qrStatus,
@@ -192,7 +193,7 @@ sessionsRouter.post('/', (req, res) => {
     lateThresholdTime: resolvedLateTime,
     category: category || 'workshop',
     organizer: organizer || personInCharge.fullName,
-    qrIntervalSec: Number(qrIntervalSec) || 20,
+    qrIntervalSec: resolveQrIntervalSec(qrIntervalSec),
     qrWindowOpenMinutes: 15,
     qrWindowCloseMinutes: 15,
     lateThresholdMinutes: 10,
@@ -268,6 +269,7 @@ sessionsRouter.patch('/:id', (req, res) => {
     lateThresholdTime,
     category,
     organizer,
+    qrIntervalSec,
     timeChangeReason
   } = req.body;
 
@@ -346,6 +348,7 @@ sessionsRouter.patch('/:id', (req, res) => {
   if (lateThresholdTime !== undefined) session.lateThresholdTime = lateThresholdTime;
   if (category) session.category = category;
   if (organizer) session.organizer = organizer;
+  if (qrIntervalSec !== undefined) session.qrIntervalSec = resolveQrIntervalSec(qrIntervalSec);
 
   // Sync lifecycle after changes
   syncSessionsLifecycle(store);

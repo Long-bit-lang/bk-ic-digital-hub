@@ -1222,7 +1222,7 @@
       "lateThresholdTime": "18:00",
       "category": "general_meeting",
       "organizer": "Ban Chuyên môn & Dự án",
-      "qrIntervalSec": 20,
+      "qrIntervalSec": 60,
       "qrWindowOpenMinutes": 15,
       "qrWindowCloseMinutes": 15,
       "lateThresholdMinutes": 10,

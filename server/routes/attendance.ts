@@ -3,9 +3,11 @@ import { Router } from 'express';
 import { db } from '../db.ts';
 import type { AttendanceRecord, AttendanceRequest, AttendanceStatus } from '../../src/types/index.ts';
 import {
+  buildQrToken,
   checkQRWindow,
   evaluateLateStatus,
   parseSessionDateTime,
+  resolveQrIntervalSec,
   syncSessionsLifecycle
 } from '../timeUtils.ts';
 import { requireAuth, requireNormalSession } from '../middleware/auth.ts';
@@ -354,13 +356,13 @@ attendanceRouter.post('/qr-token', (req, res) => {
     session.attendanceOpenTime,
     session.attendanceCloseTime
   );
-  const intervalSec = session.qrIntervalSec || 20;
+  const intervalSec = resolveQrIntervalSec(session.qrIntervalSec);
   const nowSec = Math.floor(Date.now() / 1000);
   const timeSlot = Math.floor(nowSec / intervalSec);
   const expiresIn = intervalSec - (nowSec % intervalSec);
 
   // Dynamic server-authoritative token
-  const token = `BKIC-QR-${session.id.slice(-6)}-${timeSlot.toString(36).toUpperCase()}-${((timeSlot * 47) % 10000).toString().padStart(4, '0')}`;
+  const token = buildQrToken(session.id, timeSlot);
 
   res.json({
     success: true,
@@ -462,11 +464,11 @@ attendanceRouter.post('/checkin-qr', (req, res) => {
 
   // Validate Token rotation (current or previous window)
   if (token) {
-    const intervalSec = session.qrIntervalSec || 20;
+    const intervalSec = resolveQrIntervalSec(session.qrIntervalSec);
     const nowSec = Math.floor(Date.now() / 1000);
     const currentSlot = Math.floor(nowSec / intervalSec);
-    const validCurrent = `BKIC-QR-${session.id.slice(-6)}-${currentSlot.toString(36).toUpperCase()}-${((currentSlot * 47) % 10000).toString().padStart(4, '0')}`;
-    const validPrev = `BKIC-QR-${session.id.slice(-6)}-${(currentSlot - 1).toString(36).toUpperCase()}-${(((currentSlot - 1) * 47) % 10000).toString().padStart(4, '0')}`;
+    const validCurrent = buildQrToken(session.id, currentSlot);
+    const validPrev = buildQrToken(session.id, currentSlot - 1);
 
     if (token !== validCurrent && token !== validPrev) {
       return res.status(400).json({

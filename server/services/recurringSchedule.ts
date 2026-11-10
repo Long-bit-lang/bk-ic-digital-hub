@@ -1,7 +1,7 @@
 // Recurring Tuesday Schedule Generator for BK-IC Digital Hub
 import type { DatabaseSchema } from '../db.ts';
 import type { TrainingSession } from '../../src/types/index.ts';
-import { getVNCurrentDateStr, VN_TIMEZONE } from '../timeUtils.ts';
+import { DEFAULT_QR_INTERVAL_SEC, getVNCurrentDateStr, VN_TIMEZONE } from '../timeUtils.ts';
 
 /**
  * Computes the dates of upcoming Tuesdays in Asia/Ho_Chi_Minh for the next `weeksAhead` weeks.
@@ -81,6 +81,7 @@ export function syncRecurringTuesdaySessions(store: DatabaseSchema, weeksAhead: 
         location: 'Văn phòng BK-IC / Trường Đại học Bách khoa – ĐHĐN',
         status: 'scheduled',
         attendanceStatus: 'closed',
+        qrIntervalSec: DEFAULT_QR_INTERVAL_SEC,
         unit: 'BDH',
         isRecurring: true,
         recurrenceRule: 'FREQ=WEEKLY;BYDAY=TU;TIME=17:30-19:00;TZ=Asia/Ho_Chi_Minh',

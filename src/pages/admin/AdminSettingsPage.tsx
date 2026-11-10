@@ -650,17 +650,17 @@ export const AdminSettingsPage: React.FC = () => {
         </div>
 
         <p className="text-xs text-slate-400 leading-relaxed">
-          Mỗi mã QR sinh ra gắn liền với một Time-Window Slot và định danh phiên. Mã tự động xoay sau mỗi 20–30 giây để ngăn chặn việc chụp ảnh chia sẻ từ xa. Cổng điểm danh tự động đóng sau khi hết giờ.
+          Mỗi mã QR sinh ra gắn liền với một Time-Window Slot và định danh phiên. Mã tự động xoay sau mỗi 1 phút (60 giây) để ngăn chặn việc chụp ảnh chia sẻ từ xa. Cổng điểm danh tự động đóng sau khi hết giờ.
         </p>
 
         <div className="p-4 rounded-2xl bg-slate-800/40 border border-slate-700/40 text-xs text-slate-300 space-y-2">
           <div className="flex items-center justify-between">
             <span>Thời gian xoay vòng QR mặc định:</span>
-            <span className="font-mono font-bold text-blue-400">20 giây / token</span>
+            <span className="font-mono font-bold text-blue-400">60 giây (1 phút) / token</span>
           </div>
           <div className="flex items-center justify-between">
             <span>Dung sai trễ mạng (Tolerance Window):</span>
-            <span className="font-mono font-bold text-blue-400">1 chu kỳ liền trước (±20s)</span>
+            <span className="font-mono font-bold text-blue-400">1 chu kỳ liền trước (±60s)</span>
           </div>
         </div>
       </div>

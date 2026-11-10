@@ -198,7 +198,7 @@ export const QRScannerModal: React.FC<QRScannerModalProps> = ({
                   className="w-full rounded-xl border border-slate-300 px-3 py-2 text-xs font-mono text-slate-800 placeholder:text-slate-400 focus:border-blue-500 focus:outline-none"
                 />
                 <p className="mt-1 text-[11px] text-slate-400">
-                  Mã này hiển thị bên dưới mã QR trên màn hình máy chiếu và thay đổi sau mỗi 20 giây để đảm bảo tính hiện diện.
+                  Mã này hiển thị bên dưới mã QR trên màn hình máy chiếu và thay đổi sau mỗi 1 phút (60 giây) để đảm bảo tính hiện diện.
                 </p>
               </div>
 

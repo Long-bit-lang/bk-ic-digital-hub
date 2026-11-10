@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { useApp } from '../../context/AppContext';
 import { Session, SessionCategory, SessionStatus } from '../../types';
 import { DynamicQRProjector } from '../../components/qr/DynamicQRProjector';
+import { DEFAULT_QR_INTERVAL_SEC, resolveQrIntervalSec } from '../../utils/qrConfig';
 import { 
   Calendar, 
   Clock, 
@@ -101,7 +102,7 @@ export const AdminSessionsPage: React.FC = () => {
     attendanceOpenTime: '13:45',
     attendanceCloseTime: '14:30',
     lateThresholdTime: '14:15',
-    qrIntervalSec: 20,
+    qrIntervalSec: DEFAULT_QR_INTERVAL_SEC,
     status: 'scheduled' as SessionStatus,
     category: 'workshop' as SessionCategory,
     timeChangeReason: 'Điều chỉnh lịch sinh hoạt & khung giờ điểm danh tự động'
@@ -198,7 +199,7 @@ export const AdminSessionsPage: React.FC = () => {
       attendanceOpenTime: '13:45',
       attendanceCloseTime: '14:30',
       lateThresholdTime: '14:15',
-      qrIntervalSec: 20,
+      qrIntervalSec: DEFAULT_QR_INTERVAL_SEC,
       status: 'scheduled',
       category: 'workshop',
       timeChangeReason: 'Tạo mới phiên sinh hoạt'
@@ -223,7 +224,7 @@ export const AdminSessionsPage: React.FC = () => {
       attendanceOpenTime: s.attendanceOpenTime || (s as any).effectiveAttendanceOpenTime || '13:45',
       attendanceCloseTime: s.attendanceCloseTime || (s as any).effectiveAttendanceCloseTime || '14:30',
       lateThresholdTime: s.lateThresholdTime || (s as any).effectiveLateThresholdTime || '14:15',
-      qrIntervalSec: s.qrIntervalSec || 20,
+      qrIntervalSec: resolveQrIntervalSec(s.qrIntervalSec),
       status: s.status,
       category: s.category || 'workshop',
       timeChangeReason: 'Điều chỉnh lịch sinh hoạt & khung giờ điểm danh tự động'

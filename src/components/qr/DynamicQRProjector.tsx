@@ -5,6 +5,7 @@ import { QRCodeSVG } from 'qrcode.react';
 import { Session, AttendanceRecord } from '../../types';
 import { useApp } from '../../context/AppContext';
 import { api } from '../../services/api';
+import { DEFAULT_QR_INTERVAL_SEC } from '../../utils/qrConfig';
 import { 
   Clock, 
   Users, 
@@ -54,8 +55,8 @@ export const DynamicQRProjector: React.FC<DynamicQRProjectorProps> = ({ session,
 
   const [tokenData, setTokenData] = useState<{ token: string; expiresIn: number; intervalSec: number }>({
     token: '',
-    expiresIn: 20,
-    intervalSec: 20
+    expiresIn: DEFAULT_QR_INTERVAL_SEC,
+    intervalSec: DEFAULT_QR_INTERVAL_SEC
   });
   const [isLoadingToken, setIsLoadingToken] = useState(true);
   const [authError, setAuthError] = useState<string | null>(null);
@@ -102,7 +103,7 @@ export const DynamicQRProjector: React.FC<DynamicQRProjectorProps> = ({ session,
         setTokenData({
           token: res.token,
           expiresIn: res.expiresIn,
-          intervalSec: res.intervalSec || 20
+          intervalSec: res.intervalSec || DEFAULT_QR_INTERVAL_SEC
         });
         setAuthError(null);
       } else {

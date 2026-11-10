@@ -399,3 +399,9 @@ export function addHours(dateOrIso: string | Date, hours: number): string {
 export function isExpired(deadlineIso: string): boolean {
   return Date.now() > new Date(deadlineIso).getTime();
 }
+
+export {
+  DEFAULT_QR_INTERVAL_SEC,
+  resolveQrIntervalSec,
+  buildQrToken
+} from '../src/utils/qrConfig.ts';

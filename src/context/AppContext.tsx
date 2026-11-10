@@ -19,6 +19,7 @@ import {
   FeedbackSummary
 } from '../types';
 import { api, setApiUserContext, setApiAuthToken } from '../services/api';
+import { buildQrToken, resolveQrIntervalSec } from '../utils/qrConfig';
 import {
   INITIAL_UNITS,
   INITIAL_SITE_SETTINGS,
@@ -670,11 +671,11 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
 
   const generateSessionToken = (sessionId: string) => {
     const session = sessions.find(s => s.id === sessionId);
-    const intervalSec = session?.qrIntervalSec || 20;
+    const intervalSec = resolveQrIntervalSec(session?.qrIntervalSec);
     const now = Math.floor(Date.now() / 1000);
     const windowSlot = Math.floor(now / intervalSec);
     const expiresIn = intervalSec - (now % intervalSec);
-    const token = `BKIC-QR-${sessionId.slice(-6)}-${windowSlot.toString(36).toUpperCase()}-${((windowSlot * 47) % 10000).toString().padStart(4, '0')}`;
+    const token = buildQrToken(sessionId, windowSlot);
     return { token, expiresIn, intervalSec };
   };
 

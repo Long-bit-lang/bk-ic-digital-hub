@@ -8,7 +8,7 @@
 
 **BK-IC Digital Hub** kết hợp hai phân hệ toàn diện:
 1. **Public Website (Trang công khai đẳng cấp Apple Minimalist)**: Tiếp cận sinh viên, giới thiệu 5 ban chuyên trách, hệ sinh thái hoạt động đổi mới sáng tạo, vườn ươm dự án thực tế, tư liệu lịch sử và cổng nộp đơn tuyển thành viên Gen 2026.
-2. **Internal Management Hub (Cổng Thành viên & Bảng Quản trị Admin)**: Hệ thống điểm danh bằng mã QR động xoay vòng 20–30s chống gian lận, bảng chấm điểm rèn luyện 10 điểm (Chuyên cần 4đ - Cống hiến 4đ - Trách nhiệm 2đ), thu thập phản hồi ẩn danh, quản lý tuyển sinh và nhật ký kiểm toán (Audit Logs).
+2. **Internal Management Hub (Cổng Thành viên & Bảng Quản trị Admin)**: Hệ thống điểm danh bằng mã QR động xoay vòng 60s (1 phút) chống gian lận, bảng chấm điểm rèn luyện 10 điểm (Chuyên cần 4đ - Cống hiến 4đ - Trách nhiệm 2đ), thu thập phản hồi ẩn danh, quản lý tuyển sinh và nhật ký kiểm toán (Audit Logs).
 
 ### Nguồn Dữ liệu Xác thực (Provenance)
 - **Tên chính thức:** Câu lạc bộ Khởi nghiệp và Đổi mới sáng tạo - Bách Khoa Innovation Club (BK-IC).
@@ -83,7 +83,7 @@ src/
 ### A. Hệ thống Điểm danh QR Xoay vòng Động (Dynamic Token)
 - Ban tổ chức mở phiên sinh hoạt và bấm **"Trình chiếu QR Lên Máy Chiếu"**.
 - Mã QR tự sinh mã bảo mật không đối xứng dựa trên `sessionId + TimeWindowSlot`.
-- Mã tự động làm mới sau mỗi **20 giây** kèm thanh tiến trình đếm ngược.
+- Mã tự động làm mới sau mỗi **1 phút (60 giây)** kèm thanh tiến trình đếm ngược.
 - Thành viên quét mã bằng camera điện thoại hoặc nhập trực tiếp mã hiển thị.
 - Hệ thống tự động so khớp giờ quét với `lateThresholdTime` để phân định **Có mặt đúng giờ** hay **Đến muộn**.
 - Chặn 100% việc một thành viên điểm danh trùng lặp trong cùng một phiên.
