@@ -1,25 +1,98 @@
-// BK-IC Admin Feedback Analytics & Anonymous Response Viewer
-import React, { useState, useEffect, useCallback } from 'react';
+// BK-IC Admin Feedback Analytics, Window Management & Anonymous Response Viewer
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useApp } from '../../context/AppContext';
-import { 
-  MessageSquare, 
-  Star, 
-  ShieldCheck, 
-  EyeOff, 
-  Calendar, 
-  Lightbulb, 
-  TrendingUp,
-  Filter,
+import {
+  MessageSquare,
+  EyeOff,
   RefreshCw,
   Clock,
   AlertCircle,
   CheckCircle2,
-  Unlock
+  Unlock,
+  Info,
+  Calendar
 } from 'lucide-react';
 import { api } from '../../services/api';
 
+const DEFAULT_REOPEN_REASON = 'Mở lại cổng góp ý để thu thập thêm ý kiến từ thành viên';
+
+function getSessionFeedbackStatusInfo(session: any) {
+  if (!session) {
+    return {
+      isOpen: false,
+      label: 'Không xác định',
+      badgeClass: 'bg-slate-800 text-slate-400 border-slate-700',
+      deadline: undefined as string | undefined
+    };
+  }
+
+  if (session.status === 'cancelled') {
+    return {
+      isOpen: false,
+      label: 'Buổi đã hủy',
+      badgeClass: 'bg-rose-500/15 text-rose-400 border-rose-500/30',
+      deadline: undefined as string | undefined
+    };
+  }
+
+  const details = session.feedbackWindowDetails;
+  const deadline = details?.deadline || session.feedbackDeadline;
+  const deadlineMs = deadline ? new Date(deadline).getTime() : NaN;
+  const nowMs = Date.now();
+
+  let isOpen = false;
+  let windowReason: string | undefined = details?.reason;
+
+  if (typeof session.isFeedbackOpen === 'boolean') {
+    isOpen = session.isFeedbackOpen;
+  } else if (typeof details?.isOpen === 'boolean') {
+    isOpen = details.isOpen;
+  } else if (session.feedbackStatus === 'reopened' && (!Number.isNaN(deadlineMs) ? nowMs <= deadlineMs : true)) {
+    isOpen = true;
+  } else if (session.feedbackStatus === 'open' && (!Number.isNaN(deadlineMs) ? nowMs <= deadlineMs : true)) {
+    isOpen = true;
+  } else if (session.status !== 'ended') {
+    windowReason = 'not_ended_yet';
+  } else {
+    windowReason = 'expired';
+  }
+
+  if (isOpen) {
+    if (session.feedbackStatus === 'reopened') {
+      return {
+        isOpen: true,
+        label: 'Đang mở lại (Admin/BCN)',
+        badgeClass: 'bg-blue-500/20 text-blue-300 border-blue-500/40',
+        deadline
+      };
+    }
+    return {
+      isOpen: true,
+      label: 'Đang mở tự động (24h)',
+      badgeClass: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40',
+      deadline
+    };
+  }
+
+  if (windowReason === 'not_ended_yet') {
+    return {
+      isOpen: false,
+      label: `Chưa mở · Tự mở lúc ${session.endTime} (${session.date})`,
+      badgeClass: 'bg-amber-500/15 text-amber-300 border-amber-500/30',
+      deadline
+    };
+  }
+
+  return {
+    isOpen: false,
+    label: 'Đã đóng (Hết hạn)',
+    badgeClass: 'bg-slate-800 text-slate-400 border-slate-700',
+    deadline
+  };
+}
+
 export const AdminFeedbackPage: React.FC = () => {
-  const { sessions, currentUser, reopenFeedbackWindow } = useApp();
+  const { sessions, currentUser, reopenFeedbackWindow, reloadSessions } = useApp();
   const [sessionFilter, setSessionFilter] = useState<string>('all');
   const [feedbacks, setFeedbacks] = useState<any[]>([]);
   const [metrics, setMetrics] = useState<{
@@ -40,10 +113,12 @@ export const AdminFeedbackPage: React.FC = () => {
 
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [successBanner, setSuccessBanner] = useState<string | null>(null);
 
   // Modal for Reopening Feedback Window (BN & Admin only)
   const [reopenModal, setReopenModal] = useState<{
     isOpen: boolean;
+    allowSessionSelect: boolean;
     sessionId: string;
     sessionTitle: string;
     hours: number;
@@ -52,15 +127,22 @@ export const AdminFeedbackPage: React.FC = () => {
     error: string | null;
   }>({
     isOpen: false,
+    allowSessionSelect: false,
     sessionId: '',
     sessionTitle: '',
     hours: 24,
-    reason: '',
+    reason: DEFAULT_REOPEN_REASON,
     isSubmitting: false,
     error: null
   });
 
   const isBnOrAdmin = currentUser?.role === 'admin' || currentUser?.role === 'sysadmin' || currentUser?.unit === 'BN';
+
+  const nonCancelledSessions = useMemo(() => {
+    return [...sessions]
+      .filter(s => s.status !== 'cancelled')
+      .sort((a, b) => `${b.date} ${b.endTime}`.localeCompare(`${a.date} ${a.endTime}`));
+  }, [sessions]);
 
   // Load feedback data from real API
   const loadData = useCallback(async () => {
@@ -101,14 +183,19 @@ export const AdminFeedbackPage: React.FC = () => {
     loadData();
   }, [loadData]);
 
-  // Handle reopening feedback
-  const handleOpenReopenModal = (sessionId: string, sessionTitle: string) => {
+  // Handle opening reopen modal (works both for a specific session or with session picker from 'all')
+  const handleOpenReopenModal = (sessionId?: string, sessionTitle?: string, allowSessionSelect = false) => {
+    const fallbackSession = nonCancelledSessions.find(s => !getSessionFeedbackStatusInfo(s).isOpen) || nonCancelledSessions[0];
+    const targetId = sessionId || fallbackSession?.id || '';
+    const targetTitle = sessionTitle || fallbackSession?.title || '';
+
     setReopenModal({
       isOpen: true,
-      sessionId,
-      sessionTitle,
+      allowSessionSelect,
+      sessionId: targetId,
+      sessionTitle: targetTitle,
       hours: 24,
-      reason: '',
+      reason: DEFAULT_REOPEN_REASON,
       isSubmitting: false,
       error: null
     });
@@ -116,6 +203,10 @@ export const AdminFeedbackPage: React.FC = () => {
 
   const handleConfirmReopen = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!reopenModal.sessionId) {
+      setReopenModal(prev => ({ ...prev, error: 'Vui lòng chọn buổi sinh hoạt cần mở lại góp ý.' }));
+      return;
+    }
     if (!reopenModal.reason.trim()) {
       setReopenModal(prev => ({ ...prev, error: 'Vui lòng cung cấp lý do mở lại biểu mẫu góp ý.' }));
       return;
@@ -125,9 +216,9 @@ export const AdminFeedbackPage: React.FC = () => {
     try {
       const res = await reopenFeedbackWindow(reopenModal.sessionId, reopenModal.hours, reopenModal.reason.trim());
       if (res.success) {
-        alert(res.message);
+        setSuccessBanner(res.message);
         setReopenModal(prev => ({ ...prev, isOpen: false }));
-        await loadData();
+        await Promise.all([reloadSessions(), loadData()]);
       } else {
         setReopenModal(prev => ({ ...prev, error: res.message || 'Không thể mở lại thời hạn góp ý.' }));
       }
@@ -139,6 +230,7 @@ export const AdminFeedbackPage: React.FC = () => {
   };
 
   const selectedSessionObj = sessionFilter !== 'all' ? sessions.find(s => s.id === sessionFilter) : null;
+  const displayedSessionsForStatus = selectedSessionObj ? [selectedSessionObj] : nonCancelledSessions;
 
   return (
     <div className="space-y-6">
@@ -154,7 +246,7 @@ export const AdminFeedbackPage: React.FC = () => {
           </p>
         </div>
 
-        <div className="flex items-center gap-2.5">
+        <div className="flex items-center gap-2.5 flex-wrap">
           <select
             value={sessionFilter}
             onChange={(e) => setSessionFilter(e.target.value)}
@@ -167,7 +259,10 @@ export const AdminFeedbackPage: React.FC = () => {
           </select>
 
           <button
-            onClick={() => loadData()}
+            onClick={() => {
+              reloadSessions().catch(() => {});
+              loadData();
+            }}
             disabled={isLoading}
             className="p-2 rounded-xl border border-slate-700 bg-slate-800 text-slate-300 hover:text-white hover:bg-slate-700 transition"
             title="Làm mới dữ liệu"
@@ -175,10 +270,16 @@ export const AdminFeedbackPage: React.FC = () => {
             <RefreshCw className={`h-4 w-4 ${isLoading ? 'animate-spin' : ''}`} />
           </button>
 
-          {isBnOrAdmin && selectedSessionObj && (
+          {isBnOrAdmin && nonCancelledSessions.length > 0 && (
             <button
-              onClick={() => handleOpenReopenModal(selectedSessionObj.id, selectedSessionObj.title)}
-              className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-blue-600/20 text-blue-400 border border-blue-500/30 text-xs font-semibold hover:bg-blue-600/30 transition"
+              onClick={() => {
+                if (selectedSessionObj && selectedSessionObj.status !== 'cancelled') {
+                  handleOpenReopenModal(selectedSessionObj.id, selectedSessionObj.title, false);
+                } else {
+                  handleOpenReopenModal(undefined, undefined, true);
+                }
+              }}
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-blue-600/20 text-blue-400 border border-blue-500/30 text-xs font-semibold hover:bg-blue-600/30 transition"
             >
               <Unlock className="h-3.5 w-3.5" />
               <span>Mở lại góp ý</span>
@@ -187,12 +288,112 @@ export const AdminFeedbackPage: React.FC = () => {
         </div>
       </div>
 
+      {successBanner && (
+        <div className="rounded-2xl border border-emerald-500/30 bg-emerald-500/10 p-4 text-xs text-emerald-300 flex items-center justify-between gap-2.5">
+          <div className="flex items-center gap-2.5">
+            <CheckCircle2 className="h-4 w-4 text-emerald-400 shrink-0" />
+            <span>{successBanner}</span>
+          </div>
+          <button
+            type="button"
+            onClick={() => setSuccessBanner(null)}
+            className="text-[11px] text-emerald-400 hover:text-emerald-200 font-semibold shrink-0"
+          >
+            Đóng
+          </button>
+        </div>
+      )}
+
       {error && (
         <div className="rounded-2xl border border-red-500/30 bg-red-500/10 p-4 text-xs text-red-300 flex items-center gap-2.5">
           <AlertCircle className="h-4 w-4 text-red-400 shrink-0" />
           <span>{error}</span>
         </div>
       )}
+
+      {/* Feedback Window Lifecycle & Reopen Control Panel */}
+      <div className="rounded-3xl border border-slate-800 bg-slate-900 p-5 sm:p-6 space-y-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-800 pb-3">
+          <div className="flex items-center gap-2 text-sm font-bold text-white">
+            <Clock className="h-4 w-4 text-blue-400" />
+            <span>Trạng thái Cổng Góp ý Sau Buổi</span>
+          </div>
+          <span className="text-[11px] text-slate-400">
+            Tự động mở ngay khi kết thúc buổi · Duy trì 24 giờ
+          </span>
+        </div>
+
+        <div className="rounded-2xl border border-blue-500/20 bg-blue-950/20 p-3.5 flex items-start gap-2.5 text-xs text-blue-200">
+          <Info className="h-4 w-4 text-blue-400 shrink-0 mt-0.5" />
+          <p className="leading-relaxed text-[11px] text-slate-300">
+            <strong className="text-blue-300">Thời điểm mở tự động:</strong> Form góp ý tự động mở ngay tại mốc <strong>giờ kết thúc buổi sinh hoạt</strong> (<code className="font-mono text-blue-300">endTime</code>) và tiếp nhận đánh giá trong <strong>24 giờ</strong>. Sau khi hết hạn hoặc khi muốn mở sớm/gia hạn thêm, Admin / BCN bấm <strong className="text-white">"Mở lại góp ý"</strong> để mở ngay lập tức.
+          </p>
+        </div>
+
+        {displayedSessionsForStatus.length === 0 ? (
+          <div className="text-xs text-slate-500 py-3 text-center">
+            Chưa có phiên sinh hoạt nào khả dụng để cấu hình cổng góp ý.
+          </div>
+        ) : (
+          <div className="space-y-2.5 max-h-72 overflow-y-auto pr-1">
+            {displayedSessionsForStatus.map((s) => {
+              const statusInfo = getSessionFeedbackStatusInfo(s);
+              return (
+                <div
+                  key={s.id}
+                  className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 rounded-2xl border border-slate-800 bg-slate-950/50 p-3.5"
+                >
+                  <div className="space-y-1 min-w-0">
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <span className="text-xs font-bold text-white truncate">
+                        {s.title}
+                      </span>
+                      <span className={`text-[10px] font-semibold px-2.5 py-0.5 rounded-full border ${statusInfo.badgeClass}`}>
+                        {statusInfo.label}
+                      </span>
+                    </div>
+                    <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-[11px] text-slate-400">
+                      <span className="inline-flex items-center gap-1">
+                        <Calendar className="h-3 w-3 text-slate-500" />
+                        <span>{s.date} ({s.startTime} - {s.endTime})</span>
+                      </span>
+                      <span>
+                        Mở tự động lúc: <strong className="text-slate-200 font-mono">{s.endTime} {s.date}</strong>
+                      </span>
+                      {statusInfo.deadline && (
+                        <span>
+                          Hạn đóng: <strong className="text-slate-200 font-mono">{new Date(statusInfo.deadline).toLocaleString('vi-VN')}</strong>
+                        </span>
+                      )}
+                    </div>
+                    {s.feedbackStatus === 'reopened' && s.feedbackReopenedBy && (
+                      <div className="text-[11px] text-blue-300/90">
+                        Mở lại bởi <strong>{s.feedbackReopenedBy}</strong>
+                        {s.feedbackReopenReason ? ` · Lý do: ${s.feedbackReopenReason}` : ''}
+                      </div>
+                    )}
+                  </div>
+
+                  {isBnOrAdmin && s.status !== 'cancelled' && (
+                    <button
+                      type="button"
+                      onClick={() => handleOpenReopenModal(s.id, s.title, false)}
+                      className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold shrink-0 transition border ${
+                        statusInfo.isOpen
+                          ? 'bg-slate-800 text-blue-300 border-slate-700 hover:bg-slate-700'
+                          : 'bg-blue-600 text-white border-blue-500 hover:bg-blue-500'
+                      }`}
+                    >
+                      <Unlock className="h-3.5 w-3.5" />
+                      <span>{statusInfo.isOpen ? 'Gia hạn góp ý' : 'Mở lại góp ý'}</span>
+                    </button>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        )}
+      </div>
 
       {/* Aggregated Score Cards (4 official criteria + overall) */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -394,9 +595,11 @@ export const AdminFeedbackPage: React.FC = () => {
                 <Clock className="h-5 w-5 text-blue-400" />
                 <span>Mở lại Biểu mẫu Góp ý</span>
               </h3>
-              <p className="text-xs text-slate-400 mt-1">
-                Gia hạn thời gian tiếp nhận phản hồi cho buổi: <strong className="text-slate-200">{reopenModal.sessionTitle}</strong>
-              </p>
+              {!reopenModal.allowSessionSelect && (
+                <p className="text-xs text-slate-400 mt-1">
+                  Mở và gia hạn tiếp nhận phản hồi cho buổi: <strong className="text-slate-200">{reopenModal.sessionTitle}</strong>
+                </p>
+              )}
             </div>
 
             {reopenModal.error && (
@@ -406,9 +609,35 @@ export const AdminFeedbackPage: React.FC = () => {
             )}
 
             <form onSubmit={handleConfirmReopen} className="space-y-4">
+              {reopenModal.allowSessionSelect && (
+                <div>
+                  <label className="block text-xs font-semibold text-slate-300 mb-1">
+                    Chọn phiên sinh hoạt cần mở góp ý *
+                  </label>
+                  <select
+                    value={reopenModal.sessionId}
+                    onChange={(e) => {
+                      const picked = nonCancelledSessions.find(s => s.id === e.target.value);
+                      setReopenModal(prev => ({
+                        ...prev,
+                        sessionId: e.target.value,
+                        sessionTitle: picked?.title || ''
+                      }));
+                    }}
+                    className="w-full rounded-xl border border-slate-700 bg-slate-800 px-3.5 py-2 text-xs text-white focus:outline-none"
+                  >
+                    {nonCancelledSessions.map(s => (
+                      <option key={s.id} value={s.id}>
+                        {s.title} ({s.date} · {getSessionFeedbackStatusInfo(s).label})
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              )}
+
               <div>
                 <label className="block text-xs font-semibold text-slate-300 mb-1">
-                  Thời gian gia hạn thêm (Giờ) *
+                  Thời gian mở / gia hạn thêm (Giờ) *
                 </label>
                 <select
                   value={reopenModal.hours}
@@ -420,6 +649,9 @@ export const AdminFeedbackPage: React.FC = () => {
                   <option value={48}>48 giờ (2 ngày)</option>
                   <option value={72}>72 giờ (3 ngày)</option>
                 </select>
+                <span className="text-[11px] text-slate-400 mt-1 block">
+                  Hạn đóng mới dự kiến: <strong className="text-blue-300 font-mono">{new Date(Date.now() + reopenModal.hours * 3600 * 1000).toLocaleString('vi-VN')}</strong>
+                </span>
               </div>
 
               <div>
@@ -449,7 +681,7 @@ export const AdminFeedbackPage: React.FC = () => {
                   disabled={reopenModal.isSubmitting}
                   className="px-5 py-2 rounded-xl bg-blue-600 text-xs font-semibold text-white hover:bg-blue-500 disabled:opacity-50 transition"
                 >
-                  {reopenModal.isSubmitting ? 'Đang lưu...' : 'Xác nhận mở lại'}
+                  {reopenModal.isSubmitting ? 'Đang mở...' : 'Xác nhận mở góp ý'}
                 </button>
               </div>
             </form>

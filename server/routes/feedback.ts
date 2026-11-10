@@ -3,6 +3,7 @@ import { Router } from 'express';
 import { db, type DecoupledFeedback, type FeedbackEligibility } from '../db.ts';
 import type { FeedbackSummary } from '../../src/types/index.ts';
 import { isFeedbackWindowOpen, syncSessionsLifecycle } from '../timeUtils.ts';
+import { applyFeedbackReopen, enrichSession } from './sessions.ts';
 import crypto from 'crypto';
 import { requireAuth, requireNormalSession } from '../middleware/auth.ts';
 
@@ -562,33 +563,13 @@ feedbackRouter.post('/reopen/:sessionId', (req, res) => {
     return res.status(400).json({ success: false, message: 'Bắt buộc phải ghi rõ lý do mở lại thời hạn góp ý.' });
   }
 
-  const now = new Date();
-  const newDeadline = new Date(now.getTime() + extensionHours * 3600 * 1000).toISOString();
-
-  session.feedbackStatus = 'reopened';
-  session.feedbackDeadline = newDeadline;
-  session.feedbackReopenedBy = actor.fullName;
-  session.feedbackReopenedAt = now.toISOString();
-  session.feedbackReopenReason = String(reason).trim();
-
-  store.auditLogs.unshift({
-    id: `audit-${Date.now()}`,
-    timestamp: now.toISOString(),
-    actorId: actor.id,
-    actorName: actor.fullName,
-    actorRole: actor.role,
-    actorUnit: actor.unit,
-    action: 'Mở lại biểu mẫu góp ý sau meeting',
-    targetType: 'TrainingSession',
-    targetId: session.id,
-    details: `${actor.fullName} đã mở lại biểu mẫu góp ý cho buổi "${session.title}" thêm ${extensionHours} giờ (hạn mới: ${new Date(newDeadline).toLocaleString('vi-VN')}). Lý do: ${reason}`
-  });
+  const { deadlineIso } = applyFeedbackReopen(store, session, actor, { hours: extensionHours, reason });
 
   db.save();
 
   res.json({
     success: true,
-    message: `Đã mở lại biểu mẫu góp ý cho buổi "${session.title}" thành công (thời hạn mới đến ${new Date(newDeadline).toLocaleString('vi-VN')})!`,
-    session
+    message: `Đã mở lại biểu mẫu góp ý cho buổi "${session.title}" thành công (thời hạn mới đến ${new Date(deadlineIso).toLocaleString('vi-VN')})!`,
+    session: enrichSession(session)
   });
 });

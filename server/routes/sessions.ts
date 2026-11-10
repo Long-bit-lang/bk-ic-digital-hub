@@ -2,7 +2,7 @@
 import { Router } from 'express';
 import { db } from '../db.ts';
 import type { TrainingSession, SessionStatus } from '../../src/types/index.ts';
-import { checkQRWindow, parseSessionDateTime, addHours, syncSessionsLifecycle, formatTimeFromMs, getSessionScheduleTimes, resolveQrIntervalSec } from '../timeUtils.ts';
+import { checkQRWindow, parseSessionDateTime, addHours, syncSessionsLifecycle, formatTimeFromMs, getSessionScheduleTimes, resolveQrIntervalSec, isFeedbackWindowOpen } from '../timeUtils.ts';
 import { requireAuth, requireNormalSession } from '../middleware/auth.ts';
 import { syncRecurringTuesdaySessions } from '../services/recurringSchedule.ts';
 
@@ -24,7 +24,7 @@ export function isUserSessionPic(session: TrainingSession | any, user: { id: str
 }
 
 // Helper to normalize and enrich session object
-function enrichSession(session: TrainingSession) {
+export function enrichSession(session: TrainingSession) {
   const target = session.targetAudience || session.targetParticipants || 'Toàn thể thành viên chính thức';
   const qrStatus = session.status === 'cancelled'
     ? { isOpen: false, isCancelled: true }
@@ -39,6 +39,7 @@ function enrichSession(session: TrainingSession) {
   const effectiveOpenTime = session.attendanceOpenTime || formatTimeFromMs(times.openMs);
   const effectiveCloseTime = session.attendanceCloseTime || formatTimeFromMs(times.closeMs);
   const effectiveLateTime = session.lateThresholdTime || formatTimeFromMs(times.lateMs);
+  const feedbackWindowDetails = isFeedbackWindowOpen(session);
 
   return {
     ...session,
@@ -49,8 +50,48 @@ function enrichSession(session: TrainingSession) {
     effectiveAttendanceOpenTime: effectiveOpenTime,
     effectiveAttendanceCloseTime: effectiveCloseTime,
     effectiveLateThresholdTime: effectiveLateTime,
-    isAttendanceOpen: session.status !== 'cancelled' && session.attendanceStatus === 'open'
+    isAttendanceOpen: session.status !== 'cancelled' && session.attendanceStatus === 'open',
+    feedbackAutoOpenAt: feedbackWindowDetails.autoOpenAt || new Date(times.endMs).toISOString(),
+    feedbackWindowDetails,
+    isFeedbackOpen: feedbackWindowDetails.isOpen
   };
+}
+
+/**
+ * Applies a feedback window reopen/extension to a session and writes an audit log entry.
+ */
+export function applyFeedbackReopen(
+  store: any,
+  session: TrainingSession,
+  actor: { id: string; fullName: string; role?: string; unit?: string },
+  options: { hours?: number | string; reason: string }
+): { deadlineIso: string; extensionHours: number } {
+  const extensionHours = Number(options.hours) || 24;
+  const cleanReason = String(options.reason).trim();
+  const now = new Date();
+  const deadlineIso = addHours(now, extensionHours);
+
+  session.feedbackStatus = 'reopened';
+  session.feedbackDeadline = deadlineIso;
+  session.feedbackReopenedBy = actor.fullName;
+  session.feedbackReopenedAt = now.toISOString();
+  session.feedbackReopenReason = cleanReason;
+
+  store.auditLogs.unshift({
+    id: `audit-${Date.now()}`,
+    timestamp: now.toISOString(),
+    actorId: actor.id,
+    actorName: actor.fullName,
+    actorRole: actor.role,
+    actorUnit: actor.unit,
+    action: 'Mở lại biểu mẫu góp ý sau meeting',
+    targetType: 'TrainingSession',
+    targetId: session.id,
+    reason: cleanReason,
+    details: `${actor.fullName} đã mở lại biểu mẫu góp ý cho buổi "${session.title}" thêm ${extensionHours} giờ (hạn mới: ${new Date(deadlineIso).toLocaleString('vi-VN')}). Lý do: ${cleanReason}`
+  });
+
+  return { deadlineIso, extensionHours };
 }
 
 // GET /api/sessions - List training sessions
@@ -292,10 +333,12 @@ sessionsRouter.patch('/:id', (req, res) => {
       reason: effectiveReason
     });
 
-    if (endTime) {
-      const endTimestamp = parseSessionDateTime(date || session.date, endTime);
-      session.feedbackDeadline = new Date(endTimestamp + 24 * 60 * 60 * 1000).toISOString();
-    }
+    const updatedTimes = getSessionScheduleTimes({
+      date: date || session.date,
+      startTime: startTime || session.startTime,
+      endTime: endTime || session.endTime
+    });
+    session.feedbackDeadline = new Date(updatedTimes.endMs + 24 * 60 * 60 * 1000).toISOString();
   }
 
   // Only Admin, SysAdmin, or Ban Chủ nhiệm (BN) can reassign Person In Charge
@@ -554,19 +597,27 @@ sessionsRouter.post('/:id/restore', (req, res) => {
 // POST /api/sessions/:id/reopen-feedback - Reopen feedback form (BN or Admin only)
 sessionsRouter.post('/:id/reopen-feedback', (req, res) => {
   const actor = req.user!;
-  const { reason } = req.body;
+  const { reason, hours } = req.body;
 
-  if (actor.unit !== 'BN' && actor.role !== 'admin') {
+  if (actor.unit !== 'BN' && actor.role !== 'admin' && actor.role !== 'sysadmin') {
     return res.status(403).json({
       success: false,
-      message: 'Chỉ Ban Chủ nhiệm (BN) mới có thẩm quyền phê duyệt mở lại biểu mẫu phản hồi sau khi đã đóng.'
+      message: 'Chỉ Ban Chủ nhiệm (BN) hoặc Quản trị viên mới có thẩm quyền phê duyệt mở lại biểu mẫu phản hồi.'
     });
   }
 
-  if (!reason) {
+  if (!reason || !String(reason).trim()) {
     return res.status(400).json({
       success: false,
       message: 'Vui lòng nhập lý do phê duyệt mở lại biểu mẫu phản hồi.'
+    });
+  }
+
+  const extensionHours = Number(hours) || 24;
+  if (extensionHours <= 0 || extensionHours > 168) {
+    return res.status(400).json({
+      success: false,
+      message: 'Thời gian gia hạn phải từ 1 đến 168 giờ (7 ngày).'
     });
   }
 
@@ -584,34 +635,13 @@ sessionsRouter.post('/:id/reopen-feedback', (req, res) => {
     });
   }
 
-  const now = new Date();
-  const newDeadline = addHours(now, 24);
-
-  session.feedbackStatus = 'reopened';
-  session.feedbackDeadline = newDeadline;
-  session.feedbackReopenedBy = actor.fullName;
-  session.feedbackReopenReason = reason;
-  session.feedbackReopenedAt = now.toISOString();
-
-  store.auditLogs.unshift({
-    id: `audit-${Date.now()}`,
-    timestamp: now.toISOString(),
-    actorId: actor.id,
-    actorName: actor.fullName,
-    actorRole: actor.role,
-    actorUnit: 'BN',
-    action: 'Mở lại biểu mẫu phản hồi',
-    targetType: 'TrainingSession',
-    targetId: session.id,
-    reason,
-    details: `Ban Chủ nhiệm phê duyệt mở lại biểu mẫu phản hồi cho "${session.title}" thêm 24 giờ (đến ${newDeadline}). Lý do: ${reason}`
-  });
+  const { deadlineIso } = applyFeedbackReopen(store, session, actor, { hours: extensionHours, reason });
 
   db.save();
 
   res.json({
     success: true,
-    message: 'Ban Chủ nhiệm đã phê duyệt mở lại biểu mẫu phản hồi thêm 24 giờ thành công!',
-    session
+    message: `Ban Chủ nhiệm đã phê duyệt mở lại biểu mẫu phản hồi thêm ${extensionHours} giờ thành công (đến ${new Date(deadlineIso).toLocaleString('vi-VN')})!`,
+    session: enrichSession(session)
   });
 });

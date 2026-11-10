@@ -302,25 +302,23 @@ export function syncSessionsLifecycle(store: any, nowMs = Date.now()): boolean {
 
       const deadlineMs = new Date(session.feedbackDeadline).getTime();
 
-      if (nowMs < times.endMs) {
-        // Meeting is upcoming or ongoing: feedback not open yet
+      if (session.feedbackStatus === 'reopened') {
+        if (nowMs > deadlineMs) {
+          session.feedbackStatus = 'closed';
+          changed = true;
+        }
+      } else if (nowMs < times.endMs) {
+        // Meeting is upcoming or ongoing: feedback not open automatically yet
         if (session.feedbackStatus !== 'closed') {
           session.feedbackStatus = 'closed';
           changed = true;
         }
       } else {
-        // Meeting has ended
-        if (session.feedbackStatus === 'reopened') {
-          if (nowMs > deadlineMs) {
-            session.feedbackStatus = 'closed';
-            changed = true;
-          }
-        } else {
-          const desiredFbStatus = nowMs <= deadlineMs ? 'open' : 'closed';
-          if (session.feedbackStatus !== desiredFbStatus) {
-            session.feedbackStatus = desiredFbStatus;
-            changed = true;
-          }
+        // Meeting has ended: open automatically for 24h after end time
+        const desiredFbStatus = nowMs <= deadlineMs ? 'open' : 'closed';
+        if (session.feedbackStatus !== desiredFbStatus) {
+          session.feedbackStatus = desiredFbStatus;
+          changed = true;
         }
       }
     }
@@ -337,6 +335,7 @@ export function isFeedbackWindowOpen(session: any, nowMs = Date.now()): {
   isOpen: boolean;
   reason?: 'cancelled' | 'not_ended_yet' | 'expired' | 'closed_manually';
   deadline?: string;
+  autoOpenAt?: string;
   message?: string;
 } {
   if (!session) {
@@ -352,17 +351,33 @@ export function isFeedbackWindowOpen(session: any, nowMs = Date.now()): {
   }
 
   const times = getSessionScheduleTimes(session);
+  const autoOpenIso = new Date(times.endMs).toISOString();
   const deadlineMs = session.feedbackDeadline
     ? new Date(session.feedbackDeadline).getTime()
     : (times.endMs + 24 * 60 * 60 * 1000);
   const deadlineIso = new Date(deadlineMs).toISOString();
+
+  // Explicit Admin/BN reopen overrides the pre-end check until the reopened deadline expires
+  if (session.feedbackStatus === 'reopened') {
+    if (nowMs <= deadlineMs) {
+      return { isOpen: true, deadline: deadlineIso, autoOpenAt: autoOpenIso };
+    }
+    return {
+      isOpen: false,
+      reason: 'expired',
+      deadline: deadlineIso,
+      autoOpenAt: autoOpenIso,
+      message: `Biểu mẫu phản hồi đã hết hạn gia hạn vào ${new Date(deadlineMs).toLocaleString('vi-VN')}. Chỉ Ban Chủ nhiệm mới có quyền mở lại.`
+    };
+  }
 
   if (nowMs < times.endMs) {
     return {
       isOpen: false,
       reason: 'not_ended_yet',
       deadline: deadlineIso,
-      message: 'Buổi sinh hoạt chưa kết thúc, biểu mẫu góp ý chỉ mở sau khi buổi kết thúc.'
+      autoOpenAt: autoOpenIso,
+      message: `Buổi sinh hoạt chưa kết thúc. Biểu mẫu góp ý sẽ tự động mở ngay sau khi buổi kết thúc lúc ${formatTimeFromMs(times.endMs)} (${session.date}) trong vòng 24 giờ.`
     };
   }
 
@@ -371,17 +386,12 @@ export function isFeedbackWindowOpen(session: any, nowMs = Date.now()): {
       isOpen: false,
       reason: 'expired',
       deadline: deadlineIso,
+      autoOpenAt: autoOpenIso,
       message: `Biểu mẫu phản hồi đã hết hạn vào ${new Date(deadlineMs).toLocaleString('vi-VN')}. Chỉ Ban Chủ nhiệm mới có quyền mở lại.`
     };
   }
 
-  // If meeting ended and within deadline, it is open (unless manually marked closed and not reopened)
-  if (session.feedbackStatus === 'closed' && nowMs > times.endMs && nowMs <= deadlineMs && !session.feedbackReopenedBy) {
-    // Edge-case if status was previously stuck at closed before sync
-    return { isOpen: true, deadline: deadlineIso };
-  }
-
-  return { isOpen: true, deadline: deadlineIso };
+  return { isOpen: true, deadline: deadlineIso, autoOpenAt: autoOpenIso };
 }
 
 /**

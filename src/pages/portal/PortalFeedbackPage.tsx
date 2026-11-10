@@ -37,6 +37,17 @@ export const PortalFeedbackPage: React.FC = () => {
     eligibleSessions.length > 0 ? eligibleSessions[0].id : (sessions.length > 0 ? sessions[0].id : '')
   );
 
+  // Ensure selectedSessionId initializes automatically once async sessions/attendance finish loading
+  useEffect(() => {
+    if (!selectedSessionId) {
+      if (eligibleSessions.length > 0) {
+        setSelectedSessionId(eligibleSessions[0].id);
+      } else if (sessions.length > 0) {
+        setSelectedSessionId(sessions[0].id);
+      }
+    }
+  }, [selectedSessionId, eligibleSessions, sessions]);
+
   // 4 Numerical Criteria (1 to 5 integers)
   const [contentQuality, setContentQuality] = useState<number>(5);
   const [delivery, setDelivery] = useState<number>(5);
@@ -116,13 +127,18 @@ export const PortalFeedbackPage: React.FC = () => {
     }
   }, []);
 
+  const selectedSession = sessions.find(s => s.id === selectedSessionId);
+
   useEffect(() => {
     if (selectedSessionId) {
       loadSessionFeedbackStatus(selectedSessionId);
     }
-  }, [selectedSessionId, loadSessionFeedbackStatus]);
-
-  const selectedSession = sessions.find(s => s.id === selectedSessionId);
+  }, [
+    selectedSessionId,
+    selectedSession?.feedbackStatus,
+    selectedSession?.feedbackDeadline,
+    loadSessionFeedbackStatus
+  ]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -263,11 +279,16 @@ export const PortalFeedbackPage: React.FC = () => {
         ) : !sessionFeedbackStatus.isOpen ? (
           <div className="p-4 rounded-2xl bg-slate-100 border border-slate-200 text-xs text-slate-700 flex items-start gap-3">
             <Lock className="h-5 w-5 text-slate-500 shrink-0 mt-0.5" />
-            <div>
+            <div className="space-y-1">
               <strong className="block font-semibold">Biểu mẫu đã đóng hoặc chưa mở</strong>
               <span>
-                {sessionFeedbackStatus.message || 'Phiên sinh hoạt này hiện không tiếp nhận thêm đánh giá. Biểu mẫu chỉ mở tự động trong 24 giờ sau khi kết thúc.'}
+                {sessionFeedbackStatus.message || 'Phiên sinh hoạt này hiện không tiếp nhận thêm đánh giá. Biểu mẫu sẽ tự động mở ngay sau khi buổi kết thúc trong vòng 24 giờ.'}
               </span>
+              {sessionFeedbackStatus.windowReason === 'not_ended_yet' && selectedSession && (
+                <span className="block text-[11px] text-slate-500">
+                  Thời gian mở tự động dự kiến: <strong>{selectedSession.endTime}</strong> ngày <strong>{selectedSession.date}</strong> (hoặc khi Admin / BCN mở lại sớm).
+                </span>
+              )}
             </div>
           </div>
         ) : sessionFeedbackStatus.hasSubmitted ? (
