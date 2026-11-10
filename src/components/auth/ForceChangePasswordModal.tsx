@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useApp } from '../../context/AppContext';
 import { Logo } from '../brand/Logo';
+import { updateSavedPasswordIfPresent } from '../../utils/savedLoginCredentials';
 import { 
   KeyRound, 
   Lock, 
@@ -55,6 +56,9 @@ export const ForceChangePasswordModal: React.FC = () => {
     setIsSubmitting(false);
 
     if (res.success) {
+      if (currentUser?.email) {
+        updateSavedPasswordIfPresent(currentUser.email, newPassword);
+      }
       setIsSuccess(true);
       setSuccessMsg('Đổi mật khẩu mới thành công! Hệ thống đã kích hoạt phiên chính thức và đang mở khóa quyền truy cập...');
       

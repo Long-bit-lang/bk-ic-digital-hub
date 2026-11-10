@@ -4,6 +4,7 @@ import { useApp } from '../../context/AppContext';
 import { api } from '../../services/api';
 import { extractAcademicYear, formatAcademicYearDisplay } from '../../utils/academicYear';
 import { getUnitFullName, getUnitShortName, formatMemberPosition } from '../../utils/unitDisplay';
+import { updateSavedPasswordIfPresent } from '../../utils/savedLoginCredentials';
 import { 
   User, 
   GraduationCap, 
@@ -254,6 +255,7 @@ export const PortalProfilePage: React.FC = () => {
 };
 
 const ChangePasswordCard: React.FC = () => {
+  const { currentUser } = useApp();
   const [oldPassword, setOldPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -281,6 +283,9 @@ const ChangePasswordCard: React.FC = () => {
       const res = await api.auth.changePassword({ oldPassword, newPassword });
       setIsLoading(false);
       if (res.success) {
+        if (currentUser?.email) {
+          updateSavedPasswordIfPresent(currentUser.email, newPassword);
+        }
         setMessage({ type: 'success', text: res.message || 'Đổi mật khẩu thành công!' });
         setOldPassword('');
         setNewPassword('');

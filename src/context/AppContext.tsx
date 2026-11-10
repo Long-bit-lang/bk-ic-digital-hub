@@ -40,7 +40,7 @@ interface AppContextType {
   currentUnit: UnitId | null;
   switchUser: (userId: string | null) => Promise<void>;
   quickSwitchRole: (role: UserRole, unit?: UnitId) => Promise<void>;
-  login: (email: string, password?: string) => Promise<{ success: boolean; message?: string; mustChangePassword?: boolean }>;
+  login: (email: string, password?: string) => Promise<{ success: boolean; message?: string; mustChangePassword?: boolean; isRecoverySession?: boolean; user?: User }>;
   register: (payload: any) => Promise<{ success: boolean; message: string; user?: User }>;
   requestTempPassword: (email: string) => Promise<{ success: boolean; message: string; deliveryMethod?: string; emailSentTo?: string }>;
   completeRecoveryPassword: (newPassword: string, confirmPassword: string) => Promise<{ success: boolean; message: string; user?: User }>;
@@ -423,7 +423,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
   };
 
   // Real Login
-  const login = async (email: string, password?: string): Promise<{ success: boolean; message?: string; mustChangePassword?: boolean; isRecoverySession?: boolean }> => {
+  const login = async (email: string, password?: string): Promise<{ success: boolean; message?: string; mustChangePassword?: boolean; isRecoverySession?: boolean; user?: User }> => {
     try {
       const res = await api.auth.login(email, password);
       if (res.success) {
@@ -442,7 +442,8 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
           success: true, 
           message: res.message, 
           mustChangePassword: userObj.mustChangePassword,
-          isRecoverySession: userObj.isRecoverySession
+          isRecoverySession: userObj.isRecoverySession,
+          user: userObj
         };
       }
       return { success: false, message: 'Đăng nhập thất bại' };

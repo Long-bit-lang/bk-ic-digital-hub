@@ -5,6 +5,15 @@ import { api } from '../../services/api';
 import { Logo } from '../../components/brand/Logo';
 import { UnitId, UserRole } from '../../types';
 import { extractAcademicYear } from '../../utils/academicYear';
+import {
+  SavedLoginCredential,
+  clearSavedCredentials,
+  getRememberCredentialPreference,
+  getSavedCredentials,
+  removeSavedCredential,
+  saveLoginCredential,
+  setRememberCredentialPreference
+} from '../../utils/savedLoginCredentials';
 import { 
   LogIn, 
   UserPlus, 
@@ -23,7 +32,8 @@ import {
   Clock,
   ExternalLink,
   RefreshCw,
-  Lock
+  Lock,
+  BookmarkCheck
 } from 'lucide-react';
 
 export const LoginPage: React.FC = () => {
@@ -63,9 +73,11 @@ export const LoginPage: React.FC = () => {
   // Active Tab: 'login' | 'register'
   const [activeTab, setActiveTab] = useState<'login' | 'register'>('login');
 
-  // Login form state
-  const [loginEmail, setLoginEmail] = useState('');
-  const [loginPassword, setLoginPassword] = useState('');
+  // Login form state + device-local quick-fill credentials
+  const [savedCredentials, setSavedCredentials] = useState<SavedLoginCredential[]>(() => getSavedCredentials());
+  const [rememberCredentials, setRememberCredentials] = useState<boolean>(() => getRememberCredentialPreference());
+  const [loginEmail, setLoginEmail] = useState(() => getSavedCredentials()[0]?.email || '');
+  const [loginPassword, setLoginPassword] = useState(() => getSavedCredentials()[0]?.password || '');
   const [showLoginPassword, setShowLoginPassword] = useState(false);
   const [loginError, setLoginError] = useState('');
   const [isSubmittingLogin, setIsSubmittingLogin] = useState(false);
@@ -106,28 +118,64 @@ export const LoginPage: React.FC = () => {
   const isRegPasswordValid =
     regHasMinLength && regHasUppercase && regHasLowercase && regHasNumber && regHasSpecial && regIsMatch;
 
+  // Quick-fill helpers for device-local saved credentials
+  const handleQuickFillCredential = (cred: SavedLoginCredential) => {
+    setLoginEmail(cred.email);
+    setLoginPassword(cred.password);
+    setLoginError('');
+  };
+
+  const handleRemoveSavedCredential = (email: string) => {
+    const remaining = removeSavedCredential(email);
+    setSavedCredentials(remaining);
+    if (loginEmail.trim().toLowerCase() === email.trim().toLowerCase()) {
+      setLoginEmail('');
+      setLoginPassword('');
+    }
+  };
+
+  const handleClearAllSavedCredentials = () => {
+    clearSavedCredentials();
+    setSavedCredentials([]);
+    setLoginEmail('');
+    setLoginPassword('');
+  };
+
   // Handle Login
   const handleLoginSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoginError('');
 
-    if (!loginEmail.trim()) {
+    const trimmedEmail = loginEmail.trim();
+    if (!trimmedEmail) {
       setLoginError('Vui lòng nhập email đăng nhập.');
       return;
     }
 
     setIsSubmittingLogin(true);
-    const res = await login(loginEmail.trim(), loginPassword);
+    const res = await login(trimmedEmail, loginPassword);
     setIsSubmittingLogin(false);
 
     if (res.success) {
       if (res.mustChangePassword) {
-        // ForceChangePasswordModal will render on top of application
+        // ForceChangePasswordModal will render on top of application; do not store temp password
         return;
       }
 
-      // Find role of this email in loaded users
-      const targetUser = users.find(u => u.email.toLowerCase() === loginEmail.trim().toLowerCase());
+      const targetUser = res.user || users.find(u => u.email.toLowerCase() === trimmedEmail.toLowerCase());
+
+      if (rememberCredentials) {
+        const updated = saveLoginCredential({
+          email: trimmedEmail,
+          password: loginPassword,
+          fullName: targetUser?.fullName
+        });
+        setSavedCredentials(updated);
+      } else {
+        const updated = removeSavedCredential(trimmedEmail);
+        setSavedCredentials(updated);
+      }
+
       const role = targetUser?.role || 'member';
 
       if (from) {
@@ -282,13 +330,95 @@ export const LoginPage: React.FC = () => {
                 </div>
               )}
 
+              {/* Quick-fill saved credentials on this device (localStorage) */}
+              {savedCredentials.length > 0 && (
+                <div className="rounded-2xl border border-blue-100 bg-blue-50/60 p-3.5 space-y-2.5">
+                  <div className="flex items-center justify-between gap-2">
+                    <div className="flex items-center gap-1.5 text-xs font-semibold text-blue-900">
+                      <BookmarkCheck className="h-4 w-4 text-blue-600 shrink-0" />
+                      <span>Điền nhanh tài khoản đã lưu trên thiết bị</span>
+                    </div>
+                    {savedCredentials.length > 1 && (
+                      <button
+                        type="button"
+                        onClick={handleClearAllSavedCredentials}
+                        className="text-[11px] font-medium text-slate-500 hover:text-red-600 transition"
+                      >
+                        Xóa tất cả
+                      </button>
+                    )}
+                  </div>
+
+                  <div className="space-y-1.5">
+                    {savedCredentials.map((cred) => {
+                      const isActiveFill =
+                        loginEmail.trim().toLowerCase() === cred.email.toLowerCase() &&
+                        loginPassword === cred.password;
+
+                      return (
+                        <div
+                          key={cred.email.toLowerCase()}
+                          className={`flex items-center gap-2 rounded-xl border px-2.5 py-2 transition ${
+                            isActiveFill
+                              ? 'border-blue-400 bg-white shadow-2xs'
+                              : 'border-blue-100 bg-white/80 hover:border-blue-300 hover:bg-white'
+                          }`}
+                        >
+                          <button
+                            type="button"
+                            onClick={() => handleQuickFillCredential(cred)}
+                            className="flex flex-1 items-center gap-2.5 text-left min-w-0"
+                          >
+                            <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-blue-600 text-[11px] font-bold text-white uppercase">
+                              {(cred.fullName || cred.email).charAt(0)}
+                            </div>
+                            <div className="min-w-0 flex-1">
+                              <div className="text-xs font-semibold text-slate-800 truncate">
+                                {cred.fullName || cred.email}
+                              </div>
+                              {cred.fullName && (
+                                <div className="text-[11px] font-mono text-slate-500 truncate">
+                                  {cred.email}
+                                </div>
+                              )}
+                            </div>
+                            <span
+                              className={`shrink-0 rounded-full px-2 py-0.5 text-[10px] font-semibold ${
+                                isActiveFill
+                                  ? 'bg-blue-100 text-blue-700'
+                                  : 'bg-slate-100 text-slate-600'
+                              }`}
+                            >
+                              {isActiveFill ? 'Đã điền' : 'Điền nhanh'}
+                            </span>
+                          </button>
+
+                          <button
+                            type="button"
+                            onClick={() => handleRemoveSavedCredential(cred.email)}
+                            className="rounded-lg p-1 text-slate-400 hover:bg-red-50 hover:text-red-600 transition shrink-0"
+                            title="Xóa tài khoản đã lưu khỏi thiết bị"
+                            aria-label={`Xóa ${cred.email} khỏi thiết bị`}
+                          >
+                            <X className="h-3.5 w-3.5" />
+                          </button>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+
               <form onSubmit={handleLoginSubmit} className="space-y-4">
                 <div>
-                  <label className="block text-xs font-semibold text-slate-700 mb-1.5">
+                  <label htmlFor="login-email" className="block text-xs font-semibold text-slate-700 mb-1.5">
                     Địa chỉ Email *
                   </label>
                   <input
+                    id="login-email"
+                    name="email"
                     type="email"
+                    autoComplete="username"
                     required
                     placeholder="ten.ho@dut.udn.vn hoặc email cá nhân"
                     value={loginEmail}
@@ -302,7 +432,7 @@ export const LoginPage: React.FC = () => {
 
                 <div>
                   <div className="flex items-center justify-between mb-1.5">
-                    <label className="block text-xs font-semibold text-slate-700">
+                    <label htmlFor="login-password" className="block text-xs font-semibold text-slate-700">
                       Mật khẩu *
                     </label>
                     <button
@@ -319,7 +449,10 @@ export const LoginPage: React.FC = () => {
                   </div>
                   <div className="relative">
                     <input
+                      id="login-password"
+                      name="password"
                       type={showLoginPassword ? 'text' : 'password'}
+                      autoComplete="current-password"
                       required
                       placeholder="Nhập mật khẩu"
                       value={loginPassword}
@@ -329,11 +462,38 @@ export const LoginPage: React.FC = () => {
                     <button
                       type="button"
                       onClick={() => setShowLoginPassword(!showLoginPassword)}
+                      aria-label={showLoginPassword ? 'Ẩn mật khẩu' : 'Hiện mật khẩu'}
                       className="absolute right-3 top-2.5 text-slate-400 hover:text-slate-600"
                     >
                       {showLoginPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                     </button>
                   </div>
+                </div>
+
+                {/* Opt-in save credentials on this device */}
+                <div className="flex items-start gap-2.5 pt-0.5">
+                  <input
+                    id="remember-credentials"
+                    type="checkbox"
+                    checked={rememberCredentials}
+                    onChange={(e) => {
+                      const checked = e.target.checked;
+                      setRememberCredentials(checked);
+                      setRememberCredentialPreference(checked);
+                    }}
+                    className="mt-0.5 h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500 cursor-pointer shrink-0"
+                  />
+                  <label
+                    htmlFor="remember-credentials"
+                    className="text-xs text-slate-600 cursor-pointer select-none leading-relaxed"
+                  >
+                    <span className="font-medium text-slate-700">
+                      Lưu tài khoản &amp; mật khẩu trên thiết bị này
+                    </span>
+                    <span className="block text-[11px] text-slate-400">
+                      Chỉ lưu trên trình duyệt của bạn để điền nhanh cho các lần đăng nhập sau (không nên bật trên máy dùng chung).
+                    </span>
+                  </label>
                 </div>
 
                 <button
