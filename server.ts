@@ -18,9 +18,12 @@ import { notificationsRouter } from './server/routes/notifications.ts';
 import { reportsRouter } from './server/routes/reports.ts';
 import { auditRouter } from './server/routes/audit.ts';
 import { cmsRouter } from './server/routes/cms.ts';
+import { penaltiesRouter } from './server/routes/penalties.ts';
 import { db } from './server/db.ts';
 import { authenticateUser } from './server/middleware/auth.ts';
 import { syncSessionsLifecycle } from './server/timeUtils.ts';
+import { processFeedbackLifecycle } from './server/services/feedbackLifecycle.ts';
+import { pruneAndArchiveOldSessions } from './server/services/sessionArchiveService.ts';
 import { sanitizeSmtpHost, sanitizeSmtpUser, sanitizeSmtpPass } from './server/services/emailService.ts';
 
 dotenv.config();
@@ -134,6 +137,7 @@ async function startServer() {
   app.use('/api/notifications', notificationsRouter);
   app.use('/api/reports', reportsRouter);
   app.use('/api/audit-logs', auditRouter);
+  app.use('/api/penalties', penaltiesRouter);
   app.use('/api', cmsRouter);
 
   // Guard: Any unmatched /api/* route returns clean JSON 404 instead of SPA HTML
@@ -185,18 +189,25 @@ async function startServer() {
   }
 
   const initialStore = db.get();
-  if (syncSessionsLifecycle(initialStore)) {
+  const initChanged = syncSessionsLifecycle(initialStore);
+  const initFeedbackChanged = await processFeedbackLifecycle(initialStore);
+  const initArchiveResult = pruneAndArchiveOldSessions(initialStore, 30);
+  if (initChanged || initFeedbackChanged || initArchiveResult.prunedCount > 0) {
     db.save();
     console.log('[BK-IC Server] Initial training sessions lifecycle synchronized.');
   }
 
   // Autonomous background lifecycle scheduler (runs every 20 seconds)
-  // Ensures session states (scheduled -> ongoing -> ended) and attendance (open -> closed)
-  // transition automatically on time even if no user opens or refreshes the page.
-  const lifecycleInterval = setInterval(() => {
+  // Ensures session states (scheduled -> ongoing -> ended), attendance (open -> closed),
+  // feedback 24h warning emails, closing penalty tickets, and 30-day session archival
+  // are executed autonomously to prevent database bloat and memory overload.
+  const lifecycleInterval = setInterval(async () => {
     try {
       const store = db.get();
-      if (syncSessionsLifecycle(store)) {
+      const changedSync = syncSessionsLifecycle(store);
+      const changedFeedback = await processFeedbackLifecycle(store);
+      const archiveResult = pruneAndArchiveOldSessions(store, 30);
+      if (changedSync || changedFeedback || archiveResult.prunedCount > 0) {
         db.save();
       }
     } catch (err) {

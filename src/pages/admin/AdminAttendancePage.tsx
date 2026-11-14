@@ -1,7 +1,9 @@
 // BK-IC Admin Attendance Data Matrix, Absence Requests Approval & Manual Override Modal
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { useApp } from '../../context/AppContext';
 import { AttendanceRecord, AttendanceStatus, AttendanceRequest } from '../../types';
+import { api } from '../../services/api';
 import { 
   QrCode, 
   Search, 
@@ -12,16 +14,20 @@ import {
   Clock, 
   X, 
   Save, 
-  History,
-  FileText,
-  Check,
-  XCircle,
-  AlertTriangle,
-  ExternalLink,
-  MessageSquare,
-  User,
-  Calendar,
-  Filter
+  History, 
+  FileText, 
+  Check, 
+  XCircle, 
+  AlertTriangle, 
+  ExternalLink, 
+  MessageSquare, 
+  User, 
+  Calendar, 
+  Filter,
+  ShieldAlert,
+  Award,
+  AlertCircle,
+  Trash2
 } from 'lucide-react';
 
 export const AdminAttendancePage: React.FC = () => {
@@ -34,7 +40,8 @@ export const AdminAttendancePage: React.FC = () => {
     decideAttendanceRequest
   } = useApp();
 
-  const [activeTab, setActiveTab] = useState<'records' | 'requests'>('records');
+  const [searchParams] = useSearchParams();
+  const [activeTab, setActiveTab] = useState<'records' | 'requests' | 'penalties'>('records');
 
   // Filters for Attendance Records
   const [sessionFilter, setSessionFilter] = useState<string>('all');
@@ -45,6 +52,78 @@ export const AdminAttendancePage: React.FC = () => {
   const [requestStatusFilter, setRequestStatusFilter] = useState<string>('pending');
   const [requestTypeFilter, setRequestTypeFilter] = useState<string>('all');
   const [requestSearch, setRequestSearch] = useState('');
+
+  // Penalties State
+  const [penaltyTickets, setPenaltyTickets] = useState<any[]>([]);
+  const [isLoadingPenalties, setIsLoadingPenalties] = useState(false);
+  const [penaltySessionFilter, setPenaltySessionFilter] = useState('all');
+  const [penaltyStatusFilter, setPenaltyStatusFilter] = useState('all');
+  const [penaltySearch, setPenaltySearch] = useState('');
+  const [revokeTarget, setRevokeTarget] = useState<any | null>(null);
+  const [revokeReason, setRevokeReason] = useState('');
+  const [isRevoking, setIsRevoking] = useState(false);
+
+  const loadPenalties = useCallback(async () => {
+    setIsLoadingPenalties(true);
+    try {
+      const res = await api.penalties.getAll();
+      if (res.success) {
+        setPenaltyTickets(res.tickets || []);
+      }
+    } catch (err) {
+      console.error('Failed to load penalty tickets', err);
+    } finally {
+      setIsLoadingPenalties(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    loadPenalties();
+  }, [loadPenalties]);
+
+  useEffect(() => {
+    const tab = searchParams.get('tab');
+    if (tab === 'penalties' || tab === 'compliance') {
+      setActiveTab('penalties');
+    }
+  }, [searchParams]);
+
+  const handleRevokePenalty = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!revokeTarget || !revokeReason.trim()) {
+      alert('Vui lòng nhập lý do hủy vé phạt.');
+      return;
+    }
+    setIsRevoking(true);
+    try {
+      await api.penalties.revoke(revokeTarget.id, revokeReason.trim());
+      await loadPenalties();
+      setRevokeTarget(null);
+      setRevokeReason('');
+    } catch (err: any) {
+      alert(err.message || 'Lỗi khi hủy vé phạt');
+    } finally {
+      setIsRevoking(false);
+    }
+  };
+
+  const [isClearingAll, setIsClearingAll] = useState(false);
+
+  const handleClearAllPenalties = async () => {
+    if (!window.confirm('Xác nhận xóa bỏ toàn bộ vé phạt kỷ luật và ân xá cho toàn thể thành viên? Hành động này sẽ đưa số vé phạt về 0.')) {
+      return;
+    }
+    setIsClearingAll(true);
+    try {
+      const res = await api.penalties.clearAll();
+      alert(res.message || 'Đã xóa toàn bộ vé phạt thành công!');
+      await loadPenalties();
+    } catch (err: any) {
+      alert(err.message || 'Lỗi khi xóa vé phạt');
+    } finally {
+      setIsClearingAll(false);
+    }
+  };
 
   // Manual Override Modal
   const [overrideTarget, setOverrideTarget] = useState<AttendanceRecord | null>(null);
@@ -81,6 +160,22 @@ export const AdminAttendancePage: React.FC = () => {
                         (r.sessionTitle || '').toLowerCase().includes(requestSearch.toLowerCase()) ||
                         (r.reason || '').toLowerCase().includes(requestSearch.toLowerCase());
     return matchStatus && matchType && matchSearch;
+  });
+
+  const activePenaltiesCount = penaltyTickets.filter(t => t.status === 'active').length;
+  const revokedPenaltiesCount = penaltyTickets.filter(t => t.status === 'revoked').length;
+  const resolvedPenaltiesCount = penaltyTickets.filter(t => t.status === 'resolved').length;
+
+  const filteredPenalties = penaltyTickets.filter((t) => {
+    if (!t) return false;
+    const matchSession = penaltySessionFilter === 'all' || t.sessionId === penaltySessionFilter;
+    const matchStatus = penaltyStatusFilter === 'all' || t.status === penaltyStatusFilter;
+    const matchSearch = (t.memberName || '').toLowerCase().includes(penaltySearch.toLowerCase()) ||
+                        (t.studentId || '').toLowerCase().includes(penaltySearch.toLowerCase()) ||
+                        (t.ticketCode || '').toLowerCase().includes(penaltySearch.toLowerCase()) ||
+                        (t.sessionTitle || '').toLowerCase().includes(penaltySearch.toLowerCase()) ||
+                        (t.reason || '').toLowerCase().includes(penaltySearch.toLowerCase());
+    return matchSession && matchStatus && matchSearch;
   });
 
   const handleOpenOverride = (rec: AttendanceRecord) => {
@@ -212,6 +307,27 @@ export const AdminAttendancePage: React.FC = () => {
               {pendingRequestsCount} chờ duyệt
             </span>
           )}
+        </button>
+
+        <button
+          onClick={() => setActiveTab('penalties')}
+          className={`inline-flex items-center gap-2 px-4 py-2.5 text-xs font-bold rounded-xl transition relative ${
+            activeTab === 'penalties'
+              ? 'bg-rose-600 text-white shadow-sm'
+              : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
+          }`}
+        >
+          <ShieldAlert className="h-4 w-4" />
+          <span>Theo dõi Chuyên cần & Vé phạt</span>
+          {activePenaltiesCount > 0 ? (
+            <span className="ml-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-rose-500 text-white animate-pulse">
+              {activePenaltiesCount} vé phạt
+            </span>
+          ) : penaltyTickets.length > 0 ? (
+            <span className="ml-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-700 text-slate-300">
+              {penaltyTickets.length}
+            </span>
+          ) : null}
         </button>
       </div>
 
@@ -532,6 +648,212 @@ export const AdminAttendancePage: React.FC = () => {
         </div>
       )}
 
+      {/* TAB 3: DILIGENCE & PENALTY TICKETS */}
+      {activeTab === 'penalties' && (
+        <div className="space-y-6">
+          {/* Top Overview Cards */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="rounded-2xl border border-slate-800 bg-slate-900 p-5">
+              <div className="text-xs text-slate-400">Tổng số vé phạt toàn CLB</div>
+              <div className="text-3xl font-bold font-mono text-white mt-1 tabular-nums">
+                {penaltyTickets.length}
+              </div>
+              <div className="text-[11px] text-slate-500 mt-0.5">Bao gồm tất cả các kỳ sinh hoạt</div>
+            </div>
+
+            <div className="rounded-2xl border border-slate-800 bg-slate-900 p-5">
+              <div className="text-xs text-slate-400">Vé phạt Đang hiệu lực</div>
+              <div className="text-3xl font-bold font-mono text-rose-400 mt-1 tabular-nums">
+                {activePenaltiesCount}
+              </div>
+              <div className="text-[11px] text-rose-500/80 mt-0.5">Cần theo dõi và xử lý kỷ luật</div>
+            </div>
+
+            <div className="rounded-2xl border border-slate-800 bg-slate-900 p-5">
+              <div className="text-xs text-slate-400">Đã hoàn thành khắc phục</div>
+              <div className="text-3xl font-bold font-mono text-emerald-400 mt-1 tabular-nums">
+                {resolvedPenaltiesCount}
+              </div>
+              <div className="text-[11px] text-emerald-500/80 mt-0.5">Đã nộp bổ sung đánh giá</div>
+            </div>
+
+            <div className="rounded-2xl border border-slate-800 bg-slate-900 p-5">
+              <div className="text-xs text-slate-400">Được ân xá / Bãi bỏ</div>
+              <div className="text-3xl font-bold font-mono text-purple-400 mt-1 tabular-nums">
+                {revokedPenaltiesCount}
+              </div>
+              <div className="text-[11px] text-purple-500/80 mt-0.5">BCN/Admin đã hủy phạt</div>
+            </div>
+          </div>
+
+          {/* Filter Bar */}
+          <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3 bg-slate-900 p-3 rounded-2xl border border-slate-800">
+            <div className="flex flex-wrap items-center gap-2">
+              <select
+                value={penaltySessionFilter}
+                onChange={(e) => setPenaltySessionFilter(e.target.value)}
+                className="rounded-xl border border-slate-700 bg-slate-800 px-3 py-1.5 text-xs text-slate-200 focus:outline-none max-w-xs truncate"
+              >
+                <option value="all">Tất cả các phiên sinh hoạt</option>
+                {sessions.map(s => (
+                  <option key={s.id} value={s.id}>{s.title} ({s.date})</option>
+                ))}
+              </select>
+
+              <select
+                value={penaltyStatusFilter}
+                onChange={(e) => setPenaltyStatusFilter(e.target.value)}
+                className="rounded-xl border border-slate-700 bg-slate-800 px-3 py-1.5 text-xs text-slate-200 focus:outline-none"
+              >
+                <option value="all">Tất cả trạng thái ({penaltyTickets.length})</option>
+                <option value="active">Đang hiệu lực ({activePenaltiesCount})</option>
+                <option value="resolved">Đã khắc phục ({resolvedPenaltiesCount})</option>
+                <option value="revoked">Được ân xá ({revokedPenaltiesCount})</option>
+              </select>
+            </div>
+
+            <div className="relative w-full md:w-auto md:min-w-[280px]">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-slate-500" />
+              <input
+                type="text"
+                placeholder="Tìm mã vé, tên, MSSV, buổi họp..."
+                value={penaltySearch}
+                onChange={(e) => setPenaltySearch(e.target.value)}
+                className="w-full rounded-xl border border-slate-700 bg-slate-800 pl-9 pr-3 py-1.5 text-xs text-slate-200 placeholder:text-slate-500 focus:outline-none focus:border-blue-500"
+              />
+            </div>
+          </div>
+
+          {/* Table of Penalty Tickets */}
+          <div className="rounded-2xl border border-slate-800 bg-slate-900 overflow-hidden shadow-xs">
+            <div className="p-4 border-b border-slate-800 flex items-center justify-between">
+              <div>
+                <h3 className="text-sm font-bold text-white flex items-center gap-2">
+                  <ShieldAlert className="h-4 w-4 text-rose-500" />
+                  <span>Sổ Theo Dõi Vi Phạm Kỷ Luật & Vé Phạt ({filteredPenalties.length})</span>
+                </h3>
+                <p className="text-xs text-slate-400 mt-0.5">
+                  Thực thi tự động theo quy chế nề nếp sinh hoạt & đánh giá đóng góp CLB
+                </p>
+              </div>
+
+              <div className="flex items-center gap-2">
+                {penaltyTickets.length > 0 && (
+                  <button
+                    onClick={handleClearAllPenalties}
+                    disabled={isClearingAll}
+                    className="inline-flex items-center gap-1.5 text-xs text-rose-300 hover:text-white px-3 py-1.5 rounded-lg bg-rose-600/80 hover:bg-rose-600 font-semibold transition shadow-xs disabled:opacity-50"
+                  >
+                    <Trash2 className="h-3.5 w-3.5" />
+                    <span>{isClearingAll ? 'Đang xóa...' : 'Ân xá & Xóa tất cả vé phạt'}</span>
+                  </button>
+                )}
+
+                <button
+                  onClick={loadPenalties}
+                  disabled={isLoadingPenalties}
+                  className="inline-flex items-center gap-1 text-xs text-slate-400 hover:text-white px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 transition"
+                >
+                  <Clock className={`h-3.5 w-3.5 ${isLoadingPenalties ? 'animate-spin text-rose-400' : ''}`} />
+                  <span>Làm mới</span>
+                </button>
+              </div>
+            </div>
+
+            {isLoadingPenalties ? (
+              <div className="py-16 text-center text-slate-400 text-xs flex flex-col items-center gap-2">
+                <Clock className="h-6 w-6 animate-spin text-rose-500" />
+                <span>Đang tải danh sách vé phạt từ CSDL...</span>
+              </div>
+            ) : filteredPenalties.length === 0 ? (
+              <div className="py-16 text-center text-slate-500 text-xs">
+                Không tìm thấy vé phạt nào phù hợp với bộ lọc hiện tại.
+              </div>
+            ) : (
+              <div className="overflow-x-auto">
+                <table className="w-full text-left text-xs">
+                  <thead className="bg-slate-950/60 text-slate-400 font-semibold uppercase tracking-wider border-b border-slate-800">
+                    <tr>
+                      <th className="px-4 py-3">Mã Vé</th>
+                      <th className="px-4 py-3">Thành viên</th>
+                      <th className="px-4 py-3">Phiên sinh hoạt</th>
+                      <th className="px-4 py-3">Lý do vi phạm</th>
+                      <th className="px-4 py-3">Ngày ban hành</th>
+                      <th className="px-4 py-3">Trạng thái</th>
+                      <th className="px-4 py-3 text-right">Thao tác</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-800/60 text-slate-300">
+                    {filteredPenalties.map((ticket) => (
+                      <tr key={ticket.id} className="hover:bg-slate-800/40 transition">
+                        <td className="px-4 py-3.5 font-mono font-bold text-rose-400">
+                          {ticket.ticketCode}
+                        </td>
+                        <td className="px-4 py-3.5">
+                          <div className="font-semibold text-white">{ticket.memberName}</div>
+                          <div className="text-[11px] text-slate-400 font-mono">
+                            {ticket.studentId} · {ticket.unit || 'CLB'}
+                          </div>
+                        </td>
+                        <td className="px-4 py-3.5">
+                          <div className="font-medium text-slate-200 line-clamp-1 max-w-xs">
+                            {ticket.sessionTitle || 'Buổi sinh hoạt'}
+                          </div>
+                        </td>
+                        <td className="px-4 py-3.5 max-w-xs">
+                          <div className="text-slate-300 line-clamp-2 text-[11px] leading-relaxed">
+                            {ticket.reason}
+                          </div>
+                        </td>
+                        <td className="px-4 py-3.5 font-mono text-[11px] text-slate-400">
+                          {new Date(ticket.issuedAt).toLocaleString('vi-VN')}
+                        </td>
+                        <td className="px-4 py-3.5">
+                          {ticket.status === 'active' ? (
+                            <span className="inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full bg-rose-500/20 text-rose-400 border border-rose-500/30">
+                              <AlertCircle className="h-3 w-3" />
+                              <span>Đang hiệu lực</span>
+                            </span>
+                          ) : ticket.status === 'resolved' ? (
+                            <span className="inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
+                              <CheckCircle2 className="h-3 w-3" />
+                              <span>Đã khắc phục</span>
+                            </span>
+                          ) : (
+                            <span className="inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full bg-purple-500/20 text-purple-400 border border-purple-500/30">
+                              <ShieldCheck className="h-3 w-3" />
+                              <span>Đã ân xá</span>
+                            </span>
+                          )}
+                        </td>
+                        <td className="px-4 py-3.5 text-right">
+                          {ticket.status === 'active' ? (
+                            <button
+                              onClick={() => {
+                                setRevokeTarget(ticket);
+                                setRevokeReason('');
+                              }}
+                              className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl bg-purple-600/80 hover:bg-purple-600 text-white font-semibold text-[11px] transition shadow-xs"
+                            >
+                              <ShieldCheck className="h-3.5 w-3.5" />
+                              <span>Ân xá / Hủy vé</span>
+                            </button>
+                          ) : (
+                            <span className="text-[11px] text-slate-500 italic">
+                              {ticket.revokeReason ? `Lý do: ${ticket.revokeReason}` : 'Hoàn tất'}
+                            </span>
+                          )}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
       {/* Manual Override Dialog */}
       {overrideTarget && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
@@ -707,6 +1029,68 @@ export const AdminAttendancePage: React.FC = () => {
                       <span>{isSubmittingDecide ? 'Đang từ chối...' : 'Xác nhận Từ chối'}</span>
                     </>
                   )}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Revoke Penalty Ticket Dialog */}
+      {revokeTarget && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
+          <div className="relative w-full max-w-md rounded-3xl bg-slate-900 border border-slate-800 p-6 space-y-4 text-white shadow-2xl">
+            <div className="flex items-center justify-between border-b border-slate-800 pb-3">
+              <h3 className="text-sm font-bold text-white flex items-center gap-2">
+                <ShieldCheck className="h-4 w-4 text-purple-400" />
+                <span>Ân xá & Bãi bỏ Vé phạt Kỷ luật</span>
+              </h3>
+              <button
+                onClick={() => setRevokeTarget(null)}
+                className="text-slate-400 hover:text-white"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            </div>
+
+            <div className="rounded-xl bg-slate-800/60 p-3 text-xs space-y-1">
+              <div>Mã vé: <strong className="font-mono text-rose-400">{revokeTarget.ticketCode}</strong></div>
+              <div>Thành viên: <strong className="text-white">{revokeTarget.memberName}</strong> ({revokeTarget.studentId})</div>
+              <div>Phiên sinh hoạt: <strong className="text-white">{revokeTarget.sessionTitle}</strong></div>
+              <div>Lý do vi phạm: <span className="text-slate-300">{revokeTarget.reason}</span></div>
+            </div>
+
+            <form onSubmit={handleRevokePenalty} className="space-y-4">
+              <div>
+                <label className="block text-xs font-semibold text-slate-300 mb-1">
+                  Lý do ân xá / hủy phạt (Bắt buộc lưu vết kiểm toán) *
+                </label>
+                <textarea
+                  required
+                  rows={3}
+                  value={revokeReason}
+                  onChange={(e) => setRevokeReason(e.target.value)}
+                  placeholder="VD: Thành viên đã giải trình lý do chính đáng và nộp báo cáo chuyên môn bổ sung..."
+                  className="w-full rounded-xl border border-slate-700 bg-slate-800 p-3 text-xs text-white placeholder:text-slate-500 focus:outline-none focus:border-purple-500"
+                />
+              </div>
+
+              <div className="flex justify-end gap-2 pt-2">
+                <button
+                  type="button"
+                  disabled={isRevoking}
+                  onClick={() => setRevokeTarget(null)}
+                  className="px-4 py-2 rounded-xl border border-slate-700 text-xs text-slate-300 hover:bg-slate-800 disabled:opacity-50"
+                >
+                  Hủy bỏ
+                </button>
+                <button
+                  type="submit"
+                  disabled={isRevoking}
+                  className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs shadow-sm transition disabled:opacity-50"
+                >
+                  <ShieldCheck className="h-3.5 w-3.5" />
+                  <span>{isRevoking ? 'Đang xử lý...' : 'Xác nhận Ân xá Vé phạt'}</span>
                 </button>
               </div>
             </form>

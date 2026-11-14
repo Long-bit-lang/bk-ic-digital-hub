@@ -5,6 +5,7 @@ import type { TrainingSession, SessionStatus } from '../../src/types/index.ts';
 import { checkQRWindow, parseSessionDateTime, addHours, syncSessionsLifecycle, formatTimeFromMs, getSessionScheduleTimes, resolveQrIntervalSec, isFeedbackWindowOpen } from '../timeUtils.ts';
 import { requireAuth, requireNormalSession } from '../middleware/auth.ts';
 import { syncRecurringTuesdaySessions } from '../services/recurringSchedule.ts';
+import { pruneAndArchiveOldSessions, getArchivedSessions } from '../services/sessionArchiveService.ts';
 
 export const sessionsRouter = Router();
 
@@ -643,5 +644,51 @@ sessionsRouter.post('/:id/reopen-feedback', (req, res) => {
     success: true,
     message: `Ban Chủ nhiệm đã phê duyệt mở lại biểu mẫu phản hồi thêm ${extensionHours} giờ thành công (đến ${new Date(deadlineIso).toLocaleString('vi-VN')})!`,
     session: enrichSession(session)
+  });
+});
+
+// POST /api/sessions/archive-old - Archive and prune sessions older than 1 month (or custom days)
+sessionsRouter.post('/archive-old', (req, res) => {
+  const actor = req.user!;
+  if (actor.role !== 'admin' && actor.role !== 'sysadmin' && actor.unit !== 'BN' && actor.unit !== 'BTV') {
+    return res.status(403).json({
+      success: false,
+      message: 'Chỉ Quản trị viên, Ban Chủ nhiệm hoặc Ban Thành viên mới có thẩm quyền thực hiện lưu trữ dọn dẹp meeting.'
+    });
+  }
+
+  const { days } = req.body;
+  const retentionDays = Number(days) || 30;
+  const store = db.get();
+
+  const result = pruneAndArchiveOldSessions(store, retentionDays);
+  if (result.prunedCount > 0) {
+    db.save();
+  }
+
+  res.json({
+    success: true,
+    message: result.prunedCount > 0
+      ? `Đã lọc và lưu trữ an toàn ${result.prunedCount} phiên sinh hoạt diễn ra hơn ${retentionDays} ngày trước vào kho lưu trữ.`
+      : `Hiện không có phiên sinh hoạt nào kết thúc quá ${retentionDays} ngày cần lưu trữ.`,
+    ...result
+  });
+});
+
+// GET /api/sessions/archived - View list of archived historical sessions
+sessionsRouter.get('/archived', (req, res) => {
+  const actor = req.user!;
+  if (actor.role !== 'admin' && actor.role !== 'sysadmin' && actor.unit !== 'BN' && actor.unit !== 'BDH' && actor.unit !== 'BTV') {
+    return res.status(403).json({
+      success: false,
+      message: 'Bạn không có quyền xem kho lưu trữ các phiên sinh hoạt cũ.'
+    });
+  }
+
+  const archives = getArchivedSessions();
+  res.json({
+    success: true,
+    total: archives.length,
+    archivedSessions: archives
   });
 });

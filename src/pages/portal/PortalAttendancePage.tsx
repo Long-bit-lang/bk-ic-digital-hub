@@ -1,9 +1,10 @@
 // BK-IC Member Personal Attendance Logs, Absence Request & Correction Appeals
 import React, { useState, useEffect } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, Link } from 'react-router-dom';
 import { useApp } from '../../context/AppContext';
 import { QRScannerModal } from '../../components/qr/QRScannerModal';
 import { AttendanceRequestType } from '../../types';
+import { api } from '../../services/api';
 import { 
   QrCode, 
   Calendar, 
@@ -22,7 +23,9 @@ import {
   CheckCircle,
   HelpCircle,
   Check,
-  ChevronRight
+  ChevronRight,
+  ShieldAlert,
+  Award
 } from 'lucide-react';
 
 export const PortalAttendancePage: React.FC = () => {
@@ -38,8 +41,13 @@ export const PortalAttendancePage: React.FC = () => {
   
   const [searchParams] = useSearchParams();
 
-  // Tab State: 'records' (Bảng điểm danh) | 'requests' (Đơn xin vắng & Khiếu nại)
-  const [activeTab, setActiveTab] = useState<'records' | 'requests'>('records');
+  // Tab State: 'records' (Bảng điểm danh) | 'requests' (Đơn xin vắng & Khiếu nại) | 'penalties' (Chuyên cần & Vé phạt)
+  const [activeTab, setActiveTab] = useState<'records' | 'requests' | 'penalties'>('records');
+
+  // Penalty Tickets State
+  const [penaltyTickets, setPenaltyTickets] = useState<any[]>([]);
+  const [isLoadingPenalties, setIsLoadingPenalties] = useState(false);
+  const [penaltyStatusFilter, setPenaltyStatusFilter] = useState<'all' | 'active' | 'resolved' | 'revoked'>('all');
 
   // QR Modal State
   const [showQRModal, setShowQRModal] = useState(false);
@@ -55,13 +63,29 @@ export const PortalAttendancePage: React.FC = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [absenceSubmitted, setAbsenceSubmitted] = useState(false);
 
+  // Load penalties
+  useEffect(() => {
+    setIsLoadingPenalties(true);
+    api.penalties.getMyTickets()
+      .then(res => {
+        if (res.success) {
+          setPenaltyTickets(res.tickets || []);
+        }
+      })
+      .catch(() => {})
+      .finally(() => setIsLoadingPenalties(false));
+  }, []);
+
   // Check URL query params on mount
   useEffect(() => {
     const sId = searchParams.get('sessionId');
     const tok = searchParams.get('token');
     const action = searchParams.get('action');
+    const tab = searchParams.get('tab');
 
-    if (action === 'absence') {
+    if (tab === 'penalties' || tab === 'compliance') {
+      setActiveTab('penalties');
+    } else if (action === 'absence') {
       if (sId) setAbsenceSessionId(sId);
       setShowAbsenceModal(true);
       setActiveTab('requests');
@@ -79,10 +103,28 @@ export const PortalAttendancePage: React.FC = () => {
   const presentCount = myAttendance.filter(a => a.status === 'present').length;
   const lateCount = myAttendance.filter(a => a.status === 'late').length;
   const excusedCount = myAttendance.filter(a => a.status === 'excused').length;
+  const unexcusedCount = myAttendance.filter(a => a.status === 'unexcused').length;
+
+  // Completed sessions count (ended or closed)
+  const completedSessions = (sessions || []).filter(s => s.status === 'ended' || (s as any).status === 'closed');
+  const attendedSessionsCount = presentCount + lateCount;
+  const diligenceRate = completedSessions.length > 0 
+    ? Math.min(100, Math.round((attendedSessionsCount / completedSessions.length) * 100))
+    : 100;
 
   // Filter personal requests
   const myRequests = (attendanceRequests || []).filter(r => r.memberId === currentUser.id);
   const pendingRequestsCount = myRequests.filter(r => r.status === 'pending').length;
+
+  // Penalty tickets calculations
+  const activeTickets = penaltyTickets.filter(t => t.status === 'active');
+  const resolvedTickets = penaltyTickets.filter(t => t.status === 'resolved');
+  const revokedTickets = penaltyTickets.filter(t => t.status === 'revoked');
+
+  const filteredTickets = penaltyTickets.filter(t => {
+    if (penaltyStatusFilter === 'all') return true;
+    return t.status === penaltyStatusFilter;
+  });
 
   const handleAbsenceSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -232,6 +274,27 @@ export const PortalAttendancePage: React.FC = () => {
               {pendingRequestsCount}
             </span>
           )}
+        </button>
+
+        <button
+          onClick={() => setActiveTab('penalties')}
+          className={`pb-3 transition relative flex items-center gap-2 ${
+            activeTab === 'penalties'
+              ? 'text-rose-600 border-b-2 border-rose-600'
+              : 'text-slate-500 hover:text-slate-800'
+          }`}
+        >
+          <ShieldAlert className="h-4 w-4 text-rose-500" />
+          <span>Theo dõi Chuyên cần & Vé phạt</span>
+          {activeTickets.length > 0 ? (
+            <span className="h-5 px-2 rounded-full bg-rose-500 text-white text-[10px] font-bold flex items-center justify-center animate-pulse">
+              {activeTickets.length} vé phạt
+            </span>
+          ) : penaltyTickets.length > 0 ? (
+            <span className="h-5 px-1.5 rounded-full bg-slate-200 text-slate-700 text-[10px] font-bold flex items-center justify-center">
+              {penaltyTickets.length}
+            </span>
+          ) : null}
         </button>
       </div>
 
@@ -505,7 +568,216 @@ export const PortalAttendancePage: React.FC = () => {
         </div>
       )}
 
-      {/* QR Scanner Modal */}
+      {/* Tab 3: Diligence & Penalty Tickets */}
+      {activeTab === 'penalties' && (
+        <div className="space-y-6">
+          {/* Top Diligence & Discipline Overview */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-2xs">
+              <div className="flex items-center justify-between text-xs text-slate-500 font-medium">
+                <span>Tỷ lệ Chuyên cần</span>
+                <Award className="h-4 w-4 text-blue-600" />
+              </div>
+              <div className="text-2xl font-bold font-mono text-blue-600 mt-1 tabular-nums">
+                {diligenceRate}%
+              </div>
+              <div className="text-[10px] text-slate-400 mt-0.5">
+                {attendedSessionsCount} / {Math.max(completedSessions.length, 1)} buổi đã tổ chức
+              </div>
+              <div className="w-full bg-slate-100 rounded-full h-1.5 mt-2 overflow-hidden">
+                <div 
+                  className={`h-full rounded-full transition-all ${
+                    diligenceRate >= 80 ? 'bg-emerald-500' : diligenceRate >= 65 ? 'bg-amber-500' : 'bg-rose-500'
+                  }`}
+                  style={{ width: `${diligenceRate}%` }}
+                />
+              </div>
+            </div>
+
+            <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-2xs">
+              <div className="flex items-center justify-between text-xs text-slate-500 font-medium">
+                <span>Tham dự Đúng giờ</span>
+                <CheckCircle2 className="h-4 w-4 text-emerald-600" />
+              </div>
+              <div className="text-2xl font-bold font-mono text-emerald-600 mt-1 tabular-nums">
+                {presentCount}
+              </div>
+              <div className="text-[10px] text-slate-400 mt-0.5">
+                +{lateCount} buổi đến muộn
+              </div>
+            </div>
+
+            <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-2xs">
+              <div className="flex items-center justify-between text-xs text-slate-500 font-medium">
+                <span>Vắng có phép / Đã duyệt</span>
+                <FileText className="h-4 w-4 text-purple-600" />
+              </div>
+              <div className="text-2xl font-bold font-mono text-purple-600 mt-1 tabular-nums">
+                {excusedCount}
+              </div>
+              <div className="text-[10px] text-slate-400 mt-0.5">
+                Được bảo lưu quyền lợi đánh giá
+              </div>
+            </div>
+
+            <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-2xs">
+              <div className="flex items-center justify-between text-xs text-slate-500 font-medium">
+                <span>Vé phạt Kỷ luật</span>
+                <ShieldAlert className={`h-4 w-4 ${activeTickets.length > 0 ? 'text-rose-600' : 'text-slate-400'}`} />
+              </div>
+              <div className={`text-2xl font-bold font-mono mt-1 tabular-nums ${activeTickets.length > 0 ? 'text-rose-600' : 'text-slate-800'}`}>
+                {activeTickets.length}
+              </div>
+              <div className="text-[10px] text-slate-400 mt-0.5">
+                {activeTickets.length > 0 ? 'Đang hiệu lực (cần khắc phục)' : 'Nề nếp kỷ luật tốt'}
+              </div>
+            </div>
+          </div>
+
+          {/* Active Penalty Banner if user has active tickets */}
+          {activeTickets.length > 0 && (
+            <div className="rounded-2xl border border-rose-200 bg-rose-50 p-5 space-y-3 text-rose-900 shadow-xs">
+              <div className="flex items-start gap-3">
+                <AlertTriangle className="h-5 w-5 text-rose-600 shrink-0 mt-0.5" />
+                <div className="space-y-1">
+                  <h4 className="text-sm font-bold text-rose-900">
+                    CẢNH BÁO: Bạn đang có {activeTickets.length} vé phạt kỷ luật đang có hiệu lực
+                  </h4>
+                  <p className="text-xs text-rose-800 leading-relaxed">
+                    Theo quy chế CLB, thành viên tham dự sinh hoạt bắt buộc phải hoàn thành biểu mẫu đánh giá sau buổi trong thời hạn quy định. Vé phạt sẽ ảnh hưởng trực tiếp đến điểm rèn luyện và xét phân loại thành viên định kỳ.
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex flex-wrap items-center gap-2 pt-1 border-t border-rose-200/60 text-xs">
+                <span className="font-semibold text-rose-900">Cách khắc phục:</span>
+                <span>Nếu form buổi sinh hoạt được Admin mở lại đánh giá, hãy hoàn tất form để được tự động thu hồi vé phạt; hoặc liên hệ BCN nếu có lý do chính đáng.</span>
+                <Link
+                  to="/portal/feedback"
+                  className="inline-flex items-center gap-1 font-bold text-blue-700 hover:underline ml-auto"
+                >
+                  <span>Đến form Đánh giá sinh hoạt</span>
+                  <ExternalLink className="h-3.5 w-3.5" />
+                </Link>
+              </div>
+            </div>
+          )}
+
+          {/* Penalty Tickets Table Card */}
+          <div className="rounded-3xl border border-slate-200 bg-white overflow-hidden shadow-xs">
+            <div className="p-5 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div>
+                <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
+                  <ShieldAlert className="h-4 w-4 text-rose-600" />
+                  <span>Sổ Quản lý Vé Phạt Kỷ luật ({penaltyTickets.length})</span>
+                </h3>
+                <p className="text-xs text-slate-400 mt-0.5">
+                  Lưu trữ minh bạch các vi phạm quy chế (thiếu đánh giá, vắng không phép) và trạng thái xử lý
+                </p>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <select
+                  value={penaltyStatusFilter}
+                  onChange={(e) => setPenaltyStatusFilter(e.target.value as any)}
+                  className="rounded-xl border border-slate-200 bg-slate-50 px-3 py-1.5 text-xs text-slate-700 focus:outline-none"
+                >
+                  <option value="all">Tất cả trạng thái ({penaltyTickets.length})</option>
+                  <option value="active">Đang hiệu lực ({activeTickets.length})</option>
+                  <option value="resolved">Đã khắc phục ({resolvedTickets.length})</option>
+                  <option value="revoked">Được ân xá / Hủy ({revokedTickets.length})</option>
+                </select>
+              </div>
+            </div>
+
+            {isLoadingPenalties ? (
+              <div className="py-12 text-center text-slate-400 text-xs flex flex-col items-center gap-2">
+                <Clock className="h-6 w-6 animate-spin text-rose-500" />
+                <span>Đang tải thông tin chuyên cần & vé phạt...</span>
+              </div>
+            ) : filteredTickets.length === 0 ? (
+              <div className="p-12 text-center space-y-3">
+                <div className="h-12 w-12 rounded-2xl bg-emerald-50 text-emerald-600 mx-auto flex items-center justify-center">
+                  <CheckCircle2 className="h-6 w-6" />
+                </div>
+                <div className="text-sm font-bold text-slate-800">
+                  {penaltyStatusFilter === 'all' 
+                    ? 'Tuyệt vời! Bạn không có vé phạt kỷ luật nào.' 
+                    : 'Không có vé phạt nào ở trạng thái này.'}
+                </div>
+                <p className="text-xs text-slate-500 max-w-md mx-auto">
+                  {penaltyStatusFilter === 'all'
+                    ? 'Bạn luôn duy trì tinh thần trách nhiệm và chấp hành tốt các quy định sinh hoạt của BK-IC.'
+                    : 'Hãy tiếp tục giữ vững phong độ chuyên cần và tham gia đầy đủ các hoạt động của CLB!'}
+                </p>
+              </div>
+            ) : (
+              <div className="divide-y divide-slate-100">
+                {filteredTickets.map((ticket) => (
+                  <div key={ticket.id} className="p-5 hover:bg-slate-50/70 transition space-y-3">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <span className="font-mono text-xs font-bold text-slate-900 bg-slate-100 px-2.5 py-1 rounded-md border border-slate-200">
+                          {ticket.ticketCode}
+                        </span>
+                        <span className="text-xs font-semibold text-slate-700">
+                          {ticket.sessionTitle || 'Buổi sinh hoạt'}
+                        </span>
+                      </div>
+
+                      <div>
+                        {ticket.status === 'active' ? (
+                          <span className="inline-flex items-center gap-1 text-[11px] font-bold px-2.5 py-1 rounded-full bg-rose-100 text-rose-700 border border-rose-200">
+                            <AlertCircle className="h-3 w-3" />
+                            <span>Đang hiệu lực</span>
+                          </span>
+                        ) : ticket.status === 'resolved' ? (
+                          <span className="inline-flex items-center gap-1 text-[11px] font-bold px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-700 border border-emerald-200">
+                            <CheckCircle2 className="h-3 w-3" />
+                            <span>Đã hoàn thành đánh giá</span>
+                          </span>
+                        ) : (
+                          <span className="inline-flex items-center gap-1 text-[11px] font-bold px-2.5 py-1 rounded-full bg-purple-100 text-purple-700 border border-purple-200">
+                            <ShieldCheck className="h-3 w-3" />
+                            <span>Được ân xá / Bãi bỏ</span>
+                          </span>
+                        )}
+                      </div>
+                    </div>
+
+                    <div className="text-xs text-slate-600 bg-slate-50 p-3 rounded-xl border border-slate-100 space-y-1">
+                      <div>
+                        <strong className="text-slate-800">Lý do vi phạm:</strong> {ticket.reason}
+                      </div>
+                      <div className="flex flex-wrap items-center gap-4 text-[11px] text-slate-400 pt-1">
+                        <span>⏰ Ngày cấp: {new Date(ticket.issuedAt).toLocaleString('vi-VN')}</span>
+                        <span>👤 Cấp bởi: {ticket.issuedBy || 'Hệ thống tự động'}</span>
+                        {ticket.revokedAt && (
+                          <span className="text-purple-600 font-medium">
+                            ✓ Ân xá: {ticket.revokeReason || 'Đã khắc phục'} ({new Date(ticket.revokedAt).toLocaleDateString('vi-VN')})
+                          </span>
+                        )}
+                      </div>
+                    </div>
+
+                    {ticket.status === 'active' && ticket.type === 'missing_feedback' && (
+                      <div className="flex justify-end">
+                        <Link
+                          to="/portal/feedback"
+                          className="inline-flex items-center gap-1 text-xs font-bold text-blue-600 hover:text-blue-700 bg-blue-50 hover:bg-blue-100 px-3 py-1.5 rounded-xl transition"
+                        >
+                          <span>Đến trang Đánh giá để khắc phục</span>
+                          <ExternalLink className="h-3.5 w-3.5" />
+                        </Link>
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+      )}
       {showQRModal && (
         <QRScannerModal
           defaultSessionId={urlSessionId}

@@ -8,14 +8,16 @@ import {
   Send, 
   CheckCircle2, 
   ShieldCheck, 
-  EyeOff, 
+  User, 
   Sparkles,
   AlertCircle,
   Clock,
   Edit3,
-  Lock
+  Lock,
+  AlertTriangle
 } from 'lucide-react';
 import { api } from '../../services/api';
+import type { PenaltyTicket } from '../../types';
 
 export const PortalFeedbackPage: React.FC = () => {
   const { sessions, attendance, currentUser } = useApp();
@@ -79,6 +81,7 @@ export const PortalFeedbackPage: React.FC = () => {
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [submitSuccess, setSubmitSuccess] = useState<boolean>(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
+  const [sessionTicket, setSessionTicket] = useState<PenaltyTicket | null>(null);
 
   // Load member's feedback status for the selected session
   const loadSessionFeedbackStatus = useCallback(async (sessionId: string) => {
@@ -88,7 +91,18 @@ export const PortalFeedbackPage: React.FC = () => {
     setSubmitSuccess(false);
 
     try {
-      const res = await api.feedback.getMyFeedback(sessionId);
+      const [res, ticketRes] = await Promise.all([
+        api.feedback.getMyFeedback(sessionId),
+        api.penalties.getMyTickets().catch(() => ({ success: false, tickets: [] }))
+      ]);
+
+      if (ticketRes.success && Array.isArray(ticketRes.tickets)) {
+        const found = ticketRes.tickets.find((t: PenaltyTicket) => t.sessionId === sessionId && t.type === 'missing_feedback');
+        setSessionTicket(found || null);
+      } else {
+        setSessionTicket(null);
+      }
+
       if (res.success) {
         setSessionFeedbackStatus({
           isEligible: res.isEligible,
@@ -167,7 +181,7 @@ export const PortalFeedbackPage: React.FC = () => {
         valuableTakeaway: valuableTakeaway.trim(),
         improvementSuggestion: improvementSuggestion.trim(),
         nextTopicIdea: nextTopicIdea.trim(),
-        isAnonymous: true
+        isAnonymous: false
       });
 
       if (res.success) {
@@ -234,7 +248,7 @@ export const PortalFeedbackPage: React.FC = () => {
           <span>Góp ý & Đánh giá Sau Phiên Sinh hoạt</span>
         </h1>
         <p className="text-xs text-slate-500 mt-1">
-          Thu thập phản hồi bảo mật ẩn danh nhằm nâng cao chất lượng nội dung và phương thức tổ chức.
+          Đánh giá chất lượng nội dung và phương thức tổ chức theo quy chế đào tạo của câu lạc bộ.
         </p>
       </div>
 
@@ -260,6 +274,35 @@ export const PortalFeedbackPage: React.FC = () => {
           </select>
         </div>
 
+        {/* Penalty Ticket Alert if Issued for this session */}
+        {sessionTicket && (
+          <div className="p-4 rounded-2xl bg-red-50 border border-red-200 text-xs text-red-900 flex items-start gap-3">
+            <AlertTriangle className="h-5 w-5 text-red-600 shrink-0 mt-0.5" />
+            <div className="space-y-1">
+              <div className="flex items-center gap-2">
+                <strong className="font-bold text-red-700">TÀI KHOẢN ĐÃ NHẬN VÉ PHẠT KỶ LUẬT</strong>
+                <span className="font-mono text-[11px] bg-red-200/80 text-red-800 px-2 py-0.5 rounded font-bold">
+                  {sessionTicket.ticketCode}
+                </span>
+                <span className={`text-[10px] px-2 py-0.5 rounded-full font-semibold ${
+                  sessionTicket.status === 'resolved' ? 'bg-emerald-100 text-emerald-800' :
+                  sessionTicket.status === 'revoked' ? 'bg-slate-100 text-slate-600' : 'bg-red-100 text-red-800'
+                }`}>
+                  {sessionTicket.status === 'resolved' ? 'Đã khắc phục' : sessionTicket.status === 'revoked' ? 'Đã ân xá' : 'Đang hiệu lực'}
+                </span>
+              </div>
+              <p className="text-[11px] text-red-800">
+                Lý do: {sessionTicket.reason}
+              </p>
+              {sessionTicket.status === 'active' && sessionFeedbackStatus.isOpen && (
+                <p className="text-[11px] text-blue-700 font-medium">
+                  💡 Biểu mẫu hiện đã được mở lại! Khi bạn hoàn thành gửi đánh giá bên dưới, vé phạt sẽ tự động được chuyển sang trạng thái "Đã khắc phục".
+                </p>
+              )}
+            </div>
+          </div>
+        )}
+
         {/* Dynamic Status Banner */}
         {isLoadingStatus ? (
           <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 text-xs text-slate-500 flex items-center gap-2">
@@ -282,7 +325,7 @@ export const PortalFeedbackPage: React.FC = () => {
             <div className="space-y-1">
               <strong className="block font-semibold">Biểu mẫu đã đóng hoặc chưa mở</strong>
               <span>
-                {sessionFeedbackStatus.message || 'Phiên sinh hoạt này hiện không tiếp nhận thêm đánh giá. Biểu mẫu sẽ tự động mở ngay sau khi buổi kết thúc trong vòng 24 giờ.'}
+                {sessionFeedbackStatus.message || 'Phiên sinh hoạt này hiện không tiếp nhận thêm đánh giá. Biểu mẫu sẽ tự động mở ngay sau khi buổi kết thúc trong vòng 48 giờ.'}
               </span>
               {sessionFeedbackStatus.windowReason === 'not_ended_yet' && selectedSession && (
                 <span className="block text-[11px] text-slate-500">
@@ -297,7 +340,7 @@ export const PortalFeedbackPage: React.FC = () => {
             <div>
               <strong className="block font-semibold">Bạn đã gửi phản hồi cho phiên sinh hoạt này</strong>
               <span>
-                Biểu mẫu vẫn đang mở (hạn chót: {sessionFeedbackStatus.deadline ? new Date(sessionFeedbackStatus.deadline).toLocaleString('vi-VN') : '24h sau kết thúc'}). Bạn có thể chỉnh sửa lại phản hồi bên dưới và bấm nút <strong>Cập nhật phản hồi</strong>.
+                Biểu mẫu vẫn đang mở (hạn chót: {sessionFeedbackStatus.deadline ? new Date(sessionFeedbackStatus.deadline).toLocaleString('vi-VN') : '48h sau kết thúc'}). Bạn có thể chỉnh sửa lại phản hồi bên dưới và bấm nút <strong>Cập nhật phản hồi</strong>.
               </span>
             </div>
           </div>
@@ -307,19 +350,30 @@ export const PortalFeedbackPage: React.FC = () => {
             <div>
               <strong className="block font-semibold">Đủ điều kiện gửi góp ý</strong>
               <span>
-                Bạn đã được ghi nhận tham dự. Biểu mẫu mở đến: {sessionFeedbackStatus.deadline ? new Date(sessionFeedbackStatus.deadline).toLocaleString('vi-VN') : '24h sau kết thúc'}.
+                Bạn đã được ghi nhận tham dự. Biểu mẫu mở đến: {sessionFeedbackStatus.deadline ? new Date(sessionFeedbackStatus.deadline).toLocaleString('vi-VN') : '48h sau kết thúc'}.
               </span>
             </div>
           </div>
         )}
 
-        {/* Anonymous Security Explanation Banner */}
-        <div className="rounded-2xl border border-purple-100 bg-purple-50/70 p-4 flex items-start gap-3">
-          <EyeOff className="h-5 w-5 text-purple-600 shrink-0 mt-0.5" />
-          <div className="text-xs text-purple-900 space-y-1">
-            <strong className="block font-bold">Cơ chế Bảo mật Ẩn danh (Privacy Protected)</strong>
-            <p className="text-[11px] text-purple-800 leading-relaxed">
-              Phiếu góp ý sử dụng mã liên kết ngẫu nhiên (Decoupled Token) tách rời hoàn toàn khỏi danh tính sinh viên. Ban Chủ nhiệm, Ban Điều hành và Quản trị viên chỉ xem được nội dung góp ý khách quan và điểm trung bình, không thể truy vết người gửi.
+        {/* Identity Transparency Banner (No longer anonymous) */}
+        <div className="rounded-2xl border border-blue-100 bg-blue-50/70 p-4 flex items-start gap-3">
+          <ShieldCheck className="h-5 w-5 text-blue-600 shrink-0 mt-0.5" />
+          <div className="text-xs text-blue-900 space-y-1">
+            <strong className="block font-bold">Đánh giá có định danh thành viên</strong>
+            <p className="text-[11px] text-blue-800 leading-relaxed">
+              Phiếu góp ý được ghi nhận trực tiếp theo tài khoản: <strong>{currentUser?.fullName}</strong> (MSSV: <strong>{currentUser?.studentId}</strong> · Ban: <strong>{currentUser?.unit || 'N/A'}</strong>). Ban Chủ nhiệm và Ban Điều hành sẽ theo dõi để ghi nhận tinh thần trách nhiệm và nâng cao chất lượng sinh hoạt.
+            </p>
+          </div>
+        </div>
+
+        {/* 24h Warning & Penalty Ticket Policy Banner */}
+        <div className="rounded-2xl border border-amber-200 bg-amber-50/80 p-4 flex items-start gap-3">
+          <AlertCircle className="h-5 w-5 text-amber-600 shrink-0 mt-0.5" />
+          <div className="text-xs text-amber-900 space-y-1">
+            <strong className="block font-bold">Quy chế hoàn thành đánh giá sinh hoạt & Vé phạt</strong>
+            <p className="text-[11px] text-amber-800 leading-relaxed">
+              Thành viên tham dự có trách nhiệm hoàn thành đánh giá trước khi form đóng. Trước hạn chót khoảng <strong>1 ngày (24 giờ)</strong>, hệ thống sẽ gửi <strong>email cảnh báo</strong> tới thành viên chưa nộp. Nếu tới hạn đóng form mà thành viên vẫn chưa đánh giá, tài khoản sẽ <strong>nhận 01 vé phạt</strong> vi phạm quy chế.
             </p>
           </div>
         </div>
@@ -334,7 +388,7 @@ export const PortalFeedbackPage: React.FC = () => {
         {submitSuccess && (
           <div className="p-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-xs text-emerald-800 flex items-center gap-2.5">
             <CheckCircle2 className="h-4 w-4 text-emerald-600 shrink-0" />
-            <span>{sessionFeedbackStatus.hasSubmitted ? 'Đã cập nhật phản hồi của bạn thành công!' : 'Đã gửi phản hồi ẩn danh thành công! Cảm ơn đóng góp của bạn.'}</span>
+            <span>{sessionFeedbackStatus.hasSubmitted ? 'Đã cập nhật phản hồi của bạn thành công!' : 'Đã gửi đánh giá sinh hoạt thành công! Cảm ơn đóng góp của bạn.'}</span>
           </div>
         )}
 

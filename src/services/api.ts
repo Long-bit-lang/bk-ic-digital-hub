@@ -12,7 +12,8 @@ import {
   FeedbackSummary,
   AttendanceStatus,
   MemberStatus,
-  UnitId
+  UnitId,
+  PenaltyTicket
 } from '../types';
 
 const TOKEN_KEY = 'bkic_session_token';
@@ -219,7 +220,12 @@ export const api = {
     reopenFeedback: (id: string, reason: string) => request<{ success: boolean; message: string; session: TrainingSession }>(`/api/sessions/${id}/reopen-feedback`, {
       method: 'POST',
       body: JSON.stringify({ reason })
-    })
+    }),
+    archiveOld: (days?: number) => request<{ success: boolean; message: string; prunedCount: number; archivedSessionTitles: string[] }>('/api/sessions/archive-old', {
+      method: 'POST',
+      body: JSON.stringify({ days })
+    }),
+    getArchived: () => request<{ success: boolean; total: number; archivedSessions: any[] }>('/api/sessions/archived')
   },
 
   attendance: {
@@ -353,6 +359,91 @@ export const api = {
       request<{ success: boolean; message: string; session: any }>(`/api/feedback/reopen/${sessionId}`, {
         method: 'POST',
         body: JSON.stringify(payload)
+      })
+  },
+
+  penalties: {
+    getMyTickets: () =>
+      request<{
+        success: boolean;
+        tickets: PenaltyTicket[];
+        activeCount: number;
+        totalCount: number;
+      }>('/api/penalties/my-tickets'),
+    getAll: (params?: { sessionId?: string; memberId?: string; status?: string }) => {
+      const q = new URLSearchParams();
+      if (params?.sessionId) q.set('sessionId', params.sessionId);
+      if (params?.memberId) q.set('memberId', params.memberId);
+      if (params?.status) q.set('status', params.status);
+      const queryStr = q.toString() ? `?${q.toString()}` : '';
+      return request<{
+        success: boolean;
+        tickets: PenaltyTicket[];
+        total: number;
+        activeCount: number;
+      }>(`/api/penalties${queryStr}`);
+    },
+    list: (params?: { sessionId?: string; memberId?: string; status?: string }) => {
+      const q = new URLSearchParams();
+      if (params?.sessionId) q.set('sessionId', params.sessionId);
+      if (params?.memberId) q.set('memberId', params.memberId);
+      if (params?.status) q.set('status', params.status);
+      const queryStr = q.toString() ? `?${q.toString()}` : '';
+      return request<{
+        success: boolean;
+        tickets: PenaltyTicket[];
+        total: number;
+        activeCount: number;
+      }>(`/api/penalties${queryStr}`);
+    },
+    getSessionStatus: (sessionId: string) =>
+      request<{
+        success: boolean;
+        sessionId: string;
+        sessionTitle: string;
+        feedbackStatus: string;
+        feedbackDeadline?: string;
+        warningSentAt?: string;
+        penaltiesIssuedAt?: string;
+        totalAttendees: number;
+        submittedCount: number;
+        unsubmittedCount: number;
+        penalizedCount: number;
+        attendees: {
+          memberId: string;
+          memberName: string;
+          studentId: string;
+          memberEmail: string;
+          unit?: UnitId;
+          attendanceStatus: AttendanceStatus;
+          checkInTime: string;
+          hasSubmitted: boolean;
+          warningSentAt?: string;
+          penaltyTicket?: {
+            id: string;
+            ticketCode: string;
+            status: string;
+            issuedAt: string;
+            reason: string;
+          } | null;
+        }[];
+      }>(`/api/penalties/session-status/${sessionId}`),
+    revoke: (id: string, reason: string) =>
+      request<{
+        success: boolean;
+        message: string;
+        ticket: PenaltyTicket;
+      }>(`/api/penalties/${id}/revoke`, {
+        method: 'POST',
+        body: JSON.stringify({ reason })
+      }),
+    clearAll: () =>
+      request<{
+        success: boolean;
+        message: string;
+        clearedCount: number;
+      }>('/api/penalties/clear-all', {
+        method: 'POST'
       })
   },
 

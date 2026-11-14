@@ -79,7 +79,7 @@ export const PortalLayout: React.FC = () => {
     { to: '/portal', label: 'Tổng quan', icon: LayoutDashboard, end: true },
     { to: '/portal/profile', label: 'Hồ sơ thành viên', icon: UserIcon },
     { to: '/portal/sessions', label: 'Lịch sinh hoạt', icon: Calendar },
-    { to: '/portal/attendance', label: 'Điểm danh cá nhân', icon: QrCode },
+    { to: '/portal/attendance', label: 'Chuyên cần & Điểm danh', icon: QrCode },
     { to: '/portal/evaluations', label: 'Đánh giá rèn luyện', icon: Award },
     { to: '/portal/feedback', label: 'Góp ý sau buổi', icon: MessageSquare }
   ];
@@ -88,7 +88,7 @@ export const PortalLayout: React.FC = () => {
   const bottomNavItems = [
     { to: '/portal', label: 'Tổng quan', icon: LayoutDashboard, end: true },
     { to: '/portal/sessions', label: 'Lịch SH', icon: Calendar },
-    { to: '/portal/attendance', label: 'Điểm danh', icon: QrCode },
+    { to: '/portal/attendance', label: 'Chuyên cần', icon: QrCode },
     { to: '/portal/profile', label: 'Hồ sơ', icon: UserIcon }
   ];
 

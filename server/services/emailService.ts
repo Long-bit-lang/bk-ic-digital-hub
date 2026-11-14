@@ -11,7 +11,7 @@ export interface OutboxEmail {
   resetLink?: string;
   verificationLink?: string;
   tempPassword?: string;
-  type: 'password_reset' | 'account_invitation' | 'verification' | 'test' | 'temporary_password';
+  type: 'password_reset' | 'account_invitation' | 'verification' | 'test' | 'temporary_password' | 'feedback_warning' | 'penalty_ticket';
   sentAt: string;
   expiresAt?: string;
   status: 'delivered' | 'failed';
@@ -1550,4 +1550,247 @@ export async function sendTestSmtpEmail(
       message: `Gửi thất bại do kết nối hoặc xác thực SMTP: ${errMsg || errCode || 'Không thể xác thực tài khoản'}.`
     };
   }
+}
+
+export interface SendFeedbackWarningEmailParams {
+  to: string;
+  recipientName: string;
+  studentId: string;
+  sessionTitle: string;
+  sessionDate: string;
+  deadlineIso: string;
+  hoursRemaining?: number;
+}
+
+/**
+ * Dispatch automated 24-hour warning email to attendees who have not submitted feedback.
+ */
+export async function sendFeedbackWarningEmail({
+  to,
+  recipientName,
+  studentId,
+  sessionTitle,
+  sessionDate,
+  deadlineIso,
+  hoursRemaining = 24
+}: SendFeedbackWarningEmailParams): Promise<DispatchEmailResult> {
+  const baseUrl = (process.env.APP_URL || process.env.VITE_APP_URL || 'http://localhost:3000').replace(/\/$/, '');
+  const feedbackLink = `${baseUrl}/portal/feedback`;
+
+  const deadlineFormatted = new Date(deadlineIso).toLocaleString('vi-VN', {
+    timeZone: 'Asia/Ho_Chi_Minh',
+    hour: '2-digit',
+    minute: '2-digit',
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric'
+  });
+
+  const subject = `[Cảnh báo BK-IC] Nhắc nhở hoàn thành đánh giá sinh hoạt: ${sessionTitle}`;
+
+  const htmlContent = `
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <title>${subject}</title>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: #f8fafc; margin: 0; padding: 24px; color: #1e293b; }
+    .card { max-width: 600px; margin: 0 auto; background: #ffffff; border-radius: 16px; border: 1px solid #e2e8f0; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); }
+    .header { background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); padding: 32px 24px; color: #ffffff; text-align: center; }
+    .header h1 { margin: 0; font-size: 20px; font-weight: 700; letter-spacing: -0.02em; }
+    .header p { margin: 8px 0 0; font-size: 13px; opacity: 0.95; }
+    .body { padding: 32px 28px; line-height: 1.6; font-size: 14px; }
+    .warning-box { background: #fef3c7; border: 1px solid #fde68a; border-left: 4px solid #f59e0b; padding: 14px 18px; border-radius: 8px; margin: 20px 0; color: #92400e; font-size: 13px; }
+    .penalty-warning { background: #fee2e2; border: 1px solid #fecaca; border-left: 4px solid #ef4444; padding: 14px 18px; border-radius: 8px; margin: 20px 0; color: #991b1b; font-size: 13px; font-weight: 600; }
+    .info-table { width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 13px; }
+    .info-table td { padding: 8px 12px; border-bottom: 1px solid #f1f5f9; }
+    .info-table td.label { color: #64748b; width: 140px; font-weight: 600; }
+    .info-table td.val { color: #0f172a; font-weight: 500; }
+    .btn-wrap { text-align: center; margin: 28px 0; }
+    .btn { display: inline-block; background: #2563eb; color: #ffffff !important; text-decoration: none; padding: 12px 32px; border-radius: 10px; font-weight: 600; font-size: 14px; box-shadow: 0 2px 4px rgba(37, 99, 235, 0.2); }
+    .footer { background: #f8fafc; border-top: 1px solid #e2e8f0; padding: 20px 24px; text-align: center; font-size: 12px; color: #64748b; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="header">
+      <h1>CẢNH BÁO HẠN CHÓT ĐÁNH GIÁ SINH HOẠT</h1>
+      <p>Câu lạc bộ Khởi nghiệp và Đổi mới sáng tạo BK-IC · DUT</p>
+    </div>
+    <div class="body">
+      <p>Xin chào <strong>${recipientName}</strong> (MSSV: <strong>${studentId}</strong>),</p>
+      <p>Hệ thống ghi nhận bạn đã tham dự buổi sinh hoạt <strong>"${sessionTitle}"</strong> nhưng hiện tại <strong>vẫn chưa gửi phiếu đánh giá chất lượng</strong>.</p>
+      
+      <div class="warning-box">
+        ⏳ <strong>Thời gian còn lại:</strong> Khoảng <strong>${hoursRemaining} giờ</strong> nữa.<br>
+        📅 <strong>Hạn chót đóng biểu mẫu:</strong> <strong>${deadlineFormatted}</strong>
+      </div>
+
+      <table class="info-table">
+        <tr>
+          <td class="label">Buổi sinh hoạt:</td>
+          <td class="val">${sessionTitle}</td>
+        </tr>
+        <tr>
+          <td class="label">Ngày diễn ra:</td>
+          <td class="val">${sessionDate}</td>
+        </tr>
+        <tr>
+          <td class="label">Trạng thái đánh giá:</td>
+          <td class="val" style="color: #dc2626; font-weight: bold;">Chưa hoàn thành</td>
+        </tr>
+      </table>
+
+      <div class="penalty-warning">
+        ⚠️ QUY CHẾ CLB: Thành viên tham dự buổi sinh hoạt có trách nhiệm hoàn thành đánh giá trước khi đóng form. Nếu tới hạn chót mà chưa nộp, tài khoản sẽ TỰ ĐỘNG NHẬN 01 VÉ PHẠT vi phạm quy chế sinh hoạt.
+      </div>
+
+      <div class="btn-wrap">
+        <a href="${feedbackLink}" class="btn" target="_blank">Gửi đánh giá sinh hoạt ngay</a>
+      </div>
+
+      <p style="font-size: 12px; color: #64748b;">
+        * Lưu ý: Ý kiến đánh giá hiện được ghi nhận trực tiếp theo định danh thành viên nhằm đảm bảo tính nghiêm túc và tinh thần trách nhiệm.
+      </p>
+    </div>
+    <div class="footer">
+      Email này được gửi tự động từ Hệ thống BK-IC Digital Hub.<br>
+      Trường Đại học Bách khoa – Đại học Đà Nẵng
+    </div>
+  </div>
+</body>
+</html>
+  `.trim();
+
+  return await dispatchEmail({
+    to,
+    recipientName,
+    subject,
+    htmlContent,
+    type: 'feedback_warning'
+  });
+}
+
+export interface SendPenaltyTicketEmailParams {
+  to: string;
+  recipientName: string;
+  studentId: string;
+  sessionTitle: string;
+  ticketCode: string;
+  issuedAt: string;
+  reason: string;
+}
+
+/**
+ * Dispatch formal penalty ticket notification email to attendee who missed feedback deadline.
+ */
+export async function sendPenaltyTicketEmail({
+  to,
+  recipientName,
+  studentId,
+  sessionTitle,
+  ticketCode,
+  issuedAt,
+  reason
+}: SendPenaltyTicketEmailParams): Promise<DispatchEmailResult> {
+  const baseUrl = (process.env.APP_URL || process.env.VITE_APP_URL || 'http://localhost:3000').replace(/\/$/, '');
+  const portalLink = `${baseUrl}/portal/profile`;
+
+  const issuedFormatted = new Date(issuedAt).toLocaleString('vi-VN', {
+    timeZone: 'Asia/Ho_Chi_Minh',
+    hour: '2-digit',
+    minute: '2-digit',
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric'
+  });
+
+  const subject = `[Thông báo Kỷ luật] Bạn đã nhận 01 Vé phạt (${ticketCode}) - CLB BK-IC`;
+
+  const htmlContent = `
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <title>${subject}</title>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: #f8fafc; margin: 0; padding: 24px; color: #1e293b; }
+    .card { max-width: 600px; margin: 0 auto; background: #ffffff; border-radius: 16px; border: 1px solid #fecaca; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); }
+    .header { background: linear-gradient(135deg, #ef4444 0%, #b91c1c 100%); padding: 32px 24px; color: #ffffff; text-align: center; }
+    .header h1 { margin: 0; font-size: 20px; font-weight: 700; letter-spacing: -0.02em; }
+    .header p { margin: 8px 0 0; font-size: 13px; opacity: 0.95; }
+    .body { padding: 32px 28px; line-height: 1.6; font-size: 14px; }
+    .ticket-badge { background: #fee2e2; border: 2px dashed #ef4444; padding: 16px; border-radius: 12px; text-align: center; margin: 20px 0; }
+    .ticket-badge .code { font-family: monospace; font-size: 22px; font-weight: 800; color: #b91c1c; }
+    .ticket-badge .desc { font-size: 12px; color: #7f1d1d; margin-top: 4px; }
+    .info-table { width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 13px; }
+    .info-table td { padding: 8px 12px; border-bottom: 1px solid #f1f5f9; }
+    .info-table td.label { color: #64748b; width: 140px; font-weight: 600; }
+    .info-table td.val { color: #0f172a; font-weight: 500; }
+    .footer { background: #f8fafc; border-top: 1px solid #e2e8f0; padding: 20px 24px; text-align: center; font-size: 12px; color: #64748b; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="header">
+      <h1>THÔNG BÁO PHÁT HÀNH VÉ PHẠT KỶ LUẬT</h1>
+      <p>Câu lạc bộ Khởi nghiệp và Đổi mới sáng tạo BK-IC · DUT</p>
+    </div>
+    <div class="body">
+      <p>Xin chào <strong>${recipientName}</strong> (MSSV: <strong>${studentId}</strong>),</p>
+      <p>Ban Quản trị BK-IC xin thông báo: Do bạn đã tham dự buổi sinh hoạt <strong>"${sessionTitle}"</strong> nhưng <strong>không hoàn thành đánh giá chất lượng trước khi biểu mẫu đóng</strong>, hệ thống đã tự động phát hành 01 vé phạt đối với tài khoản của bạn.</p>
+
+      <div class="ticket-badge">
+        <div class="code">${ticketCode}</div>
+        <div class="desc">01 VÉ PHẠT VI PHẠM QUY CHẾ SINH HOẠT</div>
+      </div>
+
+      <table class="info-table">
+        <tr>
+          <td class="label">Mã vé phạt:</td>
+          <td class="val font-mono">${ticketCode}</td>
+        </tr>
+        <tr>
+          <td class="label">Thời điểm phát hành:</td>
+          <td class="val">${issuedFormatted}</td>
+        </tr>
+        <tr>
+          <td class="label">Lý do:</td>
+          <td class="val" style="color: #b91c1c;">${reason}</td>
+        </tr>
+        <tr>
+          <td class="label">Buổi sinh hoạt:</td>
+          <td class="val">${sessionTitle}</td>
+        </tr>
+        <tr>
+          <td class="label">Đơn vị phát hành:</td>
+          <td class="val">Hệ thống tự động (Quy chế Sinh hoạt CLB)</td>
+        </tr>
+      </table>
+
+      <p style="font-size: 13px; color: #475569;">
+        Vé phạt sẽ được lưu trong hồ sơ thành viên và ảnh hưởng đến điểm rèn luyện/trách nhiệm định kỳ. Nếu bạn có lý do đặc biệt bất khả kháng, vui lòng liên hệ Ban Chủ nhiệm (BCN) hoặc Ban Thành viên (BTV) để được xem xét.
+      </p>
+
+      <div style="text-align: center; margin-top: 24px;">
+        <a href="${portalLink}" style="display: inline-block; background: #334155; color: #ffffff; text-decoration: none; padding: 10px 24px; border-radius: 8px; font-size: 13px; font-weight: 600;">Xem hồ sơ cá nhân</a>
+      </div>
+    </div>
+    <div class="footer">
+      Email thông báo kỷ luật chính thức từ BK-IC Digital Hub.<br>
+      Trường Đại học Bách khoa – Đại học Đà Nẵng
+    </div>
+  </div>
+</body>
+</html>
+  `.trim();
+
+  return await dispatchEmail({
+    to,
+    recipientName,
+    subject,
+    htmlContent,
+    type: 'penalty_ticket'
+  });
 }

@@ -462,9 +462,9 @@ async function runTests() {
     adminSummaryRes.status === 200 &&
     adminSummaryData.summary &&
     adminSummaryData.responses?.length === 5 &&
-    adminSummaryData.responses.every((r: any) => !r.memberId && !r.authorHash && !r.submissionToken),
+    adminSummaryData.responses.every((r: any) => r.memberName && r.studentId && r.isAnonymous === false),
     1,
-    'Admin xem góp ý chi tiết của meeting, danh tính tác giả được bảo vệ ẩn danh',
+    'Admin xem góp ý chi tiết của meeting, danh tính tác giả được ghi nhận định danh rõ ràng',
     `Admin responses count: ${adminSummaryData.responses?.length}`
   );
 

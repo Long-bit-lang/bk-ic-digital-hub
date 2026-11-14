@@ -971,7 +971,7 @@ export const LoginPage: React.FC = () => {
                   </div>
                   <div className="p-2.5 rounded-xl border border-slate-200 bg-slate-50">
                     <span className="font-semibold text-emerald-600 block">3. Member (Thành viên chính thức)</span>
-                    <span>Quét mã QR điểm danh buổi tập huấn, nộp báo cáo nhiệm vụ, gửi phản hồi ẩn danh, xem lịch sử đánh giá cá nhân.</span>
+                    <span>Quét mã QR điểm danh buổi tập huấn, nộp báo cáo nhiệm vụ, gửi phản hồi sinh hoạt, xem lịch sử đánh giá cá nhân.</span>
                   </div>
                   <div className="p-2.5 rounded-xl border border-slate-200 bg-slate-50">
                     <span className="font-semibold text-amber-600 block">4. Applicant (Ứng viên)</span>

@@ -17,7 +17,9 @@ import type {
   ClubEvent,
   ProvenanceArticle,
   SiteSettings,
-  ClubUnit
+  ClubUnit,
+  PenaltyTicket,
+  UnitId
 } from '../src/types/index.ts';
 
 import { loadCloudData, saveCloudData } from './services/firestoreSync.ts';
@@ -32,7 +34,7 @@ export interface DecoupledFeedback {
   id: string;
   sessionId: string;
   sessionTitle: string;
-  submissionToken: string; // Cryptographic opaque token for anonymous decoupling
+  submissionToken: string; // Cryptographic opaque token for decoupling
   contentQuality: number; // 1-5
   delivery: number; // 1-5
   durationSuitability: number; // 1-5
@@ -43,11 +45,16 @@ export interface DecoupledFeedback {
   submittedAt: string;
   updatedAt?: string;
 
-  // Legacy backwards compatibility fields
-  feedbackText?: string;
-  isAnonymous?: boolean;
+  // Identified Feedback Fields (Attributed to Member)
   memberId?: string;
   memberName?: string;
+  studentId?: string;
+  memberEmail?: string;
+  unit?: UnitId;
+  isAnonymous?: boolean;
+
+  // Legacy backwards compatibility fields
+  feedbackText?: string;
   authorHash?: string;
   usefulnessScore?: number;
   clarityScore?: number;
@@ -59,9 +66,11 @@ export interface FeedbackEligibility {
   sessionId: string;
   memberId: string;
   hasSubmitted: boolean;
-  submissionToken?: string; // Token matching DecoupledFeedback.submissionToken without exposing in summary reports
+  submissionToken?: string;
   submittedAt?: string;
   updatedAt?: string;
+  warningSentAt?: string;
+  penaltyTicketId?: string;
 }
 
 export interface DatabaseSchema {
@@ -73,6 +82,7 @@ export interface DatabaseSchema {
   attendanceRequests: AttendanceRequest[];
   feedbackEligibility: FeedbackEligibility[];
   feedbacks: DecoupledFeedback[];
+  penaltyTickets: PenaltyTicket[];
   tasks: Task[];
   evaluations: MonthlyEvaluation[];
   notifications: Notification[];
@@ -256,6 +266,7 @@ class DatabaseManager {
     data.attendanceRequests = Array.isArray(data.attendanceRequests) ? data.attendanceRequests : [];
     data.feedbackEligibility = Array.isArray(data.feedbackEligibility) ? data.feedbackEligibility : [];
     data.feedbacks = Array.isArray(data.feedbacks) ? data.feedbacks : [];
+    data.penaltyTickets = Array.isArray(data.penaltyTickets) ? data.penaltyTickets : [];
     data.tasks = Array.isArray(data.tasks) ? data.tasks : [];
     data.evaluations = Array.isArray(data.evaluations) ? data.evaluations : [];
     data.notifications = Array.isArray(data.notifications) ? data.notifications : [];
@@ -436,6 +447,7 @@ class DatabaseManager {
     data.attendanceRequests = [];
     data.feedbackEligibility = [];
     data.feedbacks = [];
+    data.penaltyTickets = [];
     data.tasks = [];
     data.evaluations = [];
     data.notifications = [];
@@ -481,6 +493,7 @@ class DatabaseManager {
       attendanceRequests: [],
       feedbackEligibility: [],
       feedbacks: [],
+      penaltyTickets: [],
       tasks: [],
       evaluations: [],
       notifications: [],

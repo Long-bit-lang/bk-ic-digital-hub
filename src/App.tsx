@@ -60,6 +60,7 @@ function AppRouter() {
         <Route element={<PublicLayout />}>
           <Route path="/" element={<HomePage />} />
           <Route path="/about" element={<AboutPage />} />
+          <Route path="/organization" element={<Navigate to="/#organization" replace />} />
           <Route path="/activities" element={<ActivitiesPage />} />
           <Route path="/events" element={<EventsPage />} />
           <Route path="/projects" element={<ProjectsPage />} />
@@ -87,6 +88,7 @@ function AppRouter() {
           <Route path="attendance" element={<PortalAttendancePage />} />
           <Route path="evaluations" element={<PortalEvaluationsPage />} />
           <Route path="feedback" element={<PortalFeedbackPage />} />
+          <Route path="penalties" element={<Navigate to="/portal/attendance?tab=penalties" replace />} />
         </Route>
 
         {/* Admin Portal Routes */}
@@ -97,6 +99,7 @@ function AppRouter() {
           <Route path="attendance" element={<AdminAttendancePage />} />
           <Route path="evaluations" element={<AdminEvaluationsPage />} />
           <Route path="feedback" element={<AdminFeedbackPage />} />
+          <Route path="penalties" element={<Navigate to="/admin/attendance?tab=penalties" replace />} />
           <Route path="applications" element={<AdminApplicationsPage />} />
           <Route path="content" element={<AdminContentPage />} />
           <Route path="settings" element={<AdminSettingsPage />} />

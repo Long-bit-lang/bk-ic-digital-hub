@@ -230,12 +230,18 @@ feedbackRouter.post('/submit', (req, res) => {
       existingFeedback.improvementSuggestion = cleanSuggestion;
       existingFeedback.nextTopicIdea = cleanNextTopic;
       existingFeedback.updatedAt = nowIso;
+      existingFeedback.memberId = actor.id;
+      existingFeedback.memberName = actor.fullName;
+      existingFeedback.studentId = actor.studentId;
+      existingFeedback.memberEmail = actor.email;
+      existingFeedback.unit = actor.unit;
+      existingFeedback.isAnonymous = false;
 
       if (eligibility) {
         eligibility.updatedAt = nowIso;
       }
     } else {
-      // Create new decoupled response
+      // Create new response
       const newToken = crypto.randomBytes(32).toString('hex');
 
       const newFeedback: DecoupledFeedback = {
@@ -243,6 +249,12 @@ feedbackRouter.post('/submit', (req, res) => {
         sessionId: session.id,
         sessionTitle: session.title,
         submissionToken: newToken,
+        memberId: actor.id,
+        memberName: actor.fullName,
+        studentId: actor.studentId,
+        memberEmail: actor.email,
+        unit: actor.unit,
+        isAnonymous: false,
         contentQuality: q1,
         delivery: q2,
         durationSuitability: q3,
@@ -272,7 +284,16 @@ feedbackRouter.post('/submit', (req, res) => {
       }
     }
 
-    // Audit log without leaking feedback content, scores, or cryptographic submission token
+    // If member had an active penalty ticket for missing feedback on this session, resolve it
+    const activeTicket = store.penaltyTickets?.find(
+      t => t.sessionId === session.id && t.memberId === actor.id && t.type === 'missing_feedback' && t.status === 'active'
+    );
+    if (activeTicket) {
+      activeTicket.status = 'resolved';
+      activeTicket.notes = `Đã nộp đánh giá bổ sung vào lúc ${new Date().toLocaleString('vi-VN')}.`;
+    }
+
+    // Audit log
     store.auditLogs.unshift({
       id: `audit-${Date.now()}`,
       timestamp: nowIso,
@@ -280,10 +301,10 @@ feedbackRouter.post('/submit', (req, res) => {
       actorName: actor.fullName,
       actorRole: actor.role,
       actorUnit: actor.unit,
-      action: existingFeedback ? 'Cập nhật phản hồi chất lượng buổi học' : 'Gửi phản hồi chất lượng buổi học',
+      action: existingFeedback ? 'Cập nhật đánh giá chất lượng buổi sinh hoạt' : 'Gửi đánh giá chất lượng buổi sinh hoạt',
       targetType: 'TrainingFeedback',
       targetId: session.id,
-      details: `Thành viên đã ${existingFeedback ? 'cập nhật' : 'gửi'} phản hồi ẩn danh cho buổi "${session.title}".`
+      details: `Thành viên ${actor.fullName} (${actor.studentId}) đã ${existingFeedback ? 'cập nhật' : 'gửi'} đánh giá cho buổi "${session.title}".`
     });
 
     db.save();
@@ -292,7 +313,7 @@ feedbackRouter.post('/submit', (req, res) => {
       success: true,
       message: existingFeedback
         ? 'Đã cập nhật phản hồi của bạn thành công!'
-        : 'Đã gửi phản hồi ẩn danh thành công! Danh tính của bạn được bảo vệ tuyệt đối.',
+        : 'Đã gửi đánh giá sinh hoạt thành công! Cảm ơn bạn đã đóng góp ý kiến.',
       feedback: {
         sessionId: session.id,
         contentQuality: q1,
@@ -411,24 +432,37 @@ feedbackRouter.get('/summary/:sessionId', (req, res) => {
     sanitizedComments
   };
 
-  // Provide anonymous detailed responses only to authorized viewers (Admin, BN, scoped BDH)
+  // Provide detailed responses with attribution to authorized viewers (Admin, BN, scoped BDH)
   let responses: any[] | undefined = undefined;
   if (isDetailedViewer) {
-    responses = list.map(f => ({
-      id: f.id,
-      sessionId: f.sessionId,
-      sessionTitle: f.sessionTitle,
-      contentQuality: f.contentQuality || f.usefulnessScore || 5,
-      delivery: f.delivery || f.clarityScore || 5,
-      durationSuitability: f.durationSuitability || f.organizationScore || 5,
-      usefulness: f.usefulness || f.usefulnessScore || 5,
-      valuableTakeaway: f.valuableTakeaway || f.feedbackText || '',
-      improvementSuggestion: f.improvementSuggestion || '',
-      nextTopicIdea: f.nextTopicIdea || '',
-      submittedAt: f.submittedAt,
-      updatedAt: f.updatedAt,
-      isAnonymous: true // Strictly anonymous presentation
-    }));
+    responses = list.map(f => {
+      let member = f.memberId ? store.users.find(u => u.id === f.memberId) : null;
+      if (!member && f.submissionToken) {
+        const el = store.feedbackEligibility.find(e => e.sessionId === f.sessionId && e.submissionToken === f.submissionToken);
+        if (el) member = store.users.find(u => u.id === el.memberId);
+      }
+
+      return {
+        id: f.id,
+        sessionId: f.sessionId,
+        sessionTitle: f.sessionTitle,
+        memberId: member?.id || f.memberId,
+        memberName: member?.fullName || f.memberName || 'Thành viên CLB',
+        studentId: member?.studentId || f.studentId || '',
+        memberEmail: member?.email || f.memberEmail || '',
+        unit: member?.unit || f.unit,
+        contentQuality: f.contentQuality || f.usefulnessScore || 5,
+        delivery: f.delivery || f.clarityScore || 5,
+        durationSuitability: f.durationSuitability || f.organizationScore || 5,
+        usefulness: f.usefulness || f.usefulnessScore || 5,
+        valuableTakeaway: f.valuableTakeaway || f.feedbackText || '',
+        improvementSuggestion: f.improvementSuggestion || '',
+        nextTopicIdea: f.nextTopicIdea || '',
+        submittedAt: f.submittedAt,
+        updatedAt: f.updatedAt,
+        isAnonymous: false
+      };
+    });
   }
 
   res.json({
@@ -506,22 +540,35 @@ feedbackRouter.get('/list', (req, res) => {
       : null
   };
 
-  // Sanitize every record to strip all tokens and private identifiers
-  const sanitizedList = feedbacks.map(f => ({
-    id: f.id,
-    sessionId: f.sessionId,
-    sessionTitle: f.sessionTitle,
-    contentQuality: f.contentQuality || f.usefulnessScore || 5,
-    delivery: f.delivery || f.clarityScore || 5,
-    durationSuitability: f.durationSuitability || f.organizationScore || 5,
-    usefulness: f.usefulness || f.usefulnessScore || 5,
-    valuableTakeaway: f.valuableTakeaway || f.feedbackText || '',
-    improvementSuggestion: f.improvementSuggestion || '',
-    nextTopicIdea: f.nextTopicIdea || '',
-    submittedAt: f.submittedAt,
-    updatedAt: f.updatedAt,
-    isAnonymous: true
-  }));
+  // Return feedback list with author identity for management oversight
+  const sanitizedList = feedbacks.map(f => {
+    let member = f.memberId ? store.users.find(u => u.id === f.memberId) : null;
+    if (!member && f.submissionToken) {
+      const el = store.feedbackEligibility.find(e => e.sessionId === f.sessionId && e.submissionToken === f.submissionToken);
+      if (el) member = store.users.find(u => u.id === el.memberId);
+    }
+
+    return {
+      id: f.id,
+      sessionId: f.sessionId,
+      sessionTitle: f.sessionTitle,
+      memberId: member?.id || f.memberId,
+      memberName: member?.fullName || f.memberName || 'Thành viên CLB',
+      studentId: member?.studentId || f.studentId || '',
+      memberEmail: member?.email || f.memberEmail || '',
+      unit: member?.unit || f.unit,
+      contentQuality: f.contentQuality || f.usefulnessScore || 5,
+      delivery: f.delivery || f.clarityScore || 5,
+      durationSuitability: f.durationSuitability || f.organizationScore || 5,
+      usefulness: f.usefulness || f.usefulnessScore || 5,
+      valuableTakeaway: f.valuableTakeaway || f.feedbackText || '',
+      improvementSuggestion: f.improvementSuggestion || '',
+      nextTopicIdea: f.nextTopicIdea || '',
+      submittedAt: f.submittedAt,
+      updatedAt: f.updatedAt,
+      isAnonymous: false
+    };
+  });
 
   res.json({
     success: true,

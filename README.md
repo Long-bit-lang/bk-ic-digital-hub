@@ -102,7 +102,7 @@ src/
 ### D. Phân quyền Người dùng (RBAC) & Quản trị Bảo mật
 Hệ thống tuân thủ mô hình phân quyền chặt chẽ:
 - **Quản trị viên Hệ thống (Admin):** Toàn quyền cấu hình, phê duyệt trạng thái tài khoản, xem audit log, xuất báo cáo.
-- **Ban Chủ nhiệm (BN):** Quản lý định hướng, phê duyệt bảo lưu/thay đổi trạng thái thành viên, phát hành liên kết bảo mật.
+- **Ban Chủ nhiệm (BCN):** Quản lý định hướng, phê duyệt bảo lưu/thay đổi trạng thái thành viên, phát hành liên kết bảo mật.
 - **Ban Điều hành (BĐH):** Quản lý dự án, tổ chức meeting/workshop, phụ trách phiên sinh hoạt (PIC).
 - **Ban Thành viên (BTV):** Quản lý danh sách nhân sự, đối soát điểm danh, điểm danh thủ công tại chỗ.
 - **Thành viên Chính thức (Member):** Quét QR điểm danh, xem lịch sinh hoạt, gửi phản hồi sau training.

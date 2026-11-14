@@ -286,7 +286,7 @@ export function syncSessionsLifecycle(store: any, nowMs = Date.now()): boolean {
     // 3. Feedback Status & Deadline Transition (VI. QUY TRÌNH TRẠNG THÁI MEETING VÀ GÓP Ý)
     // - Cancelled: closed
     // - Scheduled/ongoing (before endMs): closed
-    // - Ended: automatically open for 24 hours after actual end time, then closed
+    // - Ended: automatically open for 48 hours after actual end time, then closed
     // - Reopened: remains open until explicit feedbackDeadline, then closed
     if (session.status === 'cancelled') {
       if (session.feedbackStatus !== 'closed') {
@@ -294,9 +294,9 @@ export function syncSessionsLifecycle(store: any, nowMs = Date.now()): boolean {
         changed = true;
       }
     } else {
-      // Ensure feedbackDeadline is initialized (endMs + 24h)
+      // Ensure feedbackDeadline is initialized (endMs + 48h)
       if (!session.feedbackDeadline) {
-        session.feedbackDeadline = new Date(times.endMs + 24 * 60 * 60 * 1000).toISOString();
+        session.feedbackDeadline = new Date(times.endMs + 48 * 60 * 60 * 1000).toISOString();
         changed = true;
       }
 
@@ -354,7 +354,7 @@ export function isFeedbackWindowOpen(session: any, nowMs = Date.now()): {
   const autoOpenIso = new Date(times.endMs).toISOString();
   const deadlineMs = session.feedbackDeadline
     ? new Date(session.feedbackDeadline).getTime()
-    : (times.endMs + 24 * 60 * 60 * 1000);
+    : (times.endMs + 48 * 60 * 60 * 1000);
   const deadlineIso = new Date(deadlineMs).toISOString();
 
   // Explicit Admin/BN reopen overrides the pre-end check until the reopened deadline expires
@@ -377,7 +377,7 @@ export function isFeedbackWindowOpen(session: any, nowMs = Date.now()): {
       reason: 'not_ended_yet',
       deadline: deadlineIso,
       autoOpenAt: autoOpenIso,
-      message: `Buổi sinh hoạt chưa kết thúc. Biểu mẫu góp ý sẽ tự động mở ngay sau khi buổi kết thúc lúc ${formatTimeFromMs(times.endMs)} (${session.date}) trong vòng 24 giờ.`
+      message: `Buổi sinh hoạt chưa kết thúc. Biểu mẫu góp ý sẽ tự động mở ngay sau khi buổi kết thúc lúc ${formatTimeFromMs(times.endMs)} (${session.date}) trong vòng 48 giờ.`
     };
   }
 

@@ -90,6 +90,7 @@ export interface User {
   password?: string;
   statusHistory?: StatusHistoryEntry[];
   unitHistory?: UnitHistoryEntry[];
+  penaltyTicketsCount?: number;
 }
 
 export type ApplicationStatus = 'pending' | 'under_review' | 'approved' | 'rejected';
@@ -151,7 +152,9 @@ export interface TrainingSession {
   qrWindowCloseMinutes?: number; // 15 mins after start
   lateThresholdMinutes?: number; // 10 mins after start
   feedbackStatus?: 'closed' | 'open' | 'reopened';
-  feedbackDeadline?: string; // ISO string (default: endTime + 24h)
+  feedbackDeadline?: string; // ISO string (default: endTime + 48h)
+  feedbackWarningSentAt?: string; // ISO string when ~24h warning email was sent
+  feedbackPenaltiesIssuedAt?: string; // ISO string when closing penalties were issued
   feedbackReopenedBy?: string;
   feedbackReopenReason?: string;
   feedbackReopenedAt?: string;
@@ -242,6 +245,11 @@ export interface TrainingFeedback {
   sessionId: string;
   sessionTitle: string;
   isAnonymous?: boolean;
+  memberId?: string;
+  memberName?: string;
+  studentId?: string;
+  memberEmail?: string;
+  unit?: UnitId;
   contentQuality: number; // 1-5
   delivery: number; // 1-5
   durationSuitability: number; // 1-5
@@ -260,8 +268,38 @@ export interface TrainingFeedback {
   averageScore?: number;
   authorTokenHash?: string;
   authorHash?: string;
-  memberId?: string;
-  memberName?: string;
+}
+
+// Penalty Ticket for Discipline Regulations (Section XI)
+export type PenaltyType = 
+  | 'missing_feedback' 
+  | 'attendance_violation' 
+  | 'task_overdue' 
+  | 'discipline' 
+  | 'other';
+
+export type PenaltyStatus = 'active' | 'appealed' | 'revoked' | 'resolved';
+
+export interface PenaltyTicket {
+  id: string;
+  ticketCode: string;
+  memberId: string;
+  studentId: string;
+  memberName: string;
+  memberEmail: string;
+  unit?: UnitId;
+  type: PenaltyType;
+  reason: string;
+  sessionId?: string;
+  sessionTitle?: string;
+  issuedAt: string;
+  issuedBy: string;
+  status: PenaltyStatus;
+  penaltyPoints?: number;
+  notes?: string;
+  revokedBy?: string;
+  revokedAt?: string;
+  revokeReason?: string;
 }
 
 // Alias for compatibility

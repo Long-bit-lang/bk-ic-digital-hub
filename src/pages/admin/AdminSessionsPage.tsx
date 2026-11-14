@@ -4,6 +4,7 @@ import { useApp } from '../../context/AppContext';
 import { Session, SessionCategory, SessionStatus } from '../../types';
 import { DynamicQRProjector } from '../../components/qr/DynamicQRProjector';
 import { DEFAULT_QR_INTERVAL_SEC, resolveQrIntervalSec } from '../../utils/qrConfig';
+import { api } from '../../services/api';
 import { 
   Calendar, 
   Clock, 
@@ -23,7 +24,10 @@ import {
   Info,
   RotateCcw,
   AlertTriangle,
-  XCircle
+  XCircle,
+  Archive,
+  History,
+  Database
 } from 'lucide-react';
 
 export const AdminSessionsPage: React.FC = () => {
@@ -72,6 +76,51 @@ export const AdminSessionsPage: React.FC = () => {
       hour12: false
     }).format(new Date());
   });
+
+  // Archival state
+  const [isArchiving, setIsArchiving] = useState(false);
+  const [archiveBanner, setArchiveBanner] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
+  const [showArchiveModal, setShowArchiveModal] = useState(false);
+  const [archivedList, setArchivedList] = useState<any[]>([]);
+  const [isLoadingArchives, setIsLoadingArchives] = useState(false);
+
+  const handleTriggerArchive = async () => {
+    if (!window.confirm('Hệ thống tự động lọc và chuyển các buổi sinh hoạt kết thúc hơn 30 ngày vào kho lưu trữ (data/archives/sessions_archive.json). Bạn có muốn kích hoạt lưu trữ thủ công ngay bây giờ không?')) {
+      return;
+    }
+    setIsArchiving(true);
+    setArchiveBanner(null);
+    try {
+      const res = await api.sessions.archiveOld(30);
+      setArchiveBanner({
+        message: `Đã lưu trữ và dọn dẹp ${res.prunedCount} buổi sinh hoạt cách đây hơn 30 ngày khỏi CSDL hoạt động!`,
+        type: 'success'
+      });
+      setTimeout(() => {
+        window.location.reload();
+      }, 1500);
+    } catch (err: any) {
+      setArchiveBanner({
+        message: err.message || 'Lỗi khi kích hoạt lưu trữ',
+        type: 'error'
+      });
+    } finally {
+      setIsArchiving(false);
+    }
+  };
+
+  const handleOpenArchives = async () => {
+    setShowArchiveModal(true);
+    setIsLoadingArchives(true);
+    try {
+      const res = await api.sessions.getArchived();
+      setArchivedList(Array.isArray(res) ? res : []);
+    } catch (err: any) {
+      alert(err.message || 'Lỗi khi tải danh sách lưu trữ');
+    } finally {
+      setIsLoadingArchives(false);
+    }
+  };
 
   React.useEffect(() => {
     const clockTimer = setInterval(() => {
@@ -301,6 +350,62 @@ export const AdminSessionsPage: React.FC = () => {
           <span>Tạo Phiên Sinh hoạt mới</span>
         </button>
       </div>
+
+      {/* 30-Day Auto-Prune & Archival Policy Bar */}
+      <div className="bg-slate-900/80 border border-slate-800 rounded-2xl p-4 flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div className="flex items-start gap-3">
+          <div className="p-2.5 rounded-xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 shrink-0">
+            <Database className="h-5 w-5" />
+          </div>
+          <div>
+            <div className="flex items-center gap-2">
+              <h4 className="text-xs font-bold text-white uppercase tracking-wider">
+                Chính sách tối ưu CSDL & Tự động lọc buổi sinh hoạt (30 Ngày)
+              </h4>
+              <span className="text-[10px] bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-1.5 py-0.5 rounded font-medium">
+                Tự động kích hoạt
+              </span>
+            </div>
+            <p className="text-xs text-slate-400 mt-0.5 leading-relaxed">
+              Các buổi sinh hoạt đã kết thúc hoặc hủy quá 30 ngày (1 tháng) sẽ được tự động lọc khỏi database hoạt động để chống quá tải, và lưu trữ an toàn vào kho dữ liệu lịch sử (<code className="text-slate-300 font-mono">data/archives/sessions_archive.json</code>).
+            </p>
+          </div>
+        </div>
+
+        <div className="flex items-center gap-2 shrink-0">
+          <button
+            type="button"
+            onClick={handleOpenArchives}
+            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold border border-slate-700 transition"
+          >
+            <History className="h-4 w-4 text-slate-400" />
+            <span>Kho Lưu Trữ</span>
+          </button>
+          <button
+            type="button"
+            disabled={isArchiving}
+            onClick={handleTriggerArchive}
+            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-indigo-600/90 hover:bg-indigo-600 text-white text-xs font-semibold shadow-xs transition disabled:opacity-50"
+          >
+            <Archive className="h-4 w-4" />
+            <span>{isArchiving ? 'Đang lọc...' : 'Lọc & Lưu trữ ngay'}</span>
+          </button>
+        </div>
+      </div>
+
+      {archiveBanner && (
+        <div className={`p-3.5 rounded-xl border text-xs flex items-center justify-between gap-2 ${
+          archiveBanner.type === 'success' ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-300' : 'bg-rose-500/10 border-rose-500/30 text-rose-300'
+        }`}>
+          <div className="flex items-center gap-2">
+            <CheckCircle2 className="h-4 w-4 shrink-0" />
+            <span>{archiveBanner.message}</span>
+          </div>
+          <button onClick={() => setArchiveBanner(null)} className="text-slate-400 hover:text-white">
+            <X className="h-4 w-4" />
+          </button>
+        </div>
+      )}
 
       {/* Sessions Grid */}
       <div className="space-y-4">
@@ -777,6 +882,81 @@ export const AdminSessionsPage: React.FC = () => {
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+      {/* Archive Modal */}
+      {showArchiveModal && (
+        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-slate-900 border border-slate-800 rounded-3xl w-full max-w-4xl max-h-[85vh] flex flex-col shadow-2xl overflow-hidden">
+            <div className="p-5 border-b border-slate-800 flex items-center justify-between bg-slate-950/60">
+              <div className="flex items-center gap-2.5">
+                <div className="p-2 rounded-xl bg-indigo-500/20 text-indigo-400">
+                  <Archive className="h-5 w-5" />
+                </div>
+                <div>
+                  <h3 className="text-base font-bold text-white">Kho Lưu Trữ Lịch Sử Buổi Sinh Hoạt</h3>
+                  <p className="text-xs text-slate-400">Các meeting đã kết thúc &gt; 30 ngày được lọc khỏi database chính để chống đầy bộ nhớ</p>
+                </div>
+              </div>
+              <button
+                onClick={() => setShowArchiveModal(false)}
+                className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+
+            <div className="p-5 overflow-y-auto flex-1 space-y-3">
+              {isLoadingArchives ? (
+                <div className="py-12 text-center text-slate-400 text-xs flex flex-col items-center gap-2">
+                  <Clock className="h-6 w-6 animate-spin text-indigo-400" />
+                  <span>Đang tải danh sách lưu trữ từ server...</span>
+                </div>
+              ) : archivedList.length === 0 ? (
+                <div className="py-12 text-center text-slate-500 text-xs">
+                  Hiện chưa có buổi sinh hoạt nào trong kho lưu trữ (chưa có buổi nào kết thúc &gt; 30 ngày cần lọc).
+                </div>
+              ) : (
+                archivedList.map((item, idx) => (
+                  <div key={item.session?.id || idx} className="bg-slate-800/60 border border-slate-700/60 rounded-2xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                    <div className="space-y-1">
+                      <div className="flex items-center gap-2">
+                        <span className="text-[10px] font-bold uppercase px-2 py-0.5 rounded bg-slate-700 text-slate-300">
+                          {item.session?.category || 'Buổi họp'}
+                        </span>
+                        <span className="text-xs font-semibold text-slate-300">{item.session?.date}</span>
+                        <span className="text-xs text-slate-500">·</span>
+                        <span className="text-xs text-slate-400 font-mono">{item.session?.startTime} - {item.session?.endTime}</span>
+                      </div>
+                      <h4 className="text-sm font-bold text-white">{item.session?.title}</h4>
+                      <p className="text-xs text-slate-400 line-clamp-1">{item.session?.location}</p>
+                    </div>
+
+                    <div className="flex items-center gap-2 sm:self-center shrink-0">
+                      <div className="text-right text-xs">
+                        <div className="text-slate-300 font-semibold">{item.attendance?.length || 0} điểm danh</div>
+                        <div className="text-slate-400">{item.feedbacks?.length || 0} phản hồi</div>
+                      </div>
+                      <span className="text-[11px] font-mono px-2.5 py-1 rounded-lg bg-indigo-500/10 text-indigo-300 border border-indigo-500/20">
+                        Đã lưu trữ
+                      </span>
+                    </div>
+                  </div>
+                ))
+              )}
+            </div>
+
+            <div className="p-4 border-t border-slate-800 bg-slate-950/60 flex justify-between items-center text-xs text-slate-400">
+              <span>Lưu tại tập tin: <code className="text-indigo-300 font-mono">data/archives/sessions_archive.json</code></span>
+              <button
+                type="button"
+                onClick={() => setShowArchiveModal(false)}
+                className="px-4 py-1.5 rounded-xl bg-slate-800 text-slate-200 hover:bg-slate-700 font-medium"
+              >
+                Đóng
+              </button>
+            </div>
           </div>
         </div>
       )}

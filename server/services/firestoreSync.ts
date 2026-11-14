@@ -72,7 +72,9 @@ export function initFirestore(): Firestore | null {
     }
 
     firestoreInstance = getFirestore(app);
-    firestoreInstance.settings({ ignoreUndefinedProperties: true });
+    try {
+      firestoreInstance.settings({ ignoreUndefinedProperties: true });
+    } catch {}
     console.log(`[FirestoreSync] ✓ Connected to Cloud Firestore database for project: ${credentials.project_id}`);
     return firestoreInstance;
   } catch (err) {
@@ -103,14 +105,16 @@ export async function loadCloudData(localFallback: DatabaseSchema): Promise<Data
     snapshot.forEach(doc => {
       const docData = doc.data();
       if (docData && docData.items !== undefined) {
-        // Prevent empty cloud collection from overwriting non-empty local collection
+        // For essential seed collections (units, users), prevent empty cloud collection from overwriting
+        const isSeedCollection = doc.id === 'units' || doc.id === 'users';
         if (
+          isSeedCollection &&
           Array.isArray(docData.items) &&
           docData.items.length === 0 &&
           Array.isArray((localFallback as any)[doc.id]) &&
           (localFallback as any)[doc.id].length > 0
         ) {
-          console.log(`[FirestoreSync] Preserving local collection "${doc.id}" (${(localFallback as any)[doc.id].length} items) because cloud collection is empty.`);
+          console.log(`[FirestoreSync] Preserving local seed collection "${doc.id}" (${(localFallback as any)[doc.id].length} items) because cloud collection is empty.`);
           (merged as any)[doc.id] = (localFallback as any)[doc.id];
         } else {
           (merged as any)[doc.id] = docData.items;

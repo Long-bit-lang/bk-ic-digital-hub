@@ -1,5 +1,5 @@
 // BK-IC Member Portal Dashboard Overview
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useApp } from '../../context/AppContext';
 import { QRScannerModal } from '../../components/qr/QRScannerModal';
@@ -8,6 +8,7 @@ import { Session } from '../../types';
 import { formatAcademicYearDisplay } from '../../utils/academicYear';
 import { formatMemberPosition } from '../../utils/unitDisplay';
 import { isSessionAttendanceOpen } from '../../utils/qrConfig';
+import { api } from '../../services/api';
 import { 
   Calendar, 
   Clock, 
@@ -20,15 +21,25 @@ import {
   MapPin,
   TrendingUp,
   AlertCircle,
-  Maximize2
+  Maximize2,
+  ShieldAlert
 } from 'lucide-react';
 
 export const PortalDashboardPage: React.FC = () => {
   const { currentUser, sessions, attendance, evaluations } = useApp();
   const [showQR, setShowQR] = useState(false);
   const [projectingSession, setProjectingSession] = useState<Session | null>(null);
+  const [penaltyTickets, setPenaltyTickets] = useState<any[]>([]);
+
+  useEffect(() => {
+    api.penalties.getMyTickets().then(res => {
+      if (res.success) setPenaltyTickets(res.tickets || []);
+    }).catch(() => {});
+  }, []);
 
   if (!currentUser) return null;
+
+  const activeTickets = penaltyTickets.filter(t => t.status === 'active');
 
   // Member stats
   const memberAttendance = attendance.filter(a => a.memberId === currentUser.id);
@@ -66,6 +77,35 @@ export const PortalDashboardPage: React.FC = () => {
 
   return (
     <div className="space-y-8">
+      {/* Active Penalty Tickets Alert */}
+      {activeTickets.length > 0 && (
+        <div className="rounded-2xl border border-red-200 bg-red-50 p-4 flex items-start gap-3 text-xs text-red-900 shadow-xs">
+          <ShieldAlert className="h-5 w-5 text-red-600 shrink-0 mt-0.5" />
+          <div className="space-y-1">
+            <div className="flex items-center gap-2 flex-wrap">
+              <strong className="font-bold text-red-700">CẢNH BÁO: TÀI KHOẢN ĐANG CÓ {activeTickets.length} VÉ PHẠT KỶ LUẬT</strong>
+              <span className="font-mono text-[11px] bg-red-200/80 text-red-800 px-2 py-0.5 rounded font-bold">
+                {activeTickets.map(t => t.ticketCode).join(', ')}
+              </span>
+            </div>
+            <p className="text-[11px] text-red-800">
+              Nguyên nhân: Không hoàn thành đánh giá sinh hoạt sau khi tham dự. Nếu buổi sinh hoạt được mở lại biểu mẫu, bạn có thể hoàn thành đánh giá để khắc phục vé phạt.
+            </p>
+            <div className="pt-1 flex items-center gap-4 flex-wrap">
+              <Link to="/portal/attendance?tab=penalties" className="inline-flex items-center gap-1 font-semibold text-rose-700 hover:underline">
+                <span>Xem Sổ Chuyên cần & Vé phạt</span>
+                <ArrowRight className="h-3 w-3" />
+              </Link>
+              <span className="text-slate-300">·</span>
+              <Link to="/portal/feedback" className="inline-flex items-center gap-1 font-semibold text-blue-700 hover:underline">
+                <span>Đến trang Đánh giá sinh hoạt</span>
+                <ArrowRight className="h-3 w-3" />
+              </Link>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Personalized Greeting */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
