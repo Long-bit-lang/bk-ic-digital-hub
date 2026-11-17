@@ -1,10 +1,8 @@
-import React, { useState } from 'react';
+// BK-IC Digital Hub — Minimalist Editorial & Modern Tech Split-Screen Login
+import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { useApp } from '../../context/AppContext';
-import { api } from '../../services/api';
 import { Logo } from '../../components/brand/Logo';
-import { UnitId, UserRole } from '../../types';
-import { extractAcademicYear } from '../../utils/academicYear';
 import {
   SavedLoginCredential,
   clearSavedCredentials,
@@ -16,7 +14,6 @@ import {
 } from '../../utils/savedLoginCredentials';
 import { 
   LogIn, 
-  UserPlus, 
   KeyRound, 
   Eye, 
   EyeOff, 
@@ -29,15 +26,16 @@ import {
   GraduationCap,
   Sparkles,
   Mail,
-  Clock,
-  ExternalLink,
-  RefreshCw,
   Lock,
-  BookmarkCheck
+  BookmarkCheck,
+  ArrowLeft,
+  Layers,
+  Award,
+  Users
 } from 'lucide-react';
 
 export const LoginPage: React.FC = () => {
-  const { login, register, requestTempPassword, forgotPassword, users, currentUser } = useApp();
+  const { login, forgotPassword, users, currentUser } = useApp();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -55,7 +53,7 @@ export const LoginPage: React.FC = () => {
   }
 
   // Auto-redirect if user is already authenticated with a normal session
-  React.useEffect(() => {
+  useEffect(() => {
     if (currentUser && !currentUser.mustChangePassword && !currentUser.isRecoverySession) {
       const role = currentUser.role || 'member';
       if (from) {
@@ -70,9 +68,6 @@ export const LoginPage: React.FC = () => {
     }
   }, [currentUser, from, navigate]);
 
-  // Active Tab: 'login' | 'register'
-  const [activeTab, setActiveTab] = useState<'login' | 'register'>('login');
-
   // Login form state + device-local quick-fill credentials
   const [savedCredentials, setSavedCredentials] = useState<SavedLoginCredential[]>(() => getSavedCredentials());
   const [rememberCredentials, setRememberCredentials] = useState<boolean>(() => getRememberCredentialPreference());
@@ -82,23 +77,6 @@ export const LoginPage: React.FC = () => {
   const [loginError, setLoginError] = useState('');
   const [isSubmittingLogin, setIsSubmittingLogin] = useState(false);
 
-  // Register form state
-  const [regFullName, setRegFullName] = useState('');
-  const [regStudentId, setRegStudentId] = useState('');
-  const [regEmail, setRegEmail] = useState('');
-  const [regPhone, setRegPhone] = useState('');
-  const [regPassword, setRegPassword] = useState('');
-  const [regConfirmPassword, setRegConfirmPassword] = useState('');
-  const [showRegPassword, setShowRegPassword] = useState(false);
-  const [regFaculty, setRegFaculty] = useState('Khoa Công nghệ Thông tin');
-  const [regClassId, setRegClassId] = useState('24T_CLC');
-  const [regAcademicYear, setRegAcademicYear] = useState('24');
-  const [regDesiredUnit, setRegDesiredUnit] = useState<UnitId>('BDH');
-  const [regMotivation, setRegMotivation] = useState('');
-  const [regError, setRegError] = useState('');
-  const [regSuccess, setRegSuccess] = useState('');
-  const [isSubmittingReg, setIsSubmittingReg] = useState(false);
-
   // Reset / Temporary Password Modal
   const [showForgotModal, setShowForgotModal] = useState(false);
   const [forgotEmail, setForgotEmail] = useState('');
@@ -107,16 +85,6 @@ export const LoginPage: React.FC = () => {
 
   // Help & Guide Modal
   const [showGuideModal, setShowGuideModal] = useState(false);
-
-  // Real-time registration password checkers
-  const regHasMinLength = regPassword.length >= 8;
-  const regHasUppercase = /[A-Z]/.test(regPassword);
-  const regHasLowercase = /[a-z]/.test(regPassword);
-  const regHasNumber = /[0-9]/.test(regPassword);
-  const regHasSpecial = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(regPassword);
-  const regIsMatch = regPassword.length > 0 && regPassword === regConfirmPassword;
-  const isRegPasswordValid =
-    regHasMinLength && regHasUppercase && regHasLowercase && regHasNumber && regHasSpecial && regIsMatch;
 
   // Quick-fill helpers for device-local saved credentials
   const handleQuickFillCredential = (cred: SavedLoginCredential) => {
@@ -158,7 +126,7 @@ export const LoginPage: React.FC = () => {
 
     if (res.success) {
       if (res.mustChangePassword) {
-        // ForceChangePasswordModal will render on top of application; do not store temp password
+        // ForceChangePasswordModal will render on top of application
         return;
       }
 
@@ -192,48 +160,7 @@ export const LoginPage: React.FC = () => {
     }
   };
 
-  // Handle Register with password policy compliance
-  const handleRegisterSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setRegError('');
-    setRegSuccess('');
-
-    if (!regFullName.trim() || !regStudentId.trim() || !regEmail.trim() || !regPassword) {
-      setRegError('Vui lòng điền đầy đủ các thông tin bắt buộc có dấu (*).');
-      return;
-    }
-
-    if (!isRegPasswordValid) {
-      setRegError('Mật khẩu chưa đáp ứng đầy đủ yêu cầu chính sách bảo mật (tối thiểu 8 ký tự, có chữ hoa, thường, số, ký tự đặc biệt).');
-      return;
-    }
-
-    setIsSubmittingReg(true);
-    const res = await register({
-      fullName: regFullName.trim(),
-      studentId: regStudentId.trim(),
-      email: regEmail.trim(),
-      phone: regPhone.trim(),
-      password: regPassword,
-      faculty: regFaculty,
-      classId: regClassId,
-      academicYear: regAcademicYear,
-      desiredUnit: regDesiredUnit,
-      motivation: regMotivation
-    });
-    setIsSubmittingReg(false);
-
-    if (res.success) {
-      setRegSuccess('Đăng ký tài khoản thành công! Đang chuyển hướng...');
-      setTimeout(() => {
-        navigate('/pending-approval');
-      }, 1200);
-    } else {
-      setRegError(res.message || 'Đăng ký không thành công. Vui lòng thử lại.');
-    }
-  };
-
-  // Handle Forgot Password / Request Temporary Password (Requirements 1, 2 & 3)
+  // Handle Forgot Password
   const handleForgotSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const trimmedForgotEmail = forgotEmail.trim();
@@ -262,538 +189,351 @@ export const LoginPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 via-slate-100 to-blue-50/40 flex flex-col justify-center py-12 px-4 sm:px-6 lg:px-8">
-      {/* Top Brand Banner */}
-      <div className="sm:mx-auto sm:w-full sm:max-w-xl text-center space-y-3">
-        <div className="flex justify-center mb-2">
-          <Logo showSubtitle={true} />
-        </div>
-        <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
-          Cổng Xác thực BK-IC Digital Hub
-        </h1>
-        <p className="text-xs sm:text-sm text-slate-600 max-w-md mx-auto">
-          Hệ thống Quản lý Hoạt động & Thành viên Câu lạc bộ Sáng tạo Khởi nghiệp Trường ĐH Bách khoa - ĐHĐN
-        </p>
+    <div className="min-h-screen w-full bg-[#FFFFFF] flex flex-col lg:flex-row">
+      {/* ========================================================================= */}
+      {/* LEFT COLUMN: BRAND & INSTITUTIONAL EDITORIAL PANEL (Deep Navy #10182D)     */}
+      {/* ========================================================================= */}
+      <div className="relative w-full lg:w-5/12 xl:w-1/2 bg-[#10182D] text-white p-8 sm:p-12 lg:p-16 flex flex-col justify-between overflow-hidden">
+        {/* Subtle Ambient Lighting Gradients */}
+        <div className="absolute -top-32 -left-32 w-96 h-96 rounded-full bg-[#1749B5]/25 blur-3xl pointer-events-none" />
+        <div className="absolute -bottom-32 -right-32 w-96 h-96 rounded-full bg-[#6B9DFF]/15 blur-3xl pointer-events-none" />
+        <div className="absolute inset-0 bg-[radial-gradient(#1749B5_1px,transparent_1px)] [background-size:24px_24px] opacity-15 pointer-events-none" />
 
-        {/* Action button to open Guide */}
-        <div className="pt-2">
-          <button
-            type="button"
-            onClick={() => setShowGuideModal(true)}
-            className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-200 text-blue-700 text-xs font-semibold hover:bg-blue-100 transition shadow-xs"
+        {/* Top Header: Back to Public Site + Logo */}
+        <div className="relative z-10 space-y-8">
+          <Link
+            to="/"
+            className="inline-flex items-center gap-2 text-xs font-medium text-slate-300 hover:text-white transition group"
           >
-            <HelpCircle className="h-4 w-4 text-blue-600" />
-            <span>Hướng dẫn cách tạo tài khoản & Phân quyền</span>
-          </button>
+            <ArrowLeft className="h-4 w-4 group-hover:-translate-x-1 transition-transform" />
+            <span>Quay lại Trang chủ</span>
+          </Link>
+
+          <div className="flex items-center gap-3">
+            <div className="h-10 w-10 rounded-xl bg-white/10 border border-white/20 flex items-center justify-center font-bold text-[#6B9DFF] text-base tracking-wider">
+              BK
+            </div>
+            <div>
+              <div className="text-base font-extrabold tracking-tight text-white flex items-center gap-1.5">
+                <span>BK-IC DIGITAL HUB</span>
+                <span className="text-[10px] font-mono font-medium px-2 py-0.5 rounded-full bg-[#1749B5]/60 text-[#6B9DFF] border border-[#1749B5]">
+                  INTERNAL
+                </span>
+              </div>
+              <div className="text-[11px] text-slate-400 font-normal">
+                Đoàn TN – Hội SV Trường Đại học Bách khoa (DUT)
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Center: Editorial Manifesto & Pillar Cards */}
+        <div className="relative z-10 py-12 space-y-8">
+          <div className="space-y-3">
+            <div className="inline-flex items-center gap-2 text-[11px] font-mono tracking-wider uppercase text-[#6B9DFF]">
+              <span className="h-1.5 w-1.5 rounded-full bg-[#6B9DFF] animate-pulse"></span>
+              <span>Cổng Điều hành &amp; Thành viên</span>
+            </div>
+            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-white tracking-tight leading-snug">
+              Không gian số kết nối Đổi mới Sáng tạo &amp; Khởi nghiệp.
+            </h1>
+            <p className="text-xs sm:text-sm text-slate-300 leading-relaxed font-light max-w-lg">
+              Nền tảng vận hành tập trung số hóa toàn diện dành riêng cho Thành viên và Ban Điều hành BachKhoa Innovation and Entrepreneurship Club.
+            </p>
+          </div>
+
+          {/* 3 Pillar Micro-cards */}
+          <div className="space-y-3 max-w-md">
+            <div className="flex items-start gap-3.5 p-3.5 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-xs">
+              <div className="p-2 rounded-xl bg-[#1749B5]/40 text-[#6B9DFF] shrink-0 mt-0.5">
+                <Users className="h-4 w-4" />
+              </div>
+              <div>
+                <strong className="text-xs font-semibold text-white block">Cơ cấu 3 Ban Minh bạch</strong>
+                <span className="text-[11px] text-slate-400 leading-relaxed">
+                  Phân quyền độc lập giữa Ban Chủ nhiệm, Ban Điều hành và Ban Thành viên.
+                </span>
+              </div>
+            </div>
+
+            <div className="flex items-start gap-3.5 p-3.5 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-xs">
+              <div className="p-2 rounded-xl bg-[#1749B5]/40 text-[#6B9DFF] shrink-0 mt-0.5">
+                <Layers className="h-4 w-4" />
+              </div>
+              <div>
+                <strong className="text-xs font-semibold text-white block">Số hóa Sinh hoạt &amp; Dự án</strong>
+                <span className="text-[11px] text-slate-400 leading-relaxed">
+                  Điểm danh thông minh qua mã QR, quản lý workshop thường niên và dự án đồng hành.
+                </span>
+              </div>
+            </div>
+
+            <div className="flex items-start gap-3.5 p-3.5 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-xs">
+              <div className="p-2 rounded-xl bg-[#1749B5]/40 text-[#6B9DFF] shrink-0 mt-0.5">
+                <Award className="h-4 w-4" />
+              </div>
+              <div>
+                <strong className="text-xs font-semibold text-white block">Hệ sinh thái Bách khoa</strong>
+                <span className="text-[11px] text-slate-400 leading-relaxed">
+                  Cầu nối giữa sinh viên tài năng, viện nghiên cứu và mạng lưới doanh nghiệp công nghệ.
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Bottom Institutional Citation */}
+        <div className="relative z-10 pt-6 border-t border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-[11px] text-slate-400">
+          <span>&copy; {new Date().getFullYear()} BK-IC. Mọi quyền được bảo lưu.</span>
+          <span className="font-mono text-slate-500">dut.udn.vn • bkic.dut@gmail.com</span>
         </div>
       </div>
 
-      {/* Main Card */}
-      <div className="mt-6 sm:mx-auto sm:w-full sm:max-w-xl">
-        <div className="bg-white py-8 px-6 sm:px-10 shadow-xl shadow-slate-200/60 rounded-3xl border border-slate-200 space-y-6">
+      {/* ========================================================================= */}
+      {/* RIGHT COLUMN: CLEAN EDITORIAL LOGIN FORM (Off-white / White)              */}
+      {/* ========================================================================= */}
+      <div className="w-full lg:w-7/12 xl:w-1/2 bg-[#F8FAFC] flex items-center justify-center p-6 sm:p-12 lg:p-16">
+        <div className="w-full max-w-md space-y-8 bg-white p-8 sm:p-10 rounded-3xl border border-[#E2E6EE] shadow-sm">
           
-          {/* Tab Selector */}
-          <div className="flex rounded-2xl bg-slate-100 p-1 border border-slate-200">
-            <button
-              type="button"
-              onClick={() => setActiveTab('login')}
-              className={`flex-1 py-2.5 text-xs sm:text-sm font-semibold rounded-xl transition flex items-center justify-center gap-2 ${
-                activeTab === 'login'
-                  ? 'bg-white text-blue-700 shadow-sm'
-                  : 'text-slate-600 hover:text-slate-900'
-              }`}
-            >
-              <LogIn className="h-4 w-4" />
-              <span>Đăng nhập</span>
-            </button>
-            <button
-              type="button"
-              onClick={() => setActiveTab('register')}
-              className={`flex-1 py-2.5 text-xs sm:text-sm font-semibold rounded-xl transition flex items-center justify-center gap-2 ${
-                activeTab === 'register'
-                  ? 'bg-white text-blue-700 shadow-sm'
-                  : 'text-slate-600 hover:text-slate-900'
-              }`}
-            >
-              <UserPlus className="h-4 w-4" />
-              <span>Đăng ký tài khoản mới</span>
-            </button>
+          {/* Form Header */}
+          <div className="space-y-2">
+            <div className="inline-flex items-center gap-1.5 text-[11px] font-mono font-semibold uppercase tracking-wider text-[#1749B5]">
+              <Lock className="h-3 w-3" />
+              <span>ĐĂNG NHẬP HỆ THỐNG NỘI BỘ</span>
+            </div>
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-[#10182D] tracking-tight">
+              Cổng Thành viên BK-IC
+            </h2>
+            <p className="text-xs sm:text-sm text-[#5E6573] leading-relaxed">
+              Nhập email sinh viên Bách khoa (<code className="font-mono text-[#1749B5]">@dut.udn.vn</code>) hoặc tài khoản được cấp bởi BCN.
+            </p>
           </div>
 
-          {/* TAB 1: LOGIN FORM */}
-          {activeTab === 'login' && (
-            <div className="space-y-5">
-              {loginError && (
-                <div className="rounded-xl bg-red-50 border border-red-200 p-3.5 flex items-start gap-2.5 text-xs text-red-700">
-                  <AlertCircle className="h-4 w-4 text-red-600 shrink-0 mt-0.5" />
-                  <span className="leading-relaxed">{loginError}</span>
-                </div>
-              )}
-
-              {/* Quick-fill saved credentials on this device (localStorage) */}
-              {savedCredentials.length > 0 && (
-                <div className="rounded-2xl border border-blue-100 bg-blue-50/60 p-3.5 space-y-2.5">
-                  <div className="flex items-center justify-between gap-2">
-                    <div className="flex items-center gap-1.5 text-xs font-semibold text-blue-900">
-                      <BookmarkCheck className="h-4 w-4 text-blue-600 shrink-0" />
-                      <span>Điền nhanh tài khoản đã lưu trên thiết bị</span>
-                    </div>
-                    {savedCredentials.length > 1 && (
-                      <button
-                        type="button"
-                        onClick={handleClearAllSavedCredentials}
-                        className="text-[11px] font-medium text-slate-500 hover:text-red-600 transition"
-                      >
-                        Xóa tất cả
-                      </button>
-                    )}
-                  </div>
-
-                  <div className="space-y-1.5">
-                    {savedCredentials.map((cred) => {
-                      const isActiveFill =
-                        loginEmail.trim().toLowerCase() === cred.email.toLowerCase() &&
-                        loginPassword === cred.password;
-
-                      return (
-                        <div
-                          key={cred.email.toLowerCase()}
-                          className={`flex items-center gap-2 rounded-xl border px-2.5 py-2 transition ${
-                            isActiveFill
-                              ? 'border-blue-400 bg-white shadow-2xs'
-                              : 'border-blue-100 bg-white/80 hover:border-blue-300 hover:bg-white'
-                          }`}
-                        >
-                          <button
-                            type="button"
-                            onClick={() => handleQuickFillCredential(cred)}
-                            className="flex flex-1 items-center gap-2.5 text-left min-w-0"
-                          >
-                            <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-blue-600 text-[11px] font-bold text-white uppercase">
-                              {(cred.fullName || cred.email).charAt(0)}
-                            </div>
-                            <div className="min-w-0 flex-1">
-                              <div className="text-xs font-semibold text-slate-800 truncate">
-                                {cred.fullName || cred.email}
-                              </div>
-                              {cred.fullName && (
-                                <div className="text-[11px] font-mono text-slate-500 truncate">
-                                  {cred.email}
-                                </div>
-                              )}
-                            </div>
-                            <span
-                              className={`shrink-0 rounded-full px-2 py-0.5 text-[10px] font-semibold ${
-                                isActiveFill
-                                  ? 'bg-blue-100 text-blue-700'
-                                  : 'bg-slate-100 text-slate-600'
-                              }`}
-                            >
-                              {isActiveFill ? 'Đã điền' : 'Điền nhanh'}
-                            </span>
-                          </button>
-
-                          <button
-                            type="button"
-                            onClick={() => handleRemoveSavedCredential(cred.email)}
-                            className="rounded-lg p-1 text-slate-400 hover:bg-red-50 hover:text-red-600 transition shrink-0"
-                            title="Xóa tài khoản đã lưu khỏi thiết bị"
-                            aria-label={`Xóa ${cred.email} khỏi thiết bị`}
-                          >
-                            <X className="h-3.5 w-3.5" />
-                          </button>
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
-              )}
-
-              <form onSubmit={handleLoginSubmit} className="space-y-4">
-                <div>
-                  <label htmlFor="login-email" className="block text-xs font-semibold text-slate-700 mb-1.5">
-                    Địa chỉ Email *
-                  </label>
-                  <input
-                    id="login-email"
-                    name="email"
-                    type="email"
-                    autoComplete="username"
-                    required
-                    placeholder="ten.ho@dut.udn.vn hoặc email cá nhân"
-                    value={loginEmail}
-                    onChange={(e) => setLoginEmail(e.target.value)}
-                    className="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-xs text-slate-800 placeholder:text-slate-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 focus:outline-none transition"
-                  />
-                  <span className="text-[11px] text-slate-400 mt-1 block">
-                    Khuyến khích sử dụng email sinh viên trường ĐH Bách khoa (@dut.udn.vn)
-                  </span>
-                </div>
-
-                <div>
-                  <div className="flex items-center justify-between mb-1.5">
-                    <label htmlFor="login-password" className="block text-xs font-semibold text-slate-700">
-                      Mật khẩu *
-                    </label>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setForgotEmail(loginEmail);
-                        setForgotMessage(null);
-                        setShowForgotModal(true);
-                      }}
-                      className="text-[11px] font-medium text-blue-600 hover:text-blue-800 transition"
-                    >
-                      Quên mật khẩu?
-                    </button>
-                  </div>
-                  <div className="relative">
-                    <input
-                      id="login-password"
-                      name="password"
-                      type={showLoginPassword ? 'text' : 'password'}
-                      autoComplete="current-password"
-                      required
-                      placeholder="Nhập mật khẩu"
-                      value={loginPassword}
-                      onChange={(e) => setLoginPassword(e.target.value)}
-                      className="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 pr-10 text-xs text-slate-800 placeholder:text-slate-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 focus:outline-none transition"
-                    />
-                    <button
-                      type="button"
-                      onClick={() => setShowLoginPassword(!showLoginPassword)}
-                      aria-label={showLoginPassword ? 'Ẩn mật khẩu' : 'Hiện mật khẩu'}
-                      className="absolute right-3 top-2.5 text-slate-400 hover:text-slate-600"
-                    >
-                      {showLoginPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                    </button>
-                  </div>
-                </div>
-
-                {/* Opt-in save credentials on this device */}
-                <div className="flex items-start gap-2.5 pt-0.5">
-                  <input
-                    id="remember-credentials"
-                    type="checkbox"
-                    checked={rememberCredentials}
-                    onChange={(e) => {
-                      const checked = e.target.checked;
-                      setRememberCredentials(checked);
-                      setRememberCredentialPreference(checked);
-                    }}
-                    className="mt-0.5 h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500 cursor-pointer shrink-0"
-                  />
-                  <label
-                    htmlFor="remember-credentials"
-                    className="text-xs text-slate-600 cursor-pointer select-none leading-relaxed"
-                  >
-                    <span className="font-medium text-slate-700">
-                      Lưu tài khoản &amp; mật khẩu trên thiết bị này
-                    </span>
-                    <span className="block text-[11px] text-slate-400">
-                      Chỉ lưu trên trình duyệt của bạn để điền nhanh cho các lần đăng nhập sau (không nên bật trên máy dùng chung).
-                    </span>
-                  </label>
-                </div>
-
-                <button
-                  type="submit"
-                  disabled={isSubmittingLogin}
-                  className="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-[#245BFA] py-3 text-xs sm:text-sm font-semibold text-white shadow-md shadow-blue-500/20 hover:bg-blue-700 active:scale-[0.99] transition disabled:opacity-50"
-                >
-                  {isSubmittingLogin ? (
-                    <span>Đang kiểm tra thông tin...</span>
-                  ) : (
-                    <>
-                      <span>Đăng nhập hệ thống</span>
-                      <ArrowRight className="h-4 w-4" />
-                    </>
-                  )}
-                </button>
-              </form>
+          {/* Login Error Notification */}
+          {loginError && (
+            <div className="rounded-2xl bg-red-50 border border-red-200 p-4 flex items-start gap-3 text-xs text-red-700">
+              <AlertCircle className="h-4 w-4 text-red-600 shrink-0 mt-0.5" />
+              <div className="leading-relaxed flex-1 font-medium">{loginError}</div>
             </div>
           )}
 
-          {/* TAB 2: REGISTER FORM */}
-          {activeTab === 'register' && (
-            <div className="space-y-4">
-              <div className="bg-blue-50/70 border border-blue-200 rounded-2xl p-3.5 text-xs text-blue-800 space-y-1">
-                <div className="font-semibold flex items-center gap-1.5 text-blue-900">
-                  <ShieldCheck className="h-4 w-4 text-blue-600" />
-                  <span>Quy trình Đăng ký Tài khoản Thành viên BK-IC</span>
+          {/* Saved Credentials Quick-fill (Device-local) */}
+          {savedCredentials.length > 0 && (
+            <div className="rounded-2xl border border-blue-100 bg-[#F5F6F8] p-3.5 space-y-2">
+              <div className="flex items-center justify-between gap-2">
+                <div className="flex items-center gap-1.5 text-xs font-semibold text-[#10182D]">
+                  <BookmarkCheck className="h-3.5 w-3.5 text-[#1749B5]" />
+                  <span>Tài khoản đã lưu trên thiết bị</span>
                 </div>
-                <p className="text-[11px] text-blue-700 leading-relaxed">
-                  Tài khoản sau khi đăng ký sẽ được kích hoạt ngay trong cơ sở dữ liệu hệ thống với vai trò <strong>Ứng viên (Applicant)</strong>. Ban Chủ nhiệm sẽ xem xét hồ sơ và phê duyệt kết nạp vào Ban tương ứng.
-                </p>
+                {savedCredentials.length > 1 && (
+                  <button
+                    type="button"
+                    onClick={handleClearAllSavedCredentials}
+                    className="text-[11px] font-medium text-slate-400 hover:text-red-600 transition"
+                  >
+                    Xóa tất cả
+                  </button>
+                )}
               </div>
 
-              {regError && (
-                <div className="rounded-xl bg-red-50 border border-red-200 p-3.5 flex items-start gap-2.5 text-xs text-red-700">
-                  <AlertCircle className="h-4 w-4 text-red-600 shrink-0 mt-0.5" />
-                  <span className="leading-relaxed">{regError}</span>
-                </div>
-              )}
+              <div className="space-y-1.5">
+                {savedCredentials.map((cred) => {
+                  const isActiveFill =
+                    loginEmail.trim().toLowerCase() === cred.email.toLowerCase() &&
+                    loginPassword === cred.password;
 
-              {regSuccess && (
-                <div className="rounded-xl bg-emerald-50 border border-emerald-200 p-3.5 flex items-start gap-2.5 text-xs text-emerald-800">
-                  <CheckCircle2 className="h-4 w-4 text-emerald-600 shrink-0 mt-0.5" />
-                  <span className="leading-relaxed">{regSuccess}</span>
-                </div>
-              )}
-
-              <form onSubmit={handleRegisterSubmit} className="space-y-3.5">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  <div>
-                    <label className="block text-xs font-semibold text-slate-700 mb-1">
-                      Họ và tên đầy đủ *
-                    </label>
-                    <input
-                      type="text"
-                      required
-                      placeholder="Nguyễn Văn A"
-                      value={regFullName}
-                      onChange={(e) => setRegFullName(e.target.value)}
-                      className="w-full rounded-xl border border-slate-300 px-3 py-2 text-xs text-slate-800 focus:border-blue-500 focus:outline-none"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-xs font-semibold text-slate-700 mb-1">
-                      Mã số sinh viên (MSSV) *
-                    </label>
-                    <input
-                      type="text"
-                      required
-                      placeholder="102240xxx"
-                      value={regStudentId}
-                      onChange={(e) => setRegStudentId(e.target.value)}
-                      className="w-full rounded-xl border border-slate-300 px-3 py-2 text-xs font-mono text-slate-800 focus:border-blue-500 focus:outline-none"
-                    />
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  <div>
-                    <label className="block text-xs font-semibold text-slate-700 mb-1">
-                      Email đăng nhập *
-                    </label>
-                    <input
-                      type="email"
-                      required
-                      placeholder="vana.nguyen@dut.udn.vn"
-                      value={regEmail}
-                      onChange={(e) => setRegEmail(e.target.value)}
-                      className="w-full rounded-xl border border-slate-300 px-3 py-2 text-xs text-slate-800 focus:border-blue-500 focus:outline-none"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-xs font-semibold text-slate-700 mb-1">
-                      Số điện thoại *
-                    </label>
-                    <input
-                      type="tel"
-                      required
-                      placeholder="0905123456"
-                      value={regPhone}
-                      onChange={(e) => setRegPhone(e.target.value)}
-                      className="w-full rounded-xl border border-slate-300 px-3 py-2 text-xs text-slate-800 focus:border-blue-500 focus:outline-none"
-                    />
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  <div>
-                    <label className="block text-xs font-semibold text-slate-700 mb-1">
-                      Mật khẩu *
-                    </label>
-                    <div className="relative">
-                      <input
-                        type={showRegPassword ? 'text' : 'password'}
-                        required
-                        placeholder="Tối thiểu 8 ký tự bảo mật"
-                        value={regPassword}
-                        onChange={(e) => setRegPassword(e.target.value)}
-                        className={`w-full rounded-xl border px-3 py-2 pr-9 text-xs text-slate-800 focus:outline-none transition ${
-                          regPassword.length > 0
-                            ? (isRegPasswordValid ? 'border-emerald-500 focus:border-emerald-500' : 'border-amber-400 focus:border-amber-500')
-                            : 'border-slate-300 focus:border-blue-500'
-                        }`}
-                      />
+                  return (
+                    <div
+                      key={cred.email.toLowerCase()}
+                      className={`flex items-center gap-2 rounded-xl border px-3 py-2 transition ${
+                        isActiveFill
+                          ? 'border-[#1749B5] bg-white shadow-xs'
+                          : 'border-slate-200 bg-white/80 hover:border-slate-300 hover:bg-white'
+                      }`}
+                    >
                       <button
                         type="button"
-                        onClick={() => setShowRegPassword(!showRegPassword)}
-                        className="absolute right-2.5 top-2 text-slate-400 hover:text-slate-600"
+                        onClick={() => handleQuickFillCredential(cred)}
+                        className="flex flex-1 items-center gap-2.5 text-left min-w-0"
                       >
-                        {showRegPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                        <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-md bg-[#1749B5] text-[10px] font-bold text-white uppercase">
+                          {(cred.fullName || cred.email).charAt(0)}
+                        </div>
+                        <div className="min-w-0 flex-1">
+                          <div className="text-xs font-semibold text-[#10182D] truncate">
+                            {cred.fullName || cred.email}
+                          </div>
+                          {cred.fullName && (
+                            <div className="text-[10px] font-mono text-slate-400 truncate">
+                              {cred.email}
+                            </div>
+                          )}
+                        </div>
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => handleRemoveSavedCredential(cred.email)}
+                        className="p-1 text-slate-300 hover:text-red-500 rounded transition"
+                        title="Xóa tài khoản đã lưu"
+                      >
+                        <X className="h-3.5 w-3.5" />
                       </button>
                     </div>
-                  </div>
-
-                  <div>
-                    <label className="block text-xs font-semibold text-slate-700 mb-1">
-                      Xác nhận mật khẩu *
-                    </label>
-                    <input
-                      type={showRegPassword ? 'text' : 'password'}
-                      required
-                      placeholder="Nhập lại mật khẩu"
-                      value={regConfirmPassword}
-                      onChange={(e) => setRegConfirmPassword(e.target.value)}
-                      className={`w-full rounded-xl border px-3 py-2 text-xs text-slate-800 focus:outline-none transition ${
-                        regConfirmPassword.length > 0
-                          ? (regIsMatch ? 'border-emerald-500 focus:border-emerald-500' : 'border-red-400 focus:border-red-500')
-                          : 'border-slate-300 focus:border-blue-500'
-                      }`}
-                    />
-                  </div>
-                </div>
-
-                {/* Password Policy Real-time Checklist */}
-                {regPassword.length > 0 && (
-                  <div className="p-3 bg-slate-50 border border-slate-200 rounded-xl space-y-1.5 text-[11px]">
-                    <div className="font-semibold text-slate-700 text-xs">Quy tắc mật khẩu an toàn:</div>
-                    <div className="grid grid-cols-2 gap-1.5 text-slate-600">
-                      <div className={`flex items-center gap-1.5 ${regHasMinLength ? 'text-emerald-700 font-medium' : 'text-slate-500'}`}>
-                        {regHasMinLength ? <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600 shrink-0" /> : <div className="h-1.5 w-1.5 rounded-full bg-slate-300 ml-1 mr-1" />}
-                        <span>Tối thiểu 8 ký tự</span>
-                      </div>
-                      <div className={`flex items-center gap-1.5 ${regHasUppercase && regHasLowercase ? 'text-emerald-700 font-medium' : 'text-slate-500'}`}>
-                        {regHasUppercase && regHasLowercase ? <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600 shrink-0" /> : <div className="h-1.5 w-1.5 rounded-full bg-slate-300 ml-1 mr-1" />}
-                        <span>Chữ hoa (A-Z) & chữ thường (a-z)</span>
-                      </div>
-                      <div className={`flex items-center gap-1.5 ${regHasNumber ? 'text-emerald-700 font-medium' : 'text-slate-500'}`}>
-                        {regHasNumber ? <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600 shrink-0" /> : <div className="h-1.5 w-1.5 rounded-full bg-slate-300 ml-1 mr-1" />}
-                        <span>Ít nhất 1 chữ số (0-9)</span>
-                      </div>
-                      <div className={`flex items-center gap-1.5 ${regHasSpecial ? 'text-emerald-700 font-medium' : 'text-slate-500'}`}>
-                        {regHasSpecial ? <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600 shrink-0" /> : <div className="h-1.5 w-1.5 rounded-full bg-slate-300 ml-1 mr-1" />}
-                        <span>Ký tự đặc biệt (!@#$...)</span>
-                      </div>
-                    </div>
-                    {regConfirmPassword.length > 0 && (
-                      <div className={`pt-1 border-t border-slate-200 flex items-center gap-1.5 text-xs ${regIsMatch ? 'text-emerald-700 font-semibold' : 'text-red-600'}`}>
-                        {regIsMatch ? <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600" /> : <AlertCircle className="h-3.5 w-3.5 text-red-600" />}
-                        <span>{regIsMatch ? 'Mật khẩu xác nhận trùng khớp' : 'Mật khẩu xác nhận chưa khớp'}</span>
-                      </div>
-                    )}
-                  </div>
-                )}
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  <div>
-                    <label className="block text-xs font-semibold text-slate-700 mb-1">
-                      Khoa đào tạo
-                    </label>
-                    <select
-                      value={regFaculty}
-                      onChange={(e) => setRegFaculty(e.target.value)}
-                      className="w-full rounded-xl border border-slate-300 px-3 py-2 text-xs text-slate-800 bg-white focus:border-blue-500 focus:outline-none"
-                    >
-                      <option value="Khoa Công nghệ Thông tin">Khoa Công nghệ Thông tin</option>
-                      <option value="Khoa Điện">Khoa Điện</option>
-                      <option value="Khoa Điện tử - Viễn thông">Khoa Điện tử - Viễn thông</option>
-                      <option value="Khoa Cơ khí">Khoa Cơ khí</option>
-                      <option value="Khoa Xây dựng Cầu đường">Khoa Xây dựng Cầu đường</option>
-                      <option value="Khoa Hóa">Khoa Hóa</option>
-                      <option value="Khoa Quản lý Dự án">Khoa Quản lý Dự án</option>
-                      <option value="Chương trình Tiên tiến & CLC">Chương trình Tiên tiến & CLC</option>
-                    </select>
-                  </div>
-
-                  <div>
-                    <div className="flex items-center justify-between mb-1">
-                      <label className="block text-xs font-semibold text-slate-700">
-                        Lớp sinh hoạt
-                      </label>
-                      <span className="text-[11px] font-medium text-blue-600 bg-blue-50 px-2 py-0.5 rounded-md">
-                        Khóa {extractAcademicYear(regClassId)}
-                      </span>
-                    </div>
-                    <input
-                      type="text"
-                      placeholder="VD: 25T_KHDL, 22TDH1, 24T_CLC..."
-                      value={regClassId}
-                      onChange={(e) => {
-                        const val = e.target.value;
-                        setRegClassId(val);
-                        setRegAcademicYear(extractAcademicYear(val));
-                      }}
-                      className="w-full rounded-xl border border-slate-300 px-3 py-2 text-xs text-slate-800 focus:border-blue-500 focus:outline-none"
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <label className="block text-xs font-semibold text-slate-700 mb-1">
-                    Ban nguyện vọng tham gia *
-                  </label>
-                  <select
-                    value={regDesiredUnit}
-                    onChange={(e) => setRegDesiredUnit(e.target.value as UnitId)}
-                    className="w-full rounded-xl border border-slate-300 px-3 py-2 text-xs text-slate-800 bg-white focus:border-blue-500 focus:outline-none"
-                  >
-                    <option value="BDH">Ban Điều hành (BDH) - Chuyên môn Kỹ thuật, Dự án ĐMST & Sự kiện</option>
-                    <option value="BTV">Ban Thành viên (BTV) - Nhân sự, Đánh giá, Truyền thông & Điểm danh</option>
-                    <option value="BN">Ban Chủ nhiệm (BN) - Điều hành chiến lược, Quản trị & Kết nối Cố vấn</option>
-                  </select>
-                </div>
-
-                <div>
-                  <label className="block text-xs font-semibold text-slate-700 mb-1">
-                    Nguyện vọng / Mục tiêu khi tham gia CLB
-                  </label>
-                  <textarea
-                    rows={2}
-                    placeholder="Chia sẻ lý do và định hướng phát triển của bạn khi gia nhập BK-IC..."
-                    value={regMotivation}
-                    onChange={(e) => setRegMotivation(e.target.value)}
-                    className="w-full rounded-xl border border-slate-300 px-3 py-2 text-xs text-slate-800 focus:border-blue-500 focus:outline-none"
-                  />
-                </div>
-
-                <button
-                  type="submit"
-                  disabled={isSubmittingReg}
-                  className="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-emerald-600 py-3 text-xs sm:text-sm font-semibold text-white shadow-md shadow-emerald-600/20 hover:bg-emerald-700 active:scale-[0.99] transition disabled:opacity-50"
-                >
-                  {isSubmittingReg ? (
-                    <span>Đang khởi tạo tài khoản...</span>
-                  ) : (
-                    <>
-                      <UserPlus className="h-4 w-4" />
-                      <span>Hoàn tất đăng ký tài khoản</span>
-                    </>
-                  )}
-                </button>
-              </form>
+                  );
+                })}
+              </div>
             </div>
           )}
 
-          {/* Footer Back link */}
-          <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
-            <Link to="/" className="hover:text-blue-600 transition flex items-center gap-1 font-medium">
-              <span>← Trở về Trang chủ CLB</span>
-            </Link>
+          {/* Form */}
+          <form onSubmit={handleLoginSubmit} className="space-y-4">
+            <div>
+              <label htmlFor="login-email" className="block text-xs font-semibold text-[#10182D] mb-1.5">
+                Địa chỉ Email *
+              </label>
+              <input
+                id="login-email"
+                name="email"
+                type="email"
+                autoComplete="username"
+                required
+                placeholder="ten.ho@dut.udn.vn hoặc email cá nhân"
+                value={loginEmail}
+                onChange={(e) => setLoginEmail(e.target.value)}
+                className="w-full rounded-xl border border-[#CBD5E1] bg-white px-3.5 py-2.5 text-xs text-[#10182D] placeholder:text-slate-400 focus:border-[#1749B5] focus:ring-2 focus:ring-[#1749B5]/10 focus:outline-none transition"
+              />
+            </div>
+
+            <div>
+              <div className="flex items-center justify-between mb-1.5">
+                <label htmlFor="login-password" className="block text-xs font-semibold text-[#10182D]">
+                  Mật khẩu *
+                </label>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setForgotEmail(loginEmail);
+                    setForgotMessage(null);
+                    setShowForgotModal(true);
+                  }}
+                  className="text-[11px] font-medium text-[#1749B5] hover:underline"
+                >
+                  Quên mật khẩu?
+                </button>
+              </div>
+              <div className="relative">
+                <input
+                  id="login-password"
+                  name="password"
+                  type={showLoginPassword ? 'text' : 'password'}
+                  autoComplete="current-password"
+                  required
+                  placeholder="Nhập mật khẩu"
+                  value={loginPassword}
+                  onChange={(e) => setLoginPassword(e.target.value)}
+                  className="w-full rounded-xl border border-[#CBD5E1] bg-white px-3.5 py-2.5 pr-10 text-xs text-[#10182D] placeholder:text-slate-400 focus:border-[#1749B5] focus:ring-2 focus:ring-[#1749B5]/10 focus:outline-none transition"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowLoginPassword(!showLoginPassword)}
+                  aria-label={showLoginPassword ? 'Ẩn mật khẩu' : 'Hiện mật khẩu'}
+                  className="absolute right-3 top-2.5 text-slate-400 hover:text-slate-600"
+                >
+                  {showLoginPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                </button>
+              </div>
+            </div>
+
+            {/* Remember credentials checkbox */}
+            <div className="flex items-start gap-2.5 pt-1">
+              <input
+                id="remember-credentials"
+                type="checkbox"
+                checked={rememberCredentials}
+                onChange={(e) => {
+                  const checked = e.target.checked;
+                  setRememberCredentials(checked);
+                  setRememberCredentialPreference(checked);
+                }}
+                className="mt-0.5 h-4 w-4 rounded border-slate-300 text-[#1749B5] focus:ring-[#1749B5] cursor-pointer shrink-0"
+              />
+              <label
+                htmlFor="remember-credentials"
+                className="text-xs text-[#5E6573] cursor-pointer select-none leading-relaxed"
+              >
+                <span className="font-medium text-[#10182D]">
+                  Lưu tài khoản trên thiết bị này
+                </span>
+                <span className="block text-[11px] text-slate-400">
+                  Chỉ lưu an toàn trên trình duyệt cá nhân để điền nhanh lần sau.
+                </span>
+              </label>
+            </div>
+
+            {/* Submit Button */}
             <button
-              type="button"
-              onClick={() => setShowGuideModal(true)}
-              className="text-blue-600 hover:text-blue-800 font-semibold"
+              type="submit"
+              disabled={isSubmittingLogin}
+              className="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-[#1749B5] py-3 text-xs sm:text-sm font-semibold text-white shadow-md shadow-[#1749B5]/20 hover:bg-[#10182D] active:scale-[0.99] transition disabled:opacity-50"
             >
-              Cách tạo tài khoản?
+              {isSubmittingLogin ? (
+                <span>Đang kiểm tra thông tin...</span>
+              ) : (
+                <>
+                  <span>Đăng nhập hệ thống</span>
+                  <ArrowRight className="h-4 w-4" />
+                </>
+              )}
             </button>
+          </form>
+
+          {/* Public Candidate Info Notice (Explains why no public self-registration) */}
+          <div className="pt-4 border-t border-slate-100 space-y-3">
+            <div className="rounded-2xl bg-[#F5F6F8] p-4 text-xs text-[#5E6573] space-y-1.5">
+              <div className="font-semibold text-[#10182D] flex items-center gap-1.5">
+                <ShieldCheck className="h-4 w-4 text-[#1749B5]" />
+                <span>Quy chế Cấp tài khoản Thành viên</span>
+              </div>
+              <p className="text-[11px] leading-relaxed">
+                Hệ thống BK-IC Digital Hub không mở chức năng tự đăng ký công khai. Sinh viên muốn tham gia CLB vui lòng nộp hồ sơ qua trang <strong>Tuyển thành viên</strong> tại phân hệ Hoạt động.
+              </p>
+              <div className="pt-1">
+                <Link
+                  to="/activities/recruitment"
+                  className="inline-flex items-center gap-1 text-[11px] font-semibold text-[#1749B5] hover:underline"
+                >
+                  <span>Nộp đơn ứng tuyển thành viên mới</span>
+                  <ArrowRight className="h-3 w-3" />
+                </Link>
+              </div>
+            </div>
+
+            {/* Guide Modal Trigger Button */}
+            <div className="text-center">
+              <button
+                type="button"
+                onClick={() => setShowGuideModal(true)}
+                className="inline-flex items-center gap-1.5 text-xs text-slate-500 hover:text-[#1749B5] transition font-medium"
+              >
+                <HelpCircle className="h-3.5 w-3.5" />
+                <span>Hướng dẫn đăng nhập &amp; Cơ chế phân quyền</span>
+              </button>
+            </div>
           </div>
         </div>
       </div>
 
-      {/* MODAL 1: FORGOT / TEMPORARY PASSWORD */}
+      {/* ========================================================================= */}
+      {/* MODAL 1: FORGOT PASSWORD / TEMPORARY PASSWORD                             */}
+      {/* ========================================================================= */}
       {showForgotModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-xs p-4 overflow-y-auto">
-          <div className="relative w-full max-w-md bg-white rounded-3xl p-6 sm:p-7 shadow-2xl border border-slate-200 space-y-4 my-6">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-xs p-4">
+          <div className="relative w-full max-w-md bg-white rounded-3xl p-6 sm:p-8 shadow-2xl border border-slate-200 text-slate-800 space-y-5">
             <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-              <div className="flex items-center gap-2 text-slate-900 font-bold text-base">
-                <KeyRound className="h-5 w-5 text-blue-600" />
-                <span>Quên mật khẩu & Nhận Mật khẩu Tạm thời</span>
+              <div className="flex items-center gap-2">
+                <KeyRound className="h-5 w-5 text-[#1749B5]" />
+                <h3 className="text-base font-bold text-[#10182D]">Khôi phục Mật khẩu</h3>
               </div>
               <button
                 type="button"
@@ -804,8 +544,8 @@ export const LoginPage: React.FC = () => {
               </button>
             </div>
 
-            <p className="text-xs text-slate-600 leading-relaxed">
-              Nhập địa chỉ email sinh viên đã đăng ký (<code className="font-mono text-blue-600">@dut.udn.vn</code>). Hệ thống sẽ tạo một <strong>mật khẩu tạm thời an toàn</strong> có hiệu lực trong <strong>15 phút</strong> (dùng duy nhất 1 lần) và gửi về hộp thư của bạn để đăng nhập và bắt buộc thiết lập mật khẩu mới.
+            <p className="text-xs text-[#5E6573] leading-relaxed">
+              Nhập địa chỉ email sinh viên đã đăng ký (<code className="font-mono text-[#1749B5]">@dut.udn.vn</code>). Hệ thống sẽ tạo một <strong>mật khẩu tạm thời an toàn</strong> có hiệu lực trong <strong>15 phút</strong> (dùng duy nhất 1 lần) và gửi về hộp thư của bạn.
             </p>
 
             {forgotMessage && (
@@ -831,7 +571,7 @@ export const LoginPage: React.FC = () => {
                           setLoginEmail(forgotEmail);
                           setShowForgotModal(false);
                         }}
-                        className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-emerald-700 text-white rounded-lg text-[11px] font-semibold hover:bg-emerald-800 transition shadow-xs"
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-emerald-700 text-white rounded-lg text-[11px] font-semibold hover:bg-emerald-800 transition"
                       >
                         <span>Quay lại trang Đăng nhập</span>
                         <ArrowRight className="h-3 w-3" />
@@ -853,11 +593,8 @@ export const LoginPage: React.FC = () => {
                   placeholder="ten.ho@dut.udn.vn hoặc email cá nhân"
                   value={forgotEmail}
                   onChange={(e) => setForgotEmail(e.target.value)}
-                  className="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-xs text-slate-800 focus:border-blue-500 focus:outline-none"
+                  className="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-xs text-slate-800 focus:border-[#1749B5] focus:outline-none"
                 />
-                <span className="text-[10px] text-slate-400 mt-1 block">
-                  Không bao giờ tiết lộ email có tồn tại hay không vì lý do bảo mật.
-                </span>
               </div>
 
               <div className="flex gap-2 pt-2">
@@ -866,14 +603,14 @@ export const LoginPage: React.FC = () => {
                   onClick={() => setShowForgotModal(false)}
                   className="flex-1 py-2.5 rounded-xl border border-slate-300 text-xs font-semibold text-slate-700 hover:bg-slate-50 transition"
                 >
-                  Quay lại trang đăng nhập
+                  Đóng
                 </button>
                 <button
                   type="submit"
                   disabled={isSubmittingForgot}
-                  className="flex-1 py-2.5 rounded-xl bg-blue-600 text-xs font-semibold text-white hover:bg-blue-700 transition disabled:opacity-50"
+                  className="flex-1 py-2.5 rounded-xl bg-[#1749B5] text-xs font-semibold text-white hover:bg-[#10182D] transition disabled:opacity-50"
                 >
-                  {isSubmittingForgot ? 'Đang gửi...' : 'Gửi mật khẩu tạm thời'}
+                  {isSubmittingForgot ? 'Đang gửi...' : 'Gửi mật khẩu tạm'}
                 </button>
               </div>
             </form>
@@ -881,18 +618,20 @@ export const LoginPage: React.FC = () => {
         </div>
       )}
 
-      {/* MODAL 2: COMPREHENSIVE GUIDE FOR ACCOUNT CREATION & ROLES */}
+      {/* ========================================================================= */}
+      {/* MODAL 2: PERMISSION & MEMBERSHIP GUIDE                                    */}
+      {/* ========================================================================= */}
       {showGuideModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-xs p-4 overflow-y-auto">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-xs p-4 overflow-y-auto">
           <div className="relative w-full max-w-2xl bg-white rounded-3xl p-6 sm:p-8 shadow-2xl border border-slate-200 text-slate-800 space-y-6 my-8">
             <div className="flex items-center justify-between border-b border-slate-100 pb-4">
               <div>
-                <h3 className="text-lg font-bold text-slate-900 flex items-center gap-2">
-                  <GraduationCap className="h-5 w-5 text-blue-600" />
-                  <span>Hướng dẫn Tạo Tài khoản & Phân quyền BK-IC</span>
+                <h3 className="text-lg font-bold text-[#10182D] flex items-center gap-2">
+                  <GraduationCap className="h-5 w-5 text-[#1749B5]" />
+                  <span>Hướng dẫn Tài khoản &amp; Phân quyền BK-IC</span>
                 </h3>
                 <p className="text-xs text-slate-500 mt-0.5">
-                  Cơ chế vận hành tài khoản thực tế của Câu lạc bộ Sáng tạo Khởi nghiệp BK-IC
+                  Quy định định danh dành cho Thành viên và Ban Điều hành CLB
                 </p>
               </div>
               <button
@@ -904,91 +643,49 @@ export const LoginPage: React.FC = () => {
               </button>
             </div>
 
-            <div className="space-y-5 text-xs text-slate-600 max-h-[65vh] overflow-y-auto pr-1">
-              
-              {/* Method 1 */}
+            <div className="space-y-4 text-xs text-slate-600 max-h-[60vh] overflow-y-auto pr-1">
               <div className="rounded-2xl border border-blue-100 bg-blue-50/50 p-4 space-y-2">
-                <div className="flex items-center gap-2 font-bold text-blue-900 text-sm">
-                  <span className="h-6 w-6 rounded-full bg-blue-600 text-white flex items-center justify-center text-xs">1</span>
-                  <span>Cách 1: Sinh viên tự đăng ký tài khoản trực tuyến</span>
+                <div className="font-bold text-[#1749B5] text-sm flex items-center gap-2">
+                  <span className="h-5 w-5 rounded-full bg-[#1749B5] text-white flex items-center justify-center text-xs">1</span>
+                  <span>Dành cho Ứng viên mới</span>
                 </div>
                 <p className="leading-relaxed">
-                  Bất kỳ sinh viên Trường ĐH Bách khoa nào cũng có thể tự tạo tài khoản:
+                  Để đảm bảo chất lượng thành viên và bảo mật cơ sở dữ liệu CLB, BK-IC không mở đăng ký tự do. Bạn có thể nộp đơn gia nhập qua đợt <strong>Tuyển thành viên</strong> thường niên tại mục <em>Hoạt động &gt; Tuyển thành viên</em>.
                 </p>
-                <ol className="list-decimal list-inside space-y-1 pl-2 text-slate-700">
-                  <li>Chuyển sang tab <strong>"Đăng ký tài khoản mới"</strong> trên trang Đăng nhập này.</li>
-                  <li>Điền chính xác Họ tên, MSSV, Email (ưu tiên @dut.udn.vn), Mật khẩu (tối thiểu 6 ký tự), Số điện thoại, Khoa đào tạo và Ban nguyện vọng muốn tham gia.</li>
-                  <li>Nhấn <strong>"Hoàn tất đăng ký tài khoản"</strong>. Hệ thống sẽ tạo tài khoản thực tế và hồ sơ ứng tuyển liên kết.</li>
-                  <li>Tài khoản khởi tạo sẽ ở vai trò <strong>Ứng viên (Applicant)</strong>. Ban Chủ nhiệm / Ban Thành viên sẽ liên hệ phỏng vấn và duyệt kết nạp vào CLB.</li>
-                </ol>
               </div>
 
-              {/* Method 2 */}
               <div className="rounded-2xl border border-emerald-100 bg-emerald-50/50 p-4 space-y-2">
-                <div className="flex items-center gap-2 font-bold text-emerald-900 text-sm">
-                  <span className="h-6 w-6 rounded-full bg-emerald-600 text-white flex items-center justify-center text-xs">2</span>
-                  <span>Cách 2: Ban Chủ nhiệm / Admin cấp tài khoản trực tiếp</span>
+                <div className="font-bold text-emerald-900 text-sm flex items-center gap-2">
+                  <span className="h-5 w-5 rounded-full bg-emerald-600 text-white flex items-center justify-center text-xs">2</span>
+                  <span>Cấp tài khoản chính thức</span>
                 </div>
                 <p className="leading-relaxed">
-                  Dành cho Cán bộ điều hành, Trưởng ban, Ban Cố vấn hoặc Thành viên được kết nạp trực tiếp:
+                  Khi trúng tuyển hoặc được bổ nhiệm, Ban Chủ nhiệm sẽ trực tiếp cấp tài khoản và gửi email thông báo kèm mật khẩu khởi tạo. Thành viên đăng nhập và đổi mật khẩu trong phiên đầu tiên.
                 </p>
-                <ol className="list-decimal list-inside space-y-1 pl-2 text-slate-700">
-                  <li>Đăng nhập tài khoản Quản trị viên (Email: <code className="bg-emerald-100 px-1 py-0.5 rounded font-mono">admin.bkic@dut.udn.vn</code> hoặc <code className="bg-emerald-100 px-1 py-0.5 rounded font-mono">admin@dut.udn.vn</code>).</li>
-                  <li>Truy cập vào <strong>Trang Quản trị Hệ thống</strong> &gt; mục <strong>"Thành viên"</strong>.</li>
-                  <li>Nhấn nút <strong>"Cấp tài khoản mới"</strong> ở góc phải.</li>
-                  <li>Điền đầy đủ thông tin thành viên, phân công Ban (BN, BDH, BTV), chọn vai trò (Admin / Leader / Member) và thiết lập mật khẩu khởi tạo (mặc định 123456).</li>
-                  <li>Nhấn <strong>"Lưu & Cấp tài khoản"</strong>. Thành viên mới có thể dùng email và mật khẩu này để đăng nhập ngay lập tức.</li>
-                </ol>
               </div>
 
-              {/* Method 3 */}
-              <div className="rounded-2xl border border-purple-100 bg-purple-50/50 p-4 space-y-2">
-                <div className="flex items-center gap-2 font-bold text-purple-900 text-sm">
-                  <span className="h-6 w-6 rounded-full bg-purple-600 text-white flex items-center justify-center text-xs">3</span>
-                  <span>Cách 3: Phê duyệt từ Đơn Tuyển dụng Thành viên</span>
+              <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4 space-y-2">
+                <div className="font-bold text-slate-900 text-sm">
+                  Cơ chế 4 Cấp phân quyền:
                 </div>
-                <p className="leading-relaxed">
-                  Khi sinh viên nộp đơn tuyển dụng qua trang <strong>Tuyển quân (/join)</strong> hoặc tự đăng ký:
-                </p>
-                <ol className="list-decimal list-inside space-y-1 pl-2 text-slate-700">
-                  <li>Admin / Ban Tuyển dụng truy cập mục <strong>"Hồ sơ tuyển dụng"</strong> trong Trang Quản trị.</li>
-                  <li>Xem thông tin ứng viên, chấm điểm phỏng vấn và nhấn nút <strong>"Phê duyệt & Kết nạp vào CLB"</strong>.</li>
-                  <li>Hệ thống tự động nâng cấp vai trò của tài khoản từ <strong>Ứng viên (Applicant)</strong> thành <strong>Thành viên chính thức (Member)</strong> thuộc Ban được chỉ định.</li>
-                </ol>
-              </div>
-
-              {/* Roles matrix */}
-              <div className="pt-2">
-                <h4 className="font-bold text-slate-900 mb-2">Bảng Phân quyền Vai trò BK-IC:</h4>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[11px]">
-                  <div className="p-2.5 rounded-xl border border-slate-200 bg-slate-50">
-                    <span className="font-semibold text-red-600 block">1. Admin (Ban Chủ nhiệm)</span>
-                    <span>Toàn quyền quản trị: Cấp/xóa tài khoản, phê duyệt bảo lưu, quản lý buổi đào tạo, tổng hợp đánh giá tháng, xuất báo cáo CSV.</span>
+                  <div className="p-2.5 rounded-xl bg-white border border-slate-200">
+                    <strong className="text-red-600 block">1. Admin (Ban Chủ nhiệm)</strong>
+                    <span>Toàn quyền quản trị nhân sự, phê duyệt hoạt động và báo cáo cấp Trường.</span>
                   </div>
-                  <div className="p-2.5 rounded-xl border border-slate-200 bg-slate-50">
-                    <span className="font-semibold text-blue-600 block">2. Leader (Trưởng ban)</span>
-                    <span>Quản lý thành viên trong ban, chấm điểm đánh giá tháng, giao nhiệm vụ và giám sát tiến độ hoạt động.</span>
+                  <div className="p-2.5 rounded-xl bg-white border border-slate-200">
+                    <strong className="text-[#1749B5] block">2. Leader (Trưởng ban)</strong>
+                    <span>Điều hành công việc nội bộ từng Ban, phân công nhiệm vụ và đánh giá tháng.</span>
                   </div>
-                  <div className="p-2.5 rounded-xl border border-slate-200 bg-slate-50">
-                    <span className="font-semibold text-emerald-600 block">3. Member (Thành viên chính thức)</span>
-                    <span>Quét mã QR điểm danh buổi tập huấn, nộp báo cáo nhiệm vụ, gửi phản hồi sinh hoạt, xem lịch sử đánh giá cá nhân.</span>
+                  <div className="p-2.5 rounded-xl bg-white border border-slate-200">
+                    <strong className="text-emerald-600 block">3. Member (Thành viên)</strong>
+                    <span>Quét QR điểm danh, nhận nhiệm vụ và tham gia các dự án đổi mới sáng tạo.</span>
                   </div>
-                  <div className="p-2.5 rounded-xl border border-slate-200 bg-slate-50">
-                    <span className="font-semibold text-amber-600 block">4. Applicant (Ứng viên)</span>
-                    <span>Theo dõi trạng thái xét duyệt hồ sơ, xem quy chế và đợi Ban Chủ nhiệm xác nhận kết nạp.</span>
+                  <div className="p-2.5 rounded-xl bg-white border border-slate-200">
+                    <strong className="text-amber-600 block">4. Applicant (Ứng viên)</strong>
+                    <span>Hồ sơ đang chờ phê duyệt kết nạp vào CLB.</span>
                   </div>
                 </div>
-              </div>
-
-              {/* Setup guidelines */}
-              <div className="p-3.5 rounded-2xl bg-blue-50/70 border border-blue-200">
-                <div className="font-semibold text-blue-900 mb-1 flex items-center gap-1.5 text-xs">
-                  <Lock className="h-4 w-4 text-blue-600" />
-                  <span>Chính sách bảo mật mật khẩu hệ thống:</span>
-                </div>
-                <p className="text-[11px] text-blue-800 leading-relaxed">
-                  Mật khẩu tài khoản phải có tối thiểu 8 ký tự, bao gồm chữ hoa, chữ thường, chữ số và ký tự đặc biệt. Thành viên có thể đổi mật khẩu bất kỳ lúc nào hoặc sử dụng tính năng "Quên mật khẩu?" để nhận mật khẩu tạm thời qua email.
-                </p>
               </div>
             </div>
 
@@ -996,9 +693,9 @@ export const LoginPage: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setShowGuideModal(false)}
-                className="px-5 py-2.5 bg-blue-600 text-white rounded-xl font-semibold text-xs hover:bg-blue-700 transition"
+                className="px-5 py-2.5 bg-[#1749B5] text-white rounded-xl font-semibold text-xs hover:bg-[#10182D] transition"
               >
-                Đã hiểu, quay lại
+                Đã hiểu
               </button>
             </div>
           </div>

@@ -235,6 +235,137 @@ cmsRouter.get('/events', (req, res) => {
   res.json({ success: true, events: store.events });
 });
 
+// POST /api/workshops/register (Public Workshop Registration)
+cmsRouter.post('/workshops/register', (req, res) => {
+  const { workshopId, workshopTitle, fullName, email, phone, organization, questionsForSpeaker } = req.body;
+  if (!workshopTitle || !fullName || !email || !phone) {
+    return res.status(400).json({
+      success: false,
+      message: 'Vui lòng cung cấp đầy đủ thông tin: Họ tên, Email, Số điện thoại.'
+    });
+  }
+
+  const store = db.get();
+  store.workshopRegistrations = store.workshopRegistrations || [];
+
+  const registration = {
+    id: `wreg-${Date.now()}`,
+    workshopId: workshopId || 'ws-general',
+    workshopTitle: workshopTitle.trim(),
+    fullName: fullName.trim(),
+    email: email.trim().toLowerCase(),
+    phone: phone.trim(),
+    organization: organization ? organization.trim() : '',
+    questionsForSpeaker: questionsForSpeaker ? questionsForSpeaker.trim() : '',
+    registeredAt: new Date().toISOString()
+  };
+
+  store.workshopRegistrations.unshift(registration);
+  db.save();
+
+  res.json({
+    success: true,
+    message: 'Đăng ký tham gia workshop thành công! Ban tổ chức BK-IC sẽ gửi email xác nhận và tài liệu hội thảo đến bạn.',
+    registration
+  });
+});
+
+// POST /api/competitions/register (Public Competition Registration)
+cmsRouter.post('/competitions/register', (req, res) => {
+  const { competitionId, competitionTitle, regType, teamName, leaderName, leaderEmail, leaderPhone, membersCount, projectIdeaSummary } = req.body;
+  if (!competitionTitle || !leaderName || !leaderEmail || !leaderPhone) {
+    return res.status(400).json({
+      success: false,
+      message: 'Vui lòng điền đầy đủ thông tin trưởng nhóm/người đăng ký, email và số điện thoại liên lạc.'
+    });
+  }
+
+  const store = db.get();
+  store.competitionRegistrations = store.competitionRegistrations || [];
+
+  const registration = {
+    id: `creg-${Date.now()}`,
+    competitionId: competitionId || 'comp-general',
+    competitionTitle: competitionTitle.trim(),
+    regType: regType === 'team' ? 'team' : 'individual',
+    teamName: teamName ? teamName.trim() : '',
+    leaderName: leaderName.trim(),
+    leaderEmail: leaderEmail.trim().toLowerCase(),
+    leaderPhone: leaderPhone.trim(),
+    membersCount: Number(membersCount) || 1,
+    projectIdeaSummary: projectIdeaSummary ? projectIdeaSummary.trim() : '',
+    registeredAt: new Date().toISOString()
+  };
+
+  store.competitionRegistrations.unshift(registration);
+  db.save();
+
+  res.json({
+    success: true,
+    message: 'Hồ sơ đăng ký dự thi đã được ghi nhận thành công! Ban Chuyên môn BK-IC sẽ liên hệ hỗ trợ đội thi.',
+    registration
+  });
+});
+
+// POST /api/partnerships/request (Public Partnership Request)
+cmsRouter.post('/partnerships/request', (req, res) => {
+  const { organizationName, representativeName, position, email, phone, partnershipType, proposalContent, attachmentUrl } = req.body;
+  if (!organizationName || !representativeName || !email || !phone || !proposalContent) {
+    return res.status(400).json({
+      success: false,
+      message: 'Vui lòng cung cấp đầy đủ: Tên tổ chức/doanh nghiệp, Người đại diện, Email, Số điện thoại và Nội dung đề xuất.'
+    });
+  }
+
+  const store = db.get();
+  store.partnershipRequests = store.partnershipRequests || [];
+
+  const request = {
+    id: `preq-${Date.now()}`,
+    organizationName: organizationName.trim(),
+    representativeName: representativeName.trim(),
+    position: position ? position.trim() : '',
+    email: email.trim().toLowerCase(),
+    phone: phone.trim(),
+    partnershipType: partnershipType || 'business_coop',
+    proposalContent: proposalContent.trim(),
+    attachmentUrl: attachmentUrl || '',
+    status: 'received',
+    submittedAt: new Date().toISOString()
+  };
+
+  store.partnershipRequests.unshift(request);
+
+  store.auditLogs.unshift({
+    id: `audit-${Date.now()}`,
+    timestamp: new Date().toISOString(),
+    actorId: 'guest-partner',
+    actorName: representativeName.trim(),
+    actorRole: 'partner',
+    action: 'Gửi đề xuất hợp tác',
+    targetType: 'PartnershipRequest',
+    targetId: request.id,
+    details: `Đơn vị ${organizationName} gửi đề xuất hợp tác mảng ${partnershipType}`
+  });
+
+  db.save();
+
+  res.json({
+    success: true,
+    message: 'Đề xuất hợp tác đã được gửi thành công! Ban Chủ nhiệm BK-IC sẽ liên hệ làm việc trong thời gian sớm nhất.',
+    request
+  });
+});
+
+// GET /api/partnerships/requests (Admin & BCN Only)
+cmsRouter.get('/partnerships/requests', requireAuth, requireNormalSession, requireUnitOrRole(['BN'], ['admin']), (req, res) => {
+  const store = db.get();
+  res.json({
+    success: true,
+    requests: store.partnershipRequests || []
+  });
+});
+
 // GET /api/settings (Public site settings - strictly excluding internal SMTP configuration)
 cmsRouter.get('/settings', (req, res) => {
   const store = db.get();

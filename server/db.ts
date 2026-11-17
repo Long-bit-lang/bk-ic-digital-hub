@@ -93,6 +93,9 @@ export interface DatabaseSchema {
   events: ClubEvent[];
   articles: ProvenanceArticle[];
   siteSettings: SiteSettings;
+  workshopRegistrations?: any[];
+  competitionRegistrations?: any[];
+  partnershipRequests?: any[];
 }
 
 // 3 Main Units of BK-IC (Structure)

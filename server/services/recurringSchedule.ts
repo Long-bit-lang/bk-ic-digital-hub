@@ -44,6 +44,9 @@ export function getUpcomingTuesdayDates(startOrWeeks?: string | number, weeksAhe
     
     if (weekday === 'Tue' && !tuesdayDates.includes(dateStr)) {
       tuesdayDates.push(dateStr);
+      if (tuesdayDates.length >= effectiveWeeks) {
+        break;
+      }
     }
   }
   

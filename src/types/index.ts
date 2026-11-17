@@ -305,6 +305,50 @@ export interface PenaltyTicket {
 // Alias for compatibility
 export type SessionFeedback = TrainingFeedback;
 
+// Public Registration & Partnership Types (P0 & P1)
+export interface WorkshopRegistration {
+  id: string;
+  workshopId: string;
+  workshopTitle: string;
+  fullName: string;
+  email: string;
+  phone: string;
+  organization?: string;
+  questionsForSpeaker?: string;
+  registeredAt: string;
+}
+
+export interface CompetitionRegistration {
+  id: string;
+  competitionId: string;
+  competitionTitle: string;
+  regType: 'individual' | 'team';
+  teamName?: string;
+  leaderName: string;
+  leaderEmail: string;
+  leaderPhone: string;
+  membersCount?: number;
+  projectIdeaSummary?: string;
+  registeredAt: string;
+}
+
+export type PartnershipRequestStatus = 'received' | 'reviewing' | 'contacted' | 'approved' | 'rejected';
+
+export interface PartnershipRequest {
+  id: string;
+  organizationName: string;
+  representativeName: string;
+  position?: string;
+  email: string;
+  phone: string;
+  partnershipType: 'companion_project' | 'sponsor' | 'business_coop' | 'event_cohost' | 'other';
+  proposalContent: string;
+  attachmentUrl?: string;
+  status: PartnershipRequestStatus;
+  submittedAt: string;
+  notes?: string;
+}
+
 export interface FeedbackSummary {
   sessionId: string;
   sessionTitle: string;

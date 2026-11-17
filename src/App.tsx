@@ -17,6 +17,7 @@ import { ProjectsPage } from './pages/ProjectsPage';
 import { NewsPage } from './pages/NewsPage';
 import { JoinPage } from './pages/JoinPage';
 import { ContactPage } from './pages/ContactPage';
+import { PartnershipPage } from './pages/PartnershipPage';
 
 // Auth Pages
 import { LoginPage } from './pages/auth/LoginPage';
@@ -62,11 +63,14 @@ function AppRouter() {
           <Route path="/about" element={<AboutPage />} />
           <Route path="/organization" element={<Navigate to="/#organization" replace />} />
           <Route path="/activities" element={<ActivitiesPage />} />
+          <Route path="/activities/:category" element={<ActivitiesPage />} />
           <Route path="/events" element={<EventsPage />} />
           <Route path="/projects" element={<ProjectsPage />} />
           <Route path="/news" element={<NewsPage />} />
           <Route path="/join" element={<JoinPage />} />
-          <Route path="/contact" element={<ContactPage />} />
+          <Route path="/partnership" element={<PartnershipPage />} />
+          <Route path="/partnership/:section" element={<PartnershipPage />} />
+          <Route path="/contact" element={<PartnershipPage />} />
         </Route>
 
         {/* Authentication Routes */}

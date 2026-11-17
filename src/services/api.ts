@@ -543,6 +543,19 @@ export const api = {
       method: 'POST',
       body: JSON.stringify(payload)
     }),
+    registerWorkshop: (payload: any) => request<{ success: boolean; message: string; registration: any }>('/api/workshops/register', {
+      method: 'POST',
+      body: JSON.stringify(payload)
+    }),
+    registerCompetition: (payload: any) => request<{ success: boolean; message: string; registration: any }>('/api/competitions/register', {
+      method: 'POST',
+      body: JSON.stringify(payload)
+    }),
+    submitPartnershipRequest: (payload: any) => request<{ success: boolean; message: string; request: any }>('/api/partnerships/request', {
+      method: 'POST',
+      body: JSON.stringify(payload)
+    }),
+    getPartnershipRequests: () => request<{ success: boolean; requests: any[] }>('/api/partnerships/requests'),
     convertApplicant: (id: string, payload: { unit: UnitId; position?: string }) =>
       request<{ success: boolean; message: string; member: User }>(`/api/applications/${id}/convert-to-member`, {
         method: 'POST',
