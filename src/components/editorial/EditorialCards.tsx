@@ -274,3 +274,4 @@ export const CompetitionCard: React.FC<CompetitionCardProps> = ({
     </div>
   );
 };
+

@@ -2,6 +2,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { SectionHeading } from '../components/editorial/SectionHeading';
+import { Breadcrumbs } from '../components/editorial/Breadcrumbs';
 import { CTASection } from '../components/editorial/CTASection';
 import { 
   Building2, 
@@ -14,12 +15,16 @@ import {
   Shield, 
   Cpu, 
   UserCheck, 
-  ArrowRight,
-  Sparkles,
-  BookOpen,
-  Target,
-  Zap,
-  Network
+  ArrowRight, 
+  Sparkles, 
+  BookOpen, 
+  Target, 
+  Zap, 
+  Network,
+  Cpu as Microchip,
+  Leaf,
+  Coins,
+  Palette
 } from 'lucide-react';
 
 export const AboutPage: React.FC = () => {
@@ -65,6 +70,29 @@ export const AboutPage: React.FC = () => {
     }
   ];
 
+  const tracks = [
+    {
+      icon: Microchip,
+      title: 'AI & Embedded IoT',
+      desc: 'Nghiên cứu ứng dụng trí tuệ nhân tạo biên, vi điều khiển thông minh và các hệ thống cảm biến công nghiệp.'
+    },
+    {
+      icon: Leaf,
+      title: 'Green Tech & Clean Energy',
+      desc: 'Phát triển các giải pháp giám sát năng lượng, xử lý rác thải thông minh và công nghệ giảm phát thải carbon.'
+    },
+    {
+      icon: Coins,
+      title: 'FinTech & Digital Economy',
+      desc: 'Ứng dụng chuyển đổi số trong tài chính sinh viên, thương mại điện tử phi tập trung và quản lý chi tiêu thông minh.'
+    },
+    {
+      icon: Palette,
+      title: 'EdTech & Creative Workspace',
+      desc: 'Xây dựng các công cụ hỗ trợ học tập trực quan, số hóa dữ liệu phòng thí nghiệm và không gian sáng tạo mở.'
+    }
+  ];
+
   const whyJoinReasons = [
     {
       icon: Zap,
@@ -89,96 +117,113 @@ export const AboutPage: React.FC = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-[#F5F6F8] text-[#10182D] py-16 px-4 sm:px-6 lg:px-8">
-      <div className="mx-auto max-w-5xl space-y-20">
-        {/* 1. HERO GIỚI THIỆU CLB */}
-        <div className="space-y-6">
-          <div className="inline-flex items-center gap-2 rounded-full border border-[#1749B5]/20 bg-[#1749B5]/10 px-3.5 py-1 text-xs font-semibold text-[#1749B5] font-mono">
-            <Building2 className="h-3.5 w-3.5" />
-            <span>TRƯỜNG ĐẠI HỌC BÁCH KHOA – ĐẠI HỌC ĐÀ NẴNG (DUT)</span>
-          </div>
+    <div className="min-h-screen bg-[#FDFDFE] text-[#10182D] py-12 px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-5xl space-y-16">
+        {/* Breadcrumbs */}
+        <Breadcrumbs items={[{ label: 'Về chúng tôi' }]} />
 
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-[#10182D] leading-tight">
-            Về Bách Khoa Innovation Club (BK-IC)
-          </h1>
-
-          <p className="text-base sm:text-lg text-[#5E6573] leading-relaxed font-normal">
-            Câu lạc bộ Khởi nghiệp và Đổi mới Sáng tạo trực thuộc <strong className="text-[#10182D]">Đoàn Thanh niên – Hội Sinh viên Trường Đại học Bách khoa, Đại học Đà Nẵng</strong>. Nơi ươm mầm tinh thần doanh nhân công nghệ và kết nối sinh viên kỹ thuật Bách khoa với hệ sinh thái khởi nghiệp quốc gia.
-          </p>
-        </div>
-
-        {/* 2. CÂU CHUYỆN BK-IC & XÁC THỰC PHÁP LÝ (Báo Đà Nẵng) */}
-        <div className="rounded-3xl border border-[#E2E6EE] bg-white p-7 sm:p-10 shadow-xs space-y-6">
-          <div className="flex items-center gap-2 text-xs font-mono font-bold text-[#1749B5] uppercase tracking-wider">
-            <ShieldCheck className="h-4 w-4" />
-            <span>Hồ sơ Xuất xứ & Căn cứ Pháp lý</span>
-          </div>
-
-          <h2 className="text-2xl font-bold text-[#10182D]">
-            Ghi nhận chính thức từ Báo Đà Nẵng (04/04/2026)
-          </h2>
-
-          <p className="text-sm text-[#5E6573] leading-relaxed font-normal">
-            Theo bài viết <em className="text-slate-800 font-semibold">"Thúc đẩy liên kết trong khởi nghiệp"</em> xuất bản ngày 04/04/2026 trên Báo Đà Nẵng, Câu lạc bộ Khởi nghiệp và Đổi mới sáng tạo - Bách Khoa Innovation Club (BK-IC) chính thức được ra mắt nhằm tạo môi trường kết nối đa ngành, chuyển giao công nghệ sinh viên và đóng góp giải pháp đổi mới cho thành phố.
-          </p>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs bg-[#F5F6F8] p-5 rounded-2xl border border-slate-100">
-            <div>
-              <span className="text-slate-400 block font-mono">Tên tiếng Việt:</span>
-              <strong className="text-slate-800">Câu lạc bộ Khởi nghiệp và Đổi mới sáng tạo</strong>
+        {/* ========================================================================= */}
+        {/* 1. GIỚI THIỆU CLB (#intro)                                                */}
+        {/* ========================================================================= */}
+        <section id="intro" className="space-y-6 scroll-mt-24">
+          <div className="space-y-4">
+            <div className="inline-flex items-center gap-2 rounded-full border border-[#1749B5]/20 bg-[#1749B5]/10 px-3.5 py-1 text-xs font-semibold text-[#1749B5] font-mono">
+              <Building2 className="h-3.5 w-3.5" />
+              <span>TRƯỜNG ĐẠI HỌC BÁCH KHOA – ĐẠI HỌC ĐÀ NẴNG (DUT)</span>
             </div>
-            <div>
-              <span className="text-slate-400 block font-mono">Tên quốc tế:</span>
-              <strong className="text-slate-800">BachKhoa Innovation and Entrepreneurship Club (BK-IC)</strong>
-            </div>
-            <div>
-              <span className="text-slate-400 block font-mono">Đơn vị trực thuộc:</span>
-              <strong className="text-slate-800">Đoàn Thanh niên – Hội Sinh viên Trường ĐH Bách khoa (DUT)</strong>
-            </div>
-            <div>
-              <span className="text-slate-400 block font-mono">Trụ sở hoạt động:</span>
-              <strong className="text-slate-800">54 Nguyễn Lương Bằng, Liên Chiểu, TP. Đà Nẵng</strong>
-            </div>
-          </div>
 
-          <div className="pt-2">
-            <a
-              href="https://baodanang.vn/thuc-day-lien-ket-trong-khoi-nghiep-3330893.html"
-              target="_blank"
-              rel="noreferrer"
-              className="inline-flex items-center gap-2 text-xs font-bold text-[#1749B5] hover:underline"
-            >
-              <span>Đọc nguyên văn bài viết trên Báo Đà Nẵng điện tử</span>
-              <ExternalLink className="h-3.5 w-3.5" />
-            </a>
-          </div>
-        </div>
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-[#10182D] leading-tight">
+              Về Bách Khoa Innovation Club (BK-IC)
+            </h1>
 
-        {/* 3. TẦM NHÌN VÀ SỨ MỆNH */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <div className="rounded-3xl border border-[#E2E6EE] bg-white p-8 space-y-4 shadow-xs">
-            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#1749B5]/10 text-[#1749B5]">
-              <Compass className="h-6 w-6" />
-            </div>
-            <h3 className="text-xl font-extrabold text-[#10182D]">Tầm nhìn</h3>
-            <p className="text-sm text-[#5E6573] leading-relaxed font-normal">
-              Trở thành cộng đồng đổi mới sáng tạo sinh viên hàng đầu miền Trung, nơi mỗi ý tưởng táo bạo của sinh viên Bách khoa được tiếp sức bằng cố vấn chuyên môn, công cụ kỹ thuật và nguồn lực thực tiễn để vươn tầm thị trường.
+            <p className="text-base sm:text-lg text-[#5E6573] leading-relaxed font-normal">
+              Câu lạc bộ Khởi nghiệp và Đổi mới Sáng tạo trực thuộc <strong className="text-[#10182D]">Đoàn Thanh niên – Hội Sinh viên Trường Đại học Bách khoa, Đại học Đà Nẵng</strong>. Nơi ươm mầm tinh thần doanh nhân công nghệ và kết nối sinh viên kỹ thuật Bách khoa với hệ sinh thái khởi nghiệp quốc gia.
             </p>
           </div>
 
-          <div className="rounded-3xl border border-[#E2E6EE] bg-white p-8 space-y-4 shadow-xs">
-            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-indigo-50 text-indigo-600">
-              <Award className="h-6 w-6" />
+          {/* Căn cứ xuất xứ Báo Đà Nẵng */}
+          <div className="rounded-3xl border border-[#E2E6EE] bg-white p-7 sm:p-10 shadow-xs space-y-5">
+            <div className="flex items-center gap-2 text-xs font-mono font-bold text-[#1749B5] uppercase tracking-wider">
+              <ShieldCheck className="h-4 w-4" />
+              <span>Hồ sơ Xuất xứ &amp; Căn cứ Pháp lý</span>
             </div>
-            <h3 className="text-xl font-extrabold text-[#10182D]">Sứ mệnh</h3>
-            <p className="text-sm text-[#5E6573] leading-relaxed font-normal">
-              Thúc đẩy tư duy khởi nghiệp trong học tập và nghiên cứu; hỗ trợ thương mại hóa đề tài nghiên cứu khoa học; đào tạo thế hệ kỹ sư giàu bản lĩnh, chủ động thích ứng và dẫn dắt cuộc cách mạng chuyển đổi số.
-            </p>
-          </div>
-        </div>
 
-        {/* 4. VÌ SAO NÊN GIA NHẬP BK-IC? */}
-        <div className="space-y-8">
+            <h2 className="text-2xl font-bold text-[#10182D]">
+              Ghi nhận chính thức từ Báo Đà Nẵng (04/04/2026)
+            </h2>
+
+            <p className="text-sm text-[#5E6573] leading-relaxed font-normal">
+              Theo bài viết <em className="text-slate-800 font-semibold">"Thúc đẩy liên kết trong khởi nghiệp"</em> xuất bản ngày 04/04/2026 trên Báo Đà Nẵng, Câu lạc bộ Khởi nghiệp và Đổi mới sáng tạo - Bách Khoa Innovation Club (BK-IC) chính thức được thành lập nhằm tạo môi trường kết nối đa ngành, chuyển giao công nghệ sinh viên và đóng góp giải pháp đổi mới cho thành phố.
+            </p>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs bg-[#F5F6F8] p-5 rounded-2xl border border-slate-100">
+              <div>
+                <span className="text-slate-400 block font-mono">Tên tiếng Việt:</span>
+                <strong className="text-slate-800">Câu lạc bộ Khởi nghiệp và Đổi mới sáng tạo</strong>
+              </div>
+              <div>
+                <span className="text-slate-400 block font-mono">Tên quốc tế:</span>
+                <strong className="text-slate-800">BachKhoa Innovation and Entrepreneurship Club (BK-IC)</strong>
+              </div>
+              <div>
+                <span className="text-slate-400 block font-mono">Đơn vị trực thuộc:</span>
+                <strong className="text-slate-800">Đoàn Thanh niên – Hội Sinh viên Trường ĐH Bách khoa (DUT)</strong>
+              </div>
+              <div>
+                <span className="text-slate-400 block font-mono">Trụ sở hoạt động:</span>
+                <strong className="text-slate-800">54 Nguyễn Lương Bằng, Liên Chiểu, TP. Đà Nẵng</strong>
+              </div>
+            </div>
+
+            <div className="pt-2">
+              <a
+                href="https://baodanang.vn/thuc-day-lien-ket-trong-khoi-nghiep-3330893.html"
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-2 text-xs font-bold text-[#1749B5] hover:underline"
+              >
+                <span>Đọc nguyên văn bài viết trên Báo Đà Nẵng điện tử</span>
+                <ExternalLink className="h-3.5 w-3.5" />
+              </a>
+            </div>
+          </div>
+        </section>
+
+        {/* ========================================================================= */}
+        {/* 2. LĨNH VỰC HOẠT ĐỘNG (#fields)                                          */}
+        {/* ========================================================================= */}
+        <section id="fields" className="space-y-6 scroll-mt-24 pt-8 border-t border-slate-200">
+          <SectionHeading
+            eyebrow="LĨNH VỰC HOẠT ĐỘNG"
+            title="Các Trụ cột Công nghệ Trọng điểm"
+            subtitle="BK-IC tập trung nguồn lực ươm tạo và phát triển các giải pháp giải quyết trực tiếp các bài toán kỹ thuật hiện đại."
+          />
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            {tracks.map((t, idx) => {
+              const Icon = t.icon;
+              return (
+                <div
+                  key={idx}
+                  className="rounded-3xl border border-[#E2E6EE] bg-white p-7 shadow-xs space-y-3 hover:border-[#6B9DFF] transition"
+                >
+                  <div className="p-2.5 rounded-xl bg-blue-50 text-[#1749B5] w-fit">
+                    <Icon className="h-5 w-5" />
+                  </div>
+                  <h3 className="text-lg font-bold text-[#10182D]">{t.title}</h3>
+                  <p className="text-xs sm:text-sm text-[#5E6573] leading-relaxed">
+                    {t.desc}
+                  </p>
+                </div>
+              );
+            })}
+          </div>
+        </section>
+
+        {/* ========================================================================= */}
+        {/* 3. VÌ SAO GIA NHẬP BK-IC? (#why-join)                                    */}
+        {/* ========================================================================= */}
+        <section id="why-join" className="space-y-6 scroll-mt-24 pt-8 border-t border-slate-200">
           <SectionHeading
             eyebrow="GIÁ TRỊ CỐT LÕI"
             title="Vì sao nên gia nhập Bách Khoa Innovation Club?"
@@ -191,14 +236,14 @@ export const AboutPage: React.FC = () => {
               return (
                 <div
                   key={idx}
-                  className="rounded-2xl border border-[#E2E6EE] bg-white p-6 shadow-xs space-y-3 hover:border-[#6B9DFF] transition"
+                  className="rounded-3xl border border-[#E2E6EE] bg-white p-7 shadow-xs space-y-3 hover:border-[#6B9DFF] transition"
                 >
                   <div className="p-2.5 rounded-xl bg-[#F5F6F8] text-[#1749B5] w-fit">
                     <Icon className="h-5 w-5" />
                   </div>
-                  <h4 className="text-base font-bold text-[#10182D]">
+                  <h3 className="text-base font-bold text-[#10182D]">
                     {item.title}
-                  </h4>
+                  </h3>
                   <p className="text-xs sm:text-sm text-[#5E6573] leading-relaxed">
                     {item.desc}
                   </p>
@@ -206,10 +251,45 @@ export const AboutPage: React.FC = () => {
               );
             })}
           </div>
-        </div>
+        </section>
 
-        {/* 5. CƠ CẤU TỔ CHỨC (3 Ban: BCN - BĐH - BTV) */}
-        <div className="space-y-8">
+        {/* ========================================================================= */}
+        {/* 4. TẦM NHÌN VÀ SỨ MỆNH (#vision-mission)                                  */}
+        {/* ========================================================================= */}
+        <section id="vision-mission" className="space-y-6 scroll-mt-24 pt-8 border-t border-slate-200">
+          <SectionHeading
+            eyebrow="ĐỊNH HƯỚNG PHÁT TRIỂN"
+            title="Tầm nhìn &amp; Sứ mệnh Dài hạn"
+            subtitle="Xây dựng nền tảng vững chắc để đưa sản phẩm trí tuệ sinh viên Bách khoa vươn xa."
+          />
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="rounded-3xl border border-[#E2E6EE] bg-white p-8 space-y-4 shadow-xs">
+              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#1749B5]/10 text-[#1749B5]">
+                <Compass className="h-6 w-6" />
+              </div>
+              <h3 className="text-xl font-extrabold text-[#10182D]">Tầm nhìn</h3>
+              <p className="text-sm text-[#5E6573] leading-relaxed font-normal">
+                Trở thành cộng đồng đổi mới sáng tạo sinh viên hàng đầu miền Trung, nơi mỗi ý tưởng táo bạo của sinh viên Bách khoa được tiếp sức bằng cố vấn chuyên môn, công cụ kỹ thuật và nguồn lực thực tiễn để vươn tầm thị trường.
+              </p>
+            </div>
+
+            <div className="rounded-3xl border border-[#E2E6EE] bg-white p-8 space-y-4 shadow-xs">
+              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-indigo-50 text-indigo-600">
+                <Award className="h-6 w-6" />
+              </div>
+              <h3 className="text-xl font-extrabold text-[#10182D]">Sứ mệnh</h3>
+              <p className="text-sm text-[#5E6573] leading-relaxed font-normal">
+                Thúc đẩy tư duy khởi nghiệp trong học tập và nghiên cứu; hỗ trợ thương mại hóa đề tài nghiên cứu khoa học; đào tạo thế hệ kỹ sư giàu bản lĩnh, chủ động thích ứng và dẫn dắt cuộc cách mạng chuyển đổi số.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* ========================================================================= */}
+        {/* 5. CƠ CẤU TỔ CHỨC (#structure)                                            */}
+        {/* ========================================================================= */}
+        <section id="structure" className="space-y-6 scroll-mt-24 pt-8 border-t border-slate-200">
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
             <SectionHeading
               eyebrow="BỘ MÁY CHÍNH THỨC"
@@ -222,9 +302,9 @@ export const AboutPage: React.FC = () => {
           {/* Org Tree Overview */}
           <div className="rounded-3xl border border-slate-200 bg-white p-6 sm:p-8 text-center space-y-4">
             <div className="max-w-md mx-auto rounded-2xl border border-slate-200 bg-slate-50 p-4">
-              <span className="text-[11px] font-mono text-slate-400 uppercase block">Cơ quan bảo trợ & cố vấn</span>
+              <span className="text-[11px] font-mono text-slate-400 uppercase block">Cơ quan bảo trợ &amp; cố vấn</span>
               <strong className="text-sm text-[#10182D]">Đoàn Thanh niên – Hội Sinh viên ĐH Bách khoa (DUT)</strong>
-              <div className="text-xs text-slate-500 mt-0.5">Trung tâm Hỗ trợ sinh viên & Quan hệ doanh nghiệp</div>
+              <div className="text-xs text-slate-500 mt-0.5">Trung tâm Hỗ trợ sinh viên &amp; Quan hệ doanh nghiệp</div>
             </div>
 
             <div className="w-0.5 h-6 bg-slate-200 mx-auto"></div>
@@ -284,9 +364,9 @@ export const AboutPage: React.FC = () => {
               })}
             </div>
           </div>
-        </div>
+        </section>
 
-        {/* 6. CTA SECTION */}
+        {/* CTA SECTION */}
         <CTASection
           eyebrow="GIA NHẬP BK-IC"
           title="Trở thành một phần của thế hệ sinh viên đổi mới sáng tạo"

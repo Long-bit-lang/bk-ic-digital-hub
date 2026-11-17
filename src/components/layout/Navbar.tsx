@@ -106,7 +106,9 @@ export const Navbar: React.FC = () => {
                 to="/activities"
                 className={({ isActive }) =>
                   `inline-flex items-center gap-1 py-1 transition-colors group ${
-                    isActive ? 'font-bold text-[#1749B5]' : 'text-slate-600 hover:text-[#1749B5]'
+                    isActive || location.pathname.startsWith('/activities')
+                      ? 'font-bold text-[#1749B5]'
+                      : 'text-slate-600 hover:text-[#1749B5]'
                   }`
                 }
               >

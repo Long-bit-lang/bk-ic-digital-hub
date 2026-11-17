@@ -1,4 +1,4 @@
-// BK-IC Digital Hub - Main Application Router
+// BK-IC Digital Hub - Main Application Router & Sitemap Architecture
 import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AppProvider } from './context/AppContext';
@@ -8,25 +8,45 @@ import { PublicLayout } from './components/layout/PublicLayout';
 import { PortalLayout } from './components/portal/PortalLayout';
 import { AdminLayout } from './components/admin/AdminLayout';
 
-// Public Pages
+// Public Primary Pages
 import { HomePage } from './pages/HomePage';
 import { AboutPage } from './pages/AboutPage';
 import { ActivitiesPage } from './pages/ActivitiesPage';
+import { PartnershipPage } from './pages/PartnershipPage';
+import { NotFoundPage } from './pages/NotFoundPage';
+
+// Activities Subpages & Details (6 Subcategories)
+import { InternalActivitiesPage } from './pages/activities/InternalActivitiesPage';
+import { WorkshopsPage } from './pages/activities/WorkshopsPage';
+import { WorkshopDetailPage } from './pages/activities/WorkshopDetailPage';
+import { CompetitionsPage } from './pages/activities/CompetitionsPage';
+import { CompetitionDetailPage } from './pages/activities/CompetitionDetailPage';
+import { CompanionProjectsPage } from './pages/activities/CompanionProjectsPage';
+import { CompanionProjectDetailPage } from './pages/activities/CompanionProjectDetailPage';
+import { BKSharkPage } from './pages/activities/BKSharkPage';
+import { BKSharkSeasonDetailPage } from './pages/activities/BKSharkSeasonDetailPage';
+import { RecruitmentPage } from './pages/activities/RecruitmentPage';
+
+// Partnership Subpages (3 Subcategories)
+import { CompanionProjectPartnershipPage } from './pages/partnership/CompanionProjectPartnershipPage';
+import { PartnershipPartnersPage } from './pages/partnership/PartnershipPartnersPage';
+import { PartnershipBusinessPage } from './pages/partnership/PartnershipBusinessPage';
+
+// Legacy / Existing Public Pages (Preserved for compatibility)
 import { EventsPage } from './pages/EventsPage';
 import { ProjectsPage } from './pages/ProjectsPage';
 import { NewsPage } from './pages/NewsPage';
 import { JoinPage } from './pages/JoinPage';
 import { ContactPage } from './pages/ContactPage';
-import { PartnershipPage } from './pages/PartnershipPage';
 
-// Auth Pages
+// Auth Pages (Dedicated Login Split-Screen & Recovery)
 import { LoginPage } from './pages/auth/LoginPage';
 import { PendingApprovalPage } from './pages/auth/PendingApprovalPage';
 import { ResetPasswordPage } from './pages/auth/ResetPasswordPage';
 import { VerifyEmailPage } from './pages/auth/VerifyEmailPage';
 import { CheckInPage } from './pages/checkin/CheckInPage';
 
-// Member Portal Pages
+// Member Portal Pages (Preserved)
 import { PortalDashboardPage } from './pages/portal/PortalDashboardPage';
 import { PortalProfilePage } from './pages/portal/PortalProfilePage';
 import { PortalSessionsPage } from './pages/portal/PortalSessionsPage';
@@ -34,7 +54,7 @@ import { PortalAttendancePage } from './pages/portal/PortalAttendancePage';
 import { PortalEvaluationsPage } from './pages/portal/PortalEvaluationsPage';
 import { PortalFeedbackPage } from './pages/portal/PortalFeedbackPage';
 
-// Admin Portal Pages
+// Admin Portal Pages (Preserved)
 import { AdminDashboardPage } from './pages/admin/AdminDashboardPage';
 import { AdminMembersPage } from './pages/admin/AdminMembersPage';
 import { AdminSessionsPage } from './pages/admin/AdminSessionsPage';
@@ -57,23 +77,50 @@ function AppRouter() {
       {(currentUser?.mustChangePassword || currentUser?.isRecoverySession) && <ForceChangePasswordModal />}
       
       <Routes>
-        {/* Public Website Routes */}
+        {/* ========================================================================= */}
+        {/* 1. PUBLIC WEBSITE ROUTES (5 Main Navigation Items & Subsystems)           */}
+        {/* ========================================================================= */}
         <Route element={<PublicLayout />}>
+          {/* Item 1: Trang chủ (Home) */}
           <Route path="/" element={<HomePage />} />
+
+          {/* Item 2: Về chúng tôi (About Us) */}
           <Route path="/about" element={<AboutPage />} />
-          <Route path="/organization" element={<Navigate to="/#organization" replace />} />
+          <Route path="/organization" element={<Navigate to="/about#structure" replace />} />
+
+          {/* Item 3: Hoạt động (Activities) — 6 Subcategories & Detail Routes */}
           <Route path="/activities" element={<ActivitiesPage />} />
-          <Route path="/activities/:category" element={<ActivitiesPage />} />
+          <Route path="/activities/internal" element={<InternalActivitiesPage />} />
+          <Route path="/activities/workshops" element={<WorkshopsPage />} />
+          <Route path="/activities/workshops/:slug" element={<WorkshopDetailPage />} />
+          <Route path="/activities/competitions" element={<CompetitionsPage />} />
+          <Route path="/activities/competitions/:slug" element={<CompetitionDetailPage />} />
+          <Route path="/activities/companion-projects" element={<CompanionProjectsPage />} />
+          <Route path="/activities/companion-projects/:slug" element={<CompanionProjectDetailPage />} />
+          <Route path="/activities/bk-shark" element={<BKSharkPage />} />
+          <Route path="/activities/bk-shark/:season" element={<BKSharkSeasonDetailPage />} />
+          <Route path="/activities/recruitment" element={<RecruitmentPage />} />
+
+          {/* Item 4: Hợp tác (Partnership) — 3 Subcategories */}
+          <Route path="/partnership" element={<PartnershipPage />} />
+          <Route path="/partnership/companion-project" element={<CompanionProjectPartnershipPage />} />
+          <Route path="/partnership/partners" element={<PartnershipPartnersPage />} />
+          <Route path="/partnership/business" element={<PartnershipBusinessPage />} />
+
+          {/* Legacy / Alias Routes (Preserved for backward compatibility) */}
           <Route path="/events" element={<EventsPage />} />
           <Route path="/projects" element={<ProjectsPage />} />
           <Route path="/news" element={<NewsPage />} />
           <Route path="/join" element={<JoinPage />} />
-          <Route path="/partnership" element={<PartnershipPage />} />
-          <Route path="/partnership/:section" element={<PartnershipPage />} />
           <Route path="/contact" element={<PartnershipPage />} />
+
+          {/* 404 Unknown Route Handling */}
+          <Route path="*" element={<NotFoundPage />} />
         </Route>
 
-        {/* Authentication Routes */}
+        {/* ========================================================================= */}
+        {/* 2. AUTHENTICATION ROUTES (Item 5: Đăng nhập - Login)                       */}
+        {/* ========================================================================= */}
         <Route path="/login" element={<LoginPage />} />
         <Route path="/reset-password" element={<ResetPasswordPage />} />
         <Route path="/verify-email" element={<VerifyEmailPage />} />
@@ -84,7 +131,9 @@ function AppRouter() {
         <Route path="/checkin" element={<CheckInPage />} />
         <Route path="/checkin/:sessionId" element={<CheckInPage />} />
 
-        {/* Member Portal Routes */}
+        {/* ========================================================================= */}
+        {/* 3. MEMBER PORTAL ROUTES (Preserved 100%)                                  */}
+        {/* ========================================================================= */}
         <Route path="/portal" element={<PortalLayout />}>
           <Route index element={<PortalDashboardPage />} />
           <Route path="profile" element={<PortalProfilePage />} />
@@ -95,7 +144,9 @@ function AppRouter() {
           <Route path="penalties" element={<Navigate to="/portal/attendance?tab=penalties" replace />} />
         </Route>
 
-        {/* Admin Portal Routes */}
+        {/* ========================================================================= */}
+        {/* 4. ADMIN PORTAL ROUTES (Preserved 100%)                                   */}
+        {/* ========================================================================= */}
         <Route path="/admin" element={<AdminLayout />}>
           <Route index element={<AdminDashboardPage />} />
           <Route path="members" element={<AdminMembersPage />} />
@@ -108,9 +159,6 @@ function AppRouter() {
           <Route path="content" element={<AdminContentPage />} />
           <Route path="settings" element={<AdminSettingsPage />} />
         </Route>
-
-        {/* 404 Fallback */}
-        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </>
   );
@@ -129,4 +177,3 @@ export function App() {
 }
 
 export default App;
-

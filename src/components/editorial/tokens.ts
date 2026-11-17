@@ -11,3 +11,4 @@ export const EDITORIAL_COLORS = {
   muted: '#5E6573',
   border: '#E2E6EE'
 };
+

@@ -2,7 +2,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   to?: string;
   href?: string;
   variant?: 'primary' | 'secondary' | 'dark' | 'outline-white' | 'ghost';
@@ -78,3 +78,23 @@ export const Button: React.FC<ButtonProps> = ({
     </button>
   );
 };
+
+export const PrimaryButton: React.FC<Omit<ButtonProps, 'variant'>> = (props) => (
+  <Button variant="primary" {...props} />
+);
+
+export const SecondaryButton: React.FC<Omit<ButtonProps, 'variant'>> = (props) => (
+  <Button variant="secondary" {...props} />
+);
+
+export const DarkButton: React.FC<Omit<ButtonProps, 'variant'>> = (props) => (
+  <Button variant="dark" {...props} />
+);
+
+export const OutlineWhiteButton: React.FC<Omit<ButtonProps, 'variant'>> = (props) => (
+  <Button variant="outline-white" {...props} />
+);
+
+export const GhostButton: React.FC<Omit<ButtonProps, 'variant'>> = (props) => (
+  <Button variant="ghost" {...props} />
+);
