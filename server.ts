@@ -1,5 +1,6 @@
 // BK-IC Digital Hub - Fullstack Express Server
 import express from 'express';
+import http from 'http';
 import cors from 'cors';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -149,14 +150,21 @@ async function startServer() {
     });
   });
 
+  const httpServer = http.createServer(app);
+
   // Frontend Serving: Vite middleware in Dev, Static pre-built files in Prod
   if (!isProduction) {
     const vite = await createViteServer({
-      server: { middlewareMode: true },
+      server: {
+        middlewareMode: true,
+        ws: {
+          server: httpServer
+        }
+      },
       appType: 'spa',
     });
     app.use(vite.middlewares);
-    console.log('[BK-IC Server] Vite development middleware mounted.');
+    console.log('[BK-IC Server] Vite development middleware mounted with HTTP server HMR.');
   } else {
     const distPath = path.resolve(__dirname, 'dist');
     app.use(express.static(distPath, { maxAge: '1d', index: false }));
@@ -175,7 +183,7 @@ async function startServer() {
     });
   });
 
-  const server = app.listen(PORT, '0.0.0.0', () => {
+  const server = httpServer.listen(PORT, '0.0.0.0', () => {
     console.log(`[BK-IC Server] Running on http://0.0.0.0:${PORT} (ENV: ${process.env.NODE_ENV || 'development'})`);
     console.log(`[BK-IC Server] Health endpoint: http://0.0.0.0:${PORT}/api/health`);
   });
