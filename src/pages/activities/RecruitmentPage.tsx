@@ -21,7 +21,7 @@ import {
 
 export const RecruitmentPage: React.FC = () => {
   return (
-    <div className="min-h-screen bg-[#FDFDFE] py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-transparent py-12 px-4 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-7xl space-y-12">
         {/* Breadcrumbs */}
         <Breadcrumbs
@@ -97,7 +97,7 @@ export const RecruitmentPage: React.FC = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="p-6 rounded-3xl border border-slate-200 bg-white space-y-3">
-              <span className="font-mono text-xs font-bold px-2.5 py-0.5 rounded-full bg-blue-50 text-[#1749B5] border border-blue-200">
+              <span className="text-xs font-bold px-2.5 py-0.5 rounded-full bg-blue-50 text-[#1749B5] border border-blue-200">
                 BCN • BAN CHỦ NHIỆM
               </span>
               <h4 className="text-base font-bold text-[#10182D]">Hoạch định &amp; Đối ngoại</h4>
@@ -107,7 +107,7 @@ export const RecruitmentPage: React.FC = () => {
             </div>
 
             <div className="p-6 rounded-3xl border border-slate-200 bg-white space-y-3">
-              <span className="font-mono text-xs font-bold px-2.5 py-0.5 rounded-full bg-indigo-50 text-indigo-700 border border-indigo-200">
+              <span className="text-xs font-bold px-2.5 py-0.5 rounded-full bg-indigo-50 text-indigo-700 border border-indigo-200">
                 BĐH • BAN ĐIỀU HÀNH
               </span>
               <h4 className="text-base font-bold text-[#10182D]">Kỹ thuật &amp; Dự án Đổi mới</h4>
@@ -117,7 +117,7 @@ export const RecruitmentPage: React.FC = () => {
             </div>
 
             <div className="p-6 rounded-3xl border border-slate-200 bg-white space-y-3">
-              <span className="font-mono text-xs font-bold px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">
+              <span className="text-xs font-bold px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">
                 BTV • BAN THÀNH VIÊN
               </span>
               <h4 className="text-base font-bold text-[#10182D]">Nhân sự &amp; Hoạt động Nội bộ</h4>
@@ -166,3 +166,4 @@ export const RecruitmentPage: React.FC = () => {
     </div>
   );
 };
+

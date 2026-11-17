@@ -2,6 +2,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Calendar, Clock, MapPin, ArrowRight, Award, User, Tag } from 'lucide-react';
+import { AbstractBlueVisual } from './AbstractVisuals';
 
 // 1. Editorial News / Article Card
 interface EditorialCardProps {
@@ -40,10 +41,10 @@ export const EditorialCard: React.FC<EditorialCardProps> = ({
         )}
 
         <div className="flex items-center justify-between text-xs">
-          <span className="font-mono font-bold uppercase tracking-wider text-[#1749B5] bg-[#1749B5]/10 px-2.5 py-1 rounded-md">
+          <span className="font-bold uppercase tracking-wider text-[#1749B5] bg-[#1749B5]/10 px-2.5 py-1 rounded-md">
             {category}
           </span>
-          <div className="flex items-center gap-2 text-slate-400 font-mono">
+          <div className="flex items-center gap-2 text-slate-400 font-medium">
             <span>{date}</span>
             <span>·</span>
             <span>{readTime}</span>
@@ -126,11 +127,11 @@ export const ActivityCard: React.FC<ActivityCardProps> = ({
     <div className="rounded-2xl border border-[#E2E6EE] bg-white p-6 sm:p-7 shadow-xs flex flex-col justify-between space-y-5 hover:border-[#6B9DFF] transition-all duration-200">
       <div className="space-y-4">
         <div className="flex items-center justify-between gap-2">
-          <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-slate-500 bg-slate-100 px-2.5 py-0.5 rounded">
+          <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500 bg-slate-100 px-2.5 py-0.5 rounded">
             {type}
           </span>
           <span
-            className={`text-[11px] font-mono font-semibold px-2.5 py-0.5 rounded-full border ${statusConfig.classes}`}
+            className={`text-[11px] font-semibold px-2.5 py-0.5 rounded-full border ${statusConfig.classes}`}
           >
             {statusConfig.label}
           </span>
@@ -222,10 +223,10 @@ export const CompetitionCard: React.FC<CompetitionCardProps> = ({
     <div className="rounded-2xl border border-[#E2E6EE] bg-white p-7 shadow-xs flex flex-col justify-between space-y-5 hover:border-[#6B9DFF] transition-all">
       <div className="space-y-4">
         <div className="flex items-center justify-between">
-          <span className="text-xs font-mono font-medium text-slate-500">
+          <span className="text-xs font-medium text-slate-500">
             {organizer}
           </span>
-          <span className={`text-[11px] font-mono font-bold px-2.5 py-0.5 rounded-full border ${statusLabels.color}`}>
+          <span className={`text-[11px] font-semibold px-2.5 py-0.5 rounded-full border ${statusLabels.color}`}>
             {statusLabels.text}
           </span>
         </div>
@@ -241,12 +242,12 @@ export const CompetitionCard: React.FC<CompetitionCardProps> = ({
         <div className="grid grid-cols-2 gap-3 pt-2 text-xs">
           {prize && (
             <div className="rounded-xl bg-[#F5F6F8] p-3 border border-slate-100">
-              <span className="text-[10px] font-mono text-slate-400 block uppercase">Tổng giải thưởng</span>
+              <span className="text-[10px] font-semibold text-slate-400 block uppercase">Tổng giải thưởng</span>
               <strong className="text-[#1749B5] text-sm font-extrabold">{prize}</strong>
             </div>
           )}
           <div className="rounded-xl bg-[#F5F6F8] p-3 border border-slate-100">
-            <span className="text-[10px] font-mono text-slate-400 block uppercase">Hạn nộp hồ sơ</span>
+            <span className="text-[10px] font-semibold text-slate-400 block uppercase">Hạn nộp hồ sơ</span>
             <strong className="text-slate-800 text-sm font-bold">{deadline}</strong>
           </div>
         </div>
@@ -259,7 +260,7 @@ export const CompetitionCard: React.FC<CompetitionCardProps> = ({
             <ArrowRight className="h-3.5 w-3.5" />
           </Link>
         ) : (
-          <span className="text-xs text-slate-400 font-mono">BK-IC Innovation</span>
+          <span className="text-xs text-slate-400 font-medium">BK-IC Innovation</span>
         )}
 
         {status === 'open' && onRegister && (
@@ -274,4 +275,63 @@ export const CompetitionCard: React.FC<CompetitionCardProps> = ({
     </div>
   );
 };
+
+// 4. Minimalist Editorial Timeline / List Row (Inspired by Tirtus Behance)
+export interface EditorialTimelineRowProps {
+  indexOrYear: string;
+  category?: string;
+  title: string;
+  subtitle?: string;
+  to: string;
+  thumbnailVariant?: 'ribbon' | 'mesh' | 'wave' | 'sphere';
+}
+
+export const EditorialTimelineRow: React.FC<EditorialTimelineRowProps> = ({
+  indexOrYear,
+  category,
+  title,
+  subtitle,
+  to,
+  thumbnailVariant = 'ribbon'
+}) => {
+  return (
+    <Link
+      to={to}
+      className="group py-5 border-b border-slate-200/80 flex flex-col sm:flex-row sm:items-center justify-between gap-4 hover:border-[#1749B5] transition-colors"
+    >
+      <div className="flex items-start sm:items-center gap-5">
+        <span className="text-xs font-bold text-slate-400 w-12 shrink-0">
+          {indexOrYear}
+        </span>
+
+        {/* Small thumbnail with blue abstract art */}
+        <div className="w-16 h-11 rounded-xl overflow-hidden shrink-0 border border-slate-200/60 shadow-2xs group-hover:border-[#6B9DFF] transition">
+          <AbstractBlueVisual variant={thumbnailVariant} className="w-full h-full rounded-xl" />
+        </div>
+
+        <div className="space-y-0.5">
+          {category && (
+            <span className="text-[10px] uppercase tracking-wider text-[#1749B5] font-bold">
+              {category}
+            </span>
+          )}
+          <h4 className="text-sm sm:text-base font-bold text-[#10182D] group-hover:text-[#1749B5] transition">
+            {title}
+          </h4>
+          {subtitle && (
+            <p className="text-xs text-[#5E6573] line-clamp-1">
+              {subtitle}
+            </p>
+          )}
+        </div>
+      </div>
+
+      <div className="flex items-center gap-1.5 text-xs font-semibold text-slate-400 group-hover:text-[#1749B5] group-hover:translate-x-1 transition shrink-0 pl-16 sm:pl-0">
+        <span>Xem chi tiết</span>
+        <ArrowRight className="h-3.5 w-3.5" />
+      </div>
+    </Link>
+  );
+};
+
 

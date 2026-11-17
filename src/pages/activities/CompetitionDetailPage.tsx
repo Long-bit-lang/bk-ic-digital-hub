@@ -35,7 +35,7 @@ export const CompetitionDetailPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#FDFDFE] py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-transparent py-12 px-4 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-5xl space-y-10">
         {/* Navigation & Breadcrumbs */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -58,11 +58,11 @@ export const CompetitionDetailPage: React.FC = () => {
         {/* Title Area */}
         <div className="space-y-4 border-b border-slate-200 pb-8">
           <div className="flex flex-wrap items-center gap-2">
-            <span className="px-3 py-1 rounded-full text-xs font-mono font-medium bg-blue-50 text-[#1749B5] border border-blue-200">
+            <span className="px-3 py-1 rounded-full text-xs font-semibold bg-blue-50 text-[#1749B5] border border-blue-200">
               {competition.field}
             </span>
             <span
-              className={`px-3 py-1 rounded-full text-xs font-mono font-semibold ${
+              className={`px-3 py-1 rounded-full text-xs font-semibold ${
                 competition.status === 'active'
                   ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
                   : 'bg-slate-100 text-slate-600 border border-slate-200'
@@ -70,8 +70,8 @@ export const CompetitionDetailPage: React.FC = () => {
             >
               {competition.status === 'active' ? '• Đang nhận hồ sơ dự thi' : '• Đã kết thúc'}
             </span>
-            <span className="text-xs font-mono text-slate-400">
-              Mã cuộc thi: {competition.slug}
+            <span className="text-xs font-medium text-slate-400">
+              Mã cuộc thi: <span className="font-mono text-slate-600">{competition.slug}</span>
             </span>
           </div>
 
@@ -87,7 +87,7 @@ export const CompetitionDetailPage: React.FC = () => {
         {/* Metadata Area */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           <div className="p-5 rounded-2xl border border-slate-200 bg-white space-y-1">
-            <div className="flex items-center gap-2 text-xs font-mono uppercase text-slate-400">
+            <div className="flex items-center gap-2 text-xs uppercase text-slate-400 font-semibold">
               <Trophy className="h-4 w-4 text-[#1749B5]" />
               <span>Tổng giải thưởng</span>
             </div>
@@ -96,7 +96,7 @@ export const CompetitionDetailPage: React.FC = () => {
           </div>
 
           <div className="p-5 rounded-2xl border border-slate-200 bg-white space-y-1">
-            <div className="flex items-center gap-2 text-xs font-mono uppercase text-slate-400">
+            <div className="flex items-center gap-2 text-xs uppercase text-slate-400 font-semibold">
               <Calendar className="h-4 w-4 text-[#1749B5]" />
               <span>Hạn nộp hồ sơ</span>
             </div>
@@ -105,7 +105,7 @@ export const CompetitionDetailPage: React.FC = () => {
           </div>
 
           <div className="p-5 rounded-2xl border border-slate-200 bg-white space-y-1">
-            <div className="flex items-center gap-2 text-xs font-mono uppercase text-slate-400">
+            <div className="flex items-center gap-2 text-xs uppercase text-slate-400 font-semibold">
               <Users className="h-4 w-4 text-[#1749B5]" />
               <span>Đối tượng dự thi</span>
             </div>
@@ -114,7 +114,7 @@ export const CompetitionDetailPage: React.FC = () => {
           </div>
 
           <div className="p-5 rounded-2xl border border-slate-200 bg-white space-y-1">
-            <div className="flex items-center gap-2 text-xs font-mono uppercase text-slate-400">
+            <div className="flex items-center gap-2 text-xs uppercase text-slate-400 font-semibold">
               <Building2 className="h-4 w-4 text-[#1749B5]" />
               <span>Đơn vị tổ chức</span>
             </div>
@@ -125,7 +125,7 @@ export const CompetitionDetailPage: React.FC = () => {
 
         {/* Optional Media Area Placeholder */}
         <div className="rounded-3xl border border-slate-200 bg-slate-50 p-8 sm:p-12 text-center space-y-3">
-          <div className="inline-flex items-center gap-2 text-xs font-mono text-slate-400 uppercase tracking-wider">
+          <div className="inline-flex items-center gap-2 text-xs text-slate-400 uppercase tracking-wider font-semibold">
             <FileText className="h-4 w-4" />
             <span>Khu vực Infographic Thể lệ &amp; Banner Cuộc thi</span>
           </div>
@@ -143,17 +143,17 @@ export const CompetitionDetailPage: React.FC = () => {
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
               <div className="p-4 rounded-2xl border border-slate-200 bg-white space-y-1.5">
-                <span className="text-xs font-mono font-bold text-[#1749B5]">VÒNG 1</span>
+                <span className="text-xs font-bold text-[#1749B5]">VÒNG 1</span>
                 <div className="font-bold text-[#10182D]">Ý tưởng &amp; Nộp hồ sơ</div>
                 <p className="text-xs text-slate-500">Nộp bản mô tả ý tưởng, tính mới mẻ công nghệ và khả năng giải quyết vấn đề.</p>
               </div>
               <div className="p-4 rounded-2xl border border-slate-200 bg-white space-y-1.5">
-                <span className="text-xs font-mono font-bold text-[#1749B5]">VÒNG 2</span>
+                <span className="text-xs font-bold text-[#1749B5]">VÒNG 2</span>
                 <div className="font-bold text-[#10182D]">Phát triển Nguyên mẫu (MVP)</div>
                 <p className="text-xs text-slate-500">Làm việc cùng ban cố vấn (mentors) để hoàn thiện nguyên mẫu kỹ thuật khả dụng.</p>
               </div>
               <div className="p-4 rounded-2xl border border-slate-200 bg-white space-y-1.5">
-                <span className="text-xs font-mono font-bold text-[#1749B5]">CHUNG KẾT</span>
+                <span className="text-xs font-bold text-[#1749B5]">CHUNG KẾT</span>
                 <div className="font-bold text-[#10182D]">Pitching trước Hội đồng</div>
                 <p className="text-xs text-slate-500">Thuyết trình sản phẩm thực tế, trả lời phản biện và đón nhận cơ hội ươm tạo.</p>
               </div>
@@ -168,15 +168,15 @@ export const CompetitionDetailPage: React.FC = () => {
             <div className="space-y-2 text-xs sm:text-sm">
               <div className="flex items-center justify-between p-3.5 rounded-xl border border-slate-200 bg-white">
                 <strong className="text-[#10182D]">01 Giải Nhất (Quán quân):</strong>
-                <span className="font-mono text-[#1749B5] font-bold">50.000.000 VNĐ + Suất vào thẳng Vườn ươm</span>
+                <span className="text-[#1749B5] font-bold">50.000.000 VNĐ + Suất vào thẳng Vườn ươm</span>
               </div>
               <div className="flex items-center justify-between p-3.5 rounded-xl border border-slate-200 bg-white">
                 <strong className="text-[#10182D]">01 Giải Nhì (Á quân):</strong>
-                <span className="font-mono text-slate-700 font-bold">25.000.000 VNĐ + Khóa huấn luyện chuyên sâu</span>
+                <span className="text-slate-700 font-bold">25.000.000 VNĐ + Khóa huấn luyện chuyên sâu</span>
               </div>
               <div className="flex items-center justify-between p-3.5 rounded-xl border border-slate-200 bg-white">
                 <strong className="text-[#10182D]">02 Giải Ba:</strong>
-                <span className="font-mono text-slate-700 font-bold">10.000.000 VNĐ/giải</span>
+                <span className="text-slate-700 font-bold">10.000.000 VNĐ/giải</span>
               </div>
             </div>
           </div>
@@ -213,3 +213,4 @@ export const CompetitionDetailPage: React.FC = () => {
     </div>
   );
 };
+

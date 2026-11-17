@@ -20,7 +20,7 @@ export const InternalActivitiesPage: React.FC = () => {
   });
 
   return (
-    <div className="min-h-screen bg-[#FDFDFE] py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-transparent py-12 px-4 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-7xl space-y-12">
         {/* Breadcrumb Trail */}
         <Breadcrumbs
@@ -96,7 +96,7 @@ export const InternalActivitiesPage: React.FC = () => {
               Đã kết thúc
             </button>
           </div>
-          <span className="text-xs font-mono text-slate-400 hidden sm:inline">
+          <span className="text-xs font-medium text-slate-400 hidden sm:inline">
             DUT • 2026
           </span>
         </div>
@@ -147,3 +147,4 @@ export const InternalActivitiesPage: React.FC = () => {
     </div>
   );
 };
+

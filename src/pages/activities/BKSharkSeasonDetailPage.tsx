@@ -32,7 +32,7 @@ export const BKSharkSeasonDetailPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#FDFDFE] py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-transparent py-12 px-4 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-5xl space-y-10">
         {/* Navigation & Breadcrumbs */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -55,11 +55,11 @@ export const BKSharkSeasonDetailPage: React.FC = () => {
         {/* Title Area */}
         <div className="space-y-4 border-b border-slate-200 pb-8">
           <div className="flex flex-wrap items-center gap-2">
-            <span className="px-3 py-1 rounded-full text-xs font-mono font-bold bg-[#10182D] text-white">
+            <span className="px-3 py-1 rounded-full text-xs font-bold bg-[#10182D] text-white">
               BK SHARK • MÙA {seasonData.year}
             </span>
             <span
-              className={`px-3 py-1 rounded-full text-xs font-mono font-semibold ${
+              className={`px-3 py-1 rounded-full text-xs font-semibold ${
                 seasonData.status === 'active'
                   ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
                   : 'bg-slate-100 text-slate-600 border border-slate-200'
@@ -81,7 +81,7 @@ export const BKSharkSeasonDetailPage: React.FC = () => {
         {/* Metadata Area */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           <div className="p-5 rounded-2xl border border-slate-200 bg-white space-y-1">
-            <div className="flex items-center gap-2 text-xs font-mono uppercase text-slate-400">
+            <div className="flex items-center gap-2 text-xs uppercase text-slate-400 font-semibold">
               <Calendar className="h-4 w-4 text-[#1749B5]" />
               <span>Thời gian tổ chức</span>
             </div>
@@ -90,7 +90,7 @@ export const BKSharkSeasonDetailPage: React.FC = () => {
           </div>
 
           <div className="p-5 rounded-2xl border border-slate-200 bg-white space-y-1">
-            <div className="flex items-center gap-2 text-xs font-mono uppercase text-slate-400">
+            <div className="flex items-center gap-2 text-xs uppercase text-slate-400 font-semibold">
               <Users className="h-4 w-4 text-[#1749B5]" />
               <span>Dự án Pitching</span>
             </div>
@@ -99,7 +99,7 @@ export const BKSharkSeasonDetailPage: React.FC = () => {
           </div>
 
           <div className="p-5 rounded-2xl border border-slate-200 bg-white space-y-1">
-            <div className="flex items-center gap-2 text-xs font-mono uppercase text-slate-400">
+            <div className="flex items-center gap-2 text-xs uppercase text-slate-400 font-semibold">
               <TrendingUp className="h-4 w-4 text-[#1749B5]" />
               <span>Tổng cam kết vốn</span>
             </div>
@@ -108,7 +108,7 @@ export const BKSharkSeasonDetailPage: React.FC = () => {
           </div>
 
           <div className="p-5 rounded-2xl border border-slate-200 bg-white space-y-1">
-            <div className="flex items-center gap-2 text-xs font-mono uppercase text-slate-400">
+            <div className="flex items-center gap-2 text-xs uppercase text-slate-400 font-semibold">
               <Building2 className="h-4 w-4 text-[#1749B5]" />
               <span>Đơn vị tổ chức</span>
             </div>
@@ -119,7 +119,7 @@ export const BKSharkSeasonDetailPage: React.FC = () => {
 
         {/* Optional Media Area Placeholder */}
         <div className="rounded-3xl border border-slate-200 bg-slate-50 p-8 sm:p-12 text-center space-y-3">
-          <div className="inline-flex items-center gap-2 text-xs font-mono text-slate-400 uppercase tracking-wider">
+          <div className="inline-flex items-center gap-2 text-xs text-slate-400 uppercase tracking-wider font-semibold">
             <FileText className="h-4 w-4" />
             <span>Khu vực Hình ảnh Pitching &amp; Khoảnh khắc Ký kết</span>
           </div>
@@ -194,3 +194,4 @@ export const BKSharkSeasonDetailPage: React.FC = () => {
     </div>
   );
 };
+

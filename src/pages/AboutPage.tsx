@@ -117,7 +117,7 @@ export const AboutPage: React.FC = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-[#FDFDFE] text-[#10182D] py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-transparent text-[#10182D] py-12 px-4 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-5xl space-y-16">
         {/* Breadcrumbs */}
         <Breadcrumbs items={[{ label: 'Về chúng tôi' }]} />
@@ -127,7 +127,7 @@ export const AboutPage: React.FC = () => {
         {/* ========================================================================= */}
         <section id="intro" className="space-y-6 scroll-mt-24">
           <div className="space-y-4">
-            <div className="inline-flex items-center gap-2 rounded-full border border-[#1749B5]/20 bg-[#1749B5]/10 px-3.5 py-1 text-xs font-semibold text-[#1749B5] font-mono">
+            <div className="inline-flex items-center gap-2 rounded-full border border-[#1749B5]/20 bg-[#1749B5]/10 px-3.5 py-1 text-xs font-semibold text-[#1749B5]">
               <Building2 className="h-3.5 w-3.5" />
               <span>TRƯỜNG ĐẠI HỌC BÁCH KHOA – ĐẠI HỌC ĐÀ NẴNG (DUT)</span>
             </div>
@@ -143,7 +143,7 @@ export const AboutPage: React.FC = () => {
 
           {/* Căn cứ xuất xứ Báo Đà Nẵng */}
           <div className="rounded-3xl border border-[#E2E6EE] bg-white p-7 sm:p-10 shadow-xs space-y-5">
-            <div className="flex items-center gap-2 text-xs font-mono font-bold text-[#1749B5] uppercase tracking-wider">
+            <div className="flex items-center gap-2 text-xs font-bold text-[#1749B5] uppercase tracking-wider">
               <ShieldCheck className="h-4 w-4" />
               <span>Hồ sơ Xuất xứ &amp; Căn cứ Pháp lý</span>
             </div>
@@ -158,19 +158,19 @@ export const AboutPage: React.FC = () => {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs bg-[#F5F6F8] p-5 rounded-2xl border border-slate-100">
               <div>
-                <span className="text-slate-400 block font-mono">Tên tiếng Việt:</span>
+                <span className="text-slate-400 block font-medium">Tên tiếng Việt:</span>
                 <strong className="text-slate-800">Câu lạc bộ Khởi nghiệp và Đổi mới sáng tạo</strong>
               </div>
               <div>
-                <span className="text-slate-400 block font-mono">Tên quốc tế:</span>
+                <span className="text-slate-400 block font-medium">Tên quốc tế:</span>
                 <strong className="text-slate-800">BachKhoa Innovation and Entrepreneurship Club (BK-IC)</strong>
               </div>
               <div>
-                <span className="text-slate-400 block font-mono">Đơn vị trực thuộc:</span>
+                <span className="text-slate-400 block font-medium">Đơn vị trực thuộc:</span>
                 <strong className="text-slate-800">Đoàn Thanh niên – Hội Sinh viên Trường ĐH Bách khoa (DUT)</strong>
               </div>
               <div>
-                <span className="text-slate-400 block font-mono">Trụ sở hoạt động:</span>
+                <span className="text-slate-400 block font-medium">Trụ sở hoạt động:</span>
                 <strong className="text-slate-800">54 Nguyễn Lương Bằng, Liên Chiểu, TP. Đà Nẵng</strong>
               </div>
             </div>
@@ -296,13 +296,13 @@ export const AboutPage: React.FC = () => {
               title="Cơ cấu 3 Ban Vận hành BK-IC"
               subtitle="Cơ cấu tinh gọn gồm đúng 3 ban chức năng đảm bảo tính minh bạch, chuyên môn hóa và phân quyền rõ ràng."
             />
-            <span className="text-xs font-mono text-slate-400">DUT • 2026</span>
+            <span className="text-xs font-semibold text-slate-400">DUT • 2026</span>
           </div>
 
           {/* Org Tree Overview */}
           <div className="rounded-3xl border border-slate-200 bg-white p-6 sm:p-8 text-center space-y-4">
             <div className="max-w-md mx-auto rounded-2xl border border-slate-200 bg-slate-50 p-4">
-              <span className="text-[11px] font-mono text-slate-400 uppercase block">Cơ quan bảo trợ &amp; cố vấn</span>
+              <span className="text-[11px] font-semibold text-slate-400 uppercase block">Cơ quan bảo trợ &amp; cố vấn</span>
               <strong className="text-sm text-[#10182D]">Đoàn Thanh niên – Hội Sinh viên ĐH Bách khoa (DUT)</strong>
               <div className="text-xs text-slate-500 mt-0.5">Trung tâm Hỗ trợ sinh viên &amp; Quan hệ doanh nghiệp</div>
             </div>
@@ -319,10 +319,10 @@ export const AboutPage: React.FC = () => {
                   >
                     <div className="space-y-3">
                       <div className="flex items-center justify-between">
-                        <span className={`font-mono text-xs font-bold px-2.5 py-0.5 rounded-full border ${unit.badgeClass}`}>
+                        <span className={`text-xs font-bold px-2.5 py-0.5 rounded-full border ${unit.badgeClass}`}>
                           {unit.code}
                         </span>
-                        <span className="text-[10px] font-mono text-slate-400">
+                        <span className="text-[10px] font-medium text-slate-400">
                           {unit.role}
                         </span>
                       </div>
@@ -341,7 +341,7 @@ export const AboutPage: React.FC = () => {
                       </p>
 
                       <div className="pt-2 border-t border-slate-100 space-y-1.5">
-                        <span className="text-[10px] font-mono font-bold uppercase text-slate-400 block">
+                        <span className="text-[10px] font-bold uppercase text-slate-400 block">
                           Chức năng chính:
                         </span>
                         <ul className="space-y-1">
@@ -355,7 +355,7 @@ export const AboutPage: React.FC = () => {
                       </div>
                     </div>
 
-                    <div className="pt-3 border-t border-slate-100 text-[11px] text-slate-400 font-mono flex items-center justify-between">
+                    <div className="pt-3 border-t border-slate-100 text-[11px] text-slate-400 flex items-center justify-between">
                       <span>Phân quyền độc lập</span>
                       <span className="text-[#1749B5] font-semibold">Chính thức</span>
                     </div>

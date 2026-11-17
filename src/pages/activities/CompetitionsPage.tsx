@@ -66,7 +66,7 @@ export const CompetitionsPage: React.FC = () => {
   });
 
   return (
-    <div className="min-h-screen bg-[#FDFDFE] py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-transparent py-12 px-4 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-7xl space-y-12">
         {/* Breadcrumbs */}
         <Breadcrumbs
@@ -137,11 +137,11 @@ export const CompetitionsPage: React.FC = () => {
                 <div className="space-y-4">
                   {/* Badge & Status */}
                   <div className="flex items-center justify-between">
-                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-mono font-medium bg-blue-50 text-[#1749B5] border border-blue-100">
+                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-blue-50 text-[#1749B5] border border-blue-100">
                       {comp.field}
                     </span>
                     <span
-                      className={`text-[11px] font-mono font-semibold ${
+                      className={`text-[11px] font-semibold ${
                         comp.status === 'active' ? 'text-emerald-600' : 'text-slate-400'
                       }`}
                     >
@@ -164,11 +164,11 @@ export const CompetitionsPage: React.FC = () => {
                   {/* Metrics Box */}
                   <div className="grid grid-cols-2 gap-3 pt-3 border-t border-slate-100 text-xs">
                     <div className="p-3 rounded-2xl bg-slate-50 space-y-0.5">
-                      <div className="text-[10px] font-mono text-slate-400 uppercase">Tổng giải thưởng</div>
+                      <div className="text-[10px] font-semibold text-slate-400 uppercase">Tổng giải thưởng</div>
                       <div className="font-bold text-[#10182D] truncate">{comp.prizePool}</div>
                     </div>
                     <div className="p-3 rounded-2xl bg-slate-50 space-y-0.5">
-                      <div className="text-[10px] font-mono text-slate-400 uppercase">Hạn đăng ký</div>
+                      <div className="text-[10px] font-semibold text-slate-400 uppercase">Hạn đăng ký</div>
                       <div className="font-bold text-[#10182D] truncate">{comp.deadline}</div>
                     </div>
                   </div>
@@ -216,3 +216,4 @@ export const CompetitionsPage: React.FC = () => {
     </div>
   );
 };
+

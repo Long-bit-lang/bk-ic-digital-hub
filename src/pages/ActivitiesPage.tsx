@@ -70,7 +70,7 @@ export const ActivitiesPage: React.FC = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-[#FDFDFE] py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-transparent py-12 px-4 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-7xl space-y-12">
         {/* Breadcrumbs */}
         <Breadcrumbs items={[{ label: 'Hoạt động' }]} />
@@ -99,7 +99,7 @@ export const ActivitiesPage: React.FC = () => {
                     <div className="p-3 rounded-2xl bg-slate-50 text-[#1749B5] group-hover:bg-[#1749B5] group-hover:text-white transition duration-200">
                       <Icon className="h-5 w-5" />
                     </div>
-                    <span className="font-mono text-[11px] font-semibold tracking-wider text-slate-400 group-hover:text-[#1749B5] transition">
+                    <span className="text-[11px] font-bold tracking-wider text-slate-400 group-hover:text-[#1749B5] transition">
                       {cat.badge}
                     </span>
                   </div>
@@ -114,7 +114,7 @@ export const ActivitiesPage: React.FC = () => {
                 </div>
 
                 <div className="pt-6 mt-6 border-t border-slate-100 flex items-center justify-between text-xs font-semibold">
-                  <span className="text-slate-400 font-mono text-[11px]">{cat.highlight}</span>
+                  <span className="text-slate-400 text-[11px]">{cat.highlight}</span>
                   <span className="text-[#1749B5] flex items-center gap-1 group-hover:translate-x-1 transition-transform">
                     <span>Khám phá</span>
                     <ArrowRight className="h-3.5 w-3.5" />

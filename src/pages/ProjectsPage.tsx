@@ -30,7 +30,7 @@ export const ProjectsPage: React.FC = () => {
   });
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC] py-16 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-transparent py-16 px-4 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-6xl space-y-12">
         {/* Header */}
         <div className="max-w-3xl space-y-4">

@@ -6,7 +6,7 @@ import { PrimaryButton, SecondaryButton } from '../components/editorial/Buttons'
 
 export const NotFoundPage: React.FC = () => {
   return (
-    <div className="min-h-[70vh] bg-[#FDFDFE] flex items-center justify-center py-20 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-[70vh] bg-transparent flex items-center justify-center py-20 px-4 sm:px-6 lg:px-8">
       <div className="max-w-2xl w-full text-center space-y-8">
         {/* Eyebrow badge */}
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100 border border-slate-200 text-xs font-mono font-medium text-slate-600">
@@ -61,3 +61,4 @@ export const NotFoundPage: React.FC = () => {
     </div>
   );
 };
+

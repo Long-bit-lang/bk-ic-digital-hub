@@ -95,7 +95,7 @@ export const OrganizationSection: React.FC = () => {
       {/* 01. Section Header */}
       <div ref={headerRef} className="flex flex-col md:flex-row md:items-end justify-between mb-8 sm:mb-10 gap-6">
         <div className="max-w-3xl space-y-3">
-          <div className="inline-flex items-center gap-2 rounded-full border border-blue-200 bg-blue-50 px-3.5 py-1 text-xs font-semibold text-[#245BFA] font-mono">
+          <div className="inline-flex items-center gap-2 rounded-full border border-blue-200 bg-blue-50 px-3.5 py-1 text-xs font-semibold text-[#245BFA]">
             <Users className="h-3.5 w-3.5" />
             <span>BỘ MÁY TỔ CHỨC CHÍNH THỨC • BK-IC DUT</span>
           </div>
@@ -123,7 +123,7 @@ export const OrganizationSection: React.FC = () => {
       <div ref={treeRef} className="mb-14 sm:mb-16">
         <div className="rounded-3xl border border-slate-200/90 bg-gradient-to-b from-slate-50/70 to-white p-6 sm:p-10 shadow-xs">
           <div className="text-center max-w-xl mx-auto mb-8 space-y-1.5">
-            <span className="inline-flex items-center gap-1.5 text-xs font-mono font-bold text-blue-600 uppercase tracking-wider">
+            <span className="inline-flex items-center gap-1.5 text-xs font-bold text-blue-600 uppercase tracking-wider">
               <Network className="h-3.5 w-3.5" />
               Sơ đồ Quan hệ Quản trị & Điều hành
             </span>
@@ -154,7 +154,7 @@ export const OrganizationSection: React.FC = () => {
 
             {/* Level 2: Executive Core (BCN) */}
             <div className="max-w-md mx-auto rounded-2xl border-2 border-blue-400 bg-blue-50/50 p-5 text-center shadow-xs relative">
-              <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-blue-600 text-white text-[10px] font-mono font-bold px-3 py-0.5 rounded-full shadow-xs">
+              <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-blue-600 text-white text-[10px] font-bold px-3 py-0.5 rounded-full shadow-xs">
                 TRUNG TÂM QUẢN TRỊ CHIẾN LƯỢC
               </div>
               <div className="flex items-center justify-center gap-2 text-[#245BFA] font-bold text-base mt-1">
@@ -187,7 +187,7 @@ export const OrganizationSection: React.FC = () => {
               {/* BĐH */}
               <div className="rounded-2xl border border-emerald-300 bg-emerald-50/30 p-5 shadow-xs">
                 <div className="flex items-center justify-between mb-2">
-                  <span className="font-mono text-xs font-bold text-emerald-800 bg-emerald-100 px-2.5 py-0.5 rounded-full">
+                  <span className="text-xs font-bold text-emerald-800 bg-emerald-100 px-2.5 py-0.5 rounded-full">
                     NHÁNH CHUYÊN MÔN
                   </span>
                 </div>
@@ -203,7 +203,7 @@ export const OrganizationSection: React.FC = () => {
               {/* BTV */}
               <div className="rounded-2xl border border-indigo-300 bg-indigo-50/30 p-5 shadow-xs">
                 <div className="flex items-center justify-between mb-2">
-                  <span className="font-mono text-xs font-bold text-indigo-800 bg-indigo-100 px-2.5 py-0.5 rounded-full">
+                  <span className="text-xs font-bold text-indigo-800 bg-indigo-100 px-2.5 py-0.5 rounded-full">
                     NHÁNH NỀN TẢNG SỐ
                   </span>
                 </div>
@@ -223,7 +223,7 @@ export const OrganizationSection: React.FC = () => {
       {/* 03. Weekly Collaboration Workflow */}
       <div ref={workflowRef} className="rounded-3xl border border-slate-200 bg-white p-6 sm:p-10 shadow-xs mb-14 sm:mb-20 space-y-8">
         <div className="max-w-2xl space-y-2">
-          <div className="inline-flex items-center gap-2 text-xs font-mono font-bold text-blue-600 uppercase tracking-wider">
+          <div className="inline-flex items-center gap-2 text-xs font-bold text-blue-600 uppercase tracking-wider">
             <Workflow className="h-4 w-4" />
             <span>Quy Trình Phối Hợp Khép Kín</span>
           </div>
@@ -240,10 +240,10 @@ export const OrganizationSection: React.FC = () => {
           {workflows.map((wf, idx) => (
             <div key={idx} className="rounded-2xl border border-slate-100 bg-slate-50 p-5 space-y-3 relative group hover:bg-white hover:border-blue-200 hover:shadow-xs transition">
               <div className="flex items-center justify-between">
-                <span className="font-mono text-2xl font-black text-slate-300 group-hover:text-blue-500 transition">
+                <span className="text-2xl font-bold text-slate-300 group-hover:text-blue-500 transition">
                   {wf.step}
                 </span>
-                <span className={`text-[10px] font-mono font-bold px-2 py-0.5 rounded-full border ${wf.badgeColor}`}>
+                <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${wf.badgeColor}`}>
                   {wf.unit}
                 </span>
               </div>

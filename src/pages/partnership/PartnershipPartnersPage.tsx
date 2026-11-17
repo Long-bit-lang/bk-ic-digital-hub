@@ -46,7 +46,7 @@ export const PartnershipPartnersPage: React.FC = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-[#FDFDFE] py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-transparent py-12 px-4 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-7xl space-y-16">
         {/* Breadcrumbs */}
         <Breadcrumbs
@@ -87,7 +87,7 @@ export const PartnershipPartnersPage: React.FC = () => {
                 className="rounded-3xl border border-[#E2E6EE] bg-white p-7 shadow-xs space-y-4 hover:border-[#6B9DFF] transition"
               >
                 <div className="flex items-center justify-between">
-                  <span className="font-mono text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-blue-50 text-[#1749B5] border border-blue-100">
+                  <span className="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-blue-50 text-[#1749B5] border border-blue-100">
                     {p.badge}
                   </span>
                   <Building2 className="h-4 w-4 text-slate-400" />
@@ -167,3 +167,4 @@ export const PartnershipPartnersPage: React.FC = () => {
     </div>
   );
 };
+

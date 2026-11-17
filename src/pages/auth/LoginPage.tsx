@@ -230,7 +230,7 @@ export const LoginPage: React.FC = () => {
         {/* Center: Editorial Manifesto & Pillar Cards */}
         <div className="relative z-10 py-12 space-y-8">
           <div className="space-y-3">
-            <div className="inline-flex items-center gap-2 text-[11px] font-mono tracking-wider uppercase text-[#6B9DFF]">
+            <div className="inline-flex items-center gap-2 text-[11px] font-bold tracking-wider uppercase text-[#6B9DFF]">
               <span className="h-1.5 w-1.5 rounded-full bg-[#6B9DFF] animate-pulse"></span>
               <span>Cổng Điều hành &amp; Thành viên</span>
             </div>
@@ -297,7 +297,7 @@ export const LoginPage: React.FC = () => {
           
           {/* Form Header */}
           <div className="space-y-2">
-            <div className="inline-flex items-center gap-1.5 text-[11px] font-mono font-semibold uppercase tracking-wider text-[#1749B5]">
+            <div className="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-[#1749B5]">
               <Lock className="h-3 w-3" />
               <span>ĐĂNG NHẬP HỆ THỐNG NỘI BỘ</span>
             </div>

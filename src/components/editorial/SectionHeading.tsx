@@ -26,10 +26,10 @@ export const SectionHeading: React.FC<SectionHeadingProps> = ({
     >
       {eyebrow && (
         <div
-          className={`inline-flex items-center gap-2 rounded-full px-3 py-0.5 text-xs font-mono font-semibold uppercase tracking-wider ${
+          className={`inline-flex items-center gap-2 rounded-full px-3.5 py-1 text-xs font-semibold uppercase tracking-wider ${
             dark
-              ? 'bg-[#1749B5]/20 text-[#6B9DFF] border border-[#6B9DFF]/30'
-              : 'bg-[#1749B5]/10 text-[#1749B5] border border-[#1749B5]/20'
+              ? 'bg-gradient-to-r from-[#1749B5]/30 to-[#245BFA]/20 text-[#6B9DFF] border border-[#6B9DFF]/30 shadow-xs'
+              : 'bg-gradient-to-r from-[#1749B5]/10 via-[#245BFA]/10 to-blue-50 text-[#1749B5] border border-[#1749B5]/20 shadow-2xs'
           }`}
         >
           <span className="w-1.5 h-1.5 rounded-full bg-current"></span>

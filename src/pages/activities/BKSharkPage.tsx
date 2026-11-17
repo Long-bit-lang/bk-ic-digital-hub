@@ -59,7 +59,7 @@ export const BKSharkPage: React.FC = () => {
   });
 
   return (
-    <div className="min-h-screen bg-[#FDFDFE] py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-transparent py-12 px-4 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-7xl space-y-12">
         {/* Breadcrumbs */}
         <Breadcrumbs
@@ -139,7 +139,7 @@ export const BKSharkPage: React.FC = () => {
               Lịch sử các mùa trước
             </button>
           </div>
-          <span className="text-xs font-mono text-slate-400 hidden sm:inline">
+          <span className="text-xs font-medium text-slate-400 hidden sm:inline">
             DUT • BK-IC Pitching Stage
           </span>
         </div>
@@ -155,11 +155,11 @@ export const BKSharkPage: React.FC = () => {
                 <div className="space-y-4">
                   {/* Season Badge */}
                   <div className="flex items-center justify-between">
-                    <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-mono font-bold bg-[#10182D] text-white">
+                    <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-[#10182D] text-white">
                       MÙA {season.year}
                     </span>
                     <span
-                      className={`text-[11px] font-mono font-semibold ${
+                      className={`text-[11px] font-semibold ${
                         season.status === 'active' ? 'text-emerald-600' : 'text-slate-400'
                       }`}
                     >
@@ -187,11 +187,11 @@ export const BKSharkPage: React.FC = () => {
                   {/* Metrics Box */}
                   <div className="grid grid-cols-2 gap-3 pt-3 border-t border-slate-100 text-xs">
                     <div className="p-3 rounded-2xl bg-slate-50 space-y-0.5">
-                      <div className="text-[10px] font-mono text-slate-400 uppercase">Dự án Pitching</div>
+                      <div className="text-[10px] font-semibold text-slate-400 uppercase">Dự án Pitching</div>
                       <div className="font-bold text-[#10182D]">{season.pitchesCount} Dự án</div>
                     </div>
                     <div className="p-3 rounded-2xl bg-slate-50 space-y-0.5">
-                      <div className="text-[10px] font-mono text-slate-400 uppercase">Cam kết vốn</div>
+                      <div className="text-[10px] font-semibold text-slate-400 uppercase">Cam kết vốn</div>
                       <div className="font-bold text-[#1749B5] truncate">{season.totalCommitment}</div>
                     </div>
                   </div>
@@ -233,3 +233,4 @@ export const BKSharkPage: React.FC = () => {
     </div>
   );
 };
+

@@ -66,7 +66,7 @@ export const CompanionProjectsPage: React.FC = () => {
   });
 
   return (
-    <div className="min-h-screen bg-[#FDFDFE] py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-transparent py-12 px-4 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-7xl space-y-12">
         {/* Breadcrumbs */}
         <Breadcrumbs
@@ -137,10 +137,10 @@ export const CompanionProjectsPage: React.FC = () => {
                 <div className="space-y-4">
                   {/* Field & Stage */}
                   <div className="flex items-center justify-between">
-                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-mono font-medium bg-blue-50 text-[#1749B5] border border-blue-100">
+                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-blue-50 text-[#1749B5] border border-blue-100">
                       {proj.field}
                     </span>
-                    <span className="text-[11px] font-mono text-slate-400">
+                    <span className="text-[11px] font-medium text-slate-400">
                       Năm: {proj.year}
                     </span>
                   </div>
@@ -160,11 +160,11 @@ export const CompanionProjectsPage: React.FC = () => {
                   {/* Metadata */}
                   <div className="space-y-1.5 pt-3 border-t border-slate-100 text-xs text-slate-600">
                     <div className="flex items-start gap-2">
-                      <span className="text-slate-400 font-mono">Giai đoạn:</span>
+                      <span className="text-slate-400 font-medium">Giai đoạn:</span>
                       <strong className="text-slate-800">{proj.stage}</strong>
                     </div>
                     <div className="flex items-start gap-2">
-                      <span className="text-slate-400 font-mono">Đội ngũ:</span>
+                      <span className="text-slate-400 font-medium">Đội ngũ:</span>
                       <span className="truncate">{proj.leadName}</span>
                     </div>
                   </div>
@@ -212,3 +212,4 @@ export const CompanionProjectsPage: React.FC = () => {
     </div>
   );
 };
+

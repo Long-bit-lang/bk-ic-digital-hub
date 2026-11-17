@@ -39,7 +39,7 @@ export const WorkshopDetailPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#FDFDFE] py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-transparent py-12 px-4 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-5xl space-y-10">
         {/* Navigation & Breadcrumbs */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -62,11 +62,11 @@ export const WorkshopDetailPage: React.FC = () => {
         {/* Title Area */}
         <div className="space-y-4 border-b border-slate-200 pb-8">
           <div className="flex flex-wrap items-center gap-2">
-            <span className="px-3 py-1 rounded-full text-xs font-mono font-medium bg-blue-50 text-[#1749B5] border border-blue-200">
+            <span className="px-3 py-1 rounded-full text-xs font-semibold bg-blue-50 text-[#1749B5] border border-blue-200">
               {workshop.category}
             </span>
             <span
-              className={`px-3 py-1 rounded-full text-xs font-mono font-semibold ${
+              className={`px-3 py-1 rounded-full text-xs font-semibold ${
                 workshop.status === 'upcoming'
                   ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
                   : 'bg-slate-100 text-slate-600 border border-slate-200'
@@ -74,8 +74,8 @@ export const WorkshopDetailPage: React.FC = () => {
             >
               {workshop.status === 'upcoming' ? '• Sắp diễn ra' : '• Đã hoàn thành'}
             </span>
-            <span className="text-xs font-mono text-slate-400">
-              Mã: {workshop.slug}
+            <span className="text-xs font-medium text-slate-400">
+              Mã: <span className="font-mono text-slate-600">{workshop.slug}</span>
             </span>
           </div>
 
@@ -91,7 +91,7 @@ export const WorkshopDetailPage: React.FC = () => {
         {/* Metadata Card Area */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           <div className="p-5 rounded-2xl border border-slate-200 bg-white space-y-1">
-            <div className="flex items-center gap-2 text-xs font-mono uppercase text-slate-400">
+            <div className="flex items-center gap-2 text-xs uppercase text-slate-400 font-semibold">
               <Calendar className="h-4 w-4 text-[#1749B5]" />
               <span>Thời gian</span>
             </div>
@@ -100,7 +100,7 @@ export const WorkshopDetailPage: React.FC = () => {
           </div>
 
           <div className="p-5 rounded-2xl border border-slate-200 bg-white space-y-1">
-            <div className="flex items-center gap-2 text-xs font-mono uppercase text-slate-400">
+            <div className="flex items-center gap-2 text-xs uppercase text-slate-400 font-semibold">
               <MapPin className="h-4 w-4 text-[#1749B5]" />
               <span>Địa điểm</span>
             </div>
@@ -109,7 +109,7 @@ export const WorkshopDetailPage: React.FC = () => {
           </div>
 
           <div className="p-5 rounded-2xl border border-slate-200 bg-white space-y-1">
-            <div className="flex items-center gap-2 text-xs font-mono uppercase text-slate-400">
+            <div className="flex items-center gap-2 text-xs uppercase text-slate-400 font-semibold">
               <User className="h-4 w-4 text-[#1749B5]" />
               <span>Diễn giả chính</span>
             </div>
@@ -118,7 +118,7 @@ export const WorkshopDetailPage: React.FC = () => {
           </div>
 
           <div className="p-5 rounded-2xl border border-slate-200 bg-white space-y-1">
-            <div className="flex items-center gap-2 text-xs font-mono uppercase text-slate-400">
+            <div className="flex items-center gap-2 text-xs uppercase text-slate-400 font-semibold">
               <Building2 className="h-4 w-4 text-[#1749B5]" />
               <span>Đơn vị tổ chức</span>
             </div>
@@ -129,7 +129,7 @@ export const WorkshopDetailPage: React.FC = () => {
 
         {/* Optional Image / Media Area Placeholder */}
         <div className="rounded-3xl border border-slate-200 bg-slate-50 p-8 sm:p-12 text-center space-y-3">
-          <div className="inline-flex items-center gap-2 text-xs font-mono text-slate-400 uppercase tracking-wider">
+          <div className="inline-flex items-center gap-2 text-xs text-slate-400 uppercase tracking-wider font-semibold">
             <FileText className="h-4 w-4" />
             <span>Khu vực Đồ họa &amp; Poster Sự kiện</span>
           </div>
@@ -215,3 +215,4 @@ export const WorkshopDetailPage: React.FC = () => {
     </div>
   );
 };
+

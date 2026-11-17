@@ -67,7 +67,7 @@ export const WorkshopsPage: React.FC = () => {
   });
 
   return (
-    <div className="min-h-screen bg-[#FDFDFE] py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-transparent py-12 px-4 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-7xl space-y-12">
         {/* Breadcrumb Trail */}
         <Breadcrumbs
@@ -138,11 +138,11 @@ export const WorkshopsPage: React.FC = () => {
                 <div className="space-y-4">
                   {/* Category & Status */}
                   <div className="flex items-center justify-between">
-                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-mono font-medium bg-blue-50 text-[#1749B5] border border-blue-100">
+                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-blue-50 text-[#1749B5] border border-blue-100">
                       {ws.category}
                     </span>
                     <span
-                      className={`text-[11px] font-mono font-semibold ${
+                      className={`text-[11px] font-semibold ${
                         ws.status === 'upcoming' ? 'text-emerald-600' : 'text-slate-400'
                       }`}
                     >
@@ -221,3 +221,4 @@ export const WorkshopsPage: React.FC = () => {
     </div>
   );
 };
+

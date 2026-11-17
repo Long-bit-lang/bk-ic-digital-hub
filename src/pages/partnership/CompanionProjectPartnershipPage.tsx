@@ -18,7 +18,7 @@ import {
 
 export const CompanionProjectPartnershipPage: React.FC = () => {
   return (
-    <div className="min-h-screen bg-[#FDFDFE] py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-transparent py-12 px-4 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-7xl space-y-16">
         {/* Breadcrumbs */}
         <Breadcrumbs
@@ -173,3 +173,4 @@ export const CompanionProjectPartnershipPage: React.FC = () => {
     </div>
   );
 };
+
