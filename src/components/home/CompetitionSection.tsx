@@ -26,17 +26,9 @@ export const CompetitionSection: React.FC<CompetitionSectionProps> = ({
       <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 pb-6 sm:pb-7 border-b border-slate-200/80">
         <SectionHeading
           eyebrow="SÂN CHƠI ĐỔI MỚI SÁNG TẠO"
-          title="Cuộc thi Sáng tạo"
+          title="Cuộc thi Sáng tạo và Khởi Nghiệp"
           subtitle="Các cuộc thi do BK-IC tổ chức, đồng hành hoặc phối hợp với các tổ chức và doanh nghiệp nhằm tìm kiếm và ươm tạo tài năng trẻ."
         />
-        <Link
-          to="/activities/competitions"
-          className="inline-flex items-center gap-1.5 text-xs font-bold text-[#1749B5] hover:text-[#245BFA] transition-colors shrink-0 group"
-          aria-label="Xem tất cả cuộc thi"
-        >
-          <span>Tất cả cuộc thi</span>
-          <ArrowUpRight className="h-4 w-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-        </Link>
       </div>
 
       {/* Carousel or Empty State */}

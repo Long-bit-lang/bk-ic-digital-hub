@@ -289,7 +289,7 @@
           "timestamp": "2026-10-26T02:54:41.382Z"
         }
       ],
-      "lastLoginAt": "2026-11-10T11:50:51.373Z",
+      "lastLoginAt": "2026-11-17T08:19:34.072Z",
       "unitHistory": [
         {
           "id": "uh-1794505342295",
@@ -3877,6 +3877,18 @@
   ],
   "exportLogs": [],
   "auditLogs": [
+    {
+      "id": "audit-1794903574072",
+      "timestamp": "2026-11-17T08:19:34.072Z",
+      "actorId": "usr-1792983281490",
+      "actorName": "Nguyễn Thị Thục Trang",
+      "actorRole": "leader",
+      "actorUnit": "BN",
+      "action": "Đăng nhập hệ thống",
+      "targetType": "User",
+      "targetId": "usr-1792983281490",
+      "details": "Đăng nhập thành công với email thuctrangltk@gmail.com (Vai trò: leader)"
+    },
     {
       "id": "audit-1794879160925",
       "timestamp": "2026-11-17T01:32:40.925Z",

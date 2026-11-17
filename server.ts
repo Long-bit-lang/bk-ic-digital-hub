@@ -141,6 +141,9 @@ async function startServer() {
   app.use('/api/penalties', penaltiesRouter);
   app.use('/api', cmsRouter);
 
+  // Serve Member Avatar repository statically from root /imageAVT
+  app.use('/imageAVT', express.static(path.resolve(__dirname, 'imageAVT')));
+
   // Guard: Any unmatched /api/* route returns clean JSON 404 instead of SPA HTML
   app.use('/api', (req, res) => {
     res.status(404).json({

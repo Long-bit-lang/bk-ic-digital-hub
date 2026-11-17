@@ -51,16 +51,8 @@ export const NewsSection: React.FC<NewsSectionProps> = ({ items = HOME_NEWS_DATA
         <SectionHeading
           eyebrow="BẢN TIN BK-IC"
           title="Bản tin &amp; Thông báo"
-          subtitle="Cập nhật những hoạt động, sự kiện và thông tin mới nhất từ cộng đồng BK-IC."
+          subtitle="Cập nhật những hoạt động, sự kiện và thông tin mới nhất từ câu lạc bộ BK-IC."
         />
-        <Link
-          to="/news"
-          className="inline-flex items-center gap-1.5 text-xs font-bold text-[#1749B5] hover:text-[#245BFA] transition-colors shrink-0 group"
-          aria-label="Xem tất cả tin tức"
-        >
-          <span>Xem tất cả tin tức</span>
-          <ArrowUpRight className="h-4 w-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-        </Link>
       </div>
 
       {/* News Cards Stacking Container */}
