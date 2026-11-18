@@ -38,17 +38,28 @@ export const PageHeroBanner: React.FC<PageHeroBannerProps> = ({
           compact ? 'pt-20 sm:pt-24 pb-5 sm:pb-6' : 'pt-24 sm:pt-28 pb-6 sm:pb-8'
         }`}
       >
-        {/* Subtle Tech Grid Pattern */}
-        <TechGridParticles density="subtle" showParticles={true} />
+        {/* Masked Decorative Layer: Smoothly fades out orbs & grid before bottom edge to prevent horizontal clipping line */}
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            WebkitMaskImage:
+              'linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,0.85) 35%, rgba(0,0,0,0.3) 72%, rgba(0,0,0,0) 100%)',
+            maskImage:
+              'linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,0.85) 35%, rgba(0,0,0,0.3) 72%, rgba(0,0,0,0) 100%)'
+          }}
+        >
+          {/* Subtle Tech Grid Pattern */}
+          <TechGridParticles density="subtle" showParticles={true} />
 
-        {/* Ambient Cosmic Radial Orbs */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1100px] h-[500px] bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-[#0284C7]/35 via-[#38BDF8]/15 to-transparent blur-3xl pointer-events-none" />
-        <div className="absolute -top-20 -left-20 w-96 h-96 bg-gradient-to-br from-[#0284C7]/25 to-transparent rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute top-1/2 -right-20 w-96 h-96 bg-gradient-to-bl from-[#38BDF8]/20 to-transparent rounded-full blur-3xl pointer-events-none" />
+          {/* Ambient Cosmic Radial Orbs */}
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1100px] h-[500px] bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-[#0284C7]/35 via-[#38BDF8]/15 to-transparent blur-3xl pointer-events-none" />
+          <div className="absolute -top-20 -left-20 w-96 h-96 bg-gradient-to-br from-[#0284C7]/25 to-transparent rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute top-1/2 -right-20 w-96 h-96 bg-gradient-to-bl from-[#38BDF8]/20 to-transparent rounded-full blur-3xl pointer-events-none" />
 
-        {/* Dynamic Glowing Wave Light Trails Centered in Banner */}
-        <div className="absolute top-1/2 -translate-y-1/2 inset-x-0 pointer-events-none z-10 opacity-55">
-          <GlowingLightTrails variant="hero-flow" />
+          {/* Dynamic Glowing Wave Light Trails Centered in Banner */}
+          <div className="absolute top-1/2 -translate-y-1/2 inset-x-0 pointer-events-none z-10 opacity-55">
+            <GlowingLightTrails variant="hero-flow" />
+          </div>
         </div>
 
         <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
