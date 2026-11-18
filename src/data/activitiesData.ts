@@ -288,6 +288,156 @@ export const INTERNAL_ACTIVITY_GALLERY: InternalGalleryItem[] = [
 ];
 
 // =============================================================================
+// TAB 1B: 6 CỘT MỐC HOẠT ĐỘNG & SỰ KIỆN TRỌNG TÂM CỦA CLB BK-IC NĂM 2026
+// (Dữ liệu chính thức từ Bảng tổng hợp Hoạt động BK-IC)
+// =============================================================================
+export interface ClubMilestoneActivity {
+  id: string;
+  order: number;
+  timeframe: string;
+  title: string;
+  category: 'Thành lập & Pháp lý' | 'Mạng lưới & Đối ngoại' | 'Cuộc thi & Tập huấn' | 'Nhân sự & Tổ chức' | 'Chuyển đổi số Cộng đồng';
+  organizersAndPartners: string[];
+  actionsTaken: string[];
+  outcomesAndValue: string[];
+  coverImage: string;
+  detailUrl?: string;
+}
+
+export const CLUB_MILESTONE_ACTIVITIES: ClubMilestoneActivity[] = [
+  {
+    id: 'milestone-06-cds-lienchieu',
+    order: 6,
+    timeframe: 'Cuối tháng 09 – Tháng 10/2026',
+    title: 'Cuộc thi "Ý tưởng Sáng tạo Chuyển đổi số gắn với Cải cách hành chính trong Thanh niên trên địa bàn Phường Liên Chiểu năm 2026"',
+    category: 'Chuyển đổi số Cộng đồng',
+    organizersAndPartners: [
+      'Đoàn phường Liên Chiểu',
+      'Phòng Văn hóa - Xã hội phường Liên Chiểu',
+      'CLB BK-IC (hỗ trợ chuyên môn & vận hành)',
+      'Trung tâm Hỗ trợ SV & QHDN (chỉ đạo/bảo trợ)'
+    ],
+    actionsTaken: [
+      'Phối hợp xây dựng thể lệ cuộc thi, timeline triển khai các vòng thi thực tế.',
+      'Soạn thảo kịch bản MC, điều phối nhân sự hậu cần, kỹ thuật hỗ trợ các đội thi.',
+      'Đẩy mạnh truyền thông số, thu hút các giải pháp số hóa ứng dụng trực tiếp vào dịch vụ hành chính công tại địa phương.'
+    ],
+    outcomesAndValue: [
+      'Đưa chuyên môn đổi mới sáng tạo và công nghệ của sinh viên gắn liền với thực tiễn cơ sở địa phương.',
+      'Mở rộng uy tín, mạng lưới ngoại giao của CLB với khối ban ngành Đoàn thể quận/phường.',
+      'Lan tỏa tinh thần Chuyển đổi số thanh niên năm 2026.'
+    ],
+    coverImage: '/images/bkic/news_digital_transformation_lienchieu.jpg',
+    detailUrl: '/activities/competitions/chuyen-doi-so-thanh-nien-lien-chieu-2026'
+  },
+  {
+    id: 'milestone-05-tuyen-thanh-vien',
+    order: 5,
+    timeframe: '21/08/2026 – 07/09/2026',
+    title: 'Tuyển thành viên CLB BK-IC (Năm học 2026 – 2027)',
+    category: 'Nhân sự & Tổ chức',
+    organizersAndPartners: [
+      'Ban Chủ nhiệm CLB BK-IC tự tổ chức'
+    ],
+    actionsTaken: [
+      'Mở cổng đăng ký tuyển thành viên từ ngày 21/08/2026.',
+      'Xây dựng bộ ấn phẩm truyền thông, bài viết giới thiệu các ban nòng cốt (Truyền thông, Sự kiện, Kỹ thuật - Dự án).',
+      'Tổ chức sàng lọc CV và các vòng phỏng vấn chuyên sâu đánh giá tư duy dự án, kỹ năng mềm.'
+    ],
+    outcomesAndValue: [
+      'Thu hút đông đảo ứng viên từ nhiều ngành thế mạnh (KHDL & AI, SH Y Dược, Công nghệ thông tin, Cơ khí...).',
+      'Bổ sung lực lượng nhân sự chất lượng cao để kế thừa và vận hành các dự án lớn của CLB.'
+    ],
+    coverImage: '/images/bkic/news_first_meeting.jpg',
+    detailUrl: '/activities/tuyen-thanh-vien'
+  },
+  {
+    id: 'milestone-04-mou-hub-network',
+    order: 4,
+    timeframe: 'Năm 2026',
+    title: 'Ký kết MOU, gia nhập Mạng lưới Khởi nghiệp Đổi mới sáng tạo HUB Network Đà Nẵng',
+    category: 'Mạng lưới & Đối ngoại',
+    organizersAndPartners: [
+      'HUB Network Đà Nẵng phối hợp với CLB Khởi nghiệp và Đổi mới sáng tạo Bách Khoa (BK-IC)'
+    ],
+    actionsTaken: [
+      'Tham gia ký kết Biên bản ghi nhớ hợp tác (MOU), chính thức gia nhập mạng lưới; kết nối với các CLB về khởi nghiệp, công nghệ và đổi mới sáng tạo tại miền Trung.'
+    ],
+    outcomesAndValue: [
+      'Mở rộng quan hệ hợp tác; tạo cơ hội phối hợp tổ chức workshop, cuộc thi, hoạt động học thuật và dự án về AI, Blockchain, startup; góp phần kết nối sinh viên với doanh nghiệp và chuyên gia.'
+    ],
+    coverImage: '/images/bkic/bkic_launch.jpg',
+    detailUrl: '/partnership'
+  },
+  {
+    id: 'milestone-03-bkshark-2026',
+    order: 3,
+    timeframe: 'Tháng 05/2026',
+    title: 'Cuộc thi Khởi nghiệp Sinh viên "BK SHARK 2026" (kèm Chuỗi 4 buổi tập huấn chuyên sâu)',
+    category: 'Cuộc thi & Tập huấn',
+    organizersAndPartners: [
+      'Đơn vị tổ chức: Trường ĐH Bách khoa, Đoàn Thanh niên - Hội Sinh viên, CLB Khởi nghiệp và Đổi mới sáng tạo (BK-IC)',
+      'Đơn vị hỗ trợ & phối hợp: Trung tâm Hỗ trợ SV & QHDN (kết nối chuyên gia/gọi vốn), HUB Network Đà Nẵng'
+    ],
+    actionsTaken: [
+      'Phát động cuộc thi và tiếp nhận ý tưởng dự án từ sinh viên; phối hợp Trung tâm kết nối diễn giả, chuyên gia hàng đầu và kêu gọi hỗ trợ/đầu tư.',
+      'Buổi 1 (08h00 ngày 09/05 tại F310): "Thiết kế giải pháp giá trị cho khách hàng" – TS. Nguyễn Hồng Nguyên.',
+      'Buổi 2 (08h00 ngày 10/05 tại S02.01): "Nền tảng gọi vốn cộng đồng và tiếp cận khách hàng, kỹ năng Pitching và trả lời câu hỏi BGK" – Diễn giả Lê Đức Nguyên (Founder Khói Group / CEO Bánh mì Khói).',
+      'Buổi 3 (10h00 ngày 10/05 tại S02.01): "Go to Market" – ThS. Vũ Tuấn Anh (Phó TGĐ Cty TNHH Tái cấu trúc - CĐS, chuyên gia tư vấn AI - STEAM).',
+      'Buổi 4 (17h30 ngày 11/05 tại E2.204): "Khởi nghiệp Tinh gọn - Hiểu đúng người dùng, tạo đúng sản phẩm" – TS. Nguyễn Thị Anh Thư.'
+    ],
+    outcomesAndValue: [
+      '35 đội thi chính thức đăng ký với 138 sinh viên tham gia dự thi.',
+      '10 Khoa trong toàn trường tham gia; 06 trường trên địa bàn TP. Đà Nẵng cùng góp mặt.',
+      '60% dự án có giảng viên hướng dẫn chuyên môn đồng hành.',
+      'Khẳng định vị thế và năng lực điều phối sự kiện học thuật chuyên môn cao của CLB BK-IC.'
+    ],
+    coverImage: '/images/bkic/bkshark_auditorium.jpg',
+    detailUrl: '/activities/bk-shark'
+  },
+  {
+    id: 'milestone-02-mang-luoi-dhdn',
+    order: 2,
+    timeframe: '09/01/2026',
+    title: 'Ra mắt Mạng lưới Câu lạc bộ Khởi nghiệp, Đổi mới sáng tạo Đại học Đà Nẵng',
+    category: 'Mạng lưới & Đối ngoại',
+    organizersAndPartners: [
+      'Hội Sinh viên Đại học Đà Nẵng',
+      'Các câu lạc bộ sinh viên trực thuộc ĐHĐN'
+    ],
+    actionsTaken: [
+      'Tham gia chương trình ra mắt mạng lưới, kết nối các câu lạc bộ hoạt động trong lĩnh vực khởi nghiệp và đổi mới sáng tạo.'
+    ],
+    outcomesAndValue: [
+      'Tạo cơ hội kết nối giữa các câu lạc bộ, thúc đẩy hợp tác và phát triển hoạt động khởi nghiệp trong sinh viên, ký kết hợp tác với mạng lưới KNĐMST Đại học Đà Nẵng.'
+    ],
+    coverImage: '/images/bkic/news_bkic_launch_ceremony.jpg',
+    detailUrl: '/about'
+  },
+  {
+    id: 'milestone-01-thanh-lap-clb',
+    order: 1,
+    timeframe: '08/01/2026',
+    title: 'Chính thức thành lập Câu lạc bộ Khởi nghiệp và Đổi mới sáng tạo BK-IC',
+    category: 'Thành lập & Pháp lý',
+    organizersAndPartners: [
+      'Nhà trường Trường ĐH Bách khoa – ĐHĐN',
+      'Trung tâm Hỗ trợ sinh viên & Quan hệ doanh nghiệp (QHDN)'
+    ],
+    actionsTaken: [
+      'Hoàn thiện đề án thành lập, ký quyết định thành lập CLB Khởi nghiệp và Đổi mới sáng tạo (BK-IC).',
+      'Kiện toàn bộ máy Ban chủ nhiệm lâm thời và định hướng phát triển.'
+    ],
+    outcomesAndValue: [
+      'Đặt nền móng pháp lý chính thức cho hệ sinh thái khởi nghiệp đổi mới sáng tạo trong sinh viên Bách khoa.',
+      'Xác lập cơ chế trực thuộc/đồng hành cùng Trung tâm Hỗ trợ sinh viên & QHDN.'
+    ],
+    coverImage: '/images/bkic/bkic_launch.jpg',
+    detailUrl: '/about'
+  }
+];
+
+// =============================================================================
 // TAB 2: WORKSHOP THƯỜNG NIÊN (WORKSHOPS DATA)
 // =============================================================================
 export interface WorkshopItem {
@@ -340,12 +490,90 @@ export const WORKSHOPS_DATA: WorkshopItem[] = [
     ]
   },
   {
+    id: 'ws-bkshark-training-04',
+    slug: 'bk-shark-training-khoi-nghiep-tinh-gon',
+    title: 'Training BK Shark 2026 (Buổi 4): Khởi nghiệp Tinh gọn – Hiểu đúng Người dùng, Tạo đúng Sản phẩm',
+    category: 'Khởi nghiệp & Đào tạo',
+    date: 'Thứ Hai, 11/05/2026',
+    time: '17:30 – 20:00',
+    location: 'Phòng E2.204, Trường ĐH Bách khoa (DUT)',
+    speaker: 'TS. Nguyễn Thị Anh Thư',
+    speakerRole: 'Giảng viên Khoa Điện tử & AI, Trường ĐH Bách khoa – ĐHĐN',
+    status: 'completed',
+    registrationOpen: false,
+    coverImage: '/images/bkic/startup_training.jpg',
+    summary: 'Buổi tập huấn thứ 4 khép lại chuỗi Training BK SHARK 2026: tiếp cận phương pháp Lean Startup thực chiến, không lãng phí nguồn lực và giải mã kết nối Người dùng – Sản phẩm.',
+    fullDesc: 'Vào 17h30 ngày 11/05 tại phòng E2.204, chuỗi Training của BK SHARK 2026 đã chính thức khép lại đầy bùng nổ với chủ đề: "Khởi nghiệp Tinh gọn - Hiểu đúng người dùng, tạo đúng sản phẩm" cùng sự dẫn dắt tâm huyết của TS. Nguyễn Thị Anh Thư. Các đội thi được tiếp cận Lean Startup một cách thực chiến, học cách tối ưu nguồn lực và biến ý tưởng thành vũ khí sắc bén cho sân khấu Pitching.',
+    prerequisites: [
+      'Các đội thi tham gia Cuộc thi Khởi nghiệp sinh viên BK SHARK 2026',
+      'Nhóm dự án cần hoàn thiện mô hình MVP và kiểm chứng khách hàng'
+    ],
+    takeaways: [
+      'Nguyên lý Khởi nghiệp Tinh gọn (Lean Startup) ứng dụng thực tế',
+      'Học cách tối ưu và tránh lãng phí nguồn lực trong giai đoạn đầu',
+      'Phương pháp "bắt đúng bệnh" của thị trường và thiết kế sản phẩm giải quyết triệt để',
+      'Bước rèn giũa cuối cùng hoàn thiện sản phẩm trước những màn Pitching đỉnh cao'
+    ]
+  },
+  {
+    id: 'ws-bkshark-training-03',
+    slug: 'bk-shark-training-go-to-market',
+    title: 'Training BK Shark 2026 (Buổi 3): Chiến lược Go to Market – Đưa Sản phẩm Ra Thị trường',
+    category: 'Chiến lược Thị trường',
+    date: 'Chủ Nhật, 10/05/2026',
+    time: '10:00 – 12:00',
+    location: 'Phòng S02.01, Trường ĐH Bách khoa (DUT)',
+    speaker: 'ThS. Vũ Tuấn Anh',
+    speakerRole: 'Phó TGĐ Cty TNHH Tái cấu trúc - CĐS; Chuyên gia Tư vấn AI - STEAM',
+    status: 'completed',
+    registrationOpen: false,
+    coverImage: '/images/bkic/bkshark_ecosim_pitch.jpg',
+    summary: 'Buổi tập huấn thứ 3 thuộc chuỗi Training BK SHARK 2026: xây dựng chiến lược Go-to-Market thực chiến và định vị giải pháp công nghệ trên thị trường.',
+    fullDesc: 'Diễn ra vào lúc 10h00 ngày 10/05/2026 tại phòng S02.01, buổi tập huấn chuyên sâu "Go to Market" do ThS. Vũ Tuấn Anh trực tiếp chia sẻ đã giúp 35 đội thi BK SHARK 2026 nắm vững lộ trình thương mại hóa sản phẩm, xác định phân khúc khách hàng tiên phong (Early Adopters) và xây dựng kênh phân phối hiệu quả.',
+    prerequisites: [
+      'Các đội thi đăng ký tham gia Cuộc thi Khởi nghiệp sinh viên BK SHARK 2026',
+      'Nhóm dự án đang xây dựng kế hoạch thương mại hóa và phát triển thị trường'
+    ],
+    takeaways: [
+      'Phương pháp lập kế hoạch Go-to-Market (GTM) cho startup công nghệ sinh viên',
+      'Chiến lược thâm nhập thị trường ngách và mở rộng tệp người dùng đầu tiên',
+      'Ứng dụng công cụ số và AI trong tối ưu hóa vận hành & tiếp cận khách hàng',
+      'Đánh giá tính khả thi thương mại trước thềm Vòng Sơ khảo & Chung kết'
+    ]
+  },
+  {
+    id: 'ws-bkshark-training-02',
+    slug: 'bk-shark-training-goi-von-va-pitching',
+    title: 'Training BK Shark 2026 (Buổi 2): Nền tảng Gọi vốn Cộng đồng, Tiếp cận Khách hàng & Kỹ năng Pitching',
+    category: 'Gọi vốn & Pitching',
+    date: 'Chủ Nhật, 10/05/2026',
+    time: '08:00 – 10:00',
+    location: 'Phòng S02.01, Trường ĐH Bách khoa (DUT)',
+    speaker: 'Diễn giả Lê Đức Nguyên',
+    speakerRole: 'Founder Khói Group / CEO Bánh mì Khói',
+    status: 'completed',
+    registrationOpen: false,
+    coverImage: '/images/bkic/bkshark_auditorium.jpg',
+    summary: 'Buổi tập huấn thứ 2 thuộc chuỗi Training BK SHARK 2026: chia sẻ thực chiến về gọi vốn cộng đồng, nghệ thuật thuyết trình Pitching và bản lĩnh trả lời câu hỏi phản biện từ Ban Giám khảo.',
+    fullDesc: 'Vào 08h00 sáng ngày 10/05/2026 tại phòng S02.01, diễn giả Lê Đức Nguyên (Founder Khói Group / CEO Bánh mì Khói) đã mang đến những bài học xương máu từ thực tiễn khởi nghiệp, hướng dẫn các đội thi cách xây dựng câu chuyện gọi vốn thuyết phục, làm chủ sân khấu Pitching và xử lý nhạy bén các câu hỏi hóc búa từ Hội đồng Giám khảo.',
+    prerequisites: [
+      'Các đội thi đăng ký tham gia Cuộc thi Khởi nghiệp sinh viên BK SHARK 2026',
+      'Sinh viên quan tâm đến kỹ năng thuyết trình gọi vốn và phát triển thương hiệu'
+    ],
+    takeaways: [
+      'Hiểu rõ cơ chế vận hành của các nền tảng gọi vốn cộng đồng và nhà đầu tư thiên thần',
+      'Kỹ năng cấu trúc bài Pitching chạm đúng trọng tâm quan tâm của các Shark',
+      'Chiến thuật trả lời câu hỏi phản biện (Q&A) tự tin, sắc bén và có số liệu dẫn chứng',
+      'Kinh nghiệm thực tế trong việc tiếp cận khách hàng và xây dựng chuỗi giá trị'
+    ]
+  },
+  {
     id: 'ws-bkshark-training-01',
     slug: 'bk-shark-training-thiet-ke-giai-phap-gia-tri',
-    title: 'Training BK Shark 2026: Thiết kế Giải pháp Giá trị – Bước đi Đầu tiên Chinh phục Khách hàng',
+    title: 'Training BK Shark 2026 (Buổi 1): Thiết kế Giải pháp Giá trị – Bước đi Đầu tiên Chinh phục Khách hàng',
     category: 'Khởi nghiệp & Đổi mới',
     date: 'Thứ Bảy, 09/05/2026',
-    time: '08:30 – 11:30',
+    time: '08:00 – 11:30',
     location: 'Phòng F310, Trường ĐH Bách khoa (DUT)',
     speaker: 'TS. Nguyễn Hồng Nguyên',
     speakerRole: 'Chuyên gia Cố vấn Khởi nghiệp Đổi mới Sáng tạo, Trường ĐH Bách khoa – ĐHĐN',
@@ -364,45 +592,31 @@ export const WORKSHOPS_DATA: WorkshopItem[] = [
       'Mài giũa ý tưởng thô sơ thành giải pháp có sức nặng và giá trị cạnh tranh',
       'Trang bị vũ khí tự tin cải thiện dự án trước Hội đồng Giám khảo'
     ]
-  },
-  {
-    id: 'ws-bkshark-training-04',
-    slug: 'bk-shark-training-khoi-nghiep-tinh-gon',
-    title: 'Training BK Shark 2026: Khởi nghiệp Tinh gọn – Giải mã Bài toán "Người dùng" và "Sản phẩm"',
-    category: 'Khởi nghiệp & Đào tạo',
-    date: 'Thứ Hai, 11/05/2026',
-    time: '17:30 – 20:00',
-    location: 'Phòng E2.204, Trường ĐH Bách khoa (DUT)',
-    speaker: 'TS. Nguyễn Thị Anh Thư',
-    speakerRole: 'Giảng viên Khoa Điện tử & AI, Trường ĐH Bách khoa – ĐHĐN',
-    status: 'completed',
-    registrationOpen: false,
-    coverImage: '/images/bkic/startup_training.jpg',
-    summary: 'Buổi tập huấn khép lại chuỗi Training BK SHARK 2026: tiếp cận phương pháp Lean Startup thực chiến, không lãng phí nguồn lực và giải mã kết nối Người dùng – Sản phẩm.',
-    fullDesc: 'Vào 17h30 ngày 11/05 tại phòng E2.204, chuỗi Training của BK SHARK 2026 đã chính thức khép lại đầy bùng nổ với chủ đề: "Khởi nghiệp Tinh gọn - Hiểu đúng người dùng, tạo đúng sản phẩm" cùng sự dẫn dắt tâm huyết của TS. Nguyễn Thị Anh Thư. Các đội thi được tiếp cận Lean Startup một cách thực chiến, học cách tối ưu nguồn lực và biến ý tưởng thành vũ khí sắc bén cho sân khấu Pitching.',
-    prerequisites: [
-      'Các đội thi tham gia Cuộc thi Khởi nghiệp sinh viên BK SHARK 2026',
-      'Nhóm dự án cần hoàn thiện mô hình MVP và kiểm chứng khách hàng'
-    ],
-    takeaways: [
-      'Nguyên lý Khởi nghiệp Tinh gọn (Lean Startup) ứng dụng thực tế',
-      'Học cách tối ưu và tránh lãng phí nguồn lực trong giai đoạn đầu',
-      'Phương pháp "bắt đúng bệnh" của thị trường và thiết kế sản phẩm giải quyết triệt để',
-      'Bước rèn giũa cuối cùng hoàn thiện sản phẩm trước những màn Pitching đỉnh cao'
-    ]
   }
 ];
 
 // =============================================================================
-// TAB 3: CUỘC THI SÁNG TẠO (COMPETITIONS DATA)
+// TAB 3: CUỘC THI SÁNG TẠO & CHƯƠNG TRÌNH ĐỔI MỚI (COMPETITIONS DATA)
+// (Tích hợp đầy đủ dữ liệu từ Bảng tổng hợp Cuộc thi Tháng 9, Tháng 10 & BK Shark)
 // =============================================================================
+export type CompetitionLevel =
+  | 'Cấp Trường'
+  | 'Cấp Phường'
+  | 'Cấp ĐHĐN'
+  | 'Thành Phố'
+  | 'Quốc Gia'
+  | 'Quốc Tế';
+
 export interface CompetitionDetailItem {
   id: string;
   slug: string;
   title: string;
   field: string;
+  level: CompetitionLevel;
+  monthTag: 'Tháng 5/2026' | 'Tháng 9/2026' | 'Tháng 10/2026' | 'Tháng 11/2026';
   prizePool: string;
   deadline: string;
+  deadlineDetails: string;
   deadlineIso: string; // Used for countdown
   teamsCount: string;
   status: 'active' | 'upcoming' | 'completed';
@@ -410,76 +624,268 @@ export interface CompetitionDetailItem {
   organizer: string;
   coverImage: string;
   featured: boolean;
+  isClubOrganized: boolean;
   registrationOpen: boolean;
+  infoUrl?: string;
+  externalRegUrl?: string;
   timeline: { phase: string; date: string; desc: string }[];
   prizes: { rank: string; reward: string; extra: string }[];
   eligibility: string[];
 }
 
 export const COMPETITIONS_DATA: CompetitionDetailItem[] = [
+  // 1. BK SHARK 2026 (CLB ĐỒNG TỔ CHỨC)
   {
     id: 'comp-bk-shark-2026',
     slug: 'bk-shark-2026',
-    title: 'Cuộc thi Khởi nghiệp trong Sinh viên BK SHARK 2026',
+    title: 'Cuộc thi Khởi nghiệp Sinh viên "BK SHARK 2026"',
     field: 'Khởi nghiệp Đổi mới Sáng tạo & Công nghệ',
-    prizePool: 'Tổng giải thưởng & Suất ươm tạo',
-    deadline: '19/04/2026',
-    deadlineIso: '2026-04-19T23:59:59',
-    teamsCount: '24+ Đội dự thi',
+    level: 'Thành Phố',
+    monthTag: 'Tháng 5/2026',
+    prizePool: 'Cúp Vô địch & Gói ươm tạo',
+    deadline: '16/05/2026',
+    deadlineDetails: 'Tháng 05/2026 (Chuỗi 4 buổi tập huấn 09/05 – 11/05/2026 & Chung kết 16/05/2026)',
+    deadlineIso: '2026-05-16T23:59:59',
+    teamsCount: '35 đội thi • 138 sinh viên (10 Khoa, 06 Trường ĐH)',
     status: 'completed',
     featured: true,
+    isClubOrganized: true,
     registrationOpen: false,
-    organizer: 'Đoàn Thanh niên – Hội Sinh viên Trường ĐH Bách khoa & CLB BK-IC',
+    organizer: 'Trường ĐH Bách khoa, Đoàn TN - Hội SV & CLB BK-IC (Phối hợp: TT Hỗ trợ SV & QHDN, HUB Network Đà Nẵng)',
     coverImage: '/images/bkic/news_bkshark_2026_launch.jpg',
-    summary: 'Cuộc thi Khởi nghiệp trong sinh viên BK SHARK 2026 - Đấu trường ươm mầm các ý tưởng khởi nghiệp sáng tạo, kết nối mentor chuyên sâu và cơ hội gọi vốn đầu tư.',
+    infoUrl: 'https://dut.udn.vn/Phong/Taichinh/Tintuc/id/11980',
+    summary: 'Đấu trường Khởi nghiệp Sinh viên BK SHARK 2026 quy tụ 35 đội thi với 138 sinh viên từ 10 Khoa trong trường và 06 trường đại học trên địa bàn TP. Đà Nẵng (60% dự án có giảng viên hướng dẫn chuyên môn đồng hành), kèm chuỗi 4 buổi tập huấn thực chiến.',
     timeline: [
-      { phase: 'Vòng 1: Mở cổng Đăng ký & Nộp hồ sơ', date: '15/03/2026 – 19/04/2026', desc: 'Các đội thi đăng ký trực tuyến và nộp bản đề xuất ý tưởng dự án khởi nghiệp.' },
-      { phase: 'Vòng 2: Chuỗi Đào tạo Chuyên sâu (Training Tracks)', date: '20/04/2026 – 10/05/2026', desc: 'Huấn luyện về Value Proposition, Lean Startup, tài chính và kỹ năng pitching cùng các chuyên gia.' },
-      { phase: 'Vòng 3: Sơ khảo & Thẩm định Dự án', date: '11/05/2026 – 15/05/2026', desc: 'Hội đồng giám khảo phản biện và lựa chọn các đội xuất sắc nhất vào Vòng Chung kết.' },
-      { phase: 'Vòng 4: Chung kết Toàn trường (Grand Finale)', date: '20/05/2026', desc: 'Sân khấu Pitching gọi vốn trước các Shark và đại diện các quỹ đầu tư thiên thần.' }
+      { phase: 'Vòng 1: Phát động & Tiếp nhận ý tưởng dự án', date: 'Tháng 04/2026', desc: 'Tiếp nhận 35 đội thi (138 sinh viên) từ 10 Khoa thuộc DUT và 06 trường đại học tại Đà Nẵng.' },
+      { phase: 'Vòng 2: Chuỗi 4 Buổi Tập huấn Chuyên sâu', date: '09/05 – 11/05/2026', desc: 'Buổi 1: TS. Nguyễn Hồng Nguyên (F310); Buổi 2: Diễn giả Lê Đức Nguyên (S02.01); Buổi 3: ThS. Vũ Tuấn Anh (S02.01); Buổi 4: TS. Nguyễn Thị Anh Thư (E2.204).' },
+      { phase: 'Vòng 3: Sơ khảo & Thẩm định Chuyên môn', date: '12/05 – 14/05/2026', desc: 'Chấm điểm và lựa chọn Top 7 dự án xuất sắc nhất bước vào Vòng Chung kết.' },
+      { phase: 'Vòng 4: Chung kết & Gọi vốn (Grand Finale)', date: '16/05/2026', desc: 'Pitching trực tiếp trước Hội đồng Giám khảo và vinh danh Quán quân DanangBooth, Á quân 4Sight, Giải Ba Kizuna Hub.' }
     ],
     prizes: [
-      { rank: 'Giải Nhất (Quán quân)', reward: 'Cúp Vô địch + Gói hỗ trợ ươm tạo', extra: 'Cơ hội kết nối quỹ đầu tư và vào thẳng chương trình ươm tạo' },
-      { rank: 'Giải Nhì (Á quân)', reward: 'Học bổng chuyên môn & Kỷ niệm chương', extra: 'Hỗ trợ kết nối cố vấn công nghệ chuyên sâu' },
-      { rank: 'Giải Ba (Quý quân)', reward: 'Kinh phí phát triển dự án', extra: 'Giấy khen Đoàn trường và bảo trợ không gian làm việc' }
+      { rank: 'Giải Nhất (Quán quân – DanangBooth)', reward: 'Cúp Vô địch + Giải thưởng hiện kim', extra: 'Bảo trợ ươm tạo và đại diện tham gia các giải đấu cấp Thành phố & Quốc gia' },
+      { rank: 'Giải Nhì (Á quân – 4Sight)', reward: 'Kỷ niệm chương & Giải thưởng hiện kim', extra: 'Kết nối chuyên gia cố vấn công nghệ và doanh nghiệp đồng hành' },
+      { rank: 'Giải Ba (Quý quân – Kizuna Hub) & Top 7', reward: 'Giấy chứng nhận & Học bổng ươm tạo', extra: 'Vinh danh CarboX.MH, DataStorm, Nexus, WaveX NextGen' }
     ],
     eligibility: [
-      'Sinh viên đang theo học tại Trường Đại học Bách khoa – ĐHĐN và các trường thành viên',
-      'Đội thi từ 2 đến 5 thành viên (khuyến khích liên ngành Kỹ thuật, Kinh tế và Thiết kế)',
-      'Dự án thuộc lĩnh vực công nghệ, đổi mới sáng tạo hoặc mô hình kinh doanh tiềm năng'
+      'Sinh viên Trường Đại học Bách khoa – ĐHĐN và các trường đại học trên địa bàn TP. Đà Nẵng',
+      'Đội thi từ 2 đến 5 thành viên (60% dự án có giảng viên hướng dẫn chuyên môn đồng hành)',
+      'Dự án thuộc lĩnh vực công nghệ, kỹ thuật, chuyển đổi số hoặc mô hình khởi nghiệp sáng tạo'
     ]
   },
+
+  // 2. CUỘC THI CHUYỂN ĐỔI SỐ LIÊN CHIỂU 2026 (CLB PHỐI HỢP TỔ CHỨC - THÁNG 10)
   {
     id: 'comp-cds-lienchieu-2026',
     slug: 'chuyen-doi-so-thanh-nien-lien-chieu-2026',
-    title: 'Cuộc thi Ý tưởng Sáng tạo Chuyển đổi số Thanh niên Liên Chiểu 2026',
-    field: 'Chuyển đổi số & Cải cách Hành chính',
+    title: 'Cuộc thi “Ý tưởng sáng tạo chuyển đổi số thanh niên Liên Chiểu” năm 2026',
+    field: 'Chuyển đổi số, Môi trường & Đô thị xanh, Cải cách hành chính, Đời sống cộng đồng',
+    level: 'Cấp Phường',
+    monthTag: 'Tháng 10/2026',
     prizePool: 'Giải thưởng & Bằng khen Đoàn Thanh niên',
-    deadline: '03/10/2026',
-    deadlineIso: '2026-10-03T23:59:59',
-    teamsCount: '18+ Đội dự thi',
+    deadline: '04/10/2026',
+    deadlineDetails: '25/09 – 03/10: Đăng ký | Trước 04/10: Nộp hồ sơ & sản phẩm | 10/10/2026: Chung kết & Trao giải',
+    deadlineIso: '2026-10-04T23:59:59',
+    teamsCount: 'Cá nhân hoặc nhóm (tối đa 05 thành viên)',
     status: 'completed',
-    featured: false,
+    featured: true,
+    isClubOrganized: true,
     registrationOpen: false,
-    organizer: 'BCH Đoàn TNCS Hồ Chí Minh Phường Liên Chiểu (Đồng hành: CLB BK-IC)',
+    organizer: 'BCH Đoàn TNCS Hồ Chí Minh Phường Liên Chiểu, Phòng Văn hóa - Xã hội & CLB BK-IC (Bảo trợ: TT Hỗ trợ SV & QHDN)',
     coverImage: '/images/bkic/news_digital_transformation_lienchieu.jpg',
-    summary: 'Cuộc thi Ý tưởng sáng tạo chuyển đổi số gắn với cải cách hành chính trong thanh niên trên địa bàn phường Liên Chiểu năm 2026.',
+    infoUrl: 'https://www.facebook.com/share/p/199kjt2v7X/',
+    externalRegUrl: 'https://forms.gle/suQiRrkoFpBP4CNx7',
+    summary: 'Với chủ đề "Thanh niên Liên Chiểu – Sáng tạo vì cuộc sống", cuộc thi phát huy vai trò xung kích của tuổi trẻ trong chuyển đổi số, cải cách hành chính và giải quyết các bài toán thực tiễn tại địa phương do Đoàn phường Liên Chiểu phối hợp cùng CLB BK-IC tổ chức.',
     timeline: [
-      { phase: 'Giai đoạn 1: Tiếp nhận đăng ký & Hướng dẫn hoàn thiện ý tưởng', date: '25/09/2026', desc: 'Tiếp nhận hồ sơ dự thi từ thanh niên, đoàn viên và sinh viên trên địa bàn.' },
-      { phase: 'Giai đoạn 2: Hạn cuối nộp hồ sơ ý tưởng & Mô hình minh họa', date: '03/10/2026', desc: 'Các đội nộp hồ sơ thuyết minh chi tiết và video/mô hình sản phẩm minh họa.' },
-      { phase: 'Giai đoạn 3: Tổng hợp & Thẩm định chấm Vòng Sơ loại', date: '05/10/2026', desc: 'Ban Giám khảo thẩm định nội dung và chọn các ý tưởng bứt phá vào Chung kết.' },
-      { phase: 'Giai đoạn 4: Workshop Tập huấn Hỗ trợ Đội thi Chung kết', date: '07/10 – 15/10/2026', desc: 'Đồng hành cùng TS. Nguyễn Thị Anh Thư và các chuyên gia định hướng thuyết trình.' },
-      { phase: 'Giai đoạn 5: Chung kết & Lễ Trao giải', date: '10/10/2026', desc: 'Trình diễn giải pháp thực tế, vinh danh các ý tưởng xuất sắc nhất.' }
+      { phase: 'Giai đoạn 1: Tiếp nhận đăng ký & Hướng dẫn ý tưởng', date: '25/09 – 03/10/2026', desc: 'Tiếp nhận đăng ký và hướng dẫn các đội thi hoàn thiện ý tưởng dự thi.' },
+      { phase: 'Giai đoạn 2: Hạn chót nộp hồ sơ & mô hình minh họa', date: 'Trước 04/10/2026', desc: 'Các đội thi nộp hồ sơ ý tưởng và sản phẩm/mô hình minh họa về Ban Tổ chức.' },
+      { phase: 'Giai đoạn 3: Thẩm định & Chấm Vòng Sơ loại', date: '05/10 – 06/10/2026', desc: 'Ban Tổ chức tổng hợp, thẩm định và chấm chọn các đội xuất sắc vào Vòng Chung kết.' },
+      { phase: 'Giai đoạn 4: Workshop Tập huấn Đội thi Chung kết', date: '07/10 – 15/10/2026', desc: 'Tập huấn chuyên môn cùng TS. Nguyễn Thị Anh Thư và PGS.TS. Phạm Văn Tuấn tại phòng A136.' },
+      { phase: 'Giai đoạn 5: Chung kết & Lễ Trao giải', date: '10/10/2026', desc: 'Thuyết trình bảo vệ dự án chuyển đổi số và trao giải cho các đội thi xuất sắc.' }
     ],
     prizes: [
-      { rank: 'Giải Nhất', reward: 'Cúp & Bằng khen Thành đoàn / Quận đoàn', extra: 'Kèm hiện kim hỗ trợ triển khai thực nghiệm vào CCHC tại địa phương' },
-      { rank: 'Giải Nhì', reward: 'Giấy khen Ban Chấp hành Đoàn & Tiền thưởng', extra: 'Cơ hội đồng hành chuyển giao mô hình cho các đơn vị phường' },
-      { rank: 'Giải Ba & Khuyến khích', reward: 'Giấy khen & Phần thưởng lưu niệm', extra: 'Ghi nhận đóng góp sáng kiến chuyển đổi số thanh niên tiêu biểu' }
+      { rank: 'Giải Nhất', reward: 'Cúp & Giấy khen BCH Đoàn Phường', extra: 'Hỗ trợ kết nối triển khai thực nghiệm giải pháp tại địa phương' },
+      { rank: 'Giải Nhì', reward: 'Giấy khen & Hiện kim', extra: 'Đồng hành hoàn thiện sản phẩm ứng dụng số hóa' },
+      { rank: 'Giải Ba & Khuyến khích', reward: 'Giấy khen & Phần thưởng', extra: 'Ghi nhận sáng kiến chuyển đổi số phục vụ cộng đồng' }
     ],
     eligibility: [
-      'Đoàn viên thanh niên, học sinh, sinh viên trên địa bàn quận Liên Chiểu và ĐH Bách khoa',
-      'Ý tưởng tập trung vào chuyển đổi số gắn với cải cách thủ tục hành chính công',
-      'Khuyến khích có mô hình, ứng dụng di động hoặc web prototype minh họa'
+      'Cá nhân hoặc nhóm dự thi (tối đa không quá 05 thành viên/nhóm)',
+      'Đoàn viên thanh niên, sinh viên ĐH Bách khoa và thanh niên trên địa bàn Liên Chiểu',
+      'Lĩnh vực: Chuyển đổi số & công nghệ, Môi trường & đô thị xanh, Đời sống & cộng đồng, Học tập - việc làm - khởi nghiệp, Văn hóa - thể thao, Cải cách hành chính'
+    ]
+  },
+
+  // 3. AVALANCHE TEAM1 HACKATHON 2026 (THÁNG 11) — Ảnh thứ 5
+  {
+    id: 'comp-avalanche-team1-hackathon-2026',
+    slug: 'avalanche-team1-hackathon-2026',
+    title: 'AVALANCHE TEAM1 HACKATHON 2026',
+    field: 'Blockchain Avalanche & Web3 DApps',
+    level: 'Quốc Gia',
+    monthTag: 'Tháng 11/2026',
+    prizePool: '3.500 USD (~88 Triệu VNĐ)',
+    deadline: '30/11/2026',
+    deadlineDetails: '02/11 – 30/11/2026 (Khai mạc tại ĐHQG TP.HCM, Chung kết Pitching tại ĐH Tôn Đức Thắng)',
+    deadlineIso: '2026-11-30T23:59:59',
+    teamsCount: '30+ đội đăng ký • Chọn 7–10 đội vào Chung kết',
+    status: 'completed',
+    featured: false,
+    isClubOrganized: false,
+    registrationOpen: false,
+    organizer: 'Avalanche Team1 Vietnam (Khai mạc: ĐHQG TP.HCM • Chung kết: ĐH Tôn Đức Thắng)',
+    coverImage: '/images/bkic/comp_avalanche_hackathon_2026.png',
+    infoUrl: 'https://docs.google.com/document/d/1uM479CenH025TwWRBaAZZwV2c88Uxh0vjOM42uhCBaE/edit?tab=t.0#heading=h.w1zqpeqit2ak',
+    summary: 'Hackathon toàn quốc dành cho sinh viên xây dựng các sản phẩm thực tế trên nền tảng blockchain Avalanche với tổng giải thưởng dự kiến lên đến 3.500 USD, kèm 3 buổi workshop (1 offline, 2 online) và 2 buổi Q&A hỗ trợ kỹ thuật.',
+    timeline: [
+      { phase: 'Khai mạc & Phát động Hackathon', date: '02/11/2026', desc: 'Khai mạc chương trình tại Đại học Quốc gia TP.HCM và mở cổng phát triển sản phẩm.' },
+      { phase: 'Chuỗi 3 Workshop & 2 Buổi Q&A Kỹ thuật', date: 'Tháng 11/2026', desc: '1 workshop offline, 2 workshop online và 2 buổi Q&A trực tuyến hỗ trợ các team xây dựng sản phẩm trên Avalanche.' },
+      { phase: 'Vòng Chung kết & Pitching Offline', date: '30/11/2026', desc: 'Chọn 7–10 đội xuất sắc vào chung kết pitching trực tiếp tại ĐH Tôn Đức Thắng (3–5 dự án tiềm năng được đồng hành tiếp sau cuộc thi).' }
+    ],
+    prizes: [
+      { rank: 'Tổng giải thưởng toàn mùa', reward: '3.500 USD', extra: 'Trao cho các đội xuất sắc nhất tại Vòng Chung kết ở TP.HCM' },
+      { rank: 'Hỗ trợ ươm tạo sau cuộc thi', reward: 'Top 3–5 Dự án tiềm năng', extra: 'Được Team1 tiếp tục đồng hành cố vấn phát triển sản phẩm sau Hackathon' }
+    ],
+    eligibility: [
+      'Sinh viên các trường đại học, cao đẳng trên toàn quốc đam mê công nghệ Blockchain & Web3',
+      'Xây dựng các sản phẩm ứng dụng thực tế trên mạng lưới Blockchain Avalanche',
+      'Lưu ý: Các đội lọt vào Vòng Chung kết tại TP.HCM tự túc chi phí đi lại và lưu trú'
+    ]
+  },
+
+  // 4. CUỘC THI STEAM QUỐC TẾ "CÔNG DÂN CHÂU Á THẾ HỆ MỚI" (THÁNG 10) — Ảnh thứ 1
+  {
+    id: 'comp-steam-quoc-te-cong-dan-chau-a-2026',
+    slug: 'cuoc-thi-steam-quoc-te-cong-dan-chau-a-the-he-moi-2026',
+    title: 'Cuộc thi STEAM Quốc tế "Công dân Châu Á Thế hệ mới"',
+    field: 'Lập trình & Tư duy tính toán, Robot & AI, STEAM sáng tạo vì cộng đồng',
+    level: 'Quốc Tế',
+    monthTag: 'Tháng 10/2026',
+    prizePool: 'Giải thưởng & Huy chương Quốc tế',
+    deadline: '04/10/2026',
+    deadlineDetails: 'Hạn đăng ký: 04/10/2026',
+    deadlineIso: '2026-10-04T23:59:59',
+    teamsCount: '3 người/nhóm',
+    status: 'completed',
+    featured: false,
+    isClubOrganized: false,
+    registrationOpen: false,
+    organizer: 'Ban Tổ chức STEAM Quốc tế Châu Á (ANGC 2026 & LYDINC)',
+    coverImage: '/images/bkic/comp_steam_angc_2026.jpg',
+    infoUrl: 'https://drive.google.com/file/d/19qK0YK5H-TV4pVWMqZRfu7cdRmkEEXXp/view?usp=sharing',
+    externalRegUrl: 'https://www.facebook.com/share/p/1LkqMaz89k/',
+    summary: 'Cuộc thi gồm 6 nội dung về lập trình, robot, AI, sáng tạo nội dung và các dự án STEAM vì cộng đồng, nhằm phát triển tư duy sáng tạo, kỹ năng công nghệ và tinh thần giải quyết các vấn đề xã hội.',
+    timeline: [
+      { phase: 'Hạn cuối đăng ký đội thi', date: '04/10/2026', desc: 'Các đội thi (3 thành viên/nhóm) hoàn tất hồ sơ đăng ký theo 6 nội dung thi đấu.' },
+      { phase: 'Vòng Thi đấu & Thuyết trình Dự án STEAM', date: 'Tháng 10/2026', desc: 'Tranh tài ở các bảng Lập trình, Robot & AI, và Dự án STEAM vì cộng đồng.' }
+    ],
+    prizes: [
+      { rank: 'Giải Quốc tế các Bảng thi', reward: 'Huy chương & Chứng nhận Quốc tế', extra: 'Giao lưu học thuật cùng thanh thiếu niên và sinh viên khu vực Châu Á' }
+    ],
+    eligibility: [
+      'Quy mô đội thi: 03 người/nhóm',
+      'Lĩnh vực: Lập trình và tư duy tính toán, Robot và trí tuệ nhân tạo, STEM sáng tạo vì cộng đồng'
+    ]
+  },
+
+  // 5. MIT $50K VIETNAM: GIAO LƯU TRỰC TUYẾN CÙNG BTC (THÁNG 9) — Ảnh thứ 4
+  {
+    id: 'comp-mit-50k-vietnam-2026',
+    slug: 'mit-50k-vietnam-giao-luu-truc-tuyen-2026',
+    title: 'MIT $50K VIETNAM: Giao lưu Trực tuyến cùng Ban Tổ chức',
+    field: 'Các dự án khởi nghiệp công nghệ & Nghiên cứu chuyên sâu',
+    level: 'Quốc Gia',
+    monthTag: 'Tháng 9/2026',
+    prizePool: 'Giải thưởng MIT $50K Vietnam',
+    deadline: '26/09/2026',
+    deadlineDetails: '10:00 – 11:00 sáng Thứ Bảy, ngày 26/09/2026 (Trực tuyến)',
+    deadlineIso: '2026-09-26T10:00:00',
+    teamsCount: 'Không giới hạn',
+    status: 'completed',
+    featured: false,
+    isClubOrganized: false,
+    registrationOpen: false,
+    organizer: 'Ban Tổ chức MIT $50K Vietnam (Cùng Bà Tạ Thị Thanh Thủy – Giám đốc Quỹ Đinh Thiện Lý)',
+    coverImage: '/images/bkic/comp_mit_50k_vietnam_2026.jpg',
+    infoUrl: 'https://www.facebook.com/share/p/1DHFCaSkLJ/',
+    externalRegUrl: 'https://l1nk.dev/0ynhrhv',
+    summary: 'Buổi giao lưu trực tuyến cùng Ban Tổ chức MIT $50K Vietnam dành cho các nhóm dự án, học viên cao học, Nghiên cứu sinh Tiến sĩ và sau Tiến sĩ quan tâm đến điều kiện tham gia, hồ sơ và quy trình đánh giá của cuộc thi.',
+    timeline: [
+      { phase: 'Phiên Info Session & Q&A Trực tuyến', date: '10:00 – 11:00, 26/09/2026', desc: 'Giải đáp chi tiết về điều kiện tham gia, cách chuẩn bị hồ sơ và tiêu chí chấm chọn của MIT $50K Vietnam.' }
+    ],
+    prizes: [
+      { rank: 'Cơ hội Tranh tài MIT $50K', reward: 'Quỹ giải thưởng $50,000', extra: 'Kết nối trực tiếp với mạng lưới cố vấn quốc tế từ MIT và hệ sinh thái DeepTech' }
+    ],
+    eligibility: [
+      'Các dự án khởi nghiệp, sinh viên, học viên cao học, Nghiên cứu sinh Tiến sĩ và sau Tiến sĩ',
+      'Số lượng tham dự: Không giới hạn (Trực tuyến)'
+    ]
+  },
+
+  // 6. CUỘC THI SÁNG TẠO TRẺ QUỐC GIA VỀ TRÍ TUỆ NHÂN TẠO 2026 (THÁNG 9) — Ảnh thứ 2
+  {
+    id: 'comp-sang-tao-tre-quoc-gia-ai-2026',
+    slug: 'cuoc-thi-sang-tao-tre-quoc-gia-ve-tri-tue-nhan-tao-2026',
+    title: 'Cuộc thi Sáng tạo Trẻ Quốc gia về Trí tuệ Nhân tạo 2026',
+    field: 'CNTT, Khoa học máy tính, Trí tuệ nhân tạo (AI), Khoa học dữ liệu, Điện – Điện tử, Tự động hóa',
+    level: 'Quốc Gia',
+    monthTag: 'Tháng 9/2026',
+    prizePool: 'Tuyển chọn 05 Đội Đại diện DUT dự Vòng Khu vực & Toàn quốc',
+    deadline: '21/09/2026',
+    deadlineDetails: '11h00 ngày 21/09/2026 tại Phòng Công tác Sinh viên - Phòng S06.08 (CV. Đới Phương Thanh)',
+    deadlineIso: '2026-09-21T11:00:00',
+    teamsCount: '03 người/đội (Tuyển chọn 05 đội đại diện Trường)',
+    status: 'completed',
+    featured: false,
+    isClubOrganized: false,
+    registrationOpen: false,
+    organizer: 'Ban Tổ chức Quốc gia & Trường ĐH Bách khoa – ĐHĐN (Phòng CTSV S06.08)',
+    coverImage: '/images/bkic/comp_ai_quoc_gia_2026.jpg',
+    infoUrl: 'https://www.facebook.com/share/p/1BVsy8dq1f/',
+    externalRegUrl: 'https://docs.google.com/document/d/1277xrIsRtrUwbLIdDLqEUznZhroKICyJ/edit?usp=sharing&ouid=111272308073265472512&rtpof=true&sd=true',
+    summary: 'Sân chơi quốc gia dành cho sinh viên đam mê AI biến ý tưởng thành sản phẩm ứng dụng thực tiễn. Trường ĐH Bách khoa – ĐHĐN tuyển chọn 05 đội thi (tối đa 3 thành viên/đội) đại diện Trường tham dự Vòng Khu vực miền Trung (Bảng C tại Đà Nẵng) hướng tới Vòng Chung kết Toàn quốc tại Hà Nội.',
+    timeline: [
+      { phase: 'Vòng Tuyển chọn Cấp Trường (DUT)', date: 'Hạn nộp: 11h00 ngày 21/09/2026', desc: 'Nộp hồ sơ tại Phòng Công tác Sinh viên (S06.08 - Chuyên viên Đới Phương Thanh) để chọn 05 đội đại diện Trường.' },
+      { phase: 'Vòng Khu vực Miền Trung – Bảng C', date: 'Tháng 10/2026 tại Đà Nẵng', desc: '05 đội đại diện Trường ĐH Bách khoa tranh tài tại Vòng Khu vực miền Trung tổ chức ở Đà Nẵng.' },
+      { phase: 'Vòng Chung kết Toàn quốc', date: 'Cuối năm 2026 tại Hà Nội', desc: 'Các đội xuất sắc nhất khu vực tham dự Vòng Chung kết Toàn quốc tại Thủ đô Hà Nội.' }
+    ],
+    prizes: [
+      { rank: 'Đại diện Chính thức ĐH Bách khoa (05 Đội)', reward: 'Vé dự Vòng Khu vực Bảng C & Chung kết Hà Nội', extra: 'Giải thưởng Quốc gia về Trí tuệ Nhân tạo trong học tập, nghiên cứu, sản xuất và chuyển đổi số' }
+    ],
+    eligibility: [
+      'Sinh viên Trường Đại học Bách khoa – ĐHĐN (Mỗi đội tối đa 03 thành viên)',
+      'Lĩnh vực: Công nghệ thông tin, Khoa học máy tính, Trí tuệ nhân tạo, Khoa học dữ liệu, Điện – Điện tử, Tự động hóa'
+    ]
+  },
+
+  // 7. NEXT COMMERCE 2027 – TRENDS • TECHNOLOGY • TALENT (THÁNG 9) — Ảnh thứ 3
+  {
+    id: 'comp-next-commerce-2027',
+    slug: 'next-commerce-2027-trends-technology-talent',
+    title: 'Chương trình: NEXT COMMERCE 2027 – TRENDS • TECHNOLOGY • TALENT',
+    field: 'Kinh doanh, Công nghệ, AI, Marketing và Thương mại điện tử',
+    level: 'Quốc Gia',
+    monthTag: 'Tháng 9/2026',
+    prizePool: 'Quà tặng & Học bổng hơn 200 Triệu VNĐ',
+    deadline: '20/09/2026',
+    deadlineDetails: '08:00 – 12:00 | Chủ Nhật, ngày 20/09/2026 tại Nhà hát Trưng Vương, Đà Nẵng',
+    deadlineIso: '2026-09-20T08:00:00',
+    teamsCount: 'Dành cho sinh viên quan tâm',
+    status: 'completed',
+    featured: false,
+    isClubOrganized: false,
+    registrationOpen: false,
+    organizer: 'Ban Tổ chức NEXT COMMERCE 2027 (JCI Danang, VECOM & Đối tác tại Nhà hát Trưng Vương)',
+    coverImage: '/images/bkic/comp_next_commerce_2027.jpg',
+    infoUrl: 'https://www.facebook.com/share/p/1UMz4YQz7e/',
+    externalRegUrl: 'https://forms.gle/DSfpAbA2UDX4den79',
+    summary: 'Sự kiện quy mô lớn về xu hướng E-Commerce kết hợp Công nghệ và AI, mở ra cơ hội mới trong kinh doanh và Marketing. Sinh viên được lắng nghe chuyên gia, kết nối doanh nghiệp và tham gia Panel Discussion để chuẩn bị năng lực nghề nghiệp cho hành trình phía trước.',
+    timeline: [
+      { phase: 'Sự kiện Chính & Panel Discussion', date: '08:00 – 12:00 | Chủ Nhật, 20/09/2026', desc: 'Diễn ra trực tiếp tại Nhà hát Trưng Vương, TP. Đà Nẵng với sự góp mặt của các chuyên gia công nghệ và thương mại điện tử.' }
+    ],
+    prizes: [
+      { rank: 'Quà tặng & Học bổng Sự kiện', reward: 'Trị giá hơn 200 Triệu Đồng', extra: 'Học bổng khóa học AI, Storytelling, SpeakPro và Networking cùng Doanh nghiệp' }
+    ],
+    eligibility: [
+      'Sinh viên quan tâm đến lĩnh vực Kinh doanh, Công nghệ, AI, Marketing và Thương mại điện tử tại Đà Nẵng'
     ]
   }
 ];

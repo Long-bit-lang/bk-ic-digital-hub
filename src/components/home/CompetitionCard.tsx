@@ -55,14 +55,19 @@ export const CompetitionCard: React.FC<CompetitionCardProps> = ({ item }) => {
 
         <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-black/20 pointer-events-none" />
 
-        {/* Top-Left: Status Badge */}
-        <div className="absolute top-3.5 left-3.5 z-10">
+        {/* Top-Left: Status & Level Badge */}
+        <div className="absolute top-3.5 left-3.5 z-10 flex items-center gap-1.5">
           <span
             className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold shadow-xs ${statusInfo.bg}`}
           >
             <span className={`w-1.5 h-1.5 rounded-full ${statusInfo.dot}`} />
             <span>{item.statusLabel || statusInfo.label}</span>
           </span>
+          {item.level && (
+            <span className="inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-bold bg-white/95 text-[#075985] shadow-xs">
+              {item.level}
+            </span>
+          )}
         </div>
 
         {/* Top-Right: Registration Deadline Badge (Overlay trên ảnh tựa như giải thưởng) */}
@@ -94,20 +99,33 @@ export const CompetitionCard: React.FC<CompetitionCardProps> = ({ item }) => {
             {item.title}
           </h3>
 
-          {/* Lĩnh vực cuộc thi thay thế mô tả dài */}
-          <div className="flex items-center gap-2 pt-0.5 text-xs sm:text-sm">
+          {/* Lĩnh vực cuộc thi */}
+          <div className="flex flex-wrap items-center gap-1.5 pt-0.5 text-xs">
             <span className="text-slate-400 font-normal">Lĩnh vực:</span>
-            <span className="font-semibold text-[#1749B5] bg-blue-50/80 px-2.5 py-0.5 rounded-lg border border-blue-100">
+            <span className="font-semibold text-[#1749B5] bg-blue-50/80 px-2.5 py-0.5 rounded-lg border border-blue-100 line-clamp-1">
               {item.field || item.description}
             </span>
           </div>
+
+          {item.description && (
+            <p className="text-xs text-slate-600 line-clamp-2 leading-relaxed pt-0.5">
+              {item.description}
+            </p>
+          )}
         </div>
 
         <div className="space-y-3 pt-2 border-t border-slate-100">
-          {/* Timeline / Duration */}
-          <div className="flex items-center gap-1.5 text-xs font-mono text-slate-500">
-            <Clock className="w-3.5 h-3.5 text-slate-400 shrink-0" />
-            <span>Thời gian: {item.startDate} – {item.endDate}</span>
+          {/* Timeline & Scale */}
+          <div className="flex items-center justify-between gap-2 text-xs text-slate-500">
+            <div className="flex items-center gap-1.5 font-mono truncate">
+              <Clock className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+              <span>{item.startDate} – {item.endDate}</span>
+            </div>
+            {item.scale && (
+              <span className="text-[11px] font-semibold text-[#075985] bg-sky-50 px-2 py-0.5 rounded-md border border-sky-100 shrink-0">
+                {item.scale}
+              </span>
+            )}
           </div>
 
           {/* Action Link */}

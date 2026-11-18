@@ -1,12 +1,37 @@
 // BK-IC Digital Hub — Global Scroll Restoration Component
 // Automatically scrolls window to top upon route navigation, while preserving hash anchors
-import { useEffect } from 'react';
+// and preserving scroll position during in-page tab transitions under /activities
+import { useEffect, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
+
+const ACTIVITY_TAB_PATHS = new Set([
+  '/activities',
+  '/activities/sinh-hoat',
+  '/activities/workshop',
+  '/activities/cuoc-thi',
+  '/activities/du-an',
+  '/activities/bk-shark',
+  '/activities/tuyen-thanh-vien',
+  '/activities/internal',
+  '/activities/workshops',
+  '/activities/competitions',
+  '/activities/companion-projects',
+  '/activities/recruitment'
+]);
+
+function isActivityTabPath(path: string): boolean {
+  const normalized = path.replace(/\/+$/, '') || '/';
+  return ACTIVITY_TAB_PATHS.has(normalized);
+}
 
 export const ScrollToTop = () => {
   const { pathname, hash } = useLocation();
+  const prevPathnameRef = useRef<string>(pathname);
 
   useEffect(() => {
+    const prevPathname = prevPathnameRef.current;
+    prevPathnameRef.current = pathname;
+
     // If there is an anchor hash (e.g., /about#album), smoothly scroll to that specific element
     if (hash) {
       const targetId = hash.replace('#', '');
@@ -20,7 +45,12 @@ export const ScrollToTop = () => {
       return () => clearTimeout(timer);
     }
 
-    // Default behavior for all standard route changes: scroll instantly to the top
+    // When switching between tabs inside /activities, preserve scroll position so it feels like a pure tab transition without page reload/jump
+    if (isActivityTabPath(prevPathname) && isActivityTabPath(pathname)) {
+      return;
+    }
+
+    // Default behavior for all standard page changes: scroll instantly to the top
     window.scrollTo({
       top: 0,
       left: 0,
@@ -34,4 +64,3 @@ export const ScrollToTop = () => {
 
   return null;
 };
-

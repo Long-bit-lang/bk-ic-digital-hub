@@ -64,6 +64,13 @@ export const ActivityCard: React.FC<ActivityCardProps> = ({ item, variant = 'com
             {item.description}
           </p>
 
+          {item.outcomes && (
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-white/10 backdrop-blur-md border border-white/15 text-xs text-sky-200 font-semibold">
+              <Sparkles className="w-3.5 h-3.5 text-amber-300 shrink-0" />
+              <span className="line-clamp-1">{item.outcomes}</span>
+            </div>
+          )}
+
           <div className="pt-2 flex flex-wrap items-center justify-between gap-4">
             {item.location && (
               <div className="flex items-center gap-1.5 text-xs text-slate-300">

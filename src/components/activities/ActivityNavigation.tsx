@@ -70,7 +70,7 @@ export const ActivityNavigation: React.FC = () => {
   const navContainerRef = useRef<HTMLDivElement>(null);
   const activeTabRef = useRef<HTMLAnchorElement>(null);
 
-  // Auto-scroll active tab into view on mobile
+  // Auto-scroll active tab into horizontal view on mobile without triggering vertical page scroll
   useEffect(() => {
     if (activeTabRef.current && navContainerRef.current) {
       const container = navContainerRef.current;
@@ -79,7 +79,9 @@ export const ActivityNavigation: React.FC = () => {
       const containerRect = container.getBoundingClientRect();
 
       if (elementRect.left < containerRect.left || elementRect.right > containerRect.right) {
-        element.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+        const scrollOffset =
+          element.offsetLeft - container.clientWidth / 2 + element.clientWidth / 2;
+        container.scrollTo({ left: Math.max(0, scrollOffset), behavior: 'smooth' });
       }
     }
   }, [location.pathname]);
@@ -107,6 +109,7 @@ export const ActivityNavigation: React.FC = () => {
                   key={tab.id}
                   ref={active ? activeTabRef : undefined}
                   to={tab.to}
+                  preventScrollReset={true}
                   className={`relative flex items-center gap-2 px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-xl sm:rounded-full text-xs font-bold transition-colors whitespace-nowrap shrink-0 ${
                     active
                       ? 'text-[#0284C7]'
