@@ -5,6 +5,8 @@ import type { Application, UnitId, User } from '../../src/types/index.ts';
 import { extractAcademicYear } from './auth.ts';
 import { getVNCurrentTimeStr, getVNCurrentDateStr, getNowISO } from '../timeUtils.ts';
 import { requireAuth, requireNormalSession, requireAdmin, requireUnitOrRole } from '../middleware/auth.ts';
+import { checkRateLimit } from '../services/authSecurity.ts';
+import { dispatchEmail, isValidEmailFormat } from '../services/emailService.ts';
 
 export const cmsRouter = Router();
 
@@ -307,15 +309,122 @@ cmsRouter.post('/competitions/register', (req, res) => {
   });
 });
 
-// POST /api/partnerships/request (Public Partnership Request)
-cmsRouter.post('/partnerships/request', (req, res) => {
-  const { organizationName, representativeName, position, email, phone, partnershipType, proposalContent, attachmentUrl } = req.body;
-  if (!organizationName || !representativeName || !email || !phone || !proposalContent) {
-    return res.status(400).json({
+// POST /api/partnerships/request (Public Partnership Request with Rate Limiting, Honeypot & Validation)
+cmsRouter.post('/partnerships/request', async (req, res) => {
+  // 1. IP Rate Limiting (5 requests per 15 minutes per IP)
+  const clientIp = (req.headers['x-forwarded-for'] as string)?.split(',')[0].trim() || req.ip || 'unknown-ip';
+  const rateCheck = checkRateLimit(`partnership_req:${clientIp}`, 5, 15 * 60 * 1000);
+  if (!rateCheck.allowed) {
+    return res.status(429).json({
       success: false,
-      message: 'Vui lòng cung cấp đầy đủ: Tên tổ chức/doanh nghiệp, Người đại diện, Email, Số điện thoại và Nội dung đề xuất.'
+      message: `Bạn đã gửi quá nhiều yêu cầu từ địa chỉ IP này. Vui lòng thử lại sau ${rateCheck.retryAfterSec || 60} giây.`
     });
   }
+
+  // 2. Anti-spam Honeypot Check
+  const { hp_website } = req.body;
+  if (hp_website && typeof hp_website === 'string' && hp_website.trim().length > 0) {
+    return res.status(400).json({
+      success: false,
+      message: 'Yêu cầu không hợp lệ.'
+    });
+  }
+
+  const {
+    organizationName,
+    representativeName,
+    position,
+    email,
+    phone,
+    partnershipType,
+    proposalContent,
+    attachmentUrl
+  } = req.body;
+
+  // 3. Required Fields & Length Bounds Validation
+  if (!organizationName || typeof organizationName !== 'string' || organizationName.trim().length < 2 || organizationName.trim().length > 200) {
+    return res.status(400).json({
+      success: false,
+      message: 'Vui lòng cung cấp tên tổ chức/doanh nghiệp hợp lệ (2 - 200 ký tự).'
+    });
+  }
+
+  if (!representativeName || typeof representativeName !== 'string' || representativeName.trim().length < 2 || representativeName.trim().length > 100) {
+    return res.status(400).json({
+      success: false,
+      message: 'Vui lòng cung cấp họ và tên người đại diện hợp lệ (2 - 100 ký tự).'
+    });
+  }
+
+  if (position && (typeof position !== 'string' || position.trim().length > 100)) {
+    return res.status(400).json({
+      success: false,
+      message: 'Chức vụ người đại diện không được vượt quá 100 ký tự.'
+    });
+  }
+
+  const cleanEmail = (email || '').toString().trim().toLowerCase();
+  if (!cleanEmail || cleanEmail.length > 100 || !isValidEmailFormat(cleanEmail)) {
+    return res.status(400).json({
+      success: false,
+      message: 'Vui lòng cung cấp địa chỉ email liên hệ hợp lệ.'
+    });
+  }
+
+  const cleanPhone = (phone || '').toString().trim();
+  const phoneRegex = /^[0-9+() -]{9,20}$/;
+  if (!cleanPhone || !phoneRegex.test(cleanPhone)) {
+    return res.status(400).json({
+      success: false,
+      message: 'Vui lòng cung cấp số điện thoại liên hệ hợp lệ (9 - 20 ký tự số).'
+    });
+  }
+
+  if (!proposalContent || typeof proposalContent !== 'string' || proposalContent.trim().length < 20 || proposalContent.trim().length > 3000) {
+    return res.status(400).json({
+      success: false,
+      message: 'Vui lòng mô tả chi tiết nội dung đề xuất hợp tác (từ 20 đến 3000 ký tự).'
+    });
+  }
+
+  // Validate optional attachment URL
+  let cleanAttachmentUrl = '';
+  if (attachmentUrl && typeof attachmentUrl === 'string' && attachmentUrl.trim().length > 0) {
+    const trimmedUrl = attachmentUrl.trim();
+    if (trimmedUrl.length > 500) {
+      return res.status(400).json({
+        success: false,
+        message: 'Liên kết tài liệu đính kèm không được vượt quá 500 ký tự.'
+      });
+    }
+    try {
+      const parsedUrl = new URL(trimmedUrl);
+      if (parsedUrl.protocol !== 'http:' && parsedUrl.protocol !== 'https:') {
+        throw new Error('Invalid protocol');
+      }
+      cleanAttachmentUrl = trimmedUrl;
+    } catch {
+      return res.status(400).json({
+        success: false,
+        message: 'Liên kết tài liệu đính kèm phải là URL hợp lệ (bắt đầu bằng http:// hoặc https://).'
+      });
+    }
+  }
+
+  // Canonical & Legacy Partnership Types
+  const validTypes = [
+    'sponsor',
+    'expert_mentoring',
+    'problem_solving',
+    'media_coop',
+    'academic_partner',
+    'recruitment_partner',
+    'companion_project',
+    'business_coop',
+    'event_cohost',
+    'other'
+  ];
+  const normalizedType = validTypes.includes(partnershipType) ? partnershipType : 'business_coop';
 
   const store = db.get();
   store.partnershipRequests = store.partnershipRequests || [];
@@ -325,12 +434,12 @@ cmsRouter.post('/partnerships/request', (req, res) => {
     organizationName: organizationName.trim(),
     representativeName: representativeName.trim(),
     position: position ? position.trim() : '',
-    email: email.trim().toLowerCase(),
-    phone: phone.trim(),
-    partnershipType: partnershipType || 'business_coop',
+    email: cleanEmail,
+    phone: cleanPhone,
+    partnershipType: normalizedType,
     proposalContent: proposalContent.trim(),
-    attachmentUrl: attachmentUrl || '',
-    status: 'received',
+    attachmentUrl: cleanAttachmentUrl,
+    status: 'received' as const,
     submittedAt: new Date().toISOString()
   };
 
@@ -345,10 +454,42 @@ cmsRouter.post('/partnerships/request', (req, res) => {
     action: 'Gửi đề xuất hợp tác',
     targetType: 'PartnershipRequest',
     targetId: request.id,
-    details: `Đơn vị ${organizationName} gửi đề xuất hợp tác mảng ${partnershipType}`
+    details: `Đơn vị "${organizationName.trim()}" gửi đề xuất hợp tác hình thức [${normalizedType}]`
   });
 
   db.save();
+
+  // 4. Asynchronous email notification to partner (with safe fallback)
+  try {
+    await dispatchEmail({
+      to: cleanEmail,
+      recipientName: representativeName.trim(),
+      subject: `[BK-IC] Xác nhận tiếp nhận đề xuất hợp tác - ${organizationName.trim()}`,
+      type: 'partnership_acknowledgment',
+      htmlContent: `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; color: #334155; line-height: 1.6;">
+          <div style="background: linear-gradient(135deg, #0284C7, #38BDF8); padding: 24px; border-radius: 12px 12px 0 0; color: #ffffff; text-align: center;">
+            <h2 style="margin: 0; font-size: 20px;">CLB Khởi nghiệp & Đổi mới Sáng tạo BK-IC</h2>
+            <p style="margin: 6px 0 0; font-size: 13px; opacity: 0.9;">Trường Đại học Bách khoa – Đại học Đà Nẵng</p>
+          </div>
+          <div style="background: #ffffff; padding: 28px 24px; border: 1px solid #e2e8f0; border-top: none; border-radius: 0 0 12px 12px;">
+            <p>Kính gửi <strong>${representativeName.trim()}</strong> (${organizationName.trim()}),</p>
+            <p>Ban Chủ nhiệm Câu lạc bộ BK-IC xin chân thành cảm ơn Quý đơn vị đã quan tâm và gửi đề xuất hợp tác cùng chúng tôi.</p>
+            <div style="background: #f8fafc; border-left: 4px solid #0284C7; padding: 14px 18px; margin: 20px 0; border-radius: 0 8px 8px 0;">
+              <p style="margin: 0 0 6px; font-size: 13px;"><strong>Mã tham chiếu:</strong> ${request.id}</p>
+              <p style="margin: 0 0 6px; font-size: 13px;"><strong>Đơn vị:</strong> ${organizationName.trim()}</p>
+              <p style="margin: 0 0 6px; font-size: 13px;"><strong>Hình thức:</strong> ${normalizedType}</p>
+              <p style="margin: 0; font-size: 13px;"><strong>Thời gian tiếp nhận:</strong> ${new Date(request.submittedAt).toLocaleString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' })}</p>
+            </div>
+            <p>Sau khi tiếp nhận đề xuất, Ban Chủ nhiệm BK-IC sẽ xem xét nội dung và chủ động liên hệ lại với Quý đơn vị theo thông tin liên hệ đã cung cấp để trao đổi phương án phối hợp chi tiết.</p>
+            <p style="margin-top: 24px;">Trân trọng,<br/><strong>Ban Chủ nhiệm CLB BK-IC</strong><br/><span style="font-size: 12px; color: #64748b;">Trường Đại học Bách khoa, Đại học Đà Nẵng</span></p>
+          </div>
+        </div>
+      `
+    });
+  } catch (err) {
+    console.warn('[CMS Partnership] Email notification fallback:', err);
+  }
 
   res.json({
     success: true,
@@ -357,12 +498,87 @@ cmsRouter.post('/partnerships/request', (req, res) => {
   });
 });
 
-// GET /api/partnerships/requests (Admin & BCN Only)
+// GET /api/partnerships/requests (Admin & BN Only with Filter & Search)
 cmsRouter.get('/partnerships/requests', requireAuth, requireNormalSession, requireUnitOrRole(['BN'], ['admin']), (req, res) => {
   const store = db.get();
+  let requests = store.partnershipRequests || [];
+
+  const { status, type, search } = req.query;
+
+  if (status && typeof status === 'string' && status !== 'all') {
+    requests = requests.filter(r => r.status === status);
+  }
+
+  if (type && typeof type === 'string' && type !== 'all') {
+    requests = requests.filter(r => r.partnershipType === type);
+  }
+
+  if (search && typeof search === 'string' && search.trim().length > 0) {
+    const q = search.trim().toLowerCase();
+    requests = requests.filter(r =>
+      r.organizationName.toLowerCase().includes(q) ||
+      r.representativeName.toLowerCase().includes(q) ||
+      r.email.toLowerCase().includes(q) ||
+      (r.phone && r.phone.includes(q))
+    );
+  }
+
   res.json({
     success: true,
-    requests: store.partnershipRequests || []
+    requests
+  });
+});
+
+// PATCH /api/partnerships/requests/:id (Admin & BN Only: Status, Internal Notes & Assignment)
+cmsRouter.patch('/partnerships/requests/:id', requireAuth, requireNormalSession, requireUnitOrRole(['BN'], ['admin']), (req, res) => {
+  const { id } = req.params;
+  const { status, notes, assignedTo } = req.body;
+
+  const validStatuses = ['received', 'reviewing', 'contacted', 'approved', 'rejected'];
+  if (status && !validStatuses.includes(status)) {
+    return res.status(400).json({
+      success: false,
+      message: `Trạng thái không hợp lệ. Cho phép: ${validStatuses.join(', ')}`
+    });
+  }
+
+  const store = db.get();
+  store.partnershipRequests = store.partnershipRequests || [];
+
+  const request = store.partnershipRequests.find(r => r.id === id);
+  if (!request) {
+    return res.status(404).json({
+      success: false,
+      message: `Không tìm thấy hồ sơ đề xuất hợp tác có mã ${id}.`
+    });
+  }
+
+  const prevStatus = request.status;
+  if (status) request.status = status;
+  if (notes !== undefined) request.notes = typeof notes === 'string' ? notes.trim() : '';
+  if (assignedTo !== undefined) request.assignedTo = typeof assignedTo === 'string' ? assignedTo.trim() : '';
+  request.updatedAt = new Date().toISOString();
+
+  // Audit logging
+  const currentUser = (req as any).user;
+  store.auditLogs.unshift({
+    id: `audit-${Date.now()}`,
+    timestamp: new Date().toISOString(),
+    actorId: currentUser?.id || 'admin',
+    actorName: currentUser?.fullName || currentUser?.name || 'Quản trị viên',
+    actorRole: currentUser?.role || 'admin',
+    action: 'Cập nhật đề xuất hợp tác',
+    targetType: 'PartnershipRequest',
+    targetId: request.id,
+    details: `Cập nhật trạng thái từ [${prevStatus}] sang [${request.status}] cho đơn vị "${request.organizationName}"`
+  });
+
+  db.save();
+
+  res.json({
+    success: true,
+    message: 'Cập nhật trạng thái đề xuất thành công.',
+    request
   });
 });
 

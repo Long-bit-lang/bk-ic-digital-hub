@@ -11,21 +11,23 @@ import { AdminLayout } from './components/admin/AdminLayout';
 // Public Primary Pages
 import { HomePage } from './pages/HomePage';
 import { AboutPage } from './pages/AboutPage';
-import { ActivitiesPage } from './pages/ActivitiesPage';
 import { PartnershipPage } from './pages/PartnershipPage';
 import { NotFoundPage } from './pages/NotFoundPage';
 
-// Activities Subpages & Details (6 Subcategories)
-import { InternalActivitiesPage } from './pages/activities/InternalActivitiesPage';
-import { WorkshopsPage } from './pages/activities/WorkshopsPage';
+// Activities Layout & 6 Tabs
+import { ActivitiesLayout } from './pages/activities/ActivitiesLayout';
+import { InternalActivitiesTab } from './pages/activities/tabs/InternalActivitiesTab';
+import { WorkshopsTab } from './pages/activities/tabs/WorkshopsTab';
+import { CompetitionsTab } from './pages/activities/tabs/CompetitionsTab';
+import { CompanionProjectsTab } from './pages/activities/tabs/CompanionProjectsTab';
+import { BKSharkTab } from './pages/activities/tabs/BKSharkTab';
+import { RecruitmentTab } from './pages/activities/tabs/RecruitmentTab';
+
+// Activities Detail Pages
 import { WorkshopDetailPage } from './pages/activities/WorkshopDetailPage';
-import { CompetitionsPage } from './pages/activities/CompetitionsPage';
 import { CompetitionDetailPage } from './pages/activities/CompetitionDetailPage';
-import { CompanionProjectsPage } from './pages/activities/CompanionProjectsPage';
 import { CompanionProjectDetailPage } from './pages/activities/CompanionProjectDetailPage';
-import { BKSharkPage } from './pages/activities/BKSharkPage';
 import { BKSharkSeasonDetailPage } from './pages/activities/BKSharkSeasonDetailPage';
-import { RecruitmentPage } from './pages/activities/RecruitmentPage';
 
 // Partnership Subpages (3 Subcategories)
 import { CompanionProjectPartnershipPage } from './pages/partnership/CompanionProjectPartnershipPage';
@@ -62,6 +64,7 @@ import { AdminAttendancePage } from './pages/admin/AdminAttendancePage';
 import { AdminEvaluationsPage } from './pages/admin/AdminEvaluationsPage';
 import { AdminFeedbackPage } from './pages/admin/AdminFeedbackPage';
 import { AdminApplicationsPage } from './pages/admin/AdminApplicationsPage';
+import { AdminPartnershipRequestsPage } from './pages/admin/AdminPartnershipRequestsPage';
 import { AdminContentPage } from './pages/admin/AdminContentPage';
 import { AdminSettingsPage } from './pages/admin/AdminSettingsPage';
 import { useApp } from './context/AppContext';
@@ -89,18 +92,34 @@ function AppRouter() {
           <Route path="/about" element={<AboutPage />} />
           <Route path="/organization" element={<Navigate to="/about#structure" replace />} />
 
-          {/* Item 3: Hoạt động (Activities) — 6 Subcategories & Detail Routes */}
-          <Route path="/activities" element={<ActivitiesPage />} />
-          <Route path="/activities/internal" element={<InternalActivitiesPage />} />
-          <Route path="/activities/workshops" element={<WorkshopsPage />} />
+          {/* Item 3: Hoạt động (Activities) — 6 Tabs nested under ActivitiesLayout */}
+          <Route path="/activities" element={<ActivitiesLayout />}>
+            <Route index element={<Navigate to="/activities/sinh-hoat" replace />} />
+
+            {/* 6 Official Tab Routes */}
+            <Route path="sinh-hoat" element={<InternalActivitiesTab />} />
+            <Route path="workshop" element={<WorkshopsTab />} />
+            <Route path="cuoc-thi" element={<CompetitionsTab />} />
+            <Route path="du-an" element={<CompanionProjectsTab />} />
+            <Route path="bk-shark" element={<BKSharkTab />} />
+            <Route path="tuyen-thanh-vien" element={<RecruitmentTab />} />
+
+            {/* Backward Compatibility Aliases (Preserve old URLs and test stability) */}
+            <Route path="internal" element={<Navigate to="/activities/sinh-hoat" replace />} />
+            <Route path="workshops" element={<Navigate to="/activities/workshop" replace />} />
+            <Route path="competitions" element={<Navigate to="/activities/cuoc-thi" replace />} />
+            <Route path="companion-projects" element={<Navigate to="/activities/du-an" replace />} />
+            <Route path="recruitment" element={<Navigate to="/activities/tuyen-thanh-vien" replace />} />
+          </Route>
+
+          {/* Subpage Detail Routes */}
           <Route path="/activities/workshops/:slug" element={<WorkshopDetailPage />} />
-          <Route path="/activities/competitions" element={<CompetitionsPage />} />
+          <Route path="/activities/workshop/:slug" element={<WorkshopDetailPage />} />
           <Route path="/activities/competitions/:slug" element={<CompetitionDetailPage />} />
-          <Route path="/activities/companion-projects" element={<CompanionProjectsPage />} />
+          <Route path="/activities/cuoc-thi/:slug" element={<CompetitionDetailPage />} />
           <Route path="/activities/companion-projects/:slug" element={<CompanionProjectDetailPage />} />
-          <Route path="/activities/bk-shark" element={<BKSharkPage />} />
+          <Route path="/activities/du-an/:slug" element={<CompanionProjectDetailPage />} />
           <Route path="/activities/bk-shark/:season" element={<BKSharkSeasonDetailPage />} />
-          <Route path="/activities/recruitment" element={<RecruitmentPage />} />
 
           {/* Item 4: Hợp tác (Partnership) — 3 Subcategories */}
           <Route path="/partnership" element={<PartnershipPage />} />
@@ -157,6 +176,7 @@ function AppRouter() {
           <Route path="feedback" element={<AdminFeedbackPage />} />
           <Route path="penalties" element={<Navigate to="/admin/attendance?tab=penalties" replace />} />
           <Route path="applications" element={<AdminApplicationsPage />} />
+          <Route path="partnerships" element={<AdminPartnershipRequestsPage />} />
           <Route path="content" element={<AdminContentPage />} />
           <Route path="settings" element={<AdminSettingsPage />} />
         </Route>

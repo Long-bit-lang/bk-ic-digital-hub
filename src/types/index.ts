@@ -334,6 +334,18 @@ export interface CompetitionRegistration {
 
 export type PartnershipRequestStatus = 'received' | 'reviewing' | 'contacted' | 'approved' | 'rejected';
 
+export type CanonicalPartnershipType =
+  | 'sponsor'              // 1. Tài trợ
+  | 'expert_mentoring'     // 2. Đồng hành chuyên môn
+  | 'problem_solving'      // 3. Đặt hàng bài toán
+  | 'media_coop'           // 4. Truyền thông
+  | 'academic_partner'     // 5. Học thuật / Nhà trường
+  | 'recruitment_partner'  // 6. Tuyển dụng / Thực tập
+  | 'companion_project'    // Legacy
+  | 'business_coop'        // Legacy
+  | 'event_cohost'         // Legacy
+  | 'other';               // Khác
+
 export interface PartnershipRequest {
   id: string;
   organizationName: string;
@@ -341,12 +353,14 @@ export interface PartnershipRequest {
   position?: string;
   email: string;
   phone: string;
-  partnershipType: 'companion_project' | 'sponsor' | 'business_coop' | 'event_cohost' | 'other';
+  partnershipType: CanonicalPartnershipType | string;
   proposalContent: string;
   attachmentUrl?: string;
   status: PartnershipRequestStatus;
   submittedAt: string;
   notes?: string;
+  updatedAt?: string;
+  assignedTo?: string;
 }
 
 export interface FeedbackSummary {

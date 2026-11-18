@@ -74,5 +74,11 @@ describe('Navbar Scroll Responsiveness & Hero Transition Verification', () => {
     assert.ok(content.includes('AnimatePresence'), 'PageTransition must use AnimatePresence');
     assert.ok(content.includes('useOutlet'), 'PageTransition must use useOutlet for clean route preservation');
   });
+
+  it('Scenario 9: Navbar implements hysteresis deadband to prevent scroll flutter/oscillation', () => {
+    const content = fs.readFileSync(navbarFile, 'utf8');
+    assert.ok(content.includes('y <= 5') || content.includes('y <= 4'), 'Navbar must implement a hysteresis restore threshold near top');
+    assert.ok(content.includes('!prev && window.scrollY > 14'), 'Navbar must guard downward transition against upward oscillation');
+  });
 });
 

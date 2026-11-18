@@ -29,12 +29,24 @@ export const Navbar: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  // Immediate scroll detection with zero lag & minimal threshold
+  // Immediate scroll detection with hysteresis deadband
+  // Eliminates jitter/oscillation when scrolling lightly near the threshold
   useEffect(() => {
     const handleScroll = () => {
-      // Snappy threshold at 14px: triggers immediately on user's first scroll action
-      const isScrolled = window.scrollY > 14;
-      setScrolled((prev) => (prev !== isScrolled ? isScrolled : prev));
+      const y = window.scrollY;
+      setScrolled((prev) => {
+        // Hysteresis deadband:
+        // - To trigger scrolled state (shrink to edge-to-edge bar): user scrolls down past window.scrollY > 14
+        // - To restore floating pill: user must scroll back up close to top (y <= 5)
+        // This prevents the continuous shrink/expand loop when scrolling lightly near the boundary.
+        if (!prev && window.scrollY > 14) {
+          return true;
+        }
+        if (prev && y <= 5) {
+          return false;
+        }
+        return prev;
+      });
     };
 
     // Initial check on mount
@@ -80,12 +92,12 @@ export const Navbar: React.FC = () => {
 
   // 6 Subcategories for Hoạt động (clean labels only, no symbols or descriptions)
   const activitySubItems = [
-    { to: '/activities/internal', label: 'Sinh hoạt nội bộ' },
-    { to: '/activities/workshops', label: 'Workshop thường niên' },
-    { to: '/activities/competitions', label: 'Cuộc thi sáng tạo' },
-    { to: '/activities/companion-projects', label: 'Dự án đồng hành' },
+    { to: '/activities/sinh-hoat', label: 'Sinh hoạt nội bộ' },
+    { to: '/activities/workshop', label: 'Workshop thường niên' },
+    { to: '/activities/cuoc-thi', label: 'Cuộc thi sáng tạo' },
+    { to: '/activities/du-an', label: 'Dự án đồng hành' },
     { to: '/activities/bk-shark', label: 'Sân khấu BK Shark' },
-    { to: '/activities/recruitment', label: 'Tuyển thành viên mới' }
+    { to: '/activities/tuyen-thanh-vien', label: 'Tuyển thành viên mới' }
   ];
 
   // 4 Subcategories for Hợp tác (clean labels only, no symbols or descriptions)

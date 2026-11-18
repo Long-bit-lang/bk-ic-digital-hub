@@ -23,7 +23,8 @@ import {
   X,
   MoreHorizontal,
   ChevronRight,
-  UserCheck
+  UserCheck,
+  Handshake
 } from 'lucide-react';
 import { getUnitShortName, getUnitFullName } from '../../utils/unitDisplay';
 
@@ -94,6 +95,7 @@ export const AdminLayout: React.FC = () => {
     { to: '/admin/evaluations', label: 'Đánh giá Rèn luyện', icon: Award },
     { to: '/admin/feedback', label: 'Phản hồi Sinh hoạt', icon: MessageSquare },
     { to: '/admin/applications', label: 'Đơn Tuyển dụng', icon: FileText },
+    { to: '/admin/partnerships', label: 'Đề xuất Hợp tác', icon: Handshake },
     { to: '/admin/content', label: 'Quản trị Nội dung (CMS)', icon: Sliders },
     { to: '/admin/settings', label: 'Cấu hình Hệ thống', icon: Settings }
   ];
@@ -109,6 +111,7 @@ export const AdminLayout: React.FC = () => {
   const isMoreMenuActive = location.pathname.startsWith('/admin/evaluations') ||
                            location.pathname.startsWith('/admin/feedback') ||
                            location.pathname.startsWith('/admin/applications') ||
+                           location.pathname.startsWith('/admin/partnerships') ||
                            location.pathname.startsWith('/admin/content') ||
                            location.pathname.startsWith('/admin/settings') ||
                            mobileMenuOpen;

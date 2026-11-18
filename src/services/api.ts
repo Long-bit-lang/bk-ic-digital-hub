@@ -13,7 +13,9 @@ import {
   AttendanceStatus,
   MemberStatus,
   UnitId,
-  PenaltyTicket
+  PenaltyTicket,
+  PartnershipRequest,
+  PartnershipRequestStatus
 } from '../types';
 
 const TOKEN_KEY = 'bkic_session_token';
@@ -551,11 +553,23 @@ export const api = {
       method: 'POST',
       body: JSON.stringify(payload)
     }),
-    submitPartnershipRequest: (payload: any) => request<{ success: boolean; message: string; request: any }>('/api/partnerships/request', {
+    submitPartnershipRequest: (payload: any) => request<{ success: boolean; message: string; request: PartnershipRequest }>('/api/partnerships/request', {
       method: 'POST',
       body: JSON.stringify(payload)
     }),
-    getPartnershipRequests: () => request<{ success: boolean; requests: any[] }>('/api/partnerships/requests'),
+    getPartnershipRequests: (params?: { status?: string; type?: string; search?: string }) => {
+      const searchParams = new URLSearchParams();
+      if (params?.status && params.status !== 'all') searchParams.set('status', params.status);
+      if (params?.type && params.type !== 'all') searchParams.set('type', params.type);
+      if (params?.search) searchParams.set('search', params.search);
+      const queryStr = searchParams.toString();
+      return request<{ success: boolean; requests: PartnershipRequest[] }>(`/api/partnerships/requests${queryStr ? `?${queryStr}` : ''}`);
+    },
+    updatePartnershipRequest: (id: string, payload: { status?: PartnershipRequestStatus; notes?: string; assignedTo?: string }) =>
+      request<{ success: boolean; message: string; request: PartnershipRequest }>(`/api/partnerships/requests/${id}`, {
+        method: 'PATCH',
+        body: JSON.stringify(payload)
+      }),
     convertApplicant: (id: string, payload: { unit: UnitId; position?: string }) =>
       request<{ success: boolean; message: string; member: User }>(`/api/applications/${id}/convert-to-member`, {
         method: 'POST',

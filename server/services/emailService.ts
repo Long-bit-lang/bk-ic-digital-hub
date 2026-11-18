@@ -11,7 +11,7 @@ export interface OutboxEmail {
   resetLink?: string;
   verificationLink?: string;
   tempPassword?: string;
-  type: 'password_reset' | 'account_invitation' | 'verification' | 'test' | 'temporary_password' | 'feedback_warning' | 'penalty_ticket';
+  type: 'password_reset' | 'account_invitation' | 'verification' | 'test' | 'temporary_password' | 'feedback_warning' | 'penalty_ticket' | 'partnership_acknowledgment';
   sentAt: string;
   expiresAt?: string;
   status: 'delivered' | 'failed';
