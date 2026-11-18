@@ -1,13 +1,13 @@
-// BK-IC Digital Hub — Partnership Statistics Section
+// BK-IC Digital Hub — Companion Project Statistics Section
 // Count-up animation on viewport entry, strictly verified data, reduced motion compliant
 import React, { useState, useEffect, useRef } from 'react';
-import { PARTNERSHIP_STATS } from '../../data/partnershipData';
+import { COMPANION_PROJECT_STATS } from '../../data/partnershipData';
 
 export const PartnershipStats: React.FC = () => {
   const [hasAnimated, setHasAnimated] = useState(false);
   const [counts, setCounts] = useState<{ [key: string]: number }>(() => {
     const initial: { [key: string]: number } = {};
-    PARTNERSHIP_STATS.forEach(s => { initial[s.id] = 0; });
+    COMPANION_PROJECT_STATS.forEach(s => { initial[s.id] = 0; });
     return initial;
   });
 
@@ -20,7 +20,7 @@ export const PartnershipStats: React.FC = () => {
     if (prefersReducedMotion) {
       // Instantly set final counts
       const finalCounts: { [key: string]: number } = {};
-      PARTNERSHIP_STATS.forEach(s => { finalCounts[s.id] = s.numericValue; });
+      COMPANION_PROJECT_STATS.forEach(s => { finalCounts[s.id] = s.numericValue; });
       setCounts(finalCounts);
       setHasAnimated(true);
       return;
@@ -43,7 +43,7 @@ export const PartnershipStats: React.FC = () => {
             const easeOut = 1 - Math.pow(1 - progress, 3);
 
             const updated: { [key: string]: number } = {};
-            PARTNERSHIP_STATS.forEach(s => {
+            COMPANION_PROJECT_STATS.forEach(s => {
               updated[s.id] = Math.floor(easeOut * s.numericValue);
             });
             setCounts(updated);
@@ -52,7 +52,7 @@ export const PartnershipStats: React.FC = () => {
               requestAnimationFrame(step);
             } else {
               const finals: { [key: string]: number } = {};
-              PARTNERSHIP_STATS.forEach(s => { finals[s.id] = s.numericValue; });
+              COMPANION_PROJECT_STATS.forEach(s => { finals[s.id] = s.numericValue; });
               setCounts(finals);
             }
           };
@@ -74,7 +74,7 @@ export const PartnershipStats: React.FC = () => {
     <section ref={sectionRef} className="py-12 bg-gradient-to-b from-white via-sky-50/40 to-white border-y border-slate-100">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
-          {PARTNERSHIP_STATS.map((stat) => {
+          {COMPANION_PROJECT_STATS.map((stat) => {
             const currentVal = counts[stat.id] ?? 0;
             const displayFormatted = stat.numericValue < 10 ? `0${currentVal}` : `${currentVal}`;
 
@@ -98,7 +98,7 @@ export const PartnershipStats: React.FC = () => {
                   {stat.label}
                 </h3>
 
-                <p className="mt-1 text-xs text-slate-500 leading-relaxed">
+                <p className="mt-1 text-xs text-slate-500 leading-relaxed font-normal">
                   {stat.description}
                 </p>
               </div>
@@ -109,4 +109,3 @@ export const PartnershipStats: React.FC = () => {
     </section>
   );
 };
-

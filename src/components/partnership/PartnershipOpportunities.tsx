@@ -1,108 +1,122 @@
-// BK-IC Digital Hub — Partnership Opportunities Section (7 Official Categories)
+// BK-IC Digital Hub — Companion Project Intake Criteria & Focus Fields
 import React from 'react';
-import { ArrowRight, CheckCircle2 } from 'lucide-react';
-import { PARTNERSHIP_OPPORTUNITIES } from '../../data/partnershipData';
+import { ArrowRight, CheckCircle2, Target, Cpu, Sparkles } from 'lucide-react';
+import { COMPANION_CRITERIA, COMPANION_FIELDS } from '../../data/partnershipData';
 
 interface PartnershipOpportunitiesProps {
-  onSelectType: (typeKey: string) => void;
+  onSelectType?: (typeKey: string) => void;
   selectedType?: string;
+  onRequestClick?: () => void;
 }
 
 export const PartnershipOpportunities: React.FC<PartnershipOpportunitiesProps> = ({
-  onSelectType,
-  selectedType
+  onRequestClick
 }) => {
   return (
-    <section id="opportunities" className="py-16 md:py-24 bg-gradient-to-b from-white via-sky-50/30 to-white relative">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
-        {/* Section Header */}
-        <div className="max-w-3xl mx-auto text-center space-y-4">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-sky-50 border border-sky-200 text-xs font-semibold text-[#0284C7]">
-            <span>HÌNH THỨC HỢP TÁC CHÍNH THỨC</span>
+    <section id="criteria" className="py-16 md:py-24 bg-gradient-to-b from-white via-sky-50/30 to-white relative scroll-mt-20">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
+        {/* Section 1: Intake Criteria */}
+        <div className="space-y-10">
+          <div className="max-w-3xl mx-auto text-center space-y-4">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-sky-50 border border-sky-200 text-xs font-semibold text-[#0284C7]">
+              <Target className="h-3.5 w-3.5" />
+              <span>TIÊU CHÍ TIẾP NHẬN</span>
+            </div>
+
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-[#10182D] tracking-tight">
+              Dự án Nào Phù hợp để Đồng hành Cùng BK-IC?
+            </h2>
+
+            <p className="text-sm sm:text-base text-slate-600 leading-relaxed font-normal">
+              Chúng tôi tìm kiếm những nhóm sinh viên có niềm đam mê chế tạo công nghệ, mong muốn giải quyết những vấn đề thực tiễn và sẵn sàng dấn thân trải nghiệm.
+            </p>
           </div>
 
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-[#10182D] tracking-tight">
-            7 Hình thức Hợp tác Cùng BK-IC
-          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {COMPANION_CRITERIA.map((criterion) => {
+              const Icon = criterion.icon;
 
-          <p className="text-sm sm:text-base text-slate-600 leading-relaxed font-normal">
-            Mỗi đối tác có thế mạnh và định hướng riêng. BK-IC xây dựng 7 phương án hợp tác linh hoạt nhằm tạo điều kiện thuận lợi nhất để các bên cùng đồng hành và phát triển.
-          </p>
+              return (
+                <div
+                  key={criterion.id}
+                  className="flex flex-col justify-between p-6 sm:p-7 rounded-3xl bg-white border border-slate-200/90 shadow-xs hover:border-[#38BDF8] hover:shadow-xl hover:shadow-sky-500/10 hover:-translate-y-1 transition-all duration-300 space-y-4"
+                >
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between">
+                      <span className="text-[10px] font-bold tracking-wider text-[#0284C7] bg-sky-50 border border-sky-100 px-2.5 py-0.5 rounded-full uppercase">
+                        {criterion.tag}
+                      </span>
+                      <div className="h-10 w-10 rounded-2xl bg-sky-50 text-[#0284C7] flex items-center justify-center shadow-2xs">
+                        <Icon className="h-5 w-5" />
+                      </div>
+                    </div>
+
+                    <h3 className="text-base sm:text-lg font-bold text-[#10182D] leading-snug">
+                      {criterion.title}
+                    </h3>
+
+                    <p className="text-xs text-slate-600 leading-relaxed font-normal">
+                      {criterion.description}
+                    </p>
+                  </div>
+
+                  <div className="pt-3 border-t border-slate-100 flex items-center gap-1.5 text-xs font-bold text-[#0284C7]">
+                    <CheckCircle2 className="h-3.5 w-3.5" />
+                    <span>Đạt tiêu chuẩn</span>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
         </div>
 
-        {/* 7 Opportunities Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-          {PARTNERSHIP_OPPORTUNITIES.map((opp) => {
-            const Icon = opp.icon;
-            const isCurrentSelected = selectedType === opp.typeKey;
+        {/* Section 2: 5 Focus Technology Fields */}
+        <div className="p-8 sm:p-12 rounded-3xl bg-gradient-to-br from-sky-50/70 via-white to-blue-50/50 border border-sky-200/80 shadow-xs space-y-8">
+          <div className="max-w-2xl space-y-2">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white text-xs font-bold text-[#0284C7] border border-sky-200 shadow-2xs">
+              <Cpu className="h-3.5 w-3.5" />
+              <span>LĨNH VỰC CÔNG NGHỆ</span>
+            </div>
+            <h3 className="text-2xl sm:text-3xl font-extrabold text-[#075985]">
+              5 Lĩnh vực Công nghệ Trọng tâm
+            </h3>
+            <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-normal">
+              BK-IC ưu tiên hỗ trợ các nhóm dự án sáng tạo thuộc các nhóm lĩnh vực sau, đồng thời luôn sẵn sàng chào đón các ý tưởng đột phá khác:
+            </p>
+          </div>
 
-            return (
-              <div
-                key={opp.id}
-                className={`relative flex flex-col justify-between rounded-3xl bg-white p-7 border transition-all duration-300 ${
-                  isCurrentSelected
-                    ? 'border-[#0284C7] ring-2 ring-sky-400/30 shadow-lg shadow-sky-500/10 -translate-y-1'
-                    : 'border-slate-200/90 shadow-xs hover:border-[#38BDF8] hover:shadow-xl hover:shadow-sky-500/10 hover:-translate-y-1'
-                }`}
-              >
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between">
-                    <div className="h-11 w-11 rounded-2xl bg-sky-50 text-[#0284C7] flex items-center justify-center shadow-2xs">
-                      <Icon className="h-5 w-5" />
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+            {COMPANION_FIELDS.map((field) => {
+              const Icon = field.icon;
+              return (
+                <div
+                  key={field.id}
+                  className="p-5 rounded-2xl bg-white border border-slate-200/80 shadow-xs hover:border-[#38BDF8] transition space-y-2.5"
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="h-9 w-9 rounded-xl bg-sky-50 text-[#0284C7] flex items-center justify-center shrink-0">
+                      <Icon className="h-4 w-4" />
                     </div>
-                    <span className="text-[10px] font-bold tracking-wider text-[#0284C7] bg-sky-50 px-2.5 py-0.5 rounded-full border border-sky-100">
-                      {opp.badge}
-                    </span>
+                    <h4 className="text-sm font-bold text-[#10182D]">
+                      {field.name}
+                    </h4>
                   </div>
-
-                  <h3 className="text-xl font-bold text-[#10182D]">
-                    {opp.title}
-                  </h3>
-
-                  <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-normal">
-                    {opp.description}
+                  <p className="text-xs text-slate-600 leading-relaxed font-normal">
+                    {field.description}
                   </p>
-
-                  {/* Target Audience */}
-                  <div className="p-3 rounded-2xl bg-slate-50 border border-slate-100 text-xs text-slate-600">
-                    <span className="font-bold text-slate-800">Đối tượng: </span>
-                    <span>{opp.targetAudience}</span>
-                  </div>
-
-                  {/* Partner Benefits */}
-                  <div className="space-y-2 pt-2">
-                    <p className="text-xs font-bold uppercase tracking-wider text-[#0284C7]">
-                      Giá trị đối tác nhận được:
-                    </p>
-                    <ul className="space-y-1.5 text-xs text-slate-600">
-                      {opp.partnerBenefits.map((b, idx) => (
-                        <li key={idx} className="flex items-start gap-2">
-                          <CheckCircle2 className="h-3.5 w-3.5 text-[#0284C7] shrink-0 mt-0.5" />
-                          <span className="leading-snug">{b}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
                 </div>
+              );
+            })}
 
-                {/* Select Button */}
-                <div className="pt-6 mt-6 border-t border-slate-100">
-                  <button
-                    type="button"
-                    onClick={() => onSelectType(opp.typeKey)}
-                    className={`w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer ${
-                      isCurrentSelected
-                        ? 'bg-[#0284C7] text-white shadow-md shadow-sky-500/20'
-                        : 'bg-sky-50 text-[#0284C7] hover:bg-[#0284C7] hover:text-white'
-                    }`}
-                  >
-                    <span>{isCurrentSelected ? 'Đã chọn hình thức này' : 'Chọn hình thức này'}</span>
-                    <ArrowRight className="h-4 w-4" />
-                  </button>
-                </div>
-              </div>
-            );
-          })}
+            {/* Other Fields Card */}
+            <div className="p-5 rounded-2xl bg-white/70 border border-dashed border-sky-300 flex flex-col justify-center items-center text-center space-y-2">
+              <Sparkles className="h-6 w-6 text-[#0284C7]" />
+              <h4 className="text-sm font-bold text-[#075985]">Lĩnh vực Đột phá Khác</h4>
+              <p className="text-xs text-slate-500">
+                Bất kỳ giải pháp công nghệ sáng tạo nào xuất phát từ bài toán thực tế của bạn
+              </p>
+            </div>
+          </div>
         </div>
       </div>
     </section>

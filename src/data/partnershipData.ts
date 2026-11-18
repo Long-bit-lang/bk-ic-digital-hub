@@ -1,35 +1,36 @@
-// BK-IC Digital Hub — Official Partnership Data & Configurations
-// Strictly verified club metrics, real club activities, and 7 official forms of cooperation
+// BK-IC Digital Hub — Official Companion Projects & Incubation Partnership Data
+// Strictly focused on Companion Projects (Dự án đồng hành sinh viên), removing corporate marketing
 import {
-  Handshake,
+  Rocket,
   Users,
   Lightbulb,
   Building,
   Target,
   GraduationCap,
-  Briefcase,
-  Share2,
-  Trophy,
-  Rocket,
-  CheckCircle2,
   Sparkles,
   Layers,
   Code,
   Mic,
-  MessageSquare,
-  Compass,
   FileCheck2,
-  PackageCheck,
-  Cpu
+  Cpu,
+  BookmarkCheck,
+  CheckCircle2,
+  Calendar,
+  Compass,
+  Zap,
+  Leaf,
+  Bot,
+  BrainCircuit,
+  Boxes,
+  HelpCircle
 } from 'lucide-react';
 
-export interface PartnershipValueItem {
+export interface CompanionStatItem {
   id: string;
-  title: string;
+  numericValue: number;
+  suffix: string;
+  label: string;
   description: string;
-  icon: any;
-  badge: string;
-  isPrimary?: boolean;
 }
 
 export interface StudentCapabilityGroup {
@@ -41,430 +42,379 @@ export interface StudentCapabilityGroup {
   icon: any;
 }
 
-export interface PartnershipOpportunityItem {
+export interface CompanionBenefitItem {
   id: string;
-  typeKey: string;
   title: string;
   description: string;
-  targetAudience: string;
-  partnerBenefits: string[];
+  details: string[];
   icon: any;
   badge: string;
+  isPrimary?: boolean;
 }
 
-export interface PartnershipStatItem {
+export interface CompanionCriterionItem {
   id: string;
-  numericValue: number;
-  suffix: string;
-  label: string;
+  title: string;
   description: string;
+  icon: any;
+  tag: string;
 }
 
-export interface PartnershipStoryItem {
+export interface CompanionFieldItem {
   id: string;
-  partnerName: string;
-  partnerLogo?: string;
-  activityTitle: string;
-  category: string;
-  objective: string;
-  outcome: string;
-  quote?: string;
-  quoteAuthor?: string;
+  name: string;
+  description: string;
+  icon: any;
 }
 
-export interface PartnershipStepItem {
+export interface CompanionStepItem {
   step: number;
   title: string;
   description: string;
   detail: string;
 }
 
-export interface PartnershipEcosystemGroup {
-  id: string;
-  name: string;
-  role: string;
-  description: string;
-  icon: any;
-  tag: string;
-}
-
-export interface PartnershipFAQItem {
+export interface CompanionFAQItem {
   id: string;
   question: string;
   answer: string;
 }
 
 // -----------------------------------------------------------------------------
-// 1. STATS: Strictly verified data from DB & activities (No synthetic metrics)
+// 1. COMPANION STATS (Verified Numbers only - No fake corporate numbers)
 // -----------------------------------------------------------------------------
-export const PARTNERSHIP_STATS: PartnershipStatItem[] = [
+export const COMPANION_PROJECT_STATS: CompanionStatItem[] = [
   {
     id: 'members',
     numericValue: 30,
     suffix: '',
-    label: 'Thành viên nòng cốt',
-    description: 'Bao gồm BCN (3), BĐH (5) và BTV (22) là sinh viên kỹ thuật đang học tập tại các khoa thuộc Trường ĐH Bách khoa – ĐHĐN'
+    label: 'Thành viên nòng cốt hỗ trợ',
+    description: 'Ban Chủ nhiệm (3), Ban Điều hành (5) và Ban Thành viên (22) sẵn sàng hỗ trợ kỹ thuật, truyền thông và hậu cần cho dự án'
   },
   {
     id: 'teams',
     numericValue: 35,
     suffix: '+',
-    label: 'Đội thi kết nối',
-    description: 'Thu hút đông đảo sinh viên đam mê công nghệ và kinh doanh từ 6 trường đại học trên địa bàn Đà Nẵng qua BK Shark 2026'
+    label: 'Đội thi đồng hành thực tế',
+    description: 'Kinh nghiệm hỗ trợ tập huấn chuyên môn, thẩm định đề tài và đồng hành tranh tài qua mùa giải BK SHARK 2026'
   },
   {
-    id: 'students',
-    numericValue: 140,
-    suffix: '+',
-    label: 'Sinh viên tham gia tranh tài',
-    description: 'Hơn 140 bạn trẻ kỹ thuật trực tiếp trải qua các buổi tập huấn chuyên sâu và sân khấu tranh biện dự án'
-  },
-  {
-    id: 'activities',
-    numericValue: 2,
+    id: 'fields',
+    numericValue: 5,
     suffix: '',
-    label: 'Hoạt động đồng tổ chức',
-    description: 'BK SHARK 2026 (đồng tổ chức cùng Đoàn trường) và Cuộc thi Sáng tạo CĐS Liên Chiểu 2026 (đồng hành cùng Đoàn phường)'
+    label: 'Lĩnh vực công nghệ ưu tiên',
+    description: 'AI & Phần mềm số, IoT & Tự động hóa, Năng lượng Xanh, Chuyển đổi số địa phương, và Ứng dụng STEAM'
+  },
+  {
+    id: 'free',
+    numericValue: 100,
+    suffix: '%',
+    label: 'Phi lợi nhuận & Vì sinh viên',
+    description: 'Mọi hoạt động tư vấn, cố vấn, bảo trợ và kết nối nguồn lực từ BK-IC đều hoàn toàn miễn phí cho sinh viên Bách khoa'
   }
 ];
 
 // -----------------------------------------------------------------------------
-// 2. STUDENT CAPABILITY DEVELOPMENT (Định hướng phát triển năng lực sinh viên)
+// 2. CAPABILITY ACCELERATION (Định hướng bồi dưỡng năng lực sinh viên)
 // -----------------------------------------------------------------------------
 export const STUDENT_CAPABILITY_GROUPS: StudentCapabilityGroup[] = [
   {
     id: 'hard-skills',
     category: 'NĂNG LỰC KỸ THUẬT & PHƯƠNG PHÁP',
-    title: 'Nhóm Kỹ Năng Cứng (Hard Skills)',
-    description: 'BK-IC định hướng trang bị cho sinh viên phương pháp tư duy có hệ thống để chuyển hóa các vấn đề kỹ thuật thành giải pháp công nghệ cụ thể.',
+    title: 'Kỹ Năng Cứng (Hard Skills)',
+    description: 'Định hướng phương pháp tư duy có hệ thống để chuyển hóa ý tưởng lý thuyết trong phòng lab thành sản phẩm công nghệ thực tiễn.',
     icon: Cpu,
     skills: [
-      'Tư duy và hình thành ý tưởng khởi nghiệp từ các bài toán thực tiễn',
-      'Phương pháp phát triển, sàng lọc và thẩm định tính khả thi của ý tưởng',
-      'Cách thức xây dựng nguyên mẫu thử nghiệm (Prototype / MVP)',
-      'Tư duy quản trị và lộ trình phát triển dự án khởi nghiệp công nghệ'
+      'Tư duy và phương pháp xác định bài toán thực tế (Problem-Solution Fit)',
+      'Quy trình thiết kế và chế tạo nguyên mẫu thử nghiệm (Prototype / MVP)',
+      'Tư duy quản trị lộ trình phát triển và kiểm thử sản phẩm công nghệ',
+      'Định hướng ứng dụng công nghệ phù hợp (AI, IoT, Cloud, Vi điều khiển)'
     ]
   },
   {
     id: 'soft-skills',
-    category: 'NĂNG LỰC GIAO TIẾP & THUYẾT PHỤC',
-    title: 'Nhóm Kỹ Năng Mềm (Soft Skills)',
-    description: 'Tập trung rèn luyện bản lĩnh trình bày, kỹ năng truyền tải giá trị cốt lõi và khả năng phản biện bảo vệ dự án trước hội đồng chuyên môn.',
+    category: 'NĂNG LỰC TRÌNH BÀY & THUYẾT PHỤC',
+    title: 'Kỹ Năng Mềm (Soft Skills)',
+    description: 'Rèn luyện bản lĩnh làm chủ sân khấu, kỹ năng truyền tải giá trị cốt lõi và khả năng bảo vệ dự án trước hội đồng chuyên môn.',
     icon: Mic,
     skills: [
       'Kỹ năng Pitching dự án trước hội đồng cố vấn và nhà đầu tư',
-      'Kỹ năng thuyết trình mạch lạc, làm chủ sân khấu và thời lượng',
-      'Kỹ năng truyền tải và thuyết phục người nghe về tính ứng dụng của giải pháp',
-      'Kỹ năng làm nổi bật giá trị cốt lõi và giải quyết phản biện thực tế'
+      'Phương pháp thiết kế Pitch Deck chuẩn mực, trực quan và ấn tượng',
+      'Kỹ năng truyền tải và thuyết phục người nghe về tính khả thi của giải pháp',
+      'Bản lĩnh phản biện khoa học và làm nổi bật giá trị xã hội/thương mại'
     ]
   }
 ];
 
 // -----------------------------------------------------------------------------
-// 3. WHY PARTNER WITH BK-IC (Lợi ích dành cho đối tác - Trọng tâm: Nhân lực trẻ)
+// 3. COMPANION PROJECT BENEFITS (Quyền lợi khi dự án đồng hành cùng BK-IC)
 // -----------------------------------------------------------------------------
-export const WHY_PARTNER_CARDS: PartnershipValueItem[] = [
+export const COMPANION_BENEFITS: CompanionBenefitItem[] = [
   {
-    id: 'young-talent',
-    title: 'Tiếp cận nguồn nhân lực trẻ Bách khoa',
-    description: 'BK-IC tạo không gian kết nối trực tiếp với cộng đồng sinh viên Trường ĐH Bách khoa – ĐHĐN; giúp đối tác mở rộng cơ hội gặp gỡ sinh viên có nền tảng kỹ thuật tốt, tư duy chủ động, đam mê giải quyết vấn đề và tìm kiếm những góc nhìn sáng tạo từ thế hệ kỹ sư trẻ.',
-    icon: Users,
-    badge: 'GIÁ TRỊ TRỌNG TÂM',
+    id: 'mentoring',
+    title: 'Cố vấn Chuyên môn & Thầy cô Hướng dẫn',
+    description: 'Dự án được kết nối với các giảng viên giàu chuyên môn tại các khoa thuộc Trường ĐH Bách khoa và các cựu sinh viên doanh nhân, cố vấn khởi nghiệp thực chiến.',
+    details: [
+      'Góp ý chuyên sâu về kiến trúc giải pháp công nghệ',
+      'Định hướng bài toán thị trường và tính ứng dụng thực tế',
+      'Hỗ trợ tháo gỡ khó khăn kỹ thuật trong quá trình làm mẫu thử'
+    ],
+    icon: Lightbulb,
+    badge: 'CỐ VẤN CHUYÊN MÔN',
     isPrimary: true
   },
   {
-    id: 'expert-knowledge',
-    title: 'Kết nối tri thức chuyên môn',
-    description: 'Tạo cơ hội phối hợp cùng đội ngũ giảng viên, nhà nghiên cứu và các chuyên gia cố vấn trong khuôn viên trường trong các hoạt động trao đổi tri thức và tọa đàm khoa học.',
-    icon: GraduationCap,
-    badge: 'KẾT NỐI HỌC THUẬT'
-  },
-  {
-    id: 'real-problems',
-    title: 'Thúc đẩy sáng tạo từ bài toán thực tế',
-    description: 'Mang đến những đề bài, bài toán kỹ thuật hoặc nhu cầu tự động hóa thực tế của doanh nghiệp để sinh viên cùng nghiên cứu, thử nghiệm những góc nhìn giải pháp mới.',
-    icon: Target,
-    badge: 'ỨNG DỤNG THỰC TIỄN'
-  },
-  {
-    id: 'academic-branding',
-    title: 'Lan tỏa thương hiệu học thuật & tuyển dụng',
-    description: 'Gắn kết hình ảnh trách nhiệm xã hội và thương hiệu tuyển dụng của Quý đối tác trong các hoạt động đổi mới sáng tạo, workshop chuyên môn và các cuộc thi sinh viên.',
-    icon: Sparkles,
-    badge: 'TRÁCH NHIỆM XÃ HỘI'
-  }
-];
-
-// -----------------------------------------------------------------------------
-// 4. 7 OFFICIAL PARTNERSHIP FORMS (7 Hình thức hợp tác chính thức)
-// -----------------------------------------------------------------------------
-export const PARTNERSHIP_OPPORTUNITIES: PartnershipOpportunityItem[] = [
-  {
-    id: 'opp-financial-sponsor',
-    typeKey: 'financial_sponsor',
-    title: 'Tài trợ tài chính',
-    description: 'Đồng hành về nguồn kinh phí nhằm hỗ trợ công tác tổ chức các sự kiện học thuật, chuỗi workshop tập huấn và các cuộc thi sáng tạo của câu lạc bộ.',
-    targetAudience: 'Doanh nghiệp, quỹ đầu tư, cựu sinh viên doanh nhân và các tổ chức hỗ trợ.',
-    partnerBenefits: [
-      'Gắn kết hình ảnh thương hiệu trong các ấn phẩm truyền thông chính thức của chương trình',
-      'Đại diện tham dự, phát biểu hoặc trao giải tại các sân khấu sự kiện',
-      'Đóng góp thiết thực vào việc tạo sân chơi bổ ích cho thế hệ kỹ sư tương lai'
+    id: 'workspace',
+    title: 'Không gian Sinh hoạt & Hỗ trợ Cơ sở Vật chất',
+    description: 'Được ưu tiên sử dụng không gian sinh hoạt và làm việc tại phòng A136 (Khu F, Trường ĐH Bách khoa) để họp nhóm, trao đổi kỹ thuật và thử nghiệm.',
+    details: [
+      'Không gian làm việc nhóm tiện nghi, có màn hình trình chiếu và bàn làm việc',
+      'Môi trường trao đổi học thuật cởi mở cùng các thành viên kỹ thuật khác',
+      'Hỗ trợ thủ tục mượn phòng thí nghiệm và trang thiết bị thực hành của trường'
     ],
-    icon: Trophy,
-    badge: 'HỖ TRỢ KINH PHÍ'
+    icon: Building,
+    badge: 'KHÔNG GIAN LÀM VIỆC'
   },
   {
-    id: 'opp-in-kind-sponsor',
-    typeKey: 'in_kind_sponsor',
-    title: 'Tài trợ hiện vật',
-    description: 'Hỗ trợ trang thiết bị kỹ thuật, phần mềm bản quyền, không gian làm việc/lab, học bổng chuyên môn, quà tặng hoặc các nguồn lực thực tế cho sinh viên.',
-    targetAudience: 'Doanh nghiệp công nghệ, đơn vị cung cấp giải pháp và các đơn vị giáo dục.',
-    partnerBenefits: [
-      'Giới thiệu sản phẩm, công cụ công nghệ đến đúng đối tượng sinh viên kỹ thuật',
-      'Được vinh danh đơn vị tài trợ hiện vật trên các kênh truyền thông chính thức',
-      'Hỗ trợ trực tiếp cho các đội thi và nhóm dự án hoàn thiện sản phẩm'
+    id: 'pitching',
+    title: 'Mài giũa Pitch Deck & Luyện tập Pitching 1-1',
+    description: 'Được Ban Chuyên môn BK-IC trực tiếp hỗ trợ rà soát slide thuyết trình, cơ cấu lại nội dung và tổ chức các buổi diễn tập pitching thử trước khi đi thi.',
+    details: [
+      'Chuẩn hóa cấu trúc Pitch Deck từ 10-12 slide tiêu chuẩn quốc tế',
+      'Luyện tập phản xạ trả lời câu hỏi phản biện của hội đồng giám khảo',
+      'Tối ưu hóa thời lượng trình bày trong khung 3 - 5 phút'
     ],
-    icon: PackageCheck,
-    badge: 'TRANG THIẾT BỊ & NGUỒN LỰC'
+    icon: Mic,
+    badge: 'HOÀN THIỆN THUYẾT TRÌNH'
   },
   {
-    id: 'opp-expert-mentoring',
-    typeKey: 'expert_mentoring',
-    title: 'Cố vấn chuyên môn',
-    description: 'Kết nối các chuyên gia, mentor, cựu sinh viên và giảng viên tham gia chia sẻ kinh nghiệm, định hướng dự án và hướng dẫn sinh viên phát triển ý tưởng.',
-    targetAudience: 'Chuyên gia công nghệ, nhà sáng lập startup, mentor độc lập và giảng viên.',
-    partnerBenefits: [
-      'Chia sẻ kinh nghiệm thực tiễn và truyền cảm hứng đổi mới sáng tạo cho sinh viên',
-      'Trực tiếp tương tác và phát hiện những bạn trẻ tài năng, có tư duy sắc bén',
-      'Mở rộng mạng lưới kết nối cùng hội đồng cố vấn và chuyên gia trong hệ sinh thái'
-    ],
-    icon: Lightbulb,
-    badge: 'CỐ VẤN & MENTORING'
-  },
-  {
-    id: 'opp-business-challenge',
-    typeKey: 'business_challenge',
-    title: 'Kết nối bài toán doanh nghiệp',
-    description: 'Doanh nghiệp đưa ra các đề bài, bài toán kỹ thuật hoặc nhu cầu tự động hóa thực tế để sinh viên cùng nghiên cứu, xây dựng mô hình giải pháp.',
-    targetAudience: 'Doanh nghiệp sản xuất, công ty công nghệ và các đơn vị có nhu cầu R&D.',
-    partnerBenefits: [
-      'Tiếp cận các ý tưởng sáng tạo và góc nhìn giải pháp tươi mới từ sinh viên',
-      'Khảo sát các phương án kỹ thuật mẫu (PoC / MVP) với góc nhìn đa chiều',
-      'Kết nối trực tiếp nhóm sinh viên có niềm đam mê sâu với lĩnh vực của doanh nghiệp'
-    ],
-    icon: Target,
-    badge: 'BÀI TOÁN THỰC TIỄN'
-  },
-  {
-    id: 'opp-startup-project',
-    typeKey: 'startup_project',
-    title: 'Hợp tác dự án khởi nghiệp',
-    description: 'Phối hợp đồng hành cùng các nhóm ý tưởng và dự án sinh viên tiềm năng trong quá trình hoàn thiện mô hình, chế tạo mẫu thử và định hướng tương lai.',
-    targetAudience: 'Vườn ươm doanh nghiệp, nhà đầu tư thiên thần, quỹ khởi nghiệp và doanh nhân.',
-    partnerBenefits: [
-      'Đồng hành sớm cùng các dự án công nghệ sinh viên tiềm năng từ giai đoạn phôi thai',
-      'Góp phần ươm mầm và định hình các sáng kiến công nghệ có giá trị ứng dụng cao',
-      'Tạo tiền đề cho các hợp tác chuyển giao hoặc đầu tư sâu hơn trong tương lai'
+    id: 'competition-backing',
+    title: 'Bảo trợ Tham gia Các Cuộc thi Lớn',
+    description: 'Ưu tiên được BK-IC đề cử, bảo trợ pháp lý và hỗ trợ hồ sơ tham gia Sân khấu Khởi nghiệp BK SHARK, Cuộc thi Đổi mới Sáng tạo Chuyển đổi số và các giải đấu cấp Bộ/Thành phố.',
+    details: [
+      'Bảo trợ danh nghĩa từ CLB Khởi nghiệp & Đổi mới Sáng tạo trực thuộc Trường',
+      'Hỗ trợ hoàn thiện hồ sơ dự thi, video demo và thuyết minh kỹ thuật',
+      'Cơ hội tranh tài tại các vòng chung kết lớn có nhà đầu tư và vườn ươm'
     ],
     icon: Rocket,
-    badge: 'ƯƠM TẠO DỰ ÁN'
+    badge: 'BẢO TRỢ THI ĐẤU'
   },
   {
-    id: 'opp-media-cooperation',
-    typeKey: 'media_cooperation',
-    title: 'Hợp tác truyền thông',
-    description: 'Phối hợp bảo trợ truyền thông, đồng phát động và lan tỏa thông tin các chương trình, cuộc thi đổi mới sáng tạo đến đông đảo bạn trẻ.',
-    targetAudience: 'Kênh thông tin công nghệ, trang tin sinh viên, câu lạc bộ và đối tác truyền thông.',
-    partnerBenefits: [
-      'Mở rộng độ phủ sóng thông tin đến cộng đồng sinh viên Trường ĐH Bách khoa – ĐHĐN',
-      'Cùng nhau lan tỏa các thông điệp tích cực về khởi nghiệp và chuyển đổi số',
-      'Đặt logo và thông tin đơn vị bảo trợ truyền thông trên các ấn phẩm chính thức'
+    id: 'ecosystem-network',
+    title: 'Kết nối Mạng lưới Vườn ươm & Quỹ Hỗ trợ',
+    description: 'Các dự án có tiềm năng ứng dụng cao sẽ được BK-IC giới thiệu tới các vườn ươm khởi nghiệp, các quỹ hỗ trợ sinh viên nghiên cứu khoa học để phát triển lâu dài.',
+    details: [
+      'Giới thiệu tiếp cận hệ sinh thái đổi mới sáng tạo TP. Đà Nẵng',
+      'Cơ hội gặp gỡ các nhà đầu tư thiên thần và quỹ ươm tạo hạt giống',
+      'Tiền đề để đăng ký tham gia các chương trình ươm tạo chính quy sau tốt nghiệp'
     ],
-    icon: Share2,
-    badge: 'LAN TỎA THÔNG ĐIỆP'
-  },
-  {
-    id: 'opp-academic-exchange',
-    typeKey: 'academic_exchange',
-    title: 'Hợp tác học thuật',
-    description: 'Kết nối các viện, trường, khoa chuyên môn và đơn vị nghiên cứu trong các hoạt động trao đổi tri thức, tọa đàm công nghệ và định hướng học thuật.',
-    targetAudience: 'Các khoa chuyên ngành thuộc DUT, viện nghiên cứu, trường đại học đối tác.',
-    partnerBenefits: [
-      'Gắn kết phong trào sinh viên với hoạt động học thuật và nghiên cứu ứng dụng',
-      'Phối hợp tổ chức các buổi tọa đàm, seminar chuyên đề cùng giảng viên và sinh viên',
-      'Tạo môi trường thực hành phương pháp nghiên cứu và phát triển công nghệ'
-    ],
-    icon: GraduationCap,
-    badge: 'TRAO ĐỔI TRI THỨC'
+    icon: Sparkles,
+    badge: 'KẾT NỐI HỆ SINH THÁI'
   }
 ];
 
 // -----------------------------------------------------------------------------
-// 5. VERIFIED REAL CLUB ACTIVITIES (Năng lực & Kinh nghiệm thực tế đã xác nhận)
+// 4. INTAKE CRITERIA & FOCUS FIELDS (Tiêu chí tuyển chọn & Lĩnh vực ưu tiên)
 // -----------------------------------------------------------------------------
-export const PARTNERSHIP_STORIES: PartnershipStoryItem[] = [
+export const COMPANION_CRITERIA: CompanionCriterionItem[] = [
   {
-    id: 'story-bkshark',
-    partnerName: 'Đoàn Thanh niên – Hội Sinh viên Trường ĐH Bách khoa',
-    activityTitle: 'Cuộc thi Khởi nghiệp trong Sinh viên – BK SHARK 2026',
-    category: 'Đồng tổ chức Sân chơi Khởi nghiệp',
-    objective: 'BK-IC là đơn vị đồng tổ chức cuộc thi thường niên nhằm tạo sân chơi thực chiến, hỗ trợ các nhóm sinh viên phát triển ý tưởng kinh doanh công nghệ.',
-    outcome: 'Thu hút 35 đội thi với hơn 140 sinh viên từ 6 trường đại học trên địa bàn Đà Nẵng, chuỗi 4 buổi đào tạo chuyên sâu và Sân khấu Chung kết vinh danh Top 7 dự án xuất sắc.',
-    quote: 'Sự nhiệt huyết và năng lực công nghệ của các bạn trẻ Bách khoa là minh chứng rõ nét cho tiềm năng đổi mới sáng tạo của sinh viên Đà Nẵng.',
-    quoteAuthor: 'Ban Giám khảo Chung kết BK SHARK 2026'
-  },
-  {
-    id: 'story-lienchieu-cds',
-    partnerName: 'Đoàn TNCS Hồ Chí Minh Phường Liên Chiểu',
-    activityTitle: 'Cuộc thi Ý tưởng Sáng tạo Chuyển đổi số Thanh niên Liên Chiểu 2026',
-    category: 'Đồng hành Tổ chức Phong trào Địa phương',
-    objective: 'BK-IC đồng hành tổ chức cuộc thi với chủ đề "Thanh niên Liên Chiểu – Sáng tạo vì cuộc sống", hỗ trợ tập huấn và định hướng các dự án công nghệ phục vụ cộng đồng.',
-    outcome: 'Đồng hành tập huấn chuyên sâu cho các đội thi về phương pháp phát triển sản phẩm, kỹ năng pitching và hoàn thiện giải pháp chuyển đổi số gắn với cải cách hành chính.'
-  }
-];
-
-// -----------------------------------------------------------------------------
-// 6. NETWORK ECOSYSTEM GROUPS (Mạng lưới kết nối thay thế logo giả định)
-// -----------------------------------------------------------------------------
-export const PARTNERSHIP_ECOSYSTEM_GROUPS: PartnershipEcosystemGroup[] = [
-  {
-    id: 'eco-lecturers',
-    name: 'Giảng viên & Nhà khoa học DUT',
-    role: 'Cố vấn Chuyên môn & Định hướng Nghiên cứu',
-    description: 'Đội ngũ thầy cô giàu kinh nghiệm tại các khoa chuyên môn luôn sẵn sàng đồng hành, góp ý chuyên môn và bảo trợ học thuật cho các sáng kiến sinh viên.',
+    id: 'students-dut',
+    title: 'Thành viên là Sinh viên Bách khoa (DUT)',
+    description: 'Dự án có ít nhất trưởng nhóm hoặc thành viên nòng cốt đang theo học tại Trường Đại học Bách khoa – ĐHĐN (khuyến khích nhóm đa ngành từ CNTT, Điện tử, Cơ khí, Hóa, Môi trường, Quản lý dự án).',
     icon: GraduationCap,
-    tag: 'HỌC THUẬT & NGHIÊN CỨU'
+    tag: 'ĐỐI TƯỢNG'
   },
   {
-    id: 'eco-faculties',
-    name: 'Các Khoa, Phòng ban & Viện thuộc Trường',
-    role: 'Bảo trợ Đơn vị & Cơ sở Vật chất',
-    description: 'Sự ủng hộ từ Nhà trường, các khoa kỹ thuật và phòng ban chức năng tạo nền tảng vững chắc về phòng học, thiết bị và điều kiện tổ chức hoạt động.',
-    icon: Building,
-    tag: 'ĐƠN VỊ TRỰC THUỘC'
+    id: 'real-problem',
+    title: 'Giải quyết Bài toán Cụ thể & Thực tế',
+    description: 'Ý tưởng xuất phát từ nhu cầu thực tiễn trong đời sống, quản lý hành chính, chuyển đổi số cộng đồng hoặc giải quyết vấn đề kỹ thuật của doanh nghiệp.',
+    icon: Target,
+    tag: 'TÍNH ỨNG DỤNG'
   },
   {
-    id: 'eco-youth-union',
-    name: 'Đoàn Thanh niên – Hội Sinh viên',
-    role: 'Chỉ đạo Phong trào & Kết nối Sinh viên',
-    description: 'Đơn vị bảo trợ chính trị và chỉ đạo trực tiếp, hỗ trợ lan tỏa hoạt động sâu rộng đến toàn thể cộng đồng sinh viên Bách khoa.',
-    icon: Users,
-    tag: 'PHONG TRÀO THANH NIÊN'
+    id: 'commitment',
+    title: 'Tinh thần Cam kết & Tinh thần Học hỏi',
+    description: 'Nhóm tác giả có tinh thần trách nhiệm, chủ động tìm tòi giải pháp, sẵn sàng tiếp thu ý kiến góp ý của hội đồng cố vấn và kiên trì theo đuổi dự án.',
+    icon: CheckCircle2,
+    tag: 'TINH THẦN ĐỒNG ĐỘI'
   },
   {
-    id: 'eco-enterprises',
-    name: 'Doanh nghiệp Công nghệ & Sản xuất',
-    role: 'Đối tác Thực tiễn & Đặt hàng Bài toán',
-    description: 'Mạng lưới các công ty phần mềm, tự động hóa và doanh nghiệp sản xuất quan tâm đến nguồn nhân lực kỹ sư trẻ và giải pháp đổi mới sáng tạo.',
-    icon: Briefcase,
-    tag: 'DOANH NGHIỆP'
-  },
-  {
-    id: 'eco-mentors',
-    name: 'Chuyên gia, Mentor & Startup Founders',
-    role: 'Cố vấn Thực chiến & Phản biện Ý tưởng',
-    description: 'Các cựu sinh viên thành đạt, doanh nhân và cố vấn khởi nghiệp nhiệt huyết chia sẻ bài học thương trường và kỹ năng thuyết phục nhà đầu tư.',
-    icon: Lightbulb,
-    tag: 'MENTOR & KHỞI NGHIỆP'
-  },
-  {
-    id: 'eco-student-clubs',
-    name: 'Các Câu lạc bộ Học thuật & Sáng tạo',
-    role: 'Mạng lưới Đồng hành & Giao lưu',
-    description: 'Kết nối liên kết với các CLB chuyên môn, CLB học thuật trong và ngoài trường nhằm chia sẻ nguồn lực và cùng nhau tổ chức các sân chơi lớn.',
+    id: 'flexible-stages',
+    title: 'Tiếp nhận Mọi Giai đoạn Phát triển',
+    description: 'BK-IC sẵn sàng đồng hành từ giai đoạn ý tưởng sơ khai có tính logic, giai đoạn đang thiết kế mẫu thử (PoC), đến giai đoạn đã có sản phẩm chạy thử (MVP).',
     icon: Layers,
-    tag: 'CỘNG ĐỒNG SINH VIÊN'
+    tag: 'GIAI ĐOẠN LINH HOẠT'
+  }
+];
+
+export const COMPANION_FIELDS: CompanionFieldItem[] = [
+  {
+    id: 'field-ai-software',
+    name: 'Trí tuệ Nhân tạo & Phần mềm Số',
+    description: 'Các giải pháp ứng dụng AI, Computer Vision, xử lý ngôn ngữ tự nhiên, ứng dụng Web/App thông minh phục vụ người dùng.',
+    icon: BrainCircuit
   },
   {
-    id: 'eco-universities',
-    name: 'Các Cơ sở Giáo dục & Viện Nghiên cứu',
-    role: 'Trao đổi Tri thức & Mở rộng Tương lai',
-    description: 'BK-IC duy trì kết nối cởi mở với sinh viên và các đơn vị nghiên cứu thuộc Đại học Đà Nẵng, hướng tới mở rộng giao lưu trong tương lai.',
-    icon: Compass,
-    tag: 'GIAO LƯU LIÊN KẾT'
+    id: 'field-iot-robotics',
+    name: 'IoT & Tự động hóa – Robotics',
+    description: 'Hệ thống nhúng, thiết bị phần cứng thông minh, giải pháp Smart Home/Smart Agriculture, robot và hệ thống giám sát tự động.',
+    icon: Bot
+  },
+  {
+    id: 'field-greentech',
+    name: 'Công nghệ Xanh & Năng lượng',
+    description: 'Các sáng kiến tiết kiệm năng lượng, pin/nguồn sạch, xử lý môi trường, vật liệu thân thiện và kinh tế tuần hoàn.',
+    icon: Leaf
+  },
+  {
+    id: 'field-digital-transform',
+    name: 'Chuyển đổi số & Cải cách Hành chính',
+    description: 'Các nền tảng số hóa quy trình, tiện ích công dân số, giải pháp cho thanh niên và chính quyền số tại địa phương.',
+    icon: Zap
+  },
+  {
+    id: 'field-steam-edtech',
+    name: 'Giáo dục STEAM & Đời sống Xã hội',
+    description: 'Bộ học cụ STEAM, phần mềm hỗ trợ học tập, giải pháp y tế cộng đồng và các sáng kiến có tác động xã hội tích cực.',
+    icon: Boxes
   }
 ];
 
 // -----------------------------------------------------------------------------
-// 7. 4-STEP PARTNERSHIP PROCESS (Quy trình phối hợp tinh gọn)
+// 5. 4-STEP INCUBATION ROADMAP (Quy trình 4 bước đồng hành cùng dự án)
 // -----------------------------------------------------------------------------
-export const PARTNERSHIP_PROCESS_STEPS: PartnershipStepItem[] = [
+export const COMPANION_PROCESS_STEPS: CompanionStepItem[] = [
   {
     step: 1,
-    title: 'Tiếp nhận đề xuất',
-    description: 'Đối tác hoặc cá nhân điền thông tin và tóm tắt nội dung mong muốn hợp tác qua biểu mẫu trực tuyến trên website.',
-    detail: 'Hệ thống tự động ghi nhận, cấp mã tham chiếu và gửi email xác nhận đã tiếp nhận đến Quý đối tác.'
+    title: 'Nộp Hồ sơ Đề xuất Trực tuyến',
+    description: 'Đại diện nhóm dự án điền thông tin và đính kèm mô tả ý tưởng hoặc slide giới thiệu qua biểu mẫu trên website.',
+    detail: 'Hệ thống tự động ghi nhận, cấp mã tham chiếu hồ sơ và gửi email xác nhận ngay lập tức đến trưởng nhóm.'
   },
   {
     step: 2,
-    title: 'Trao đổi sơ bộ',
-    description: 'Ban Chủ nhiệm CLB BK-IC tiếp nhận thông tin, xem xét tính phù hợp và chủ động liên hệ phản hồi qua email hoặc số điện thoại đại diện.',
-    detail: 'Thảo luận về mục tiêu chung, nguồn lực phối hợp và lịch trình hoạt động phù hợp của hai bên.'
+    title: 'Ban Chuyên môn Thẩm định Sơ bộ',
+    description: 'Ban Chủ nhiệm và Ban Chuyên môn BK-IC xem xét tính khả thi, bài toán giải quyết và tiềm năng phát triển của đề tài.',
+    detail: 'Liên hệ phản hồi nhóm dự án trong vòng vài ngày làm việc để hẹn lịch trao đổi trực tiếp.'
   },
   {
     step: 3,
-    title: 'Thống nhất nội dung',
-    description: 'Hai bên tiến hành làm việc chi tiết về phương án triển khai, phân công trách nhiệm và lập kế hoạch phối hợp cụ thể.',
-    detail: 'Báo cáo xin ý kiến Đoàn trường – Hội Sinh viên và tiến hành ký kết biên bản ghi nhớ (nếu có yêu cầu).'
+    title: 'Gặp mặt Trao đổi & Phân công Mentor (Pitch & Match)',
+    description: 'Nhóm dự án trình bày trực tiếp (hoặc online) trước Ban Chuyên môn để làm rõ nhu cầu hỗ trợ và mục tiêu giai đoạn.',
+    detail: 'Thống nhất kế hoạch đồng hành, phân công mentor hướng dẫn và cấp quyền tiếp cận các tài nguyên hỗ trợ.'
   },
   {
     step: 4,
-    title: 'Triển khai & Đánh giá',
-    description: 'Phối hợp thực hiện chương trình theo kế hoạch đã thống nhất, đảm bảo giá trị thiết thực cho sinh viên và cộng đồng.',
-    detail: 'Tổng kết kết quả đạt được, ghi nhận đóng góp của đối tác và duy trì mối quan hệ hợp tác lâu dài.'
+    title: 'Chính thức Đồng hành & Chinh phục Mục tiêu',
+    description: 'Bắt tay vào quá trình ươm tạo: hoàn thiện mẫu thử, rèn luyện kỹ năng pitching và sẵn sàng tham gia các cuộc thi lớn.',
+    detail: 'BK-IC luôn theo sát tiến độ, hỗ trợ tháo gỡ khó khăn và đồng hành cùng nhóm đến khi gặt hái kết quả.'
   }
 ];
 
 // -----------------------------------------------------------------------------
-// 8. 7 FAQS (Hỏi đáp hợp tác)
+// 6. REAL TRACK RECORD (Minh chứng từ Sân khấu BK SHARK 2026)
 // -----------------------------------------------------------------------------
-export const PARTNERSHIP_FAQS: PartnershipFAQItem[] = [
+export const COMPANION_TRACK_RECORD = {
+  title: 'Minh chứng Năng lực Đồng hành Thực tế — BK SHARK 2026',
+  description: 'BK-IC là đơn vị đồng tổ chức Cuộc thi Khởi nghiệp sinh viên BK SHARK 2026 cùng Đoàn Trường ĐH Bách khoa – ĐHĐN. Toàn bộ các đội thi đã được đồng hành đào tạo thực chiến qua 4 buổi training chuyên môn và sân khấu pitching chung kết.',
+  highlights: [
+    '35 Đội thi với hơn 140 sinh viên từ 6 trường đại học trên địa bàn Đà Nẵng được bồi dưỡng kỹ năng khởi nghiệp',
+    'Chuỗi 4 buổi đào tạo chuyên sâu: Thiết kế giải pháp giá trị (TS. Nguyễn Hồng Nguyên), Hoàn thiện MVP, Xây dựng mô hình tài chính, Kỹ năng Pitching đỉnh cao',
+    'Vinh danh Top 7 Dự án Công nghệ Xuất sắc tại Vòng Chung kết ngày 16/05/2026: DanangBooth (Quán quân), 4Sight (Á quân), Kizuna Hub (Giải Ba), CarboX.MH, DataStorm, Nexus, WaveX NextGen',
+    'Kết nối các dự án tiềm năng với Hội đồng Giám khảo chuyên gia từ Quỹ SHi, Danang Fintech Lab và Sở KH&CN Đà Nẵng'
+  ]
+};
+
+// -----------------------------------------------------------------------------
+// 7. COMPANION PROJECT FAQS (Hỏi đáp dành cho sinh viên & nhóm dự án)
+// -----------------------------------------------------------------------------
+export const COMPANION_FAQS: CompanionFAQItem[] = [
   {
     id: 'faq-1',
-    question: 'Những đơn vị, cá nhân nào có thể gửi đề xuất hợp tác cùng BK-IC?',
-    answer: 'BK-IC hoan nghênh và sẵn sàng kết nối cùng các doanh nghiệp, nhà tài trợ, chuyên gia, mentor, cựu sinh viên, giảng viên, tổ chức giáo dục cũng như các bạn sinh viên, cá nhân có ý tưởng đổi mới sáng tạo mong muốn đồng hành cùng câu lạc bộ.'
+    question: 'Dự án mới chỉ có ý tưởng trên giấy, chưa có sản phẩm mẫu thì có đăng ký được không?',
+    answer: 'Hoàn toàn được! BK-IC chào đón các dự án từ giai đoạn ý tưởng sơ khai. Nếu ý tưởng của bạn có tính logic và hướng tới giải quyết một bài toán thực tế cụ thể, Ban Chuyên môn sẽ cùng bạn mài giũa và định hướng các bước tiếp theo để chế tạo mẫu thử (PoC/Prototype).'
   },
   {
     id: 'faq-2',
-    question: 'BK-IC hiện có những hình thức hợp tác chính thức nào?',
-    answer: 'BK-IC hiện có 7 hình thức hợp tác chính thức: (1) Tài trợ tài chính; (2) Tài trợ hiện vật; (3) Cố vấn chuyên môn; (4) Kết nối bài toán doanh nghiệp; (5) Hợp tác dự án khởi nghiệp; (6) Hợp tác truyền thông; (7) Hợp tác học thuật.'
+    question: 'Đăng ký nhận hỗ trợ và đồng hành từ BK-IC có phải đóng phí gì không?',
+    answer: 'Không. Toàn bộ hoạt động đồng hành, cố vấn chuyên môn, hỗ trợ luyện tập pitching và kết nối cuộc thi từ CLB Khởi nghiệp & Đổi mới Sáng tạo BK-IC đều hoàn toàn miễn phí (100% phi lợi nhuận) vì mục tiêu phát triển phong trào nghiên cứu, đổi mới sáng tạo trong sinh viên Bách khoa.'
   },
   {
     id: 'faq-3',
-    question: 'Doanh nghiệp có thể đặt đề bài thực tế cho sinh viên Bách khoa không?',
-    answer: 'Có. BK-IC rất khuyến khích các bài toán kỹ thuật hoặc vận hành từ doanh nghiệp. Câu lạc bộ sẽ hỗ trợ đưa bài toán vào các cuộc thi sáng tạo, các buổi sinh hoạt chuyên môn hoặc kết nối trực tiếp với các nhóm sinh viên có chuyên ngành phù hợp để cùng nghiên cứu giải pháp.'
+    question: 'Tôi chỉ có một mình, chưa có đủ nhóm thì có thể nộp hồ sơ được không?',
+    answer: 'Được. Bạn có thể nộp hồ sơ với tư cách cá nhân sáng lập ý tưởng. Khi tham gia sinh hoạt cùng BK-IC, bạn sẽ có cơ hội kết nối với các bạn sinh viên kỹ thuật khác (lập trình viên, thiết kế mạch, cơ khí, kinh tế) để ghép thành một nhóm hoàn chỉnh.'
   },
   {
     id: 'faq-4',
-    question: 'Quy trình tiếp nhận và phản hồi đề xuất diễn ra như thế nào?',
-    answer: 'Sau khi Quý đơn vị gửi đề xuất qua biểu mẫu trực tuyến, Ban Chủ nhiệm BK-IC sẽ tiếp nhận, đối chiếu kế hoạch hoạt động của câu lạc bộ và chủ động liên hệ phản hồi lại theo số điện thoại hoặc email đại diện để trao đổi phương án phối hợp chi tiết.'
+    question: 'Quyền sở hữu trí tuệ của dự án có bị ảnh hưởng khi BK-IC bảo trợ không?',
+    answer: 'Không. Toàn bộ quyền sở hữu trí tuệ, mã nguồn, giải pháp kỹ thuật và bản quyền sáng tạo của dự án thuộc 100% về nhóm tác giả. BK-IC đóng vai trò là vườn ươm hỗ trợ sinh viên và không giữ bất kỳ quyền sở hữu thương mại nào đối với ý tưởng của bạn.'
   },
   {
     id: 'faq-5',
-    question: 'BK-IC có thể hỗ trợ doanh nghiệp tiếp cận nguồn nhân lực sinh viên như thế nào?',
-    answer: 'BK-IC là cầu nối giúp doanh nghiệp tiếp cận nguồn nhân lực trẻ giàu tiềm năng từ Trường ĐH Bách khoa – ĐHĐN thông qua các buổi workshop chuyên môn, ngày hội hướng nghiệp, các cuộc thi sáng tạo công nghệ và kênh truyền thông sinh viên chính thức của CLB.'
+    question: 'Sau khi gửi đề xuất qua biểu mẫu, khi nào tôi sẽ nhận được phản hồi?',
+    answer: 'Hệ thống sẽ tự động gửi email xác nhận đã tiếp nhận hồ sơ ngay khi bạn nhấn gửi. Sau đó, trong vòng 3 - 5 ngày làm việc, Ban Chuyên môn BK-IC sẽ liên hệ trực tiếp với bạn qua email hoặc số điện thoại để trao đổi sơ bộ và sắp xếp buổi gặp mặt định hướng.'
   },
   {
     id: 'faq-6',
-    question: 'Các thỏa thuận hợp tác có cần ký kết văn bản chính thức không?',
-    answer: 'Tùy theo quy mô và tính chất chương trình, BK-IC sẽ báo cáo Đoàn Thanh niên – Hội Sinh viên Trường Đại học Bách khoa để xây dựng Biên bản ghi nhớ (MOU) hoặc kế hoạch phối hợp nhằm đảm bảo tính minh bạch và đúng quy định của Nhà trường.'
-  },
-  {
-    id: 'faq-7',
-    question: 'Tôi có thể gửi kèm tài liệu đề xuất hoặc hồ sơ năng lực không?',
-    answer: 'Được. Trong biểu mẫu đề xuất hợp tác trực tuyến, Quý đơn vị có thể điền đường dẫn tài liệu đính kèm (như liên kết Google Drive, OneDrive hoặc trang giới thiệu) để Ban Chủ nhiệm tiện theo dõi thông tin đầy đủ nhất.'
+    question: 'Dự án đồng hành có bắt buộc phải tham gia cuộc thi BK Shark không?',
+    answer: 'Không bắt buộc, nhưng BK-IC luôn khuyến khích các nhóm tham gia để cọ xát thực tế, hoàn thiện sản phẩm và có cơ hội nhận các giải thưởng giá trị cũng như sự chú ý từ các quỹ đầu tư và vườn ươm lớn.'
   }
 ];
 
 // -----------------------------------------------------------------------------
-// 9. OFFICIAL CONTACT INFO (Thông tin liên hệ chính thức đã xác thực)
+// 8. OFFICIAL CONTACT INFO
 // -----------------------------------------------------------------------------
-export const PARTNERSHIP_CONTACT_INFO = {
-  organization: 'Câu lạc bộ Khởi nghiệp và Đổi mới Sáng tạo (BK-IC)',
+export const COMPANION_CONTACT_INFO = {
+  unit: 'Ban Chuyên môn & Ươm tạo Dự án • CLB Khởi nghiệp và Đổi mới Sáng tạo BK-IC',
   parent: 'Trường Đại học Bách khoa – Đại học Đà Nẵng',
-  address: 'Phòng A136, Trường Đại học Bách khoa – ĐHĐN, 54 Nguyễn Lương Bằng, Q. Liên Chiểu, TP. Đà Nẵng',
+  location: 'Phòng A136, Trường ĐH Bách khoa – ĐHĐN, 54 Nguyễn Lương Bằng, Q. Liên Chiểu, TP. Đà Nẵng',
+  address: 'Phòng A136, Trường ĐH Bách khoa – ĐHĐN, 54 Nguyễn Lương Bằng, Q. Liên Chiểu, TP. Đà Nẵng',
   email: 'bkic.dut@gmail.com',
+  website: 'https://bkic.dut.udn.vn',
   fanpageUrl: 'https://www.facebook.com/dut.bkic',
-  fanpageName: 'BK-IC - BachKhoa Innovation and Entrepreneurship Club',
-  website: 'https://bkic.dut.udn.vn'
+  fanpageName: 'BK-IC - BachKhoa Innovation and Entrepreneurship Club'
 };
+
+// -----------------------------------------------------------------------------
+// BACKWARD COMPATIBILITY EXPORTS FOR LEGACY TEST HARNESSES
+// -----------------------------------------------------------------------------
+export const PARTNERSHIP_CONTACT_INFO = COMPANION_CONTACT_INFO;
+export const PARTNERSHIP_STATS = COMPANION_PROJECT_STATS;
+export const WHY_PARTNER_CARDS = COMPANION_BENEFITS.map(b => ({
+  id: b.id,
+  title: b.title,
+  description: b.description,
+  isPrimary: b.id === 'mentorship'
+}));
+export const PARTNERSHIP_OPPORTUNITIES = COMPANION_FIELDS.map(f => ({
+  id: f.id,
+  typeKey: f.id,
+  title: f.name,
+  targetAudience: f.description,
+  partnerBenefits: [f.description, 'Đồng hành cố vấn kỹ thuật', 'Bảo lưu 100% bản quyền sáng chế']
+}));
+export const PARTNERSHIP_STORIES = [
+  {
+    id: 'story-bkshark',
+    category: 'CUỘC THI KHỞI NGHIỆP',
+    activityTitle: 'Cuộc thi Khởi nghiệp Sinh viên BK SHARK 2026',
+    partnerName: 'Đoàn Trường ĐH Bách khoa – ĐHĐN',
+    objective: 'Bồi dưỡng tư duy khởi nghiệp và kỹ năng pitching cho 35 đội thi toàn thành phố.',
+    outcome: '35 đội thi với 140 sinh viên hoàn thành xuất sắc chuỗi training và vòng chung kết.',
+    quote: 'BK SHARK 2026 là bệ phóng vững chắc để các ý tưởng công nghệ của sinh viên Bách khoa vươn xa.',
+    quoteAuthor: 'Ban Tổ chức BK SHARK 2026'
+  },
+  {
+    id: 'story-lienchieu-cds',
+    category: 'CHUYỂN ĐỔI SỐ HÀNH CHÍNH',
+    activityTitle: 'Cuộc thi Ý tưởng Chuyển đổi số gắn với Cải cách hành chính Liên Chiểu 2026',
+    partnerName: 'Đoàn phường Liên Chiểu & LYDINC',
+    objective: 'Tư vấn chuyên môn, hoàn thiện prototype và định hướng giải pháp số cho các đội thi.',
+    outcome: 'Hỗ trợ các đội thi xây dựng sản phẩm minh họa và bài thuyết trình thực chiến tại chung kết.',
+    quote: 'Sự đồng hành của BK-IC đã tiếp thêm động lực lớn cho thanh niên địa phương trong phong trào số hóa.',
+    quoteAuthor: 'Đại diện Ban Tổ chức'
+  }
+];
+export const PARTNERSHIP_PROCESS_STEPS = COMPANION_PROCESS_STEPS;
+export const PARTNERSHIP_FAQS = COMPANION_FAQS;
+export const PARTNERSHIP_ECOSYSTEM_GROUPS: any[] = [];
+

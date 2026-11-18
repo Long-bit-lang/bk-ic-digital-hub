@@ -1,37 +1,37 @@
-// BK-IC Digital Hub — Partnership FAQ Section (Accessible Accordion)
+// BK-IC Digital Hub — Companion Project FAQs (Accessible Accordion)
 import React, { useState } from 'react';
 import { ChevronDown, HelpCircle } from 'lucide-react';
-import { PARTNERSHIP_FAQS } from '../../data/partnershipData';
+import { COMPANION_FAQS } from '../../data/partnershipData';
 
 export const PartnershipFAQ: React.FC = () => {
-  const [openId, setOpenId] = useState<string | null>(PARTNERSHIP_FAQS[0]?.id || null);
+  const [openId, setOpenId] = useState<string | null>(COMPANION_FAQS[0]?.id || null);
 
   const toggleAccordion = (id: string) => {
     setOpenId(prev => (prev === id ? null : id));
   };
 
   return (
-    <section className="py-16 md:py-24 bg-gradient-to-b from-white via-sky-50/20 to-white relative">
+    <section className="py-16 md:py-24 bg-gradient-to-b from-white via-sky-50/20 to-white relative" id="faq">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
         {/* Section Header */}
         <div className="text-center space-y-4">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-sky-50 border border-sky-200 text-xs font-semibold text-[#0284C7]">
             <HelpCircle className="h-3.5 w-3.5" />
-            <span>GIẢI ĐÁP THẮC MẮC</span>
+            <span>GIẢI ĐÁP CHO SINH VIÊN</span>
           </div>
 
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-[#10182D] tracking-tight">
-            Câu hỏi thường gặp
+            Câu Hỏi Thường Gặp Về Dự Án Đồng Hành
           </h2>
 
           <p className="text-sm sm:text-base text-slate-600 leading-relaxed max-w-2xl mx-auto">
-            Một số thắc mắc phổ biến về quy trình, hình thức và điều kiện khi kết nối hợp tác cùng BK-IC.
+            Giải đáp chi tiết các thắc mắc phổ biến của các bạn sinh viên và nhóm tác giả khi đăng ký nhận đồng hành từ CLB BK-IC.
           </p>
         </div>
 
         {/* Accordion Container */}
         <div className="space-y-3">
-          {PARTNERSHIP_FAQS.map((faq) => {
+          {COMPANION_FAQS.map((faq) => {
             const isOpen = openId === faq.id;
             const contentId = `faq-content-${faq.id}`;
             const buttonId = `faq-btn-${faq.id}`;
@@ -90,4 +90,3 @@ export const PartnershipFAQ: React.FC = () => {
     </section>
   );
 };
-

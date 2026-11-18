@@ -100,12 +100,13 @@ export const Navbar: React.FC = () => {
     { to: '/activities/tuyen-thanh-vien', label: 'Tuyển thành viên mới' }
   ];
 
-  // 4 Subcategories for Hợp tác (clean labels only, no symbols or descriptions)
+  // Subcategories for Hợp tác (Companion Projects Focus)
   const partnershipSubItems = [
-    { to: '/partnership', label: 'Tổng quan Hợp tác' },
-    { to: '/partnership/companion-project', label: 'Dự án đồng hành & Catalogue' },
-    { to: '/partnership/partners', label: 'Đối tác chiến lược' },
-    { to: '/partnership/business', label: 'Hợp tác doanh nghiệp' }
+    { to: '/partnership', label: 'Vườn ươm Dự án Đồng hành' },
+    { to: '/partnership#benefits', label: 'Giá trị & Quyền lợi hỗ trợ' },
+    { to: '/partnership#criteria', label: 'Tiêu chí & Lĩnh vực ưu tiên' },
+    { to: '/partnership#process', label: 'Lộ trình ươm tạo 4 bước' },
+    { to: '/partnership#request-form', label: 'Nộp hồ sơ dự án mới' }
   ];
 
   const isAboutActive = location.pathname === '/about';
@@ -255,12 +256,23 @@ export const Navbar: React.FC = () => {
                   <div className="absolute left-1/2 -translate-x-1/2 top-full pt-2.5 w-64 z-50 animate-in fade-in slide-in-from-top-1 duration-150">
                     <div className="rounded-2xl border border-[#E2E6EE] bg-white p-2 shadow-xl shadow-slate-900/10 space-y-0.5">
                       {partnershipSubItems.map((item) => {
-                        const isSubActive = location.pathname === item.to;
+                        const isSubActive =
+                          location.pathname + location.hash === item.to ||
+                          (item.to === '/partnership' && location.pathname === '/partnership' && !location.hash);
                         return (
                           <Link
                             key={item.to}
                             to={item.to}
-                            onClick={() => setPartnershipDropdown(false)}
+                            onClick={() => {
+                              setPartnershipDropdown(false);
+                              if (item.to.includes('#')) {
+                                const id = item.to.split('#')[1];
+                                setTimeout(() => {
+                                  const el = document.getElementById(id);
+                                  if (el) el.scrollIntoView({ behavior: 'smooth' });
+                                }, 50);
+                              }
+                            }}
                             className={`block rounded-xl px-3.5 py-2.5 text-xs font-semibold transition ${isSubActive
                                 ? 'bg-[#1749B5] text-white'
                                 : 'text-slate-700 hover:bg-slate-50 hover:text-[#1749B5]'
@@ -458,19 +470,33 @@ export const Navbar: React.FC = () => {
                   </Link>
 
                   <div className="pl-3 pt-1 space-y-0.5 border-t border-slate-200/60">
-                    {partnershipSubItems.map((item) => (
-                      <Link
-                        key={item.to}
-                        to={item.to}
-                        onClick={() => setMobileMenuOpen(false)}
-                        className={`block px-2.5 py-1.5 rounded-lg text-xs transition ${location.pathname === item.to
-                            ? 'bg-[#1749B5] text-white font-bold'
-                            : 'text-slate-600 hover:text-[#1749B5] hover:bg-white'
-                          }`}
-                      >
-                        {item.label}
-                      </Link>
-                    ))}
+                    {partnershipSubItems.map((item) => {
+                      const isSubActive =
+                        location.pathname + location.hash === item.to ||
+                        (item.to === '/partnership' && location.pathname === '/partnership' && !location.hash);
+                      return (
+                        <Link
+                          key={item.to}
+                          to={item.to}
+                          onClick={() => {
+                            setMobileMenuOpen(false);
+                            if (item.to.includes('#')) {
+                              const id = item.to.split('#')[1];
+                              setTimeout(() => {
+                                const el = document.getElementById(id);
+                                if (el) el.scrollIntoView({ behavior: 'smooth' });
+                              }, 50);
+                            }
+                          }}
+                          className={`block px-2.5 py-1.5 rounded-lg text-xs transition ${isSubActive
+                              ? 'bg-[#1749B5] text-white font-bold'
+                              : 'text-slate-600 hover:text-[#1749B5] hover:bg-white'
+                            }`}
+                        >
+                          {item.label}
+                        </Link>
+                      );
+                    })}
                   </div>
                 </div>
 

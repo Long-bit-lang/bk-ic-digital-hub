@@ -1,7 +1,7 @@
-// BK-IC Digital Hub — Official Partnership Conversion Platform
-// 10 Strategic Sections, Seamless Scroll & State-Managed Conversion Stepper
-import React, { useState, useEffect } from 'react';
-import { useSearchParams } from 'react-router-dom';
+// BK-IC Digital Hub — Official Companion Project Platform
+// Dedicated Incubator & Project Support for DUT Student Innovators & Research Teams
+import React, { useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import { PartnershipHero } from '../components/partnership/PartnershipHero';
 import { PartnershipStats } from '../components/partnership/PartnershipStats';
 import { PartnershipCapabilities } from '../components/partnership/PartnershipCapabilities';
@@ -15,29 +15,20 @@ import { PartnershipRequestForm } from '../components/partnership/PartnershipReq
 import { PartnershipContact } from '../components/partnership/PartnershipContact';
 
 export const PartnershipPage: React.FC = () => {
-  const [searchParams] = useSearchParams();
-  const [selectedType, setSelectedType] = useState<string>('financial_sponsor');
+  const location = useLocation();
 
-  // Map incoming URL query param (e.g., ?type=expert_mentoring or ?type=companion_project)
+  // Handle URL hashes on mount or hash change
   useEffect(() => {
-    const typeParam = searchParams.get('type');
-    if (typeParam) {
-      // Map legacy or incoming keys to valid opportunity keys
-      if (typeParam === 'companion_project' || typeParam === 'project_coop') {
-        setSelectedType('startup_project');
-      } else if (typeParam === 'sponsor' || typeParam === 'program_sponsor' || typeParam === 'business_coop') {
-        setSelectedType('financial_sponsor');
-      } else if (typeParam === 'problem_solving') {
-        setSelectedType('business_challenge');
-      } else if (typeParam === 'media_coop') {
-        setSelectedType('media_cooperation');
-      } else if (typeParam === 'academic_partner') {
-        setSelectedType('academic_exchange');
-      } else {
-        setSelectedType(typeParam);
+    if (location.hash) {
+      const targetId = location.hash.replace('#', '');
+      const el = document.getElementById(targetId);
+      if (el) {
+        setTimeout(() => {
+          el.scrollIntoView({ behavior: 'smooth' });
+        }, 100);
       }
     }
-  }, [searchParams]);
+  }, [location.hash]);
 
   // Smooth scroll helpers
   const scrollToForm = () => {
@@ -47,16 +38,11 @@ export const PartnershipPage: React.FC = () => {
     }
   };
 
-  const scrollToOpportunities = () => {
-    const el = document.getElementById('opportunities');
+  const scrollToCriteria = () => {
+    const el = document.getElementById('criteria');
     if (el) {
       el.scrollIntoView({ behavior: 'smooth' });
     }
-  };
-
-  const handleSelectOpportunity = (typeKey: string) => {
-    setSelectedType(typeKey);
-    scrollToForm();
   };
 
   return (
@@ -64,40 +50,37 @@ export const PartnershipPage: React.FC = () => {
       {/* SECTION 1: HERO */}
       <PartnershipHero
         onRequestClick={scrollToForm}
-        onExploreClick={scrollToOpportunities}
+        onExploreClick={scrollToCriteria}
       />
 
-      {/* SECTION 2: PARTNERSHIP STATISTICS (Verified Metrics) */}
+      {/* SECTION 2: VERIFIED STATS */}
       <PartnershipStats />
 
-      {/* SECTION 3: STUDENT CAPABILITY DEVELOPMENT (Định hướng bồi dưỡng năng lực sinh viên) */}
-      <PartnershipCapabilities />
-
-      {/* SECTION 4: WHY PARTNER WITH BK-IC (Trọng tâm: Tiếp cận nguồn nhân lực trẻ) */}
+      {/* SECTION 3: 5 COMPANION VALUES & BENEFITS */}
       <WhyPartnerSection />
 
-      {/* SECTION 5: 7 OFFICIAL PARTNERSHIP OPPORTUNITIES */}
-      <PartnershipOpportunities
-        onSelectType={handleSelectOpportunity}
-        selectedType={selectedType}
-      />
+      {/* SECTION 4: STUDENT CAPABILITY DEVELOPMENT (Hard & Soft Skills) */}
+      <PartnershipCapabilities />
 
-      {/* SECTION 6: VERIFIED REAL CLUB ACTIVITIES (BK Shark 2026 & Cuộc thi CĐS Liên Chiểu 2026) */}
+      {/* SECTION 5: INTAKE CRITERIA & 5 TECH FOCUS FIELDS */}
+      <PartnershipOpportunities onRequestClick={scrollToForm} />
+
+      {/* SECTION 6: REAL TRACK RECORD (BK SHARK 2026 & TOP 7 PROJECTS) */}
       <PartnershipStories />
 
-      {/* SECTION 7: NETWORK ECOSYSTEM & INVITATION (Mạng lưới kết nối thay cho logo giả) */}
+      {/* SECTION 7: INCUBATOR INTAKE STATUS & OPEN CALL */}
       <PartnershipPartners onRequestClick={scrollToForm} />
 
-      {/* SECTION 8: 4-STEP PARTNERSHIP PROCESS */}
+      {/* SECTION 8: 4-STEP INCUBATION ROADMAP */}
       <PartnershipProcess />
 
-      {/* SECTION 9: FAQ (7 Accessible Accordion Items) */}
+      {/* SECTION 9: FAQS FOR STUDENT FOUNDERS */}
       <PartnershipFAQ />
 
-      {/* SECTION 10: PARTNERSHIP REQUEST FORM (8 Verified Fields) */}
-      <PartnershipRequestForm initialType={selectedType} />
+      {/* SECTION 10: DEDICATED PROJECT APPLICATION FORM */}
+      <PartnershipRequestForm />
 
-      {/* SECTION 11: CONTACT INFORMATION */}
+      {/* SECTION 11: OFFICIAL CONTACT INFORMATION */}
       <PartnershipContact onRequestClick={scrollToForm} />
     </div>
   );

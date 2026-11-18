@@ -121,11 +121,11 @@ function AppRouter() {
           <Route path="/activities/du-an/:slug" element={<CompanionProjectDetailPage />} />
           <Route path="/activities/bk-shark/:season" element={<BKSharkSeasonDetailPage />} />
 
-          {/* Item 4: Hợp tác (Partnership) — 3 Subcategories */}
+          {/* Item 4: Hợp tác (Partnership) — Dedicated Companion Project Platform */}
           <Route path="/partnership" element={<PartnershipPage />} />
-          <Route path="/partnership/companion-project" element={<CompanionProjectPartnershipPage />} />
-          <Route path="/partnership/partners" element={<PartnershipPartnersPage />} />
-          <Route path="/partnership/business" element={<PartnershipBusinessPage />} />
+          <Route path="/partnership/companion-project" element={<Navigate to="/partnership" replace />} />
+          <Route path="/partnership/partners" element={<Navigate to="/partnership" replace />} />
+          <Route path="/partnership/business" element={<Navigate to="/partnership" replace />} />
 
           {/* Legacy / Alias Routes (Preserved for backward compatibility) */}
           <Route path="/events" element={<EventsPage />} />
