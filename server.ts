@@ -2,6 +2,7 @@
 import express from 'express';
 import http from 'http';
 import cors from 'cors';
+import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import dotenv from 'dotenv';
@@ -141,8 +142,56 @@ async function startServer() {
   app.use('/api/penalties', penaltiesRouter);
   app.use('/api', cmsRouter);
 
-  // Serve Member Avatar repository statically from root /imageAVT
+  // Serve Member Avatar repository statically from public/imageAVT and root /imageAVT
+  app.use('/imageAVT', express.static(path.resolve(__dirname, 'public/imageAVT')));
   app.use('/imageAVT', express.static(path.resolve(__dirname, 'imageAVT')));
+
+  // Real-time Member Avatar Scanner API
+  // Automatically detects any newly uploaded images named by MSSV in public/imageAVT or imageAVT
+  app.get('/api/album/avatars', (_req, res) => {
+    try {
+      const candidates = [
+        path.resolve(__dirname, 'public/imageAVT'),
+        path.resolve(__dirname, 'imageAVT'),
+        path.resolve(__dirname, 'dist/imageAVT')
+      ];
+
+      const avatarMap: Record<string, string> = {};
+      const allowedExts = new Set(['.jpg', '.jpeg', '.png', '.webp', '.gif', '.svg']);
+
+      for (const dir of candidates) {
+        if (fs.existsSync(dir)) {
+          const files = fs.readdirSync(dir);
+          for (const file of files) {
+            const ext = path.extname(file).toLowerCase();
+            if (allowedExts.has(ext)) {
+              const nameWithoutExt = path.parse(file).name.trim();
+
+              // 1. Direct match by file name (e.g. 105220278.jpg)
+              if (nameWithoutExt && !avatarMap[nameWithoutExt]) {
+                avatarMap[nameWithoutExt] = `/imageAVT/${encodeURIComponent(file)}`;
+              }
+
+              // 2. Regex match for 9-digit studentId (e.g. 105220278_avt.jpg or 105220278.jpg)
+              const match = file.match(/(\d{9})/);
+              if (match && match[1] && !avatarMap[match[1]]) {
+                avatarMap[match[1]] = `/imageAVT/${encodeURIComponent(file)}`;
+              }
+            }
+          }
+        }
+      }
+
+      res.json({
+        success: true,
+        count: Object.keys(avatarMap).length,
+        avatars: avatarMap
+      });
+    } catch (err: any) {
+      console.error('[BK-IC Server] Avatar scan error:', err);
+      res.status(500).json({ success: false, avatars: {} });
+    }
+  });
 
   // Guard: Any unmatched /api/* route returns clean JSON 404 instead of SPA HTML
   app.use('/api', (req, res) => {

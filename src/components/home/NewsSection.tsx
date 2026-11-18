@@ -2,10 +2,12 @@
 // Scroll-based Stacking Cards with Fold Crease (Inspired by https://clb.dutai.io.vn/ Phase 02)
 import React, { useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Newspaper, ArrowUpRight } from 'lucide-react';
+import { ArrowRight, Newspaper } from 'lucide-react';
 import { useScroll } from 'motion/react';
 import { SectionHeading } from '../editorial/SectionHeading';
 import { NewsCard } from './NewsCard';
+import { ScrollReveal } from '../effects/ScrollReveal';
+import { GlowingLightTrails } from '../effects/GlowingLightTrails';
 import { HOME_NEWS_DATA, type NewsItem } from '../../data/homeData';
 
 interface NewsSectionProps {
@@ -42,18 +44,25 @@ export const NewsSection: React.FC<NewsSectionProps> = ({ items = HOME_NEWS_DATA
   });
 
   return (
-    <section id="news" className="relative pt-12 sm:pt-16 pb-10 sm:pb-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto scroll-mt-24">
+    <section id="news" className="relative pt-4 sm:pt-6 pb-10 sm:pb-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto scroll-mt-24">
+      {/* Floating Wave Light Trails Backdrop */}
+      <div className="absolute top-1/4 -left-20 w-[600px] pointer-events-none -z-10 opacity-60">
+        <GlowingLightTrails variant="section-flow" />
+      </div>
+
       {/* Subtle Ambient Radial Glow */}
       <div className="absolute top-1/2 -right-32 w-[500px] h-[500px] bg-[radial-gradient(circle_at_center,rgba(36,91,250,0.14),transparent_70%)] pointer-events-none -z-10" />
 
-      {/* Section Header */}
-      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 pb-8 border-b border-slate-200">
-        <SectionHeading
-          eyebrow="BẢN TIN BK-IC"
-          title="Bản tin &amp; Thông báo"
-          subtitle="Cập nhật những hoạt động, sự kiện và thông tin mới nhất từ câu lạc bộ BK-IC."
-        />
-      </div>
+      {/* Section Header with ScrollReveal */}
+      <ScrollReveal direction="up" distance={20} duration={0.6}>
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 pb-8 border-b border-slate-200">
+          <SectionHeading
+            eyebrow="BẢN TIN BK-IC"
+            title="Bản tin &amp; Thông báo"
+            subtitle="Cập nhật những hoạt động, sự kiện và thông tin mới nhất từ câu lạc bộ BK-IC."
+          />
+        </div>
+      </ScrollReveal>
 
       {/* News Cards Stacking Container */}
       <div className="mt-10">
@@ -94,15 +103,15 @@ export const NewsSection: React.FC<NewsSectionProps> = ({ items = HOME_NEWS_DATA
 
       {/* Bottom CTA Button */}
       {sortedItems.length > 0 && (
-        <div className="mt-4 text-center relative z-20">
+        <ScrollReveal direction="up" distance={16} delay={0.2} duration={0.5} className="mt-4 text-center relative z-20">
           <Link
             to="/news"
-            className="inline-flex items-center gap-2 px-6 py-3.5 rounded-full bg-white border border-slate-200 text-[#1749B5] text-xs sm:text-sm font-bold hover:bg-[#1749B5] hover:text-white hover:border-[#1749B5] shadow-xs hover:shadow-md transition-all duration-300 group"
+            className="inline-flex items-center gap-2 px-6 py-3.5 rounded-full bg-white border border-slate-200 text-[#0284C7] text-xs sm:text-sm font-bold hover:bg-gradient-to-r hover:from-[#0284C7] hover:to-[#38BDF8] hover:text-white hover:border-transparent shadow-xs hover:shadow-[0_12px_28px_-8px_rgba(56,189,248,0.35)] transition-all duration-300 group"
           >
             <span>Xem tất cả tin tức</span>
             <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
           </Link>
-        </div>
+        </ScrollReveal>
       )}
     </section>
   );

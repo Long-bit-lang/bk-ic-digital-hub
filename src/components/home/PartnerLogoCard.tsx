@@ -12,7 +12,7 @@ export const PartnerLogoCard: React.FC<PartnerLogoCardProps> = ({ partner }) => 
   const [imageError, setImageError] = useState(false);
 
   const CardContent = (
-    <div className="h-full w-full rounded-2xl border border-slate-200/80 bg-white p-4 sm:p-5 flex flex-col items-center justify-center text-center hover:border-[#1749B5]/40 hover:shadow-md transition-all duration-300 group relative">
+    <div className="h-full w-full rounded-2xl border border-slate-200/80 bg-white p-4 sm:p-5 flex flex-col items-center justify-center text-center hover:border-[#38BDF8] hover:-translate-y-1 hover:shadow-[0_12px_28px_-8px_rgba(56,189,248,0.22)] transition-all duration-300 ease-out group relative">
       {/* External indicator icon on hover */}
       {partner.websiteUrl && (
         <span

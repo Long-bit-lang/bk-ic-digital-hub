@@ -15,7 +15,7 @@ export const ActivityCard: React.FC<ActivityCardProps> = ({ item, variant = 'com
 
   if (variant === 'lead') {
     return (
-      <article className="h-full min-h-[420px] sm:min-h-[480px] rounded-3xl overflow-hidden relative group border border-slate-200/90 shadow-md hover:shadow-2xl hover:border-[#1749B5]/40 transition-all duration-500 flex flex-col justify-end p-6 sm:p-8 lg:p-10 text-white">
+      <article className="h-full min-h-[420px] sm:min-h-[480px] rounded-3xl overflow-hidden relative group border border-slate-200/90 shadow-md hover:shadow-[0_25px_60px_-15px_rgba(56,189,248,0.30)] hover:border-[#38BDF8] hover:-translate-y-1 transition-all duration-500 ease-out flex flex-col justify-end p-6 sm:p-8 lg:p-10 text-white">
         {/* Background Image with Zoom */}
         <div className="absolute inset-0 w-full h-full overflow-hidden bg-slate-900">
           {!imageError ? (
@@ -88,7 +88,7 @@ export const ActivityCard: React.FC<ActivityCardProps> = ({ item, variant = 'com
 
   // Supporting / Compact Variant (used for side items in asymmetric grid)
   return (
-    <article className="group rounded-3xl border border-slate-200/90 bg-white hover:border-[#1749B5]/40 hover:shadow-xl hover:shadow-blue-950/5 transition-all duration-300 overflow-hidden flex flex-col sm:flex-row items-stretch">
+    <article className="group rounded-3xl border border-slate-200/90 bg-white hover:border-[#38BDF8] hover:-translate-y-1 hover:shadow-[0_16px_36px_-10px_rgba(56,189,248,0.20)] transition-all duration-300 ease-out overflow-hidden flex flex-col sm:flex-row items-stretch">
       <Link
         to={item.detailUrl}
         className="flex flex-col sm:flex-row items-stretch w-full focus:outline-hidden focus-visible:ring-2 focus-visible:ring-[#1749B5] rounded-3xl"

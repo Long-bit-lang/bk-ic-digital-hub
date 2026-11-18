@@ -1,10 +1,12 @@
 // BK-IC Digital Hub — Competitions Section Component
-// Gallery Carousel with 3 cards (Desktop), 2 cards (Tablet), 1 card (Mobile)
+// Gallery Carousel with 3 cards (Desktop), 2 cards (Tablet), 1 card (Mobile) with ScrollReveal & Light Trails
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Trophy, ArrowRight, ArrowUpRight } from 'lucide-react';
+import { Trophy, ArrowRight } from 'lucide-react';
 import { SectionHeading } from '../editorial/SectionHeading';
 import { CompetitionCarousel } from './CompetitionCarousel';
+import { ScrollReveal } from '../effects/ScrollReveal';
+import { GlowingLightTrails } from '../effects/GlowingLightTrails';
 import { HOME_COMPETITIONS_DATA, type CompetitionItem } from '../../data/homeData';
 
 interface CompetitionSectionProps {
@@ -17,22 +19,29 @@ export const CompetitionSection: React.FC<CompetitionSectionProps> = ({
   return (
     <section
       id="competitions"
-      className="relative py-10 sm:py-14 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto scroll-mt-24 border-t border-slate-200/80"
+      className="relative py-12 sm:py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto scroll-mt-24"
     >
-      {/* Subtle Ambient Radial Glow */}
-      <div className="absolute top-1/2 -left-32 w-[500px] h-[500px] bg-[radial-gradient(circle_at_center,rgba(107,157,255,0.15),transparent_70%)] pointer-events-none -z-10" />
-
-      {/* Section Header */}
-      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 pb-6 sm:pb-7 border-b border-slate-200/80">
-        <SectionHeading
-          eyebrow="SÂN CHƠI ĐỔI MỚI SÁNG TẠO"
-          title="Cuộc thi Sáng tạo và Khởi Nghiệp"
-          subtitle="Các cuộc thi do BK-IC tổ chức, đồng hành hoặc phối hợp với các tổ chức và doanh nghiệp nhằm tìm kiếm và ươm tạo tài năng trẻ."
-        />
+      {/* Floating Wave Light Trails Backdrop */}
+      <div className="absolute top-1/2 -left-20 w-[600px] pointer-events-none -z-10 opacity-60">
+        <GlowingLightTrails variant="section-flow" />
       </div>
 
-      {/* Carousel or Empty State */}
-      <div className="mt-8">
+      {/* Subtle Ambient Radial Glow */}
+      <div className="absolute top-1/2 -left-32 w-[500px] h-[500px] bg-[radial-gradient(circle_at_center,rgba(56,189,248,0.14),transparent_70%)] pointer-events-none -z-10 blur-3xl animate-pulse-glow" />
+
+      {/* Section Header with ScrollReveal */}
+      <ScrollReveal direction="up" distance={20} duration={0.6}>
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 pb-6 sm:pb-7 border-b border-slate-200/80">
+          <SectionHeading
+            eyebrow="SÂN CHƠI ĐỔI MỚI SÁNG TẠO"
+            title="Cuộc thi Sáng tạo và Khởi Nghiệp"
+            subtitle="Các cuộc thi do BK-IC tổ chức, đồng hành hoặc phối hợp với các tổ chức và doanh nghiệp nhằm tìm kiếm và ươm tạo tài năng trẻ."
+          />
+        </div>
+      </ScrollReveal>
+
+      {/* Carousel or Empty State with ScrollReveal */}
+      <ScrollReveal direction="up" distance={28} delay={0.15} duration={0.7} className="mt-8">
         {items.length > 0 ? (
           <CompetitionCarousel items={items} />
         ) : (
@@ -46,21 +55,20 @@ export const CompetitionSection: React.FC<CompetitionSectionProps> = ({
             </p>
           </div>
         )}
-      </div>
+      </ScrollReveal>
 
-      {/* Bottom CTA Button */}
+      {/* Bottom CTA Button with ScrollReveal */}
       {items.length > 0 && (
-        <div className="mt-6 sm:mt-8 text-center">
+        <ScrollReveal direction="up" distance={16} delay={0.25} duration={0.5} className="mt-6 sm:mt-8 text-center">
           <Link
             to="/activities/competitions"
-            className="inline-flex items-center gap-2 px-6 py-3.5 rounded-full bg-white border border-slate-200 text-[#1749B5] text-xs sm:text-sm font-bold hover:bg-[#1749B5] hover:text-white hover:border-[#1749B5] shadow-xs hover:shadow-md transition-all duration-300 group"
+            className="inline-flex items-center gap-2 px-6 py-3.5 rounded-full bg-white border border-slate-200 text-[#0284C7] text-xs sm:text-sm font-bold hover:bg-gradient-to-r hover:from-[#0284C7] hover:to-[#38BDF8] hover:text-white hover:border-transparent shadow-xs hover:shadow-[0_12px_28px_-8px_rgba(56,189,248,0.35)] transition-all duration-300 group"
           >
             <span>Xem tất cả cuộc thi</span>
             <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
           </Link>
-        </div>
+        </ScrollReveal>
       )}
     </section>
   );
 };
-

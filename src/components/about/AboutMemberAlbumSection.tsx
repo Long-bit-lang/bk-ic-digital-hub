@@ -7,11 +7,50 @@ import {
   GraduationCap, 
   Search,
   ZoomIn,
-  Sparkles
+  Sparkles,
+  BookOpen
 } from 'lucide-react';
 import { ImageLightboxModal } from '../common/ImageLightboxModal';
 
-export const DEFAULT_MEMBER_AVATAR = '/imageAVT/2aOboRDJDH6RgX8HEcRdWxaumJGo2n0EG1RnkbvU.jpg';
+// Discover all available avatar photos in public/imageAVT in real time via Vite
+const avatarFiles =
+  typeof (import.meta as any).glob === 'function'
+    ? (import.meta as any).glob('../../../public/imageAVT/*.{jpg,jpeg,png,webp,JPG,JPEG,PNG,WEBP}', {
+        eager: true,
+        query: '?url',
+        import: 'default'
+      })
+    : {};
+
+// Build map: '105220278' -> '/imageAVT/105220278.jpg'
+const VITE_DETECTED_AVATARS: Record<string, string> = {};
+for (const [filePath, fileUrl] of Object.entries(avatarFiles)) {
+  const filename = filePath.split('/').pop() || '';
+  const nameWithoutExt = filename.replace(/\.[^/.]+$/, '');
+  if (nameWithoutExt && !nameWithoutExt.includes('2aObo') && nameWithoutExt !== 'default') {
+    const resolvedUrl = typeof fileUrl === 'string' ? fileUrl : (fileUrl as any)?.default || `/imageAVT/${filename}`;
+    VITE_DETECTED_AVATARS[nameWithoutExt] = resolvedUrl;
+  }
+}
+
+export const DEFAULT_MEMBER_AVATAR = '/imageAVT/default.jpg';
+
+// Registered individual photos in public/imageAVT named by MSSV
+export const KNOWN_AVATARS: Record<string, string> = {
+  '105220278': '/imageAVT/105220278.jpg', // Phạm Lê Tú (Ban Chủ nhiệm)
+  '123220065': '/imageAVT/123220065.jpg', // Nguyễn Thiện Quốc (Ban Chủ nhiệm)
+  '118230004': '/imageAVT/118230004.jpg', // Nguyễn Quỳnh Châu (Ban Chủ nhiệm)
+  '105230195': '/imageAVT/105230195.jpg', // Lê Anh Khoa (Ban Điều hành)
+  '121240105': '/imageAVT/121240105.jpg', // Nguyễn Thị Thục Trang (Ban Điều hành)
+  '123230067': '/imageAVT/123230067.jpg', // Nguyễn Đoàn Anh Thư (Ban Điều hành)
+  '102240134': '/imageAVT/102240134.jpg', // Nguyễn Thị Quế Trân (Ban Điều hành)
+  '102250342': '/imageAVT/102250342.jpg', // Nguyễn Hoàng Long (Ban Thành viên)
+  '121240093': '/imageAVT/121240093.jpg', // Lê Hồng Ngân (Ban Thành viên)
+};
+
+export const getMemberAvatar = (studentId: string): string => {
+  return VITE_DETECTED_AVATARS[studentId] || KNOWN_AVATARS[studentId] || `/imageAVT/${studentId}.jpg`;
+};
 
 export interface MemberItem {
   id: string;
@@ -48,7 +87,7 @@ export const ALBUM_DATA: DepartmentGroup[] = [
         position: 'Ban Chủ nhiệm',
         faculty: 'Khoa Điện',
         studentId: '105220278',
-        avatarUrl: DEFAULT_MEMBER_AVATAR,
+        avatarUrl: getMemberAvatar('105220278'),
         departmentName: 'Ban chủ nhiệm'
       },
       {
@@ -57,7 +96,7 @@ export const ALBUM_DATA: DepartmentGroup[] = [
         position: 'Ban Chủ nhiệm',
         faculty: 'Khoa Điện',
         studentId: '123220065',
-        avatarUrl: DEFAULT_MEMBER_AVATAR,
+        avatarUrl: getMemberAvatar('123220065'),
         departmentName: 'Ban chủ nhiệm'
       },
       {
@@ -66,7 +105,7 @@ export const ALBUM_DATA: DepartmentGroup[] = [
         position: 'Ban Chủ nhiệm',
         faculty: 'Khoa Quản lý Dự án & CN',
         studentId: '118230004',
-        avatarUrl: DEFAULT_MEMBER_AVATAR,
+        avatarUrl: getMemberAvatar('118230004'),
         departmentName: 'Ban chủ nhiệm'
       }
     ]
@@ -85,7 +124,7 @@ export const ALBUM_DATA: DepartmentGroup[] = [
         position: 'Ban Điều hành',
         faculty: 'Khoa Điện',
         studentId: '105230195',
-        avatarUrl: DEFAULT_MEMBER_AVATAR,
+        avatarUrl: getMemberAvatar('105230195'),
         departmentName: 'Ban điều hành'
       },
       {
@@ -94,7 +133,7 @@ export const ALBUM_DATA: DepartmentGroup[] = [
         position: 'Ban Điều hành',
         faculty: 'Khoa Kiến trúc',
         studentId: '121240105',
-        avatarUrl: DEFAULT_MEMBER_AVATAR,
+        avatarUrl: getMemberAvatar('121240105'),
         departmentName: 'Ban điều hành'
       },
       {
@@ -103,7 +142,7 @@ export const ALBUM_DATA: DepartmentGroup[] = [
         position: 'Ban Điều hành',
         faculty: 'Khoa Điện tử - Viễn thông',
         studentId: '123230067',
-        avatarUrl: DEFAULT_MEMBER_AVATAR,
+        avatarUrl: getMemberAvatar('123230067'),
         departmentName: 'Ban điều hành'
       },
       {
@@ -112,7 +151,7 @@ export const ALBUM_DATA: DepartmentGroup[] = [
         position: 'Ban Điều hành',
         faculty: 'Khoa Điện',
         studentId: '105240182',
-        avatarUrl: DEFAULT_MEMBER_AVATAR,
+        avatarUrl: getMemberAvatar('105240182'),
         departmentName: 'Ban điều hành'
       },
       {
@@ -121,7 +160,7 @@ export const ALBUM_DATA: DepartmentGroup[] = [
         position: 'Ban Điều hành',
         faculty: 'Khoa Công nghệ Thông tin',
         studentId: '102240134',
-        avatarUrl: DEFAULT_MEMBER_AVATAR,
+        avatarUrl: getMemberAvatar('102240134'),
         departmentName: 'Ban điều hành'
       }
     ]
@@ -138,9 +177,9 @@ export const ALBUM_DATA: DepartmentGroup[] = [
         id: 'btv-1',
         fullName: 'Nguyễn Hoàng Long',
         position: 'Ban Thành viên',
-        faculty: 'Khoa Công nghệ Thông tin',
-        studentId: '102240244',
-        avatarUrl: DEFAULT_MEMBER_AVATAR,
+        faculty: 'Khoa Điện tử và Trí tuệ nhân tạo',
+        studentId: '102250342',
+        avatarUrl: getMemberAvatar('102250342'),
         departmentName: 'Ban thành viên'
       },
       {
@@ -149,7 +188,7 @@ export const ALBUM_DATA: DepartmentGroup[] = [
         position: 'Ban Thành viên',
         faculty: 'Khoa Kiến trúc',
         studentId: '121240093',
-        avatarUrl: DEFAULT_MEMBER_AVATAR,
+        avatarUrl: getMemberAvatar('121240093'),
         departmentName: 'Ban thành viên'
       },
       {
@@ -158,7 +197,7 @@ export const ALBUM_DATA: DepartmentGroup[] = [
         position: 'Ban Thành viên',
         faculty: 'Khoa Công nghệ Thông tin',
         studentId: '102240156',
-        avatarUrl: DEFAULT_MEMBER_AVATAR,
+        avatarUrl: getMemberAvatar('102240156'),
         departmentName: 'Ban thành viên'
       },
       {
@@ -167,7 +206,7 @@ export const ALBUM_DATA: DepartmentGroup[] = [
         position: 'Ban Thành viên',
         faculty: 'Khoa Công nghệ Thông tin',
         studentId: '102240263',
-        avatarUrl: DEFAULT_MEMBER_AVATAR,
+        avatarUrl: getMemberAvatar('102240263'),
         departmentName: 'Ban thành viên'
       },
       {
@@ -176,7 +215,7 @@ export const ALBUM_DATA: DepartmentGroup[] = [
         position: 'Ban Thành viên',
         faculty: 'Khoa Điện',
         studentId: '105240277',
-        avatarUrl: DEFAULT_MEMBER_AVATAR,
+        avatarUrl: getMemberAvatar('105240277'),
         departmentName: 'Ban thành viên'
       },
       {
@@ -185,7 +224,7 @@ export const ALBUM_DATA: DepartmentGroup[] = [
         position: 'Ban Thành viên',
         faculty: 'Khoa Công nghệ Thông tin',
         studentId: '102240296',
-        avatarUrl: DEFAULT_MEMBER_AVATAR,
+        avatarUrl: getMemberAvatar('102240296'),
         departmentName: 'Ban thành viên'
       },
       {
@@ -194,7 +233,7 @@ export const ALBUM_DATA: DepartmentGroup[] = [
         position: 'Ban Thành viên',
         faculty: 'Khoa Điện',
         studentId: '105240173',
-        avatarUrl: DEFAULT_MEMBER_AVATAR,
+        avatarUrl: getMemberAvatar('105240173'),
         departmentName: 'Ban thành viên'
       },
       {
@@ -203,7 +242,7 @@ export const ALBUM_DATA: DepartmentGroup[] = [
         position: 'Ban Thành viên',
         faculty: 'Khoa Quản lý Dự án',
         studentId: '118240081',
-        avatarUrl: DEFAULT_MEMBER_AVATAR,
+        avatarUrl: getMemberAvatar('118240081'),
         departmentName: 'Ban thành viên'
       },
       {
@@ -212,7 +251,7 @@ export const ALBUM_DATA: DepartmentGroup[] = [
         position: 'Ban Thành viên',
         faculty: 'Khoa Công nghệ Thông tin',
         studentId: '102240308',
-        avatarUrl: DEFAULT_MEMBER_AVATAR,
+        avatarUrl: getMemberAvatar('102240308'),
         departmentName: 'Ban thành viên'
       },
       {
@@ -221,7 +260,7 @@ export const ALBUM_DATA: DepartmentGroup[] = [
         position: 'Ban Thành viên',
         faculty: 'Khoa Xây dựng',
         studentId: '110250035',
-        avatarUrl: DEFAULT_MEMBER_AVATAR,
+        avatarUrl: getMemberAvatar('110250035'),
         departmentName: 'Ban thành viên'
       },
       {
@@ -230,7 +269,7 @@ export const ALBUM_DATA: DepartmentGroup[] = [
         position: 'Ban Thành viên',
         faculty: 'Khoa Công nghệ Thông tin',
         studentId: '123260202',
-        avatarUrl: DEFAULT_MEMBER_AVATAR,
+        avatarUrl: getMemberAvatar('123260202'),
         departmentName: 'Ban thành viên'
       },
       {
@@ -239,7 +278,7 @@ export const ALBUM_DATA: DepartmentGroup[] = [
         position: 'Ban Thành viên',
         faculty: 'Khoa Cơ khí',
         studentId: '101240005',
-        avatarUrl: DEFAULT_MEMBER_AVATAR,
+        avatarUrl: getMemberAvatar('101240005'),
         departmentName: 'Ban thành viên'
       },
       {
@@ -248,7 +287,7 @@ export const ALBUM_DATA: DepartmentGroup[] = [
         position: 'Ban Thành viên',
         faculty: 'Khoa Công nghệ Thông tin',
         studentId: '102250216',
-        avatarUrl: DEFAULT_MEMBER_AVATAR,
+        avatarUrl: getMemberAvatar('102250216'),
         departmentName: 'Ban thành viên'
       },
       {
@@ -257,7 +296,7 @@ export const ALBUM_DATA: DepartmentGroup[] = [
         position: 'Ban Thành viên',
         faculty: 'Khoa Quản lý Dự án',
         studentId: '118260013',
-        avatarUrl: DEFAULT_MEMBER_AVATAR,
+        avatarUrl: getMemberAvatar('118260013'),
         departmentName: 'Ban thành viên'
       },
       {
@@ -266,7 +305,7 @@ export const ALBUM_DATA: DepartmentGroup[] = [
         position: 'Ban Thành viên',
         faculty: 'Khoa Công nghệ Thông tin',
         studentId: '102230313',
-        avatarUrl: DEFAULT_MEMBER_AVATAR,
+        avatarUrl: getMemberAvatar('102230313'),
         departmentName: 'Ban thành viên'
       },
       {
@@ -275,7 +314,7 @@ export const ALBUM_DATA: DepartmentGroup[] = [
         position: 'Ban Thành viên',
         faculty: 'Khoa Cơ khí',
         studentId: '101250111',
-        avatarUrl: DEFAULT_MEMBER_AVATAR,
+        avatarUrl: getMemberAvatar('101250111'),
         departmentName: 'Ban thành viên'
       },
       {
@@ -284,7 +323,7 @@ export const ALBUM_DATA: DepartmentGroup[] = [
         position: 'Ban Thành viên',
         faculty: 'Khoa Điện tử - Viễn thông',
         studentId: '123250056',
-        avatarUrl: DEFAULT_MEMBER_AVATAR,
+        avatarUrl: getMemberAvatar('123250056'),
         departmentName: 'Ban thành viên'
       },
       {
@@ -293,7 +332,7 @@ export const ALBUM_DATA: DepartmentGroup[] = [
         position: 'Ban Thành viên',
         faculty: 'Khoa Công nghệ Thông tin',
         studentId: '102230094',
-        avatarUrl: DEFAULT_MEMBER_AVATAR,
+        avatarUrl: getMemberAvatar('102230094'),
         departmentName: 'Ban thành viên'
       },
       {
@@ -302,7 +341,7 @@ export const ALBUM_DATA: DepartmentGroup[] = [
         position: 'Ban Thành viên',
         faculty: 'Khoa Hóa, MT & KHSS',
         studentId: '107250108',
-        avatarUrl: DEFAULT_MEMBER_AVATAR,
+        avatarUrl: getMemberAvatar('107250108'),
         departmentName: 'Ban thành viên'
       },
       {
@@ -311,7 +350,7 @@ export const ALBUM_DATA: DepartmentGroup[] = [
         position: 'Ban Thành viên',
         faculty: 'Khoa Điện tử - Viễn thông',
         studentId: '102250369',
-        avatarUrl: DEFAULT_MEMBER_AVATAR,
+        avatarUrl: getMemberAvatar('102250369'),
         departmentName: 'Ban thành viên'
       },
       {
@@ -320,7 +359,7 @@ export const ALBUM_DATA: DepartmentGroup[] = [
         position: 'Ban Thành viên',
         faculty: 'Khoa Điện tử - Viễn thông',
         studentId: '123250130',
-        avatarUrl: DEFAULT_MEMBER_AVATAR,
+        avatarUrl: getMemberAvatar('123250130'),
         departmentName: 'Ban thành viên'
       },
       {
@@ -329,7 +368,7 @@ export const ALBUM_DATA: DepartmentGroup[] = [
         position: 'Ban Thành viên',
         faculty: 'Khoa Điện',
         studentId: '105250318',
-        avatarUrl: DEFAULT_MEMBER_AVATAR,
+        avatarUrl: getMemberAvatar('105250318'),
         departmentName: 'Ban thành viên'
       }
     ]
@@ -339,6 +378,9 @@ export const ALBUM_DATA: DepartmentGroup[] = [
 export const AboutMemberAlbumSection: React.FC = () => {
   const [selectedDeptId, setSelectedDeptId] = useState<'bcn' | 'bdh' | 'btv'>('bcn');
   const [searchQuery, setSearchQuery] = useState('');
+
+  // Dynamic Real-time Avatar Registry (scanned automatically from /api/album/avatars)
+  const [avatarRegistry, setAvatarRegistry] = useState<Record<string, string>>(KNOWN_AVATARS);
 
   // Lightbox Modal State
   const [lightboxData, setLightboxData] = useState<{
@@ -354,6 +396,47 @@ export const AboutMemberAlbumSection: React.FC = () => {
     alt: ''
   });
 
+  // Automatically fetch newly uploaded member photos from /api/album/avatars
+  React.useEffect(() => {
+    let isMounted = true;
+
+    const fetchLiveAvatars = async () => {
+      try {
+        const res = await fetch('/api/album/avatars');
+        if (res.ok) {
+          const data = await res.json();
+          if (isMounted && data.avatars && Object.keys(data.avatars).length > 0) {
+            setAvatarRegistry((prev) => ({ ...prev, ...data.avatars }));
+          }
+        }
+      } catch {
+        // Fallback gracefully to pre-mapped KNOWN_AVATARS / DEFAULT_MEMBER_AVATAR
+      }
+    };
+
+    fetchLiveAvatars();
+
+    // Re-fetch automatically on window focus (e.g. user drags a new photo into public/imageAVT and clicks back to browser)
+    const handleFocus = () => {
+      fetchLiveAvatars();
+    };
+    window.addEventListener('focus', handleFocus);
+
+    return () => {
+      isMounted = false;
+      window.removeEventListener('focus', handleFocus);
+    };
+  }, []);
+
+  const getActiveAvatar = (studentId: string): string => {
+    return (
+      VITE_DETECTED_AVATARS[studentId] ||
+      avatarRegistry[studentId] ||
+      KNOWN_AVATARS[studentId] ||
+      `/imageAVT/${studentId}.jpg`
+    );
+  };
+
   const totalMembersCount = ALBUM_DATA.reduce((acc, d) => acc + d.members.length, 0);
   const activeDept = ALBUM_DATA.find((d) => d.id === selectedDeptId) || ALBUM_DATA[0];
 
@@ -368,9 +451,10 @@ export const AboutMemberAlbumSection: React.FC = () => {
   });
 
   const openMemberLightbox = (member: MemberItem) => {
+    const activePhoto = getActiveAvatar(member.studentId);
     setLightboxData({
       isOpen: true,
-      src: member.avatarUrl,
+      src: activePhoto,
       alt: member.fullName,
       title: member.fullName,
       subtitle: `${member.departmentName} • ${member.faculty}`,
@@ -385,6 +469,13 @@ export const AboutMemberAlbumSection: React.FC = () => {
         {/* Ambient Glows */}
         <div className="absolute top-0 right-0 w-80 h-80 bg-radial from-white/15 to-transparent blur-2xl pointer-events-none" />
         <div className="absolute -bottom-20 -left-20 w-80 h-80 bg-radial from-[#6B9DFF]/20 to-transparent blur-3xl pointer-events-none" />
+
+        {/* Top Right Book Icon matching reference UI */}
+        <div className="absolute top-6 right-6 sm:top-8 sm:right-8 z-20">
+          <div className="p-2.5 rounded-2xl bg-white/10 border border-white/20 text-white/80 backdrop-blur-md hover:bg-white/20 transition-colors">
+            <BookOpen className="w-5 h-5 text-white/90" />
+          </div>
+        </div>
 
         <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-8">
           {/* Left Text Block */}
@@ -414,7 +505,7 @@ export const AboutMemberAlbumSection: React.FC = () => {
           </div>
 
           {/* Right Stat Chips */}
-          <div className="flex items-center gap-3 sm:gap-4 shrink-0">
+          <div className="flex items-center gap-3 sm:gap-4 shrink-0 lg:mt-6">
             {/* Total Members */}
             <div className="p-4 sm:p-5 rounded-2xl bg-white/10 border border-white/20 backdrop-blur-md text-center min-w-[110px] sm:min-w-[130px] space-y-1">
               <div className="flex justify-center mb-1">
@@ -518,6 +609,11 @@ export const AboutMemberAlbumSection: React.FC = () => {
           <h4 className="text-2xl sm:text-3xl font-extrabold text-[#10182D]">
             {activeDept.name}
           </h4>
+          {activeDept.headline && (
+            <p className="text-xs sm:text-sm font-semibold text-slate-700">
+              {activeDept.headline}
+            </p>
+          )}
           <p className="text-xs sm:text-sm text-[#475467] max-w-3xl leading-relaxed">
             {activeDept.description}
           </p>
@@ -538,12 +634,15 @@ export const AboutMemberAlbumSection: React.FC = () => {
                   title="Bấm để xem ảnh chi tiết"
                 >
                   <img
-                    src={member.avatarUrl}
+                    src={getActiveAvatar(member.studentId)}
                     alt={member.fullName}
                     loading="lazy"
                     className="w-full h-full object-cover object-top group-hover/img:scale-105 transition-transform duration-500"
                     onError={(e) => {
-                      (e.target as HTMLImageElement).src = DEFAULT_MEMBER_AVATAR;
+                      const img = e.target as HTMLImageElement;
+                      if (!img.src.includes('default.jpg') && !img.src.includes('2aOboRDJDH6RgX8HEcRdWxaumJGo2n0EG1RnkbvU.jpg')) {
+                        img.src = DEFAULT_MEMBER_AVATAR;
+                      }
                     }}
                   />
 

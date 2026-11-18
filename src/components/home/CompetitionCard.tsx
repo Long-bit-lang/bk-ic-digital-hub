@@ -35,7 +35,7 @@ export const CompetitionCard: React.FC<CompetitionCardProps> = ({ item }) => {
   const statusInfo = STATUS_CONFIG[item.status] || STATUS_CONFIG['upcoming'];
 
   return (
-    <article className="h-full flex flex-col rounded-3xl border border-slate-200/90 bg-white hover:border-[#1749B5]/40 hover:shadow-xl hover:shadow-blue-950/5 transition-all duration-300 group overflow-hidden">
+    <article className="h-full flex flex-col rounded-3xl border border-slate-200/90 bg-white hover:border-[#38BDF8] hover:-translate-y-1.5 hover:shadow-[0_20px_45px_-12px_rgba(56,189,248,0.22)] transition-all duration-300 ease-out group overflow-hidden">
       {/* 16:9 Aspect Ratio Image Container with Status Badge */}
       <div className="relative aspect-video w-full overflow-hidden bg-slate-100">
         {!imageError ? (

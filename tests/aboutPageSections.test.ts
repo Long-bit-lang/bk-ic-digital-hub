@@ -28,7 +28,7 @@ async function runTests() {
   assert.ok(AboutCoreValuesSection, 'AboutCoreValuesSection must be exported');
   console.log('[PASS] Section 05: AboutCoreValuesSection loaded successfully');
 
-  const { AboutMemberAlbumSection, ALBUM_DATA, DEFAULT_MEMBER_AVATAR } = await import('../src/components/about/AboutMemberAlbumSection');
+  const { AboutMemberAlbumSection, ALBUM_DATA, KNOWN_AVATARS, DEFAULT_MEMBER_AVATAR } = await import('../src/components/about/AboutMemberAlbumSection');
   assert.ok(AboutMemberAlbumSection, 'AboutMemberAlbumSection must be exported');
   console.log('[PASS] Section 06: AboutMemberAlbumSection loaded successfully');
 
@@ -59,17 +59,21 @@ async function runTests() {
   assert.strictEqual(hongNgan.studentId, '121240093');
   console.log('[PASS] Verified: Lê Hồng Ngân is placed in Ban Thành viên');
 
-  // Verify all members have active avatar in /imageAVT
+  // Verify member avatars
   const totalCount = bcn.members.length + bdh.members.length + btv.members.length;
   assert.strictEqual(totalCount, 30, 'Total members across all departments must be 30');
   
   const allMembers = [...bcn.members, ...bdh.members, ...btv.members];
   for (const m of allMembers) {
-    assert.strictEqual(m.avatarUrl, DEFAULT_MEMBER_AVATAR, `Member ${m.fullName} must have default avatar`);
+    if (KNOWN_AVATARS[m.studentId]) {
+      assert.ok(m.avatarUrl.includes(m.studentId), `Member ${m.fullName} must have their individual photo`);
+    } else {
+      assert.ok(m.avatarUrl, `Member ${m.fullName} must have an avatar URL`);
+    }
     assert.ok(m.studentId, `Member ${m.fullName} must have studentId`);
     assert.ok(m.faculty, `Member ${m.fullName} must have faculty`);
   }
-  console.log('[PASS] Verified: All 30 members have default avatar in /imageAVT/2aOboRDJDH6RgX8HEcRdWxaumJGo2n0EG1RnkbvU.jpg and valid MSSV');
+  console.log('[PASS] Verified: All members have correctly mapped avatar URLs and valid metadata');
 
   // Test AboutPage itself
   const { AboutPage } = await import('../src/pages/AboutPage');

@@ -67,6 +67,7 @@ import { AdminSettingsPage } from './pages/admin/AdminSettingsPage';
 import { useApp } from './context/AppContext';
 import { ForceChangePasswordModal } from './components/auth/ForceChangePasswordModal';
 import { ErrorBoundary } from './components/common/ErrorBoundary';
+import { ScrollToTop } from './components/common/ScrollToTop';
 
 function AppRouter() {
   const { currentUser } = useApp();
@@ -169,6 +170,7 @@ export function App() {
     <ErrorBoundary>
       <AppProvider>
         <BrowserRouter>
+          <ScrollToTop />
           <AppRouter />
         </BrowserRouter>
       </AppProvider>

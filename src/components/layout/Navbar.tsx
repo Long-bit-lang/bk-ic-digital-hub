@@ -29,25 +29,16 @@ export const Navbar: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  // Scroll detection with requestAnimationFrame & passive listener for 60fps performance
+  // Immediate scroll detection with zero lag & minimal threshold
   useEffect(() => {
-    let ticking = false;
-
-    const updateScroll = () => {
-      // Threshold 45-50px between Top State and Scrolled State
-      setScrolled(window.scrollY > 48);
-      ticking = false;
-    };
-
     const handleScroll = () => {
-      if (!ticking) {
-        window.requestAnimationFrame(updateScroll);
-        ticking = true;
-      }
+      // Snappy threshold at 14px: triggers immediately on user's first scroll action
+      const isScrolled = window.scrollY > 14;
+      setScrolled((prev) => (prev !== isScrolled ? isScrolled : prev));
     };
 
     // Initial check on mount
-    updateScroll();
+    handleScroll();
 
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
@@ -116,7 +107,7 @@ export const Navbar: React.FC = () => {
           - Top State: floating with padding-top pt-3 sm:pt-4
           - Scrolled State: full-bleed pt-0 pb-0 */}
       <header
-        className={`sticky top-0 z-50 w-full pointer-events-none transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none ${
+        className={`sticky top-0 z-50 w-full pointer-events-none transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:transition-none ${
           scrolled ? 'pt-0 pb-0' : 'pt-3 sm:pt-4 pb-2'
         }`}
       >
@@ -125,7 +116,7 @@ export const Navbar: React.FC = () => {
             - Scrolled State: 100vw full-width edge-to-edge bar (w-full rounded-[0px])
             - Reverse animation: Smoothly shrinks back from 100% to 76% and morphs from flat to capsule pill */}
         <div
-          className={`mx-auto pointer-events-auto flex h-16 items-center transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none ${
+          className={`mx-auto pointer-events-auto flex h-16 items-center transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:transition-none will-change-[width,border-radius,padding] ${
             scrolled
               ? 'w-full rounded-[0px] border border-b-[#E2E6EE] border-t-transparent border-x-transparent bg-white/95 backdrop-blur-xl shadow-xs px-6 sm:px-10 lg:px-14'
               : 'w-[92%] sm:w-[86%] lg:w-[76%] rounded-[32px] bg-white/90 backdrop-blur-xl border border-slate-200/80 shadow-md shadow-blue-950/5 px-6 sm:px-8 lg:px-10'

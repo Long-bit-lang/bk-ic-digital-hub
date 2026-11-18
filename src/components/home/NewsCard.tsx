@@ -71,7 +71,7 @@ export const NewsCard: React.FC<NewsCardProps> = ({
           top: `calc(10px + ${24 * index}px)`,
           transformOrigin: 'top center'
         }}
-        className={`w-full rounded-[36px] bg-white/95 backdrop-blur-xl p-6 sm:p-8 md:p-10 shadow-[0_20px_50px_rgba(0,0,0,0.08)] border border-slate-200/90 overflow-hidden relative will-change-transform transition-all duration-300 ${
+        className={`group w-full rounded-[36px] bg-white/95 backdrop-blur-xl p-6 sm:p-8 md:p-10 shadow-[0_20px_50px_rgba(0,0,0,0.08)] border border-slate-200/90 hover:border-[#38BDF8]/80 hover:shadow-[0_24px_55px_-12px_rgba(56,189,248,0.22)] overflow-hidden relative will-change-transform transition-all duration-300 ease-out ${
           index > 0
             ? 'shadow-[0_-12px_28px_-6px_rgba(15,23,42,0.12),0_20px_50px_rgba(0,0,0,0.08)]'
             : ''

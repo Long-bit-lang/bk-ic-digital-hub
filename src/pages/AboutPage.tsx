@@ -13,7 +13,7 @@ import { AboutMemberAlbumSection } from '../components/about/AboutMemberAlbumSec
 export const AboutPage: React.FC = () => {
   const location = useLocation();
 
-  // Support direct hash navigation like /about#album or /about#story
+  // Support direct hash navigation like /about#album or scroll directly to top
   useEffect(() => {
     if (location.hash) {
       const id = location.hash.replace('#', '');
@@ -23,8 +23,10 @@ export const AboutPage: React.FC = () => {
           el.scrollIntoView({ behavior: 'smooth' });
         }, 100);
       }
+    } else {
+      window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
     }
-  }, [location.hash]);
+  }, [location.hash, location.pathname]);
 
   return (
     <div className="min-h-screen bg-transparent text-[#10182D] py-8 sm:py-12 px-4 sm:px-6 lg:px-8">
