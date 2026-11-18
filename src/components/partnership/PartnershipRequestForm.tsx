@@ -46,7 +46,7 @@ export const PartnershipRequestForm: React.FC<PartnershipRequestFormProps> = ({ 
     position: '',
     email: '',
     phone: '',
-    partnershipType: initialType || 'sponsor',
+    partnershipType: initialType || 'financial_sponsor',
     proposalContent: '',
     attachmentUrl: '',
     hp_website: ''
@@ -195,7 +195,7 @@ export const PartnershipRequestForm: React.FC<PartnershipRequestFormProps> = ({ 
       position: '',
       email: '',
       phone: '',
-      partnershipType: 'sponsor',
+      partnershipType: 'financial_sponsor',
       proposalContent: '',
       attachmentUrl: '',
       hp_website: ''

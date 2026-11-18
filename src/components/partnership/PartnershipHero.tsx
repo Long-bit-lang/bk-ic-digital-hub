@@ -1,6 +1,6 @@
 // BK-IC Digital Hub — Partnership Hero Section
 import React from 'react';
-import { ArrowRight, Sparkles, Building2, ShieldCheck, FileText, CheckCircle2 } from 'lucide-react';
+import { ArrowRight, Sparkles, Building2, ShieldCheck, CheckCircle2, Users } from 'lucide-react';
 
 interface PartnershipHeroProps {
   onRequestClick: () => void;
@@ -24,21 +24,21 @@ export const PartnershipHero: React.FC<PartnershipHeroProps> = ({
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-sky-50 border border-sky-200/80 shadow-2xs">
               <span className="w-2 h-2 rounded-full bg-[#0284C7] animate-pulse" />
               <span className="text-xs font-bold tracking-widest text-[#0284C7] uppercase">
-                PARTNER WITH BK-IC
+                CỔNG KẾT NỐI HỢP TÁC • BK-IC DUT
               </span>
             </div>
 
             {/* Main Heading */}
             <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-[#10182D] tracking-tight leading-[1.15]">
-              Cùng BK-IC kiến tạo{' '}
+              Cầu nối Đổi mới Sáng tạo &amp;{' '}
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#0284C7] via-[#0284C7] to-[#38BDF8]">
-                hệ sinh thái đổi mới sáng tạo
+                Ươm mầm Khởi nghiệp Sinh viên Bách khoa
               </span>
             </h1>
 
             {/* Subheading */}
-            <p className="text-base sm:text-lg text-slate-600 leading-relaxed max-w-2xl">
-              Kết nối nguồn lực doanh nghiệp, chuyên gia và nhà trường với tinh thần sáng tạo của sinh viên Bách khoa Đà Nẵng, cùng phát triển những ý tưởng thành giá trị thực tiễn.
+            <p className="text-base sm:text-lg text-slate-600 leading-relaxed max-w-2xl font-normal">
+              Câu lạc bộ Khởi nghiệp và Đổi mới Sáng tạo (BK-IC) trực thuộc Trường Đại học Bách khoa – Đại học Đà Nẵng đóng vai trò là cầu nối gắn kết giữa doanh nghiệp, chuyên gia, giảng viên và cộng đồng sinh viên; cùng nhau thúc đẩy tinh thần sáng tạo, hỗ trợ phát triển ý tưởng công nghệ và tạo điều kiện để đối tác tiếp cận nguồn nhân lực trẻ giàu tiềm năng.
             </p>
 
             {/* CTAs */}
@@ -57,23 +57,23 @@ export const PartnershipHero: React.FC<PartnershipHeroProps> = ({
                 onClick={onExploreClick}
                 className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl border border-slate-200 bg-white/80 hover:bg-white text-slate-700 text-sm font-semibold hover:border-sky-300 hover:text-[#0284C7] shadow-2xs hover:shadow-sm transition-all cursor-pointer"
               >
-                <span>Khám phá cơ hội hợp tác</span>
+                <span>Khám phá các hình thức hợp tác</span>
               </button>
             </div>
 
             {/* Trust Highlights */}
-            <div className="pt-4 border-t border-slate-200/60 grid grid-cols-2 sm:grid-cols-3 gap-4 text-xs text-slate-500">
+            <div className="pt-4 border-t border-slate-200/60 grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs text-slate-500">
               <div className="flex items-center gap-2">
                 <ShieldCheck className="h-4 w-4 text-[#0284C7] shrink-0" />
-                <span>Trực thuộc Đoàn – Hội SV ĐHBK</span>
+                <span>Trực thuộc Trường ĐH Bách khoa – ĐHĐN</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Users className="h-4 w-4 text-[#0284C7] shrink-0" />
+                <span>Tiếp cận nhân lực trẻ Bách khoa</span>
               </div>
               <div className="flex items-center gap-2">
                 <CheckCircle2 className="h-4 w-4 text-[#0284C7] shrink-0" />
-                <span>Quy trình minh bạch, bảo mật</span>
-              </div>
-              <div className="flex items-center gap-2 col-span-2 sm:col-span-1">
-                <Building2 className="h-4 w-4 text-[#0284C7] shrink-0" />
-                <span>Mạng lưới đối tác uy tín</span>
+                <span>Quy trình phối hợp minh bạch, rõ ràng</span>
               </div>
             </div>
           </div>
@@ -88,7 +88,7 @@ export const PartnershipHero: React.FC<PartnershipHeroProps> = ({
               <div className="relative rounded-2xl overflow-hidden border border-slate-200/80 bg-white shadow-xl shadow-slate-200/50">
                 <img
                   src="/images/bkic/bkshark_auditorium.jpg"
-                  alt="Hội nghị kết nối BK-IC với các chuyên gia và đối tác"
+                  alt="Không gian kết nối BK-IC với các chuyên gia, diễn giả và sinh viên"
                   className="w-full h-72 sm:h-84 object-cover object-center transform hover:scale-105 transition-transform duration-700"
                   loading="eager"
                 />
@@ -99,7 +99,7 @@ export const PartnershipHero: React.FC<PartnershipHeroProps> = ({
                 {/* Floating Tag */}
                 <div className="absolute top-4 left-4 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/90 backdrop-blur-md border border-white/50 text-[11px] font-bold text-[#075985] shadow-sm">
                   <Sparkles className="h-3.5 w-3.5 text-[#0284C7]" />
-                  <span>Cầu nối Học thuật &amp; Doanh nghiệp</span>
+                  <span>Cầu nối Học thuật &amp; Thực tiễn</span>
                 </div>
 
                 {/* Bottom Caption */}
@@ -108,7 +108,7 @@ export const PartnershipHero: React.FC<PartnershipHeroProps> = ({
                     Hệ sinh thái Bách khoa Đà Nẵng
                   </p>
                   <p className="text-sm font-bold text-white leading-snug mt-0.5">
-                    Hơn 30+ cố vấn chuyên môn, vườn ươm khởi nghiệp và doanh nghiệp đồng hành cùng BK-IC
+                    Không gian gặp gỡ, chia sẻ tri thức và bồi dưỡng thế hệ kỹ sư khởi nghiệp tương lai
                   </p>
                 </div>
               </div>
@@ -119,4 +119,3 @@ export const PartnershipHero: React.FC<PartnershipHeroProps> = ({
     </section>
   );
 };
-

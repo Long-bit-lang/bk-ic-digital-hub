@@ -5,24 +5,24 @@ import { SectionHeading } from '../editorial/SectionHeading';
 
 const MISSION_PILLARS = [
   {
-    icon: Lightbulb,
-    title: 'Khơi dậy tinh thần sáng tạo',
-    desc: 'Xây dựng môi trường khuyến khích sinh viên chủ động tư duy, khám phá và đề xuất những ý tưởng mới.'
-  },
-  {
-    icon: TrendingUp,
-    title: 'Phát triển năng lực',
-    desc: 'Tạo cơ hội để sinh viên tiếp cận kiến thức, rèn luyện kỹ năng và tích lũy kinh nghiệm thông qua các hoạt động thực tế.'
-  },
-  {
     icon: Users,
-    title: 'Kết nối nguồn lực',
-    desc: 'Thúc đẩy sự kết nối giữa sinh viên, giảng viên, cựu sinh viên, chuyên gia và doanh nghiệp.'
+    title: 'Kết nối (Connect)',
+    desc: 'Xây dựng mạng lưới liên kết giữa sinh viên, giảng viên, chuyên gia, cựu sinh viên và doanh nghiệp.'
   },
   {
     icon: Rocket,
-    title: 'Thúc đẩy hiện thực hóa ý tưởng',
-    desc: 'Khuyến khích phát triển dự án, thử nghiệm giải pháp và ứng dụng tri thức vào thực tiễn.'
+    title: 'Ươm tạo (Incubate)',
+    desc: 'Hỗ trợ phát triển các ý tưởng sáng tạo và dự án khởi nghiệp công nghệ tiềm năng.'
+  },
+  {
+    icon: TrendingUp,
+    title: 'Phát triển (Develop)',
+    desc: 'Nâng cao năng lực nghiên cứu, tư duy đổi mới và kỹ năng khởi nghiệp cho sinh viên.'
+  },
+  {
+    icon: Sparkles,
+    title: 'Lan tỏa (Impact)',
+    desc: 'Thúc đẩy các giải pháp công nghệ có tính ứng dụng, tạo ra giá trị bền vững cho cộng đồng.'
   }
 ];
 
@@ -55,17 +55,25 @@ export const AboutVisionMissionSection: React.FC = () => {
             {/* Display Headline */}
             <div className="space-y-2">
               <h3 className="text-2xl sm:text-3xl font-extrabold text-[#10182D] tracking-tight">
-                Tầm nhìn Dài hạn
+                Tầm nhìn – Vision
               </h3>
               <p className="text-xs font-bold uppercase tracking-wider text-[#1749B5]">
-                Hệ sinh thái Đổi mới sáng tạo học đường
+                Hệ sinh thái Đổi mới sáng tạo &amp; Khởi nghiệp học đường
               </p>
             </div>
 
             {/* Vision Statement */}
-            <p className="text-sm sm:text-base text-[#344054] leading-relaxed font-normal">
-              Hướng đến trở thành một câu lạc bộ sinh viên năng động, có vai trò kết nối và thúc đẩy các hoạt động khởi nghiệp, đổi mới sáng tạo trong môi trường đại học; góp phần hình thành hệ sinh thái nơi ý tưởng được nuôi dưỡng, phát triển và chuyển hóa thành những giá trị thực tiễn.
-            </p>
+            <div className="space-y-3 text-sm sm:text-base text-[#344054] leading-relaxed font-normal">
+              <p>
+                Trở thành một hệ sinh thái khởi nghiệp và đổi mới sáng tạo năng động trong môi trường đại học, là cầu nối giữa tri thức học thuật và thực tiễn doanh nghiệp.
+              </p>
+              <p>
+                BK-IC hướng đến xây dựng một cộng đồng nơi các ý tưởng sáng tạo được nuôi dưỡng, các nghiên cứu khoa học được phát triển thành giải pháp công nghệ và những dự án tiềm năng có cơ hội vươn xa.
+              </p>
+              <p className="text-xs sm:text-sm text-slate-500 pt-2 border-t border-blue-100/60">
+                Đồng thời, CLB mong muốn góp phần nâng cao năng lực đổi mới sáng tạo, thúc đẩy tinh thần khởi nghiệp và khẳng định vai trò của sinh viên Bách khoa trong việc kiến tạo những giá trị mới cho xã hội.
+              </p>
+            </div>
           </div>
 
           {/* Bottom Characteristic Badges */}
@@ -75,13 +83,13 @@ export const AboutVisionMissionSection: React.FC = () => {
             </span>
             <div className="flex flex-wrap gap-2">
               <span className="text-xs font-semibold px-2.5 py-1 rounded-lg bg-white border border-blue-200 text-[#1749B5]">
-                Sinh viên là trung tâm
+                Tri thức học thuật
               </span>
               <span className="text-xs font-semibold px-2.5 py-1 rounded-lg bg-white border border-blue-200 text-[#1749B5]">
-                Nuôi dưỡng ý tưởng
+                Thực tiễn doanh nghiệp
               </span>
               <span className="text-xs font-semibold px-2.5 py-1 rounded-lg bg-white border border-blue-200 text-[#1749B5]">
-                Chuyển hóa giá trị thực
+                Giá trị bền vững
               </span>
             </div>
           </div>
@@ -97,15 +105,20 @@ export const AboutVisionMissionSection: React.FC = () => {
               </div>
               <div>
                 <span className="text-xs font-mono font-bold tracking-widest text-indigo-600 block uppercase">
-                  SỨ MỆNH
+                  SỨ MỆNH – MISSION
                 </span>
                 <h3 className="text-xl sm:text-2xl font-extrabold text-[#10182D]">
-                  4 Trụ Cột Sứ Mệnh Cốt Lõi
+                  Kết nối nguồn lực – Đồng hành sáng tạo
                 </h3>
               </div>
             </div>
             <Sparkles className="h-5 w-5 text-indigo-400 hidden sm:block" />
           </div>
+
+          {/* Mission Lead */}
+          <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+            BK-IC mang sứ mệnh kết nối nguồn lực, khơi dậy tiềm năng và đồng hành cùng sinh viên trên hành trình nghiên cứu, sáng tạo và khởi nghiệp thông qua việc tích hợp đào tạo, nghiên cứu và ứng dụng thực tiễn:
+          </p>
 
           {/* 4 Pillars Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

@@ -68,7 +68,7 @@ export const PartnershipContact: React.FC<PartnershipContactProps> = ({ onReques
               rel="noreferrer"
               className="mt-3 text-xs sm:text-sm font-bold text-[#0284C7] hover:underline"
             >
-              facebook.com/bkic.dut
+              facebook.com/dut.bkic
             </a>
           </div>
 

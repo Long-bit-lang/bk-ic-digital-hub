@@ -1,5 +1,6 @@
 // BK-IC Image Lightbox Modal — High Resolution Visual Inspector
 import React, { useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { X, ZoomIn, ZoomOut, Download, ExternalLink, Sparkles } from 'lucide-react';
 
 export interface ImageLightboxModalProps {
@@ -49,12 +50,12 @@ export const ImageLightboxModal: React.FC<ImageLightboxModalProps> = ({
 
   if (!isOpen) return null;
 
-  return (
+  return createPortal(
     <div
       role="dialog"
       aria-modal="true"
       aria-label={title || alt || 'Chi tiết hình ảnh'}
-      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-slate-950/90 backdrop-blur-md transition-opacity duration-300 animate-in fade-in"
+      className="fixed inset-0 z-[9999] flex items-center justify-center p-3 sm:p-6 bg-slate-950/90 backdrop-blur-md transition-opacity duration-300 animate-in fade-in"
       onClick={onClose}
     >
       {/* Top Floating Actions Bar */}
@@ -138,7 +139,8 @@ export const ImageLightboxModal: React.FC<ImageLightboxModalProps> = ({
           </div>
         )}
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };
 

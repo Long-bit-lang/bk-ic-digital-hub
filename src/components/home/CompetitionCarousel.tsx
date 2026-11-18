@@ -21,13 +21,8 @@ export const CompetitionCarousel: React.FC<CompetitionCarouselProps> = ({ items 
   useEffect(() => {
     const updateVisibleCount = () => {
       const width = window.innerWidth;
-      if (width >= 1024) {
-        setVisibleCount(3);
-      } else if (width >= 768) {
-        setVisibleCount(2);
-      } else {
-        setVisibleCount(1);
-      }
+      const baseVisible = width >= 1024 ? 3 : width >= 768 ? 2 : 1;
+      setVisibleCount(Math.min(Math.max(1, items.length), baseVisible));
     };
 
     updateVisibleCount();
@@ -118,13 +113,15 @@ export const CompetitionCarousel: React.FC<CompetitionCarouselProps> = ({ items 
 
         {/* Overflow Hidden Track Container */}
         <div
-          className="overflow-hidden -mx-3 px-1 py-2"
+          className={`overflow-hidden -mx-3 px-1 py-2 ${items.length <= 2 ? 'max-w-4xl mx-auto' : ''}`}
           onTouchStart={handleTouchStart}
           onTouchMove={handleTouchMove}
           onTouchEnd={handleTouchEnd}
         >
           <div
-            className="flex transition-transform duration-500 ease-out will-change-transform"
+            className={`flex transition-transform duration-500 ease-out will-change-transform ${
+              items.length <= 2 ? 'justify-center' : ''
+            }`}
             style={{
               transform: `translateX(-${(currentIndex * 100) / visibleCount}%)`
             }}
@@ -132,7 +129,13 @@ export const CompetitionCarousel: React.FC<CompetitionCarouselProps> = ({ items 
             {items.map((item) => (
               <div
                 key={item.id}
-                className="px-3 shrink-0 w-full md:w-1/2 lg:w-1/3"
+                className={`px-3 shrink-0 ${
+                  items.length === 1
+                    ? 'w-full max-w-lg mx-auto'
+                    : items.length === 2
+                      ? 'w-full md:w-1/2'
+                      : 'w-full md:w-1/2 lg:w-1/3'
+                }`}
                 style={{ boxSizing: 'border-box' }}
               >
                 <CompetitionCard item={item} />

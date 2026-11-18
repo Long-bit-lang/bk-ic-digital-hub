@@ -1,6 +1,7 @@
 // BK-IC Partnership Request Modal Component
 // Connects to /api/partnerships/request for incubator, mentoring and corporate sponsorship
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { X, Handshake, CheckCircle2, AlertCircle, Loader2, Send } from 'lucide-react';
 import { api } from '../../services/api';
 
@@ -29,7 +30,34 @@ export const PartnershipRequestModal: React.FC<PartnershipRequestModalProps> = (
   const [success, setSuccess] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
+  // Synchronize partnershipType whenever defaultType or modal open state changes
+  useEffect(() => {
+    if (isOpen) {
+      setFormData((prev) => ({
+        ...prev,
+        partnershipType: defaultType || 'program_sponsor'
+      }));
+    }
+  }, [defaultType, isOpen]);
+
   if (!isOpen) return null;
+
+  const getCategoryTitle = (type: string) => {
+    switch (type) {
+      case 'program_sponsor':
+        return { badge: 'TÀI TRỢ CHƯƠNG TRÌNH & CUỘC THI', title: 'Đề xuất Tài trợ Chương trình & Cuộc thi' };
+      case 'expert_mentoring':
+        return { badge: 'CỐ VẤN CHUYÊN MÔN & DIỄN GIẢ', title: 'Đề xuất Cố vấn Chuyên môn & Diễn giả' };
+      case 'real_world_problem':
+        return { badge: 'ĐẶT HÀNG BÀI TOÁN R&D & CHUYỂN GIAO', title: 'Đề xuất Đặt hàng Bài toán R&D' };
+      case 'recruitment_internship':
+        return { badge: 'TUYỂN DỤNG & TIẾP NHẬN THỰC TẬP', title: 'Kết nối Tuyển dụng & Tiếp nhận Thực tập' };
+      default:
+        return { badge: 'KẾT NỐI & ĐỀ XUẤT HỢP TÁC', title: 'Đồng hành Phát triển cùng BK-IC' };
+    }
+  };
+
+  const headerInfo = getCategoryTitle(formData.partnershipType);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -85,8 +113,8 @@ export const PartnershipRequestModal: React.FC<PartnershipRequestModalProps> = (
     onClose();
   };
 
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-sm animate-in fade-in duration-200">
+  return createPortal(
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-sm animate-in fade-in duration-200">
       <div
         className="relative w-full max-w-lg rounded-3xl bg-white p-6 sm:p-8 shadow-2xl border border-slate-200/80 max-h-[90vh] overflow-y-auto"
         onClick={(e) => e.stopPropagation()}
@@ -135,10 +163,10 @@ export const PartnershipRequestModal: React.FC<PartnershipRequestModalProps> = (
             <div className="space-y-1">
               <div className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full text-[11px] font-bold bg-sky-50 text-[#0284C7] border border-sky-100 uppercase tracking-wide">
                 <Handshake className="h-3 w-3" />
-                <span>Kết nối & Đề xuất Hợp tác</span>
+                <span>{headerInfo.badge}</span>
               </div>
               <h3 className="text-lg sm:text-xl font-bold text-slate-900 leading-snug">
-                Đồng hành Phát triển cùng BK-IC
+                {headerInfo.title}
               </h3>
               <p className="text-xs text-slate-500">
                 Kết nối các nguồn lực doanh nghiệp, cố vấn kỹ thuật và đầu tư hạt giống với thế hệ sinh viên Bách khoa.
@@ -285,7 +313,8 @@ export const PartnershipRequestModal: React.FC<PartnershipRequestModalProps> = (
           </form>
         )}
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };
 

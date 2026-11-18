@@ -92,6 +92,7 @@ export interface DatabaseSchema {
   projects: InnovationProject[];
   events: ClubEvent[];
   articles: ProvenanceArticle[];
+  news?: any[];
   siteSettings: SiteSettings;
   workshopRegistrations?: any[];
   competitionRegistrations?: any[];
@@ -99,6 +100,90 @@ export interface DatabaseSchema {
 }
 
 // 3 Main Units of BK-IC (Structure)
+// Initial Homepage News Crawled from Official BK-IC Facebook Fanpage (Default status: draft)
+export const INITIAL_NEWS = [
+  {
+    id: 'news-01',
+    title: 'Chúc mừng thành viên BK-IC xuất sắc nhận học bổng Nitori',
+    description: 'BK-IC chúc mừng Nguyễn Hoàng Long – thành viên CLB nhận Học bổng Quốc tế Nitori. Đây là sự ghi nhận cho những nỗ lực học tập, thành tích và tinh thần cống hiến của thành viên.',
+    category: 'Thành tựu',
+    publishedAt: '04/11/2026',
+    image: '/images/bkic/news_nitori_scholarship.jpg',
+    slug: 'chuc-mung-thanh-vien-nhan-hoc-bong-nitori',
+    detailUrl: 'https://www.facebook.com/dut.bkic',
+    source: 'Facebook Fanpage BK-IC',
+    sourceUrl: 'https://www.facebook.com/dut.bkic',
+    readTime: '3 phút đọc',
+    status: 'draft',
+    verificationNotes: 'Cần BCN xác nhận quyền công khai thông tin cá nhân và hình ảnh.',
+    priority: 'high'
+  },
+  {
+    id: 'news-02',
+    title: 'Phát động cuộc thi Ý tưởng sáng tạo chuyển đổi số thanh niên Liên Chiểu 2026',
+    description: 'Ban Chấp hành Đoàn TNCS Hồ Chí Minh phường Liên Chiểu phối hợp cùng BK-IC phát động cuộc thi nhằm khuyến khích thanh niên đề xuất các giải pháp sáng tạo, ứng dụng công nghệ và giải quyết những vấn đề thực tiễn tại địa phương.',
+    category: 'Cuộc thi',
+    publishedAt: '26/09/2026',
+    image: '/images/bkic/news_digital_transformation_lienchieu.jpg',
+    slug: 'cuoc-thi-y-tuong-sang-tao-chuyen-doi-so-lien-chieu-2026',
+    detailUrl: 'https://www.facebook.com/dut.bkic',
+    source: 'Facebook Fanpage BK-IC',
+    sourceUrl: 'https://www.facebook.com/dut.bkic',
+    readTime: '3 phút đọc',
+    status: 'draft',
+    verificationNotes: 'Cần BCN xác nhận kết quả và tình trạng tổ chức sau khi cuộc thi kết thúc.',
+    priority: 'high'
+  },
+  {
+    id: 'news-03',
+    title: 'FIRST MEETING – Khởi động hành trình mới cùng BK-IC!',
+    description: 'Bài đăng giới thiệu buổi gặp mặt đầu tiên, mở đầu hành trình hoạt động mới của BK-IC.',
+    category: 'Hoạt động CLB',
+    publishedAt: '08/09/2026',
+    image: '/images/bkic/news_first_meeting.jpg',
+    slug: 'first-meeting-khoi-dong-hanh-trinh-moi',
+    detailUrl: 'https://www.facebook.com/dut.bkic',
+    source: 'Facebook Fanpage BK-IC',
+    sourceUrl: 'https://www.facebook.com/dut.bkic',
+    readTime: '2 phút đọc',
+    status: 'draft',
+    verificationNotes: 'Chưa đủ nội dung chi tiết. Cần bổ sung nội dung và hình ảnh gốc trước khi xuất bản.',
+    priority: 'low'
+  },
+  {
+    id: 'news-04',
+    title: 'BK SHARK 2026 chính thức mở đơn đăng ký',
+    description: 'Cuộc thi Khởi nghiệp trong sinh viên – BK SHARK 2026 do Trường Đại học Bách khoa – Đại học Đà Nẵng tổ chức, tạo môi trường để sinh viên phát triển ý tưởng, học hỏi từ chuyên gia và kết nối doanh nghiệp.',
+    category: 'Cuộc thi',
+    publishedAt: '15/04/2026',
+    image: '/images/bkic/news_bkshark_2026_launch.jpg',
+    slug: 'bk-shark-2026-chinh-thuc-mo-don-dang-ky',
+    detailUrl: 'https://www.facebook.com/dut.bkic',
+    source: 'Facebook Fanpage BK-IC',
+    sourceUrl: 'https://www.facebook.com/dut.bkic',
+    readTime: '4 phút đọc',
+    status: 'draft',
+    verificationNotes: 'Cần xác nhận vai trò chính thức của BK-IC trong cuộc thi và trạng thái hiện tại của chương trình.',
+    priority: 'high'
+  },
+  {
+    id: 'news-05',
+    title: 'Ra mắt Câu lạc bộ BK-IC: Kiến tạo bệ phóng cho thế hệ kỹ sư – doanh nhân tương lai',
+    description: 'BK-IC chính thức ra mắt, đánh dấu sự khởi đầu của một tổ chức hướng đến thúc đẩy tinh thần khởi nghiệp và đổi mới sáng tạo trong cộng đồng sinh viên.',
+    category: 'Tin tức CLB',
+    publishedAt: '06/04/2026',
+    image: '/images/bkic/news_bkic_launch_ceremony.jpg',
+    slug: 'ra-mat-cau-lac-bo-bk-ic',
+    detailUrl: 'https://www.facebook.com/dut.bkic',
+    source: 'Facebook Fanpage BK-IC',
+    sourceUrl: 'https://www.facebook.com/dut.bkic',
+    readTime: '3 phút đọc',
+    status: 'draft',
+    verificationNotes: 'Cần BCN xác nhận nội dung và cách diễn đạt chính thức về sự kiện ra mắt.',
+    priority: 'high'
+  }
+];
+
 export const INITIAL_UNITS: ClubUnit[] = [
   {
     id: 'BN',
@@ -279,6 +364,7 @@ class DatabaseManager {
     data.projects = Array.isArray(data.projects) ? data.projects : [];
     data.events = Array.isArray(data.events) ? data.events : [];
     data.articles = Array.isArray(data.articles) ? data.articles : [];
+    data.news = Array.isArray(data.news) && data.news.length > 0 ? data.news : [...INITIAL_NEWS];
     data.siteSettings = data.siteSettings || INITIAL_SITE_SETTINGS;
   }
 
@@ -519,6 +605,7 @@ class DatabaseManager {
       projects: [],
       events: [],
       articles: [],
+      news: [...INITIAL_NEWS],
       siteSettings: INITIAL_SITE_SETTINGS
     };
     this.save();

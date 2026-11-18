@@ -99,20 +99,27 @@ export const AdminPartnershipRequestsPage: React.FC = () => {
   // Helper for type labels
   const getTypeLabel = (type: string) => {
     switch (type) {
+      case 'financial_sponsor':
       case 'sponsor':
-        return { label: 'Tài trợ', color: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' };
+        return { label: 'Tài trợ tài chính', color: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' };
+      case 'in_kind_sponsor':
+        return { label: 'Tài trợ hiện vật', color: 'bg-amber-500/10 text-amber-400 border-amber-500/20' };
       case 'expert_mentoring':
-        return { label: 'Đồng hành chuyên môn', color: 'bg-blue-500/10 text-blue-400 border-blue-500/20' };
+        return { label: 'Cố vấn chuyên môn', color: 'bg-blue-500/10 text-blue-400 border-blue-500/20' };
+      case 'business_challenge':
       case 'problem_solving':
-        return { label: 'Đặt hàng bài toán', color: 'bg-purple-500/10 text-purple-400 border-purple-500/20' };
-      case 'media_coop':
-        return { label: 'Truyền thông', color: 'bg-sky-500/10 text-sky-400 border-sky-500/20' };
-      case 'academic_partner':
-        return { label: 'Học thuật / Nhà trường', color: 'bg-indigo-500/10 text-indigo-400 border-indigo-500/20' };
-      case 'recruitment_partner':
-        return { label: 'Tuyển dụng / Thực tập', color: 'bg-amber-500/10 text-amber-400 border-amber-500/20' };
+        return { label: 'Kết nối bài toán doanh nghiệp', color: 'bg-purple-500/10 text-purple-400 border-purple-500/20' };
+      case 'startup_project':
       case 'companion_project':
-        return { label: 'Dự án đồng hành', color: 'bg-cyan-500/10 text-cyan-400 border-cyan-500/20' };
+        return { label: 'Hợp tác dự án khởi nghiệp', color: 'bg-cyan-500/10 text-cyan-400 border-cyan-500/20' };
+      case 'media_cooperation':
+      case 'media_coop':
+        return { label: 'Hợp tác truyền thông', color: 'bg-sky-500/10 text-sky-400 border-sky-500/20' };
+      case 'academic_exchange':
+      case 'academic_partner':
+        return { label: 'Hợp tác học thuật', color: 'bg-indigo-500/10 text-indigo-400 border-indigo-500/20' };
+      case 'recruitment_partner':
+        return { label: 'Tuyển dụng / Thực tập', color: 'bg-teal-500/10 text-teal-400 border-teal-500/20' };
       case 'business_coop':
         return { label: 'Hợp tác doanh nghiệp', color: 'bg-teal-500/10 text-teal-400 border-teal-500/20' };
       default:
@@ -121,17 +128,20 @@ export const AdminPartnershipRequestsPage: React.FC = () => {
   };
 
   // Helper for status badge
-  const getStatusBadge = (status: PartnershipRequestStatus) => {
+  const getStatusBadge = (status: PartnershipRequestStatus | string) => {
     switch (status) {
       case 'received':
         return { label: 'Mới tiếp nhận', color: 'bg-sky-500/20 text-sky-300 border-sky-500/30' };
       case 'reviewing':
         return { label: 'Đang xem xét', color: 'bg-amber-500/20 text-amber-300 border-amber-500/30' };
       case 'contacted':
-        return { label: 'Đã liên hệ', color: 'bg-blue-500/20 text-blue-300 border-blue-500/30' };
+      case 'in_discussion':
+        return { label: 'Đang trao đổi', color: 'bg-blue-500/20 text-blue-300 border-blue-500/30' };
       case 'approved':
+      case 'accepted':
         return { label: 'Đã chấp thuận', color: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30' };
       case 'rejected':
+      case 'declined':
         return { label: 'Đã từ chối', color: 'bg-rose-500/20 text-rose-300 border-rose-500/30' };
       default:
         return { label: status, color: 'bg-slate-500/20 text-slate-300 border-slate-500/30' };

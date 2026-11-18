@@ -27,26 +27,29 @@ export const AboutHeroSection: React.FC = () => {
           {/* Main Title & Brand Tagline */}
           <div className="space-y-3">
             <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight text-[#10182D] leading-[1.12]">
-              Câu lạc bộ Khởi nghiệp và Đổi mới Sáng tạo
+              Bách Khoa Innovation Club – BK-IC
             </h1>
             <p className="text-lg sm:text-xl font-bold bg-gradient-to-r from-[#1749B5] via-[#245BFA] to-[#0EA5E9] bg-clip-text text-transparent">
-              Kết nối ý tưởng – Thúc đẩy sáng tạo – Kiến tạo giá trị.
+              Nơi ý tưởng được khơi nguồn, công nghệ được kiến tạo và tương lai được định hình.
             </p>
           </div>
 
           {/* Descriptive Content */}
           <div className="space-y-3.5 text-sm sm:text-base text-[#475467] leading-relaxed">
             <p>
-              Câu lạc bộ Khởi nghiệp và Đổi mới Sáng tạo (BK-IC) là tổ chức sinh viên trực thuộc{' '}
+              Câu lạc bộ Khởi nghiệp và Đổi mới Sáng tạo – Bách Khoa Innovation Club (BK-IC) trực thuộc{' '}
               <strong className="text-[#10182D] font-semibold">
                 Đoàn Thanh niên – Hội Sinh viên Trường Đại học Bách khoa, Đại học Đà Nẵng
               </strong>.
             </p>
             <p>
-              BK-IC hướng đến xây dựng một môi trường thúc đẩy tinh thần khởi nghiệp, tư duy đổi mới sáng tạo và khả năng ứng dụng tri thức vào thực tiễn. Thông qua các hoạt động học thuật, chương trình đào tạo, cuộc thi, dự án và hoạt động kết nối, câu lạc bộ tạo điều kiện để sinh viên khám phá tiềm năng, phát triển ý tưởng và từng bước hiện thực hóa những sáng kiến của mình.
+              Được thành lập với định hướng xây dựng một hệ sinh thái khởi nghiệp và đổi mới sáng tạo ngay trong môi trường đại học, BK-IC là nơi kết nối sinh viên, giảng viên, cựu sinh viên, chuyên gia và doanh nghiệp nhằm thúc đẩy các hoạt động nghiên cứu, sáng tạo và phát triển dự án khởi nghiệp.
             </p>
-            <p className="text-xs sm:text-sm text-slate-500 pt-1 border-t border-slate-200/60">
-              Không chỉ là nơi quy tụ những sinh viên có cùng đam mê, BK-IC còn hướng đến phát triển một hệ sinh thái đổi mới sáng tạo trong môi trường đại học, nơi sinh viên có cơ hội kết nối với giảng viên, cựu sinh viên, chuyên gia và doanh nghiệp để cùng chia sẻ tri thức, kinh nghiệm và nguồn lực.
+            <p>
+              Không chỉ là nơi nuôi dưỡng những ý tưởng mới, BK-IC còn hướng đến việc tạo dựng môi trường để sinh viên được học hỏi, thử nghiệm, phát triển năng lực và từng bước đưa những kết quả nghiên cứu khoa học vào ứng dụng thực tiễn.
+            </p>
+            <p className="text-sm sm:text-base font-semibold text-[#1749B5] pt-1 border-t border-slate-200/60">
+              BK-IC – Nơi ý tưởng được khơi nguồn, công nghệ được kiến tạo và tương lai được định hình.
             </p>
           </div>
         </div>

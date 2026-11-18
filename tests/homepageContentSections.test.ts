@@ -7,6 +7,7 @@ import {
   HOME_COMPETITIONS_DATA,
   HOME_ACTIVITIES_DATA,
   HOME_PARTNERS_DATA,
+  sortCompetitions,
   type NewsItem,
   type CompetitionItem,
   type ActivityItem,
@@ -61,7 +62,10 @@ sortedNews.forEach((news) => {
   assert.ok(news.id, 'News item must have an id');
   assert.ok(news.title, 'News item must have a title');
   assert.ok(news.description, 'News item must have description');
-  assert.ok(news.detailUrl.startsWith('/'), 'News item detailUrl must be an internal route starting with /');
+  assert.ok(
+    news.detailUrl.startsWith('/') || news.detailUrl.startsWith('https://'),
+    'News item detailUrl must be an internal route starting with / or valid official URL starting with https://'
+  );
   assert.ok(news.image.startsWith('/'), 'News item image path must start with /');
 });
 console.log('[PASS] Scenario 3: All news items have valid metadata, images, and valid internal routes');
@@ -71,8 +75,8 @@ console.log('[PASS] Scenario 3: All news items have valid metadata, images, and 
 // -----------------------------------------------------------------------------
 console.log('\n--- Testing Section 2: Cuộc thi (Competitions) ---');
 
-// Criteria 5, 6, 7: Carousel constraints & statuses
-assert.ok(HOME_COMPETITIONS_DATA.length >= 3, 'Competitions data has at least 3 items to fill desktop view');
+// Criteria 5, 6, 7: Carousel constraints, authentic fields & statuses
+assert.ok(HOME_COMPETITIONS_DATA.length >= 2, 'Competitions data contains authentic club competitions');
 console.log(`[PASS] Scenario 4: Competitions collection contains ${HOME_COMPETITIONS_DATA.length} items`);
 
 const validStatuses = ['upcoming', 'ongoing', 'completed'];
@@ -81,9 +85,22 @@ HOME_COMPETITIONS_DATA.forEach((comp) => {
   assert.ok(comp.statusLabel, 'Competition must have a human-readable status label');
   assert.ok(comp.startDate, 'Competition must specify startDate');
   assert.ok(comp.registrationDeadline, 'Competition must specify registrationDeadline');
+  assert.ok(comp.field, 'Competition must specify field (Lĩnh vực cuộc thi)');
   assert.ok(comp.detailUrl.startsWith('/'), 'Competition detailUrl must be a valid route');
 });
-console.log('[PASS] Scenario 5: All competitions have valid statuses, dates, and detail links');
+console.log('[PASS] Scenario 5: All competitions have valid fields, statuses, dates, and detail links');
+
+// Verify status sorting format: ongoing -> upcoming -> completed
+const testCompList: CompetitionItem[] = [
+  { ...HOME_COMPETITIONS_DATA[0], id: 'c-comp', status: 'completed' },
+  { ...HOME_COMPETITIONS_DATA[0], id: 'c-ong', status: 'ongoing' },
+  { ...HOME_COMPETITIONS_DATA[0], id: 'c-upc', status: 'upcoming' }
+];
+const sortedCompList = sortCompetitions(testCompList);
+assert.strictEqual(sortedCompList[0].status, 'ongoing', 'First must be ongoing');
+assert.strictEqual(sortedCompList[1].status, 'upcoming', 'Second must be upcoming');
+assert.strictEqual(sortedCompList[2].status, 'completed', 'Third must be completed');
+console.log('[PASS] Scenario 5b: Competitions are strictly sorted by format: ongoing -> upcoming -> completed');
 
 // Verify responsive visible count bounds
 const testWidths = [

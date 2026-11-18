@@ -411,10 +411,18 @@ cmsRouter.post('/partnerships/request', async (req, res) => {
     }
   }
 
-  // Canonical & Legacy Partnership Types
+  // 7 Official Canonical Partnership Types & Legacy Aliases
   const validTypes = [
-    'sponsor',
+    // 7 Official Canonical Types
+    'financial_sponsor',
+    'in_kind_sponsor',
     'expert_mentoring',
+    'business_challenge',
+    'startup_project',
+    'media_cooperation',
+    'academic_exchange',
+    // Legacy Aliases
+    'sponsor',
     'problem_solving',
     'media_coop',
     'academic_partner',
@@ -424,7 +432,7 @@ cmsRouter.post('/partnerships/request', async (req, res) => {
     'event_cohost',
     'other'
   ];
-  const normalizedType = validTypes.includes(partnershipType) ? partnershipType : 'business_coop';
+  const normalizedType = validTypes.includes(partnershipType) ? partnershipType : 'financial_sponsor';
 
   const store = db.get();
   store.partnershipRequests = store.partnershipRequests || [];
@@ -534,7 +542,7 @@ cmsRouter.patch('/partnerships/requests/:id', requireAuth, requireNormalSession,
   const { id } = req.params;
   const { status, notes, assignedTo } = req.body;
 
-  const validStatuses = ['received', 'reviewing', 'contacted', 'approved', 'rejected'];
+  const validStatuses = ['received', 'reviewing', 'contacted', 'in_discussion', 'approved', 'accepted', 'rejected', 'declined'];
   if (status && !validStatuses.includes(status)) {
     return res.status(400).json({
       success: false,
@@ -645,6 +653,161 @@ cmsRouter.post('/system/reload-db', requireAuth, requireNormalSession, requireAd
     success: true,
     message: 'Đã tải lại cơ sở dữ liệu từ đĩa thành công!'
   });
+});
+
+// =============================================================================
+// CMS NEWS MANAGEMENT (HOMEPAGE NEWS & FANPAGE CRAWL ARTICLES)
+// =============================================================================
+
+// GET /api/news (Public / Admin: retrieve news)
+cmsRouter.get('/news', (req, res) => {
+  const store = db.get();
+  const allNews = store.news || [];
+  const { status, priority } = req.query;
+  let result = [...allNews];
+  if (status && typeof status === 'string' && status !== 'all') {
+    result = result.filter((n: any) => n.status === status);
+  }
+  if (priority && typeof priority === 'string' && priority !== 'all') {
+    result = result.filter((n: any) => n.priority === priority);
+  }
+  res.json({ success: true, news: result });
+});
+
+// GET /api/news/:id (Public / Admin)
+cmsRouter.get('/news/:id', (req, res) => {
+  const store = db.get();
+  const allNews = store.news || [];
+  const item = allNews.find((n: any) => n.id === req.params.id);
+  if (!item) {
+    return res.status(404).json({ success: false, message: 'Không tìm thấy bài viết' });
+  }
+  res.json({ success: true, item });
+});
+
+// POST /api/news (Admin only: create news item)
+cmsRouter.post('/news', requireAuth, requireNormalSession, requireAdmin, (req, res) => {
+  const actor = req.user!;
+  const store = db.get();
+  store.news = store.news || [];
+
+  const {
+    title,
+    description,
+    category,
+    publishedAt,
+    image,
+    source,
+    sourceUrl,
+    detailUrl,
+    verificationNotes,
+    status,
+    priority,
+    readTime
+  } = req.body;
+
+  if (!title || !description) {
+    return res.status(400).json({ success: false, message: 'Tiêu đề và tóm tắt không được để trống' });
+  }
+
+  const newItem = {
+    id: `news-${Date.now()}`,
+    title: title.trim(),
+    description: description.trim(),
+    category: category || 'Tin tức CLB',
+    publishedAt: publishedAt || new Date().toLocaleDateString('vi-VN'),
+    image: image || '/images/bkic/bkic_launch.jpg',
+    source: source || 'Facebook Fanpage BK-IC',
+    sourceUrl: sourceUrl || 'https://www.facebook.com/dut.bkic',
+    detailUrl: detailUrl || sourceUrl || 'https://www.facebook.com/dut.bkic',
+    verificationNotes: verificationNotes || '',
+    status: status || 'draft',
+    priority: priority || 'normal',
+    readTime: readTime || '3 phút đọc',
+    createdAt: new Date().toISOString()
+  };
+
+  store.news.unshift(newItem);
+
+  store.auditLogs.unshift({
+    id: `audit-${Date.now()}`,
+    timestamp: new Date().toISOString(),
+    actorId: actor.id,
+    actorName: actor.fullName,
+    actorRole: actor.role,
+    actorUnit: actor.unit,
+    action: 'Tạo bài viết CMS mới',
+    targetType: 'News',
+    targetId: newItem.id,
+    details: `${actor.fullName} tạo bài viết "${newItem.title}" với trạng thái [${newItem.status}]`
+  });
+
+  db.save();
+  res.json({ success: true, message: 'Tạo bài viết mới thành công', item: newItem });
+});
+
+// PATCH /api/news/:id (Admin only: update news item)
+cmsRouter.patch('/news/:id', requireAuth, requireNormalSession, requireAdmin, (req, res) => {
+  const actor = req.user!;
+  const store = db.get();
+  store.news = store.news || [];
+  const idx = store.news.findIndex((n: any) => n.id === req.params.id);
+  if (idx === -1) {
+    return res.status(404).json({ success: false, message: 'Không tìm thấy bài viết' });
+  }
+
+  const oldItem = store.news[idx];
+  const updatedItem = {
+    ...oldItem,
+    ...req.body,
+    updatedAt: new Date().toISOString()
+  };
+  store.news[idx] = updatedItem;
+
+  store.auditLogs.unshift({
+    id: `audit-${Date.now()}`,
+    timestamp: new Date().toISOString(),
+    actorId: actor.id,
+    actorName: actor.fullName,
+    actorRole: actor.role,
+    actorUnit: actor.unit,
+    action: 'Cập nhật bài viết CMS',
+    targetType: 'News',
+    targetId: updatedItem.id,
+    details: `${actor.fullName} cập nhật bài viết "${updatedItem.title}" - Trạng thái: [${updatedItem.status}]`
+  });
+
+  db.save();
+  res.json({ success: true, message: 'Cập nhật bài viết thành công', item: updatedItem });
+});
+
+// DELETE /api/news/:id (Admin only: delete news item)
+cmsRouter.delete('/news/:id', requireAuth, requireNormalSession, requireAdmin, (req, res) => {
+  const actor = req.user!;
+  const store = db.get();
+  store.news = store.news || [];
+  const idx = store.news.findIndex((n: any) => n.id === req.params.id);
+  if (idx === -1) {
+    return res.status(404).json({ success: false, message: 'Không tìm thấy bài viết' });
+  }
+
+  const removed = store.news.splice(idx, 1)[0];
+
+  store.auditLogs.unshift({
+    id: `audit-${Date.now()}`,
+    timestamp: new Date().toISOString(),
+    actorId: actor.id,
+    actorName: actor.fullName,
+    actorRole: actor.role,
+    actorUnit: actor.unit,
+    action: 'Xóa bài viết CMS',
+    targetType: 'News',
+    targetId: removed.id,
+    details: `${actor.fullName} đã xóa bài viết "${removed.title}"`
+  });
+
+  db.save();
+  res.json({ success: true, message: 'Đã xóa bài viết thành công' });
 });
 
 // POST /api/system/reset-demo - Reset data to initial verified baseline (Strictly Admin only, disabled in production)

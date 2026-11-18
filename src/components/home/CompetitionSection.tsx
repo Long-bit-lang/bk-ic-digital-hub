@@ -7,7 +7,7 @@ import { SectionHeading } from '../editorial/SectionHeading';
 import { CompetitionCarousel } from './CompetitionCarousel';
 import { ScrollReveal } from '../effects/ScrollReveal';
 import { GlowingLightTrails } from '../effects/GlowingLightTrails';
-import { HOME_COMPETITIONS_DATA, type CompetitionItem } from '../../data/homeData';
+import { HOME_COMPETITIONS_DATA, sortCompetitions, type CompetitionItem } from '../../data/homeData';
 
 interface CompetitionSectionProps {
   items?: CompetitionItem[];
@@ -16,6 +16,9 @@ interface CompetitionSectionProps {
 export const CompetitionSection: React.FC<CompetitionSectionProps> = ({
   items = HOME_COMPETITIONS_DATA
 }) => {
+  // Sort format: đang diễn ra (ongoing) -> sắp diễn ra (upcoming) -> đã kết thúc (completed)
+  const sortedItems = sortCompetitions(items);
+
   return (
     <section
       id="competitions"
@@ -44,8 +47,8 @@ export const CompetitionSection: React.FC<CompetitionSectionProps> = ({
 
       {/* Carousel or Empty State with ScrollReveal */}
       <ScrollReveal direction="up" distance={28} delay={0.15} duration={0.7} className="mt-8">
-        {items.length > 0 ? (
-          <CompetitionCarousel items={items} />
+        {sortedItems.length > 0 ? (
+          <CompetitionCarousel items={sortedItems} />
         ) : (
           <div className="rounded-3xl border-2 border-dashed border-slate-200 bg-gradient-to-br from-white via-slate-50/70 to-blue-50/50 p-12 text-center space-y-3">
             <div className="w-12 h-12 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center mx-auto">

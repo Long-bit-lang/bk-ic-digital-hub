@@ -5,7 +5,7 @@ import { PageHeroBanner } from '../../components/layout/PageHeroBanner';
 import { PageContentCanvas } from '../../components/layout/PageContentCanvas';
 import { ScrollReveal } from '../../components/effects/ScrollReveal';
 import { CTASection } from '../../components/editorial/CTASection';
-import { sampleWorkshops } from './WorkshopsPage';
+import { WORKSHOPS_DATA, type WorkshopItem } from '../../data/activitiesData';
 import { 
   Calendar, 
   Clock, 
@@ -24,21 +24,9 @@ import {
 export const WorkshopDetailPage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
 
-  // Look up workshop by slug, or generate structured detail
-  const found = sampleWorkshops.find((w) => w.slug === slug);
-  const workshop = found || {
-    slug: slug || 'workshop-detail',
-    title: slug
-      ? `Hội thảo Chuyên đề: ${slug.split('-').map(s => s.charAt(0).toUpperCase() + s.slice(1)).join(' ')}`
-      : 'Hội thảo Chuyên đề Công nghệ BK-IC',
-    category: 'Công nghệ & Đổi mới',
-    date: 'Thứ Bảy, 12/12/2026',
-    time: '08:30 – 11:30',
-    location: 'Hội trường Khu F, Trường Đại học Bách khoa (DUT)',
-    speaker: 'TS. Giảng viên Cố vấn Khoa Chuyên ngành, DUT',
-    status: 'upcoming' as const,
-    summary: 'Chuyên đề học thuật kết hợp thực hành định hướng nghiên cứu và phát triển sản phẩm công nghệ.'
-  };
+  // Look up workshop by slug from official WORKSHOPS_DATA
+  const found = WORKSHOPS_DATA.find((w) => w.slug === slug);
+  const workshop: WorkshopItem = found || WORKSHOPS_DATA[0];
 
   return (
     <div className="min-h-screen text-[#334155] selection:bg-sky-100 selection:text-[#0284C7] overflow-x-clip">
@@ -55,7 +43,7 @@ export const WorkshopDetailPage: React.FC = () => {
         compact={true}
         actions={
           <Link
-            to="/activities/workshops"
+            to="/activities/workshop"
             className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-white/10 border border-white/20 text-xs font-semibold text-slate-200 hover:text-white hover:bg-white/20 transition backdrop-blur-md"
           >
             <ArrowLeft className="h-3.5 w-3.5" />
@@ -98,70 +86,71 @@ export const WorkshopDetailPage: React.FC = () => {
               <div className="text-xs space-y-0.5">
                 <div className="text-slate-400 font-medium">Diễn giả / Chủ trì</div>
                 <div className="font-bold text-[#10182D]">{workshop.speaker}</div>
-                <div className="text-slate-500">Ban Cố vấn Chuyên môn</div>
+                <div className="text-slate-500 line-clamp-1">{workshop.speakerRole || 'Ban Cố vấn Chuyên môn'}</div>
               </div>
             </div>
           </div>
         </ScrollReveal>
 
+        {/* Cover Image Frame */}
+        {workshop.coverImage && (
+          <ScrollReveal direction="up" distance={20} delay={0.08} duration={0.6}>
+            <div className="rounded-3xl overflow-hidden border border-slate-200/90 shadow-sm bg-slate-900 aspect-16/9 sm:aspect-21/9 max-h-[460px]">
+              <img
+                src={workshop.coverImage}
+                alt={workshop.title}
+                className="w-full h-full object-cover"
+              />
+            </div>
+          </ScrollReveal>
+        )}
+
         {/* Main Content Area */}
         <div className="space-y-8 text-slate-700 leading-relaxed text-sm sm:text-base">
-          <ScrollReveal direction="up" distance={20} delay={0.1} duration={0.6}>
-            <div className="space-y-3">
+          {workshop.fullDesc && (
+            <ScrollReveal direction="up" distance={20} delay={0.1} duration={0.6}>
+              <div className="p-6 sm:p-8 rounded-3xl border border-slate-200/80 bg-white shadow-xs space-y-3">
+                <h2 className="text-xl sm:text-2xl font-bold text-[#10182D]">
+                  Tổng quan Buổi Workshop / Tập huấn
+                </h2>
+                <p className="text-slate-600 leading-relaxed text-justify">
+                  {workshop.fullDesc}
+                </p>
+              </div>
+            </ScrollReveal>
+          )}
+
+          <ScrollReveal direction="up" distance={20} delay={0.15} duration={0.6}>
+            <div className="p-6 sm:p-8 rounded-3xl border border-slate-200/80 bg-white shadow-xs space-y-4">
               <h2 className="text-xl sm:text-2xl font-bold text-[#10182D]">
-                Mục tiêu &amp; Giá trị mang lại
+                Mục tiêu &amp; Giá trị mang lại cho người tham dự
               </h2>
-              <p className="text-slate-600 leading-relaxed">
-                Buổi workshop hướng đến trang bị cho sinh viên cái nhìn thực tế về quy trình phát triển sản phẩm công nghệ, kết nối tư duy lý thuyết trên giảng đường với nhu cầu ứng dụng thực tiễn tại doanh nghiệp.
-              </p>
-              <ul className="space-y-2 pt-2">
-                <li className="flex items-start gap-2">
-                  <CheckCircle2 className="h-4 w-4 text-[#0284C7] shrink-0 mt-1" />
-                  <span>Nắm vững kiến thức nền tảng và các xu hướng công nghệ nổi bật trong lĩnh vực.</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <CheckCircle2 className="h-4 w-4 text-[#0284C7] shrink-0 mt-1" />
-                  <span>Hỏi đáp và thảo luận trực tiếp cùng diễn giả và ban cố vấn chuyên môn.</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <CheckCircle2 className="h-4 w-4 text-[#0284C7] shrink-0 mt-1" />
-                  <span>Cơ hội tham gia vào các nhóm dự án đồng hành do BK-IC bảo trợ.</span>
-                </li>
+              <ul className="space-y-2.5 pt-1">
+                {(workshop.takeaways || [
+                  'Nắm vững kiến thức nền tảng và các xu hướng công nghệ nổi bật trong lĩnh vực.',
+                  'Hỏi đáp và thảo luận trực tiếp cùng diễn giả và ban cố vấn chuyên môn.',
+                  'Cơ hội tham gia vào các nhóm dự án đồng hành do BK-IC bảo trợ.'
+                ]).map((takeaway, idx) => (
+                  <li key={idx} className="flex items-start gap-2.5">
+                    <CheckCircle2 className="h-4 w-4 text-[#0284C7] shrink-0 mt-1" />
+                    <span className="text-slate-700">{takeaway}</span>
+                  </li>
+                ))}
               </ul>
             </div>
           </ScrollReveal>
 
-          <ScrollReveal direction="up" distance={20} delay={0.15} duration={0.6}>
-            <div className="space-y-3">
-              <h2 className="text-xl sm:text-2xl font-bold text-[#10182D]">
-                Nội dung chương trình dự kiến
-              </h2>
-              <div className="space-y-3">
-                <div className="p-5 rounded-3xl border border-slate-200/80 bg-white shadow-xs">
-                  <div className="font-bold text-[#10182D]">Phần 1: Khởi động &amp; Báo cáo Tổng quan xu hướng (45 phút)</div>
-                  <div className="text-xs text-slate-500 mt-1">Giới thiệu bối cảnh thực tế và các rào cản kỹ thuật thường gặp.</div>
-                </div>
-                <div className="p-5 rounded-3xl border border-slate-200/80 bg-white shadow-xs">
-                  <div className="font-bold text-[#10182D]">Phần 2: Trình diễn Demo Kỹ thuật &amp; Case Study (60 phút)</div>
-                  <div className="text-xs text-slate-500 mt-1">Phân tích dự án mẫu và cách thức giải quyết bài toán tối ưu.</div>
-                </div>
-                <div className="p-5 rounded-3xl border border-slate-200/80 bg-white shadow-xs">
-                  <div className="font-bold text-[#10182D]">Phần 3: Tọa đàm Hỏi đáp (Q&amp;A) &amp; Kết nối giao lưu (30 phút)</div>
-                  <div className="text-xs text-slate-500 mt-1">Giao lưu mở cùng sinh viên và chụp ảnh lưu niệm.</div>
-                </div>
-              </div>
-            </div>
-          </ScrollReveal>
-
-          {/* Registration Notice */}
+          {/* Status & Registration Notice */}
           <ScrollReveal direction="up" distance={20} delay={0.2} duration={0.6}>
             <div className="rounded-3xl border border-[#0284C7]/20 bg-gradient-to-br from-sky-50/70 via-white to-blue-50/50 p-6 sm:p-8 space-y-2 shadow-xs">
               <div className="flex items-center gap-2 text-base font-bold text-[#0284C7]">
                 <BookmarkCheck className="h-5 w-5" />
-                <span>Đăng ký tham dự Workshop</span>
+                <span>Trạng thái Chương trình</span>
               </div>
               <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-                Cổng đăng ký tham dự trực tuyến sẽ được kích hoạt theo thông báo chính thức của Ban Tổ chức. Sinh viên có thể theo dõi Fanpage BK-IC để nhận vé mời sớm nhất.
+                {workshop.status === 'completed'
+                  ? 'Chương trình đã diễn ra thành công tốt đẹp. Quý độc giả và các bạn sinh viên có thể theo dõi Fanpage chính thức của BK-IC để cập nhật các sự kiện đào tạo, tập huấn tiếp theo.'
+                  : 'Cổng đăng ký tham dự trực tuyến sẽ được kích hoạt theo thông báo chính thức của Ban Tổ chức. Sinh viên có thể theo dõi Fanpage BK-IC để nhận vé mời sớm nhất.'}
               </p>
             </div>
           </ScrollReveal>
@@ -170,14 +159,14 @@ export const WorkshopDetailPage: React.FC = () => {
         {/* Bottom Navigation */}
         <div className="pt-6 border-t border-slate-200/80 flex items-center justify-between">
           <Link
-            to="/activities/workshops"
+            to="/activities/workshop"
             className="inline-flex items-center gap-2 text-xs font-semibold text-slate-600 hover:text-[#0284C7] transition"
           >
             <ArrowLeft className="h-4 w-4" />
             <span>Tất cả Workshop</span>
           </Link>
           <Link
-            to="/activities/competitions"
+            to="/activities/cuoc-thi"
             className="text-xs font-bold text-[#0284C7] hover:text-[#075985] hover:underline"
           >
             Khám phá Cuộc thi sáng tạo →

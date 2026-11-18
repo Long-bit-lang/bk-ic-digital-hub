@@ -35,9 +35,9 @@ export const AboutPage: React.FC = () => {
       <PageHeroBanner
         breadcrumbs={[{ label: 'Về chúng tôi' }]}
         eyebrow="TỔ CHỨC KHỞI NGHIỆP TRƯỜNG ĐH BÁCH KHOA • DUT"
-        title="Câu lạc bộ Khởi nghiệp &"
-        titleHighlight="Đổi mới Sáng tạo"
-        subtitle="Môi trường kết nối sinh viên kỹ thuật Bách khoa với ban cố vấn chuyên môn, dự án nghiên cứu ứng dụng và mạng lưới doanh nghiệp khởi nghiệp quốc gia."
+        title="Bách Khoa Innovation Club –"
+        titleHighlight="BK-IC"
+        subtitle="Nơi ý tưởng được khơi nguồn, công nghệ được kiến tạo và tương lai được định hình."
       />
 
       {/* 2. Seamless Pure White Content Canvas with Tech Grid & Trails */}
@@ -51,10 +51,10 @@ export const AboutPage: React.FC = () => {
         {/* Section 03: Tầm nhìn & Sứ mệnh (Dual Sculptural Blocks) */}
         <AboutVisionMissionSection />
 
-        {/* Section 04: Lĩnh vực hoạt động (4 Bento Cards with Visuals & Numbering) */}
+        {/* Section 04: Lĩnh vực hoạt động (5 Key Fields of Activity) */}
         <AboutFieldsSection />
 
-        {/* Section 05: Giá trị cốt lõi (CONNECT - CREATE - IMPACT Typographic Monoliths) */}
+        {/* Section 05: Tại sao bạn nên gia nhập BK-IC? (Why Join BK-IC) */}
         <AboutCoreValuesSection />
 
         {/* Section 06: Album thành viên câu lạc bộ (GEN 1 Archive: BCN, BĐH, BTV) */}

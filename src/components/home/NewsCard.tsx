@@ -43,6 +43,21 @@ const CATEGORY_CONFIG: Record<
     accentGradient: 'from-[#7C3AED] via-[#8B5CF6] to-[#A78BFA]',
     glowClass: 'bg-purple-500/10',
     badgeClass: 'bg-purple-50 text-purple-700 border-purple-200/80'
+  },
+  'Cuộc thi': {
+    accentGradient: 'from-[#D97706] via-[#F59E0B] to-[#FCD34D]',
+    glowClass: 'bg-amber-500/10',
+    badgeClass: 'bg-amber-50 text-amber-800 border-amber-200/80'
+  },
+  'Tin tức CLB': {
+    accentGradient: 'from-[#1749B5] via-[#0284C7] to-[#38BDF8]',
+    glowClass: 'bg-blue-500/10',
+    badgeClass: 'bg-blue-50 text-[#1749B5] border-blue-200/80'
+  },
+  'Hoạt động CLB': {
+    accentGradient: 'from-[#0284C7] via-[#2563EB] to-[#60A5FA]',
+    glowClass: 'bg-sky-500/10',
+    badgeClass: 'bg-sky-50 text-sky-700 border-sky-200/80'
   }
 };
 
@@ -56,6 +71,7 @@ export const NewsCard: React.FC<NewsCardProps> = ({
 }) => {
   const [imageError, setImageError] = useState(false);
   const config = CATEGORY_CONFIG[item.category] || CATEGORY_CONFIG['Sự kiện'];
+  const isExternal = item.detailUrl.startsWith('http://') || item.detailUrl.startsWith('https://');
 
   // Smooth scroll-driven scale transformation (exact DUT AI Phase 02 formula)
   const scale = useTransform(progress, range, [1, targetScale]);
@@ -102,7 +118,7 @@ export const NewsCard: React.FC<NewsCardProps> = ({
           {/* Left Column: ~60% Width (7/12 cols on desktop) */}
           <div className="md:col-span-6 lg:col-span-7 flex flex-col justify-between h-full">
             <div>
-              {/* Category Badge + Index / Total + Date */}
+              {/* Category Badge + Date */}
               <div className="flex flex-wrap items-center gap-3 mb-4 sm:mb-5">
                 <span
                   className={`text-[11px] font-extrabold uppercase tracking-widest px-3.5 py-1.5 rounded-full border backdrop-blur-md ${config.badgeClass}`}
@@ -120,12 +136,25 @@ export const NewsCard: React.FC<NewsCardProps> = ({
                 </div>
               </div>
 
-              {/* Title */}
-              <Link to={item.detailUrl} className="group/title block">
-                <h3 className="text-xl sm:text-2xl lg:text-3xl font-extrabold text-[#10182D] leading-[1.25] tracking-tight mb-3 sm:mb-4 group-hover/title:text-[#1749B5] transition-colors line-clamp-2">
-                  {item.title}
-                </h3>
-              </Link>
+              {/* Title (Supports both external Fanpage URL and internal route) */}
+              {isExternal ? (
+                <a
+                  href={item.detailUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group/title block"
+                >
+                  <h3 className="text-xl sm:text-2xl lg:text-3xl font-extrabold text-[#10182D] leading-[1.25] tracking-tight mb-3 sm:mb-4 group-hover/title:text-[#1749B5] transition-colors line-clamp-2">
+                    {item.title}
+                  </h3>
+                </a>
+              ) : (
+                <Link to={item.detailUrl} className="group/title block">
+                  <h3 className="text-xl sm:text-2xl lg:text-3xl font-extrabold text-[#10182D] leading-[1.25] tracking-tight mb-3 sm:mb-4 group-hover/title:text-[#1749B5] transition-colors line-clamp-2">
+                    {item.title}
+                  </h3>
+                </Link>
+              )}
 
               {/* Description */}
               <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-normal mb-6 line-clamp-2 sm:line-clamp-3">
@@ -136,43 +165,82 @@ export const NewsCard: React.FC<NewsCardProps> = ({
             {/* Bottom Meta & Action Link */}
             <div className="flex flex-wrap items-center justify-between gap-3 pt-4 border-t border-slate-100">
               <div className="flex items-center gap-2 text-xs font-mono text-slate-500">
-                <span className="text-slate-400">BK-IC News</span>
+                <span className="text-slate-400">{item.source || 'Facebook Fanpage BK-IC'}</span>
               </div>
 
-              <Link
-                to={item.detailUrl}
-                className="inline-flex items-center gap-1.5 text-xs font-bold text-[#1749B5] hover:text-[#245BFA] group/btn transition-colors cursor-pointer"
-              >
-                <span>Xem chi tiết</span>
-                <ArrowUpRight className="w-4 h-4 transition-transform group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5" />
-              </Link>
+              {isExternal ? (
+                <a
+                  href={item.detailUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 text-xs font-bold text-[#1749B5] hover:text-[#245BFA] group/btn transition-colors cursor-pointer"
+                >
+                  <span>Xem trên Fanpage</span>
+                  <ArrowUpRight className="w-4 h-4 transition-transform group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5" />
+                </a>
+              ) : (
+                <Link
+                  to={item.detailUrl}
+                  className="inline-flex items-center gap-1.5 text-xs font-bold text-[#1749B5] hover:text-[#245BFA] group/btn transition-colors cursor-pointer"
+                >
+                  <span>Xem chi tiết</span>
+                  <ArrowUpRight className="w-4 h-4 transition-transform group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5" />
+                </Link>
+              )}
             </div>
           </div>
 
           {/* Right Column: ~40% Width (5/12 cols on desktop) */}
           <div className="md:col-span-6 lg:col-span-5 w-full">
-            <Link
-              to={item.detailUrl}
-              className="block relative w-full h-[200px] sm:h-[240px] md:h-[280px] rounded-[24px] overflow-hidden shadow-md hover:shadow-xl border border-slate-200/80 group/img transition-all duration-300"
-              tabIndex={-1}
-              aria-hidden="true"
-            >
-              {!imageError ? (
-                <img
-                  src={item.image}
-                  alt={item.title}
-                  loading="lazy"
-                  onError={() => setImageError(true)}
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover/img:scale-105"
-                />
-              ) : (
-                <div className="w-full h-full flex flex-col items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-50 text-slate-400 p-4">
-                  <Newspaper className="w-10 h-10 text-[#1749B5]/40 mb-2" />
-                  <span className="text-xs font-medium text-slate-500">BK-IC News</span>
-                </div>
-              )}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-60 pointer-events-none" />
-            </Link>
+            {isExternal ? (
+              <a
+                href={item.detailUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block relative w-full h-[200px] sm:h-[240px] md:h-[280px] rounded-[24px] overflow-hidden shadow-md hover:shadow-xl border border-slate-200/80 group/img transition-all duration-300"
+                tabIndex={-1}
+                aria-hidden="true"
+              >
+                {!imageError ? (
+                  <img
+                    src={item.image}
+                    alt={item.title}
+                    loading="lazy"
+                    onError={() => setImageError(true)}
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover/img:scale-105"
+                  />
+                ) : (
+                  <div className="w-full h-full flex flex-col items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-50 text-slate-400 p-4">
+                    <Newspaper className="w-10 h-10 text-[#1749B5]/40 mb-2" />
+                    <span className="text-xs font-medium text-slate-500">BK-IC Fanpage</span>
+                  </div>
+                )}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-60 pointer-events-none" />
+              </a>
+            ) : (
+              <Link
+                to={item.detailUrl}
+                className="block relative w-full h-[200px] sm:h-[240px] md:h-[280px] rounded-[24px] overflow-hidden shadow-md hover:shadow-xl border border-slate-200/80 group/img transition-all duration-300"
+                tabIndex={-1}
+                aria-hidden="true"
+              >
+                {!imageError ? (
+                  <img
+                    src={item.image}
+                    alt={item.title}
+                    loading="lazy"
+                    onError={() => setImageError(true)}
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover/img:scale-105"
+                  />
+                ) : (
+                  <div className="w-full h-full flex flex-col items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-50 text-slate-400 p-4">
+                    <Newspaper className="w-10 h-10 text-[#1749B5]/40 mb-2" />
+                    <span className="text-xs font-medium text-slate-500">BK-IC News</span>
+                  </div>
+                )}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-60 pointer-events-none" />
+              </Link>
+            )}
           </div>
         </div>
       </motion.div>

@@ -72,145 +72,174 @@ export const CompanionProjectsTab: React.FC = () => {
           </div>
         </ScrollReveal>
 
-        {/* Filter Bar */}
-        <ScrollReveal direction="up" distance={16} delay={0.06} duration={0.5}>
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200/80 pb-4">
-            <div className="flex items-center gap-2 overflow-x-auto no-scrollbar py-0.5">
-              <button
-                onClick={() => setStageFilter('all')}
-                className={`px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition ${
-                  stageFilter === 'all'
-                    ? 'bg-[#0284C7] text-white shadow-xs'
-                    : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-                }`}
-              >
-                Tất cả giai đoạn
-              </button>
-              <button
-                onClick={() => setStageFilter('Pilot')}
-                className={`px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition ${
-                  stageFilter === 'Pilot'
-                    ? 'bg-[#0284C7] text-white shadow-xs'
-                    : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-                }`}
-              >
-                Thử nghiệm thực tế (Pilot)
-              </button>
-              <button
-                onClick={() => setStageFilter('MVP')}
-                className={`px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition ${
-                  stageFilter === 'MVP'
-                    ? 'bg-[#0284C7] text-white shadow-xs'
-                    : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-                }`}
-              >
-                Nguyên mẫu MVP
-              </button>
-              <button
-                onClick={() => setStageFilter('Prototype')}
-                className={`px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition ${
-                  stageFilter === 'Prototype'
-                    ? 'bg-[#0284C7] text-white shadow-xs'
-                    : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-                }`}
-              >
-                Mẫu thử (Prototype)
-              </button>
-            </div>
-
-            <div className="relative max-w-xs w-full">
-              <Search className="h-4 w-4 text-slate-400 absolute left-3 top-2.5 pointer-events-none" />
-              <input
-                type="text"
-                placeholder="Tìm dự án, công nghệ..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-9 pr-4 py-2 rounded-xl border border-slate-200 bg-white text-xs text-slate-800 placeholder:text-slate-400 focus:outline-none focus:border-[#0284C7]"
-              />
-            </div>
-          </div>
-        </ScrollReveal>
-
-        {/* Project Grid */}
-        {filteredProjects.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredProjects.map((p) => (
-              <div
-                key={p.id}
-                className="group flex flex-col justify-between h-full rounded-3xl border border-slate-200/80 bg-white p-6 shadow-xs hover:border-[#38BDF8] hover:shadow-xl hover:shadow-sky-500/10 hover:-translate-y-1 transition-all duration-300"
-              >
-                <div className="space-y-4">
-                  {/* Category & Stage */}
-                  <div className="flex items-center justify-between">
-                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-sky-50 text-[#0284C7] border border-sky-100">
-                      {p.field}
-                    </span>
-                    <span className="text-[11px] font-semibold text-emerald-600 bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200">
-                      • {p.stage}
-                    </span>
-                  </div>
-
-                  {/* Title */}
-                  <h4 className="text-base font-bold text-[#10182D] leading-snug group-hover:text-[#0284C7] transition">
-                    <Link to={`/activities/companion-projects/${p.slug}`}>
-                      {p.title}
-                    </Link>
-                  </h4>
-
-                  {/* Summary */}
-                  <p className="text-xs text-[#5E6573] leading-relaxed line-clamp-3">
-                    {p.summary}
-                  </p>
-
-                  {/* Tech Stack Pills */}
-                  <div className="flex flex-wrap gap-1.5 pt-1">
-                    {p.techStack.map((tech) => (
-                      <span
-                        key={tech}
-                        className="text-[10px] font-semibold text-slate-600 bg-slate-100 px-2 py-0.5 rounded-md"
-                      >
-                        {tech}
-                      </span>
-                    ))}
-                  </div>
-
-                  {/* Metrics */}
-                  {p.metrics && (
-                    <div className="grid grid-cols-2 gap-2 pt-3 border-t border-slate-100 text-xs">
-                      {p.metrics.map((m, i) => (
-                        <div key={i} className="p-2 rounded-xl bg-slate-50 border border-slate-100">
-                          <span className="text-[10px] text-slate-400 block">{m.label}</span>
-                          <span className="font-bold text-[#075985] text-xs">{m.value}</span>
-                        </div>
-                      ))}
-                    </div>
-                  )}
+        {/* Project Grid or Empty State */}
+        {COMPANION_PROJECTS_DATA.length > 0 ? (
+          <>
+            {/* Filter Bar */}
+            <ScrollReveal direction="up" distance={16} delay={0.06} duration={0.5}>
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200/80 pb-4">
+                <div className="flex items-center gap-2 overflow-x-auto no-scrollbar py-0.5">
+                  <button
+                    onClick={() => setStageFilter('all')}
+                    className={`px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition ${
+                      stageFilter === 'all'
+                        ? 'bg-[#0284C7] text-white shadow-xs'
+                        : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                    }`}
+                  >
+                    Tất cả giai đoạn
+                  </button>
+                  <button
+                    onClick={() => setStageFilter('Pilot')}
+                    className={`px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition ${
+                      stageFilter === 'Pilot'
+                        ? 'bg-[#0284C7] text-white shadow-xs'
+                        : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                    }`}
+                  >
+                    Thử nghiệm thực tế (Pilot)
+                  </button>
+                  <button
+                    onClick={() => setStageFilter('MVP')}
+                    className={`px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition ${
+                      stageFilter === 'MVP'
+                        ? 'bg-[#0284C7] text-white shadow-xs'
+                        : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                    }`}
+                  >
+                    Nguyên mẫu MVP
+                  </button>
+                  <button
+                    onClick={() => setStageFilter('Prototype')}
+                    className={`px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition ${
+                      stageFilter === 'Prototype'
+                        ? 'bg-[#0284C7] text-white shadow-xs'
+                        : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                    }`}
+                  >
+                    Mẫu thử (Prototype)
+                  </button>
                 </div>
 
-                {/* View Details Link */}
-                <div className="pt-5 mt-4 border-t border-slate-100 flex items-center justify-between">
-                  <span className="text-xs text-slate-400 truncate max-w-[170px]" title={p.faculty}>
-                    {p.leadName}
-                  </span>
-                  <Link
-                    to={`/activities/companion-projects/${p.slug}`}
-                    className="inline-flex items-center gap-1 text-xs font-semibold text-[#0284C7] hover:underline shrink-0"
-                  >
-                    <span>Hồ sơ dự án</span>
-                    <ArrowRight className="h-3 w-3" />
-                  </Link>
+                <div className="relative max-w-xs w-full">
+                  <Search className="h-4 w-4 text-slate-400 absolute left-3 top-2.5 pointer-events-none" />
+                  <input
+                    type="text"
+                    placeholder="Tìm dự án, công nghệ..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="w-full pl-9 pr-4 py-2 rounded-xl border border-slate-200 bg-white text-xs text-slate-800 placeholder:text-slate-400 focus:outline-none focus:border-[#0284C7]"
+                  />
                 </div>
               </div>
-            ))}
-          </div>
+            </ScrollReveal>
+
+            {filteredProjects.length > 0 ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {filteredProjects.map((p) => (
+                  <div
+                    key={p.id}
+                    className="group flex flex-col justify-between h-full rounded-3xl border border-slate-200/80 bg-white p-6 shadow-xs hover:border-[#38BDF8] hover:shadow-xl hover:shadow-sky-500/10 hover:-translate-y-1 transition-all duration-300"
+                  >
+                    <div className="space-y-4">
+                      {/* Category & Stage */}
+                      <div className="flex items-center justify-between">
+                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-sky-50 text-[#0284C7] border border-sky-100">
+                          {p.field}
+                        </span>
+                        <span className="text-[11px] font-semibold text-emerald-600 bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200">
+                          • {p.stage}
+                        </span>
+                      </div>
+
+                      {/* Title */}
+                      <h4 className="text-base font-bold text-[#10182D] leading-snug group-hover:text-[#0284C7] transition">
+                        <Link to={`/activities/companion-projects/${p.slug}`}>
+                          {p.title}
+                        </Link>
+                      </h4>
+
+                      {/* Summary */}
+                      <p className="text-xs text-[#5E6573] leading-relaxed line-clamp-3">
+                        {p.summary}
+                      </p>
+
+                      {/* Tech Stack Pills */}
+                      <div className="flex flex-wrap gap-1.5 pt-1">
+                        {p.techStack.map((tech) => (
+                          <span
+                            key={tech}
+                            className="text-[10px] font-semibold text-slate-600 bg-slate-100 px-2 py-0.5 rounded-md"
+                          >
+                            {tech}
+                          </span>
+                        ))}
+                      </div>
+
+                      {/* Metrics */}
+                      {p.metrics && (
+                        <div className="grid grid-cols-2 gap-2 pt-3 border-t border-slate-100 text-xs">
+                          {p.metrics.map((m, i) => (
+                            <div key={i} className="p-2 rounded-xl bg-slate-50 border border-slate-100">
+                              <span className="text-[10px] text-slate-400 block">{m.label}</span>
+                              <span className="font-bold text-[#075985] text-xs">{m.value}</span>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+
+                    {/* View Details Link */}
+                    <div className="pt-5 mt-4 border-t border-slate-100 flex items-center justify-between">
+                      <span className="text-xs text-slate-400 truncate max-w-[170px]" title={p.faculty}>
+                        {p.leadName}
+                      </span>
+                      <Link
+                        to={`/activities/companion-projects/${p.slug}`}
+                        className="inline-flex items-center gap-1 text-xs font-semibold text-[#0284C7] hover:underline shrink-0"
+                      >
+                        <span>Hồ sơ dự án</span>
+                        <ArrowRight className="h-3 w-3" />
+                      </Link>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="rounded-3xl border border-dashed border-slate-300 bg-slate-50 p-12 text-center space-y-3">
+                <Inbox className="h-8 w-8 text-slate-400 mx-auto" />
+                <h4 className="text-sm font-bold text-slate-700">Chưa có dự án nào trong phân loại này</h4>
+                <p className="text-xs text-slate-500">
+                  Hãy chọn lại bộ lọc hoặc liên hệ CLB để được tiếp nhận hồ sơ ươm tạo mới.
+                </p>
+              </div>
+            )}
+          </>
         ) : (
-          <div className="rounded-3xl border border-dashed border-slate-300 bg-slate-50 p-12 text-center space-y-3">
-            <Inbox className="h-8 w-8 text-slate-400 mx-auto" />
-            <h4 className="text-sm font-bold text-slate-700">Chưa có dự án nào trong phân loại này</h4>
-            <p className="text-xs text-slate-500">
-              Hãy chọn lại bộ lọc hoặc liên hệ CLB để được tiếp nhận hồ sơ ươm tạo mới.
-            </p>
-          </div>
+          <ScrollReveal direction="up" distance={16} delay={0.06} duration={0.5}>
+            <div className="rounded-3xl border border-dashed border-slate-300 bg-gradient-to-br from-slate-50 via-white to-sky-50/40 p-8 sm:p-12 text-center space-y-4">
+              <div className="p-3.5 bg-sky-50 text-[#0284C7] w-fit mx-auto rounded-2xl shadow-2xs border border-sky-100">
+                <Rocket className="h-8 w-8 text-[#0284C7]" />
+              </div>
+              <div className="space-y-1.5 max-w-lg mx-auto">
+                <h4 className="text-base sm:text-lg font-bold text-[#10182D]">
+                  Vườn Ươm Dự Án đang mở nhận Đề xuất Mới
+                </h4>
+                <p className="text-xs sm:text-sm text-slate-500 leading-relaxed">
+                  Hiện tại CLB BK-IC đang trong giai đoạn tiếp nhận và xét duyệt các hồ sơ ý tưởng khởi nghiệp sáng tạo mới của sinh viên Bách khoa. Nhóm dự án sẽ được hỗ trợ không gian lab, kết nối chuyên gia cố vấn và cơ hội bảo trợ kinh phí ươm tạo.
+                </p>
+              </div>
+              <div className="pt-2">
+                <button
+                  onClick={() => openPartnerModal('real_world_problem')}
+                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#0284C7] text-white font-bold text-xs hover:bg-[#0369A1] transition shadow-xs"
+                >
+                  <Handshake className="h-4 w-4" />
+                  <span>Gửi Ý tưởng / Đề xuất Ươm tạo</span>
+                </button>
+              </div>
+            </div>
+          </ScrollReveal>
         )}
       </div>
 
@@ -299,7 +328,7 @@ export const CompanionProjectsTab: React.FC = () => {
 
                 <div className="pt-4 border-t border-slate-100">
                   <button
-                    onClick={() => openPartnerModal(model.badge.toLowerCase())}
+                    onClick={() => openPartnerModal(model.id)}
                     className="w-full py-2.5 px-4 rounded-xl bg-slate-50 hover:bg-sky-50 text-[#0284C7] font-bold text-xs border border-slate-200 hover:border-sky-200 transition text-center"
                   >
                     Đề xuất hợp tác mảng này

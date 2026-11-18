@@ -7,6 +7,8 @@ import { ScrollReveal } from '../../components/effects/ScrollReveal';
 import { CTASection } from '../../components/editorial/CTASection';
 import { Flame, Trophy, TrendingUp, Users, ArrowRight, Calendar, Building2, Search, Inbox } from 'lucide-react';
 
+import { BK_SHARK_SEASONS } from '../../data/activitiesData';
+
 export interface SharkSeasonItem {
   season: string;
   year: string;
@@ -18,38 +20,7 @@ export interface SharkSeasonItem {
   date: string;
 }
 
-export const sampleSeasons: SharkSeasonItem[] = [
-  {
-    season: '2026',
-    year: '2026',
-    theme: 'DeepTech & Sustainable Innovation',
-    pitchesCount: 8,
-    totalCommitment: '350.000.000 VNĐ',
-    status: 'active',
-    summary: 'Mùa giải quy tụ các giải pháp phần cứng thông minh, AI biên và công nghệ năng lượng tái tạo từ sinh viên Bách khoa.',
-    date: 'Dự kiến: Tháng 12/2026'
-  },
-  {
-    season: '2025',
-    year: '2025',
-    theme: 'Digital Transformation & Smart City',
-    pitchesCount: 10,
-    totalCommitment: '280.000.000 VNĐ',
-    status: 'completed',
-    summary: 'Sân khấu chứng kiến 5 thoả thuận cam kết đầu tư hạt giống và 3 dự án được nhận vào Vườn ươm Doanh nghiệp Đà Nẵng.',
-    date: 'Tháng 11/2025'
-  },
-  {
-    season: '2024',
-    year: '2024',
-    theme: 'AI & Data-driven Solutions',
-    pitchesCount: 6,
-    totalCommitment: '150.000.000 VNĐ',
-    status: 'completed',
-    summary: 'Mùa giải khởi đầu cho mô hình pitching thực tế giữa sinh viên Bách khoa và các Shark là cựu sinh viên thành đạt.',
-    date: 'Tháng 12/2024'
-  }
-];
+export const sampleSeasons: SharkSeasonItem[] = BK_SHARK_SEASONS;
 
 export const BKSharkPage: React.FC = () => {
   const [filter, setFilter] = useState<'all' | 'active' | 'completed'>('all');

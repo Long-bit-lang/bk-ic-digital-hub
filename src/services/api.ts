@@ -580,6 +580,24 @@ export const api = {
       method: 'PATCH',
       body: JSON.stringify(payload)
     }),
+    getNews: (params?: { status?: string; priority?: string }) => {
+      const searchParams = new URLSearchParams();
+      if (params?.status && params.status !== 'all') searchParams.set('status', params.status);
+      if (params?.priority && params.priority !== 'all') searchParams.set('priority', params.priority);
+      const queryStr = searchParams.toString();
+      return request<{ success: boolean; news: any[] }>(`/api/news${queryStr ? `?${queryStr}` : ''}`);
+    },
+    createNews: (payload: any) => request<{ success: boolean; message: string; item: any }>('/api/news', {
+      method: 'POST',
+      body: JSON.stringify(payload)
+    }),
+    updateNews: (id: string, payload: any) => request<{ success: boolean; message: string; item: any }>(`/api/news/${id}`, {
+      method: 'PATCH',
+      body: JSON.stringify(payload)
+    }),
+    deleteNews: (id: string) => request<{ success: boolean; message: string }>(`/api/news/${id}`, {
+      method: 'DELETE'
+    }),
     resetDemo: () => request<{ success: boolean; message: string }>('/api/system/reset-demo', { method: 'POST' }),
     cleanTestData: () => request<{ success: boolean; message: string; data?: any }>('/api/system/clean-test-data', { method: 'POST' }),
     reloadDb: () => request<{ success: boolean; message: string }>('/api/system/reload-db', { method: 'POST' }),

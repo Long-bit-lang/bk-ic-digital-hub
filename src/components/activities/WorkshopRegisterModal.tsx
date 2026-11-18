@@ -1,6 +1,7 @@
 // BK-IC Workshop Registration Modal Component
 // Connects to /api/workshops/register with full client validation & error handling
 import React, { useState } from 'react';
+import { createPortal } from 'react-dom';
 import { X, Sparkles, CheckCircle2, AlertCircle, Loader2, Send } from 'lucide-react';
 import { api } from '../../services/api';
 
@@ -77,8 +78,8 @@ export const WorkshopRegisterModal: React.FC<WorkshopRegisterModalProps> = ({
     onClose();
   };
 
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-sm animate-in fade-in duration-200">
+  return createPortal(
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-sm animate-in fade-in duration-200">
       <div
         className="relative w-full max-w-lg rounded-3xl bg-white p-6 sm:p-8 shadow-2xl border border-slate-200/80 max-h-[90vh] overflow-y-auto"
         onClick={(e) => e.stopPropagation()}
@@ -244,7 +245,8 @@ export const WorkshopRegisterModal: React.FC<WorkshopRegisterModalProps> = ({
           </form>
         )}
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };
 

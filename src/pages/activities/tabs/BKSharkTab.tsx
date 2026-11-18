@@ -173,60 +173,96 @@ export const BKSharkTab: React.FC = () => {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {BK_SHARK_SEASONS.map((season) => (
               <div
                 key={season.season}
-                className="group flex flex-col justify-between h-full rounded-3xl border border-slate-200/80 bg-white p-6 shadow-xs hover:border-[#38BDF8] hover:shadow-xl hover:shadow-sky-500/10 hover:-translate-y-1 transition-all duration-300"
+                className="group flex flex-col justify-between h-full rounded-3xl border border-slate-200/80 bg-white p-6 sm:p-7 shadow-xs hover:border-[#38BDF8] hover:shadow-xl hover:shadow-sky-500/10 hover:-translate-y-1 transition-all duration-300"
               >
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
                     <span className="inline-flex px-3 py-1 rounded-full text-xs font-bold bg-[#10182D] text-white">
                       MÙA {season.year}
                     </span>
-                    <span
-                      className={`text-[11px] font-semibold ${
-                        season.status === 'active' ? 'text-emerald-600' : 'text-slate-400'
-                      }`}
-                    >
-                      {season.status === 'active' ? '• Mùa hiện tại' : '• Đã trao giải'}
+                    <span className="text-[11px] font-semibold text-emerald-600 bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200">
+                      • Đã trao giải chung cuộc
                     </span>
                   </div>
 
-                  <h4 className="text-base font-bold text-[#10182D] leading-snug group-hover:text-[#0284C7] transition">
+                  <h4 className="text-base sm:text-lg font-bold text-[#10182D] leading-snug group-hover:text-[#0284C7] transition">
                     <Link to={`/activities/bk-shark/${season.season}`}>
                       Chủ đề: {season.theme}
                     </Link>
                   </h4>
 
-                  <p className="text-xs text-[#5E6573] leading-relaxed line-clamp-3">
+                  <p className="text-xs text-[#5E6573] leading-relaxed">
                     {season.summary}
                   </p>
 
-                  <div className="grid grid-cols-2 gap-2 pt-3 border-t border-slate-100 text-xs">
-                    <div className="p-2.5 rounded-xl bg-slate-50 border border-slate-100">
+                  <div className="grid grid-cols-2 gap-2.5 pt-3 border-t border-slate-100 text-xs">
+                    <div className="p-3 rounded-xl bg-slate-50 border border-slate-100">
                       <span className="text-[10px] text-slate-400 block font-medium">Quy mô</span>
-                      <span className="font-bold text-[#075985] text-xs">{season.pitchesCount} Dự án</span>
+                      <span className="font-bold text-[#075985] text-xs sm:text-sm">35 Đội thi (140+ SV)</span>
                     </div>
-                    <div className="p-2.5 rounded-xl bg-slate-50 border border-slate-100">
-                      <span className="text-[10px] text-slate-400 block font-medium">Cam kết vốn</span>
-                      <span className="font-bold text-[#0284C7] text-xs">{season.totalCommitment}</span>
+                    <div className="p-3 rounded-xl bg-slate-50 border border-slate-100">
+                      <span className="text-[10px] text-slate-400 block font-medium">Vòng Chung kết</span>
+                      <span className="font-bold text-[#0284C7] text-xs sm:text-sm">Top 7 Đội tranh tài</span>
                     </div>
                   </div>
                 </div>
 
                 <div className="pt-5 mt-4 border-t border-slate-100 flex items-center justify-between">
-                  <span className="text-xs text-slate-400">{season.date}</span>
+                  <span className="text-xs text-slate-500 font-medium">{season.date}</span>
                   <Link
                     to={`/activities/bk-shark/${season.season}`}
-                    className="inline-flex items-center gap-1 text-xs font-semibold text-[#0284C7] hover:underline"
+                    className="inline-flex items-center gap-1.5 text-xs font-bold text-[#0284C7] hover:underline"
                   >
-                    <span>Xem diễn biến</span>
+                    <span>Xem kết quả &amp; Top 7 dự án</span>
                     <ArrowRight className="h-3.5 w-3.5" />
                   </Link>
                 </div>
               </div>
             ))}
+
+            {/* Upcoming Season Card */}
+            <div className="group flex flex-col justify-between h-full rounded-3xl border border-dashed border-sky-300 bg-gradient-to-br from-sky-50/50 via-white to-blue-50/30 p-6 sm:p-7 shadow-xs">
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <span className="inline-flex px-3 py-1 rounded-full text-xs font-bold bg-[#0284C7] text-white">
+                    MÙA TIẾP THEO
+                  </span>
+                  <span className="text-[11px] font-semibold text-[#0284C7] bg-sky-100/70 px-2.5 py-0.5 rounded-full border border-sky-200">
+                    • Đang chuẩn bị khởi động
+                  </span>
+                </div>
+
+                <h4 className="text-base sm:text-lg font-bold text-[#10182D] leading-snug">
+                  BK SHARK: Đấu trường Khởi nghiệp Sinh viên Bách khoa
+                </h4>
+
+                <p className="text-xs text-slate-600 leading-relaxed">
+                  Mùa giải mới hứa hẹn tiếp tục mở rộng quy mô, nâng cao chất lượng các chuỗi huấn luyện chuyên sâu và kết nối các quỹ đầu tư mạo hiểm đồng hành cùng sinh viên.
+                </p>
+
+                <div className="p-3.5 rounded-2xl bg-white border border-sky-100 text-xs text-slate-600 space-y-1">
+                  <span className="font-semibold text-[#075985] block">Dành cho Nhà đầu tư &amp; Cố vấn:</span>
+                  <p className="text-[11px] text-slate-500">
+                    Quý doanh nghiệp và cựu sinh viên quan tâm đồng hành bảo trợ giải thưởng hoặc tham gia Hội đồng Giám khảo có thể gửi đề xuất hợp tác ngay hôm nay.
+                  </p>
+                </div>
+              </div>
+
+              <div className="pt-5 mt-4 border-t border-slate-100 flex items-center justify-between">
+                <span className="text-xs text-slate-400">Dự kiến phát động 2027</span>
+                <button
+                  onClick={() => setIsInvestorModalOpen(true)}
+                  className="inline-flex items-center gap-1.5 text-xs font-bold text-[#0284C7] hover:underline"
+                >
+                  <span>Đăng ký Đồng hành</span>
+                  <ArrowRight className="h-3.5 w-3.5" />
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </ScrollReveal>
