@@ -3,11 +3,12 @@ import React from 'react';
 
 interface SectionHeadingProps {
   eyebrow?: string;
-  title: string;
-  subtitle?: string;
+  title: string | React.ReactNode;
+  subtitle?: string | React.ReactNode;
   align?: 'left' | 'center';
   dark?: boolean;
   className?: string;
+  titleClassName?: string;
 }
 
 export const SectionHeading: React.FC<SectionHeadingProps> = ({
@@ -16,13 +17,16 @@ export const SectionHeading: React.FC<SectionHeadingProps> = ({
   subtitle,
   align = 'left',
   dark = false,
-  className = ''
+  className = '',
+  titleClassName = ''
 }) => {
   const isCenter = align === 'center';
+  const hasCustomMaxWidth = className.includes('max-w-');
+  const defaultMaxWidth = isCenter ? 'max-w-3xl' : 'max-w-2xl';
 
   return (
     <div
-      className={`space-y-3 ${isCenter ? 'text-center mx-auto max-w-3xl' : 'max-w-2xl'} ${className}`}
+      className={`space-y-3 ${isCenter ? 'text-center mx-auto' : ''} ${hasCustomMaxWidth ? '' : defaultMaxWidth} ${className}`}
     >
       {eyebrow && (
         <div
@@ -38,9 +42,9 @@ export const SectionHeading: React.FC<SectionHeadingProps> = ({
       )}
 
       <h2
-        className={`text-2xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight leading-tight ${
-          dark ? 'text-white' : 'text-[#10182D]'
-        }`}
+        className={`font-extrabold tracking-tight leading-tight ${
+          titleClassName || 'text-2xl sm:text-4xl lg:text-5xl'
+        } ${dark ? 'text-white' : 'text-[#10182D]'}`}
       >
         {title}
       </h2>

@@ -34,8 +34,10 @@ export const CompetitionSection: React.FC<CompetitionSectionProps> = ({
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 pb-6 sm:pb-7 border-b border-slate-200/80">
           <SectionHeading
             eyebrow="SÂN CHƠI ĐỔI MỚI SÁNG TẠO"
-            title="Cuộc thi Sáng tạo và Khởi Nghiệp"
+            title="Cuộc thi Sáng tạo và Khởi nghiệp"
             subtitle="Các cuộc thi do BK-IC tổ chức, đồng hành hoặc phối hợp với các tổ chức và doanh nghiệp nhằm tìm kiếm và ươm tạo tài năng trẻ."
+            className="max-w-4xl lg:max-w-5xl"
+            titleClassName="text-[19px] xs:text-[22px] sm:text-3xl md:text-4xl lg:text-[40px] xl:text-[46px] whitespace-nowrap"
           />
         </div>
       </ScrollReveal>

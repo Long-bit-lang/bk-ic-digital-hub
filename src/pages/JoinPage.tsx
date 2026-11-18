@@ -3,6 +3,9 @@ import React, { useState } from 'react';
 import confetti from 'canvas-confetti';
 import { useApp } from '../context/AppContext';
 import { extractAcademicYear } from '../utils/academicYear';
+import { PageHeroBanner } from '../components/layout/PageHeroBanner';
+import { PageContentCanvas } from '../components/layout/PageContentCanvas';
+import { ScrollReveal } from '../components/effects/ScrollReveal';
 import { 
   Sparkles, 
   Send, 
@@ -127,45 +130,46 @@ export const JoinPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-transparent py-16 px-4 sm:px-6 lg:px-8">
-      <div className="mx-auto max-w-4xl space-y-12">
-        {/* Header */}
-        <div className="text-center max-w-2xl mx-auto space-y-4">
-          <div className="inline-flex items-center gap-2 rounded-full border border-blue-200 bg-blue-50 px-3.5 py-1 text-xs font-semibold text-[#245BFA]">
-            <Sparkles className="h-3.5 w-3.5" />
-            <span>TUYỂN THÀNH VIÊN BK-IC GEN 2026</span>
-          </div>
-          <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-[#101828]">
-            Gia nhập Bách Khoa Innovation Club
-          </h1>
-          <p className="text-sm sm:text-base text-slate-600 leading-relaxed font-normal">
-            Cùng chúng mình xây dựng những sản phẩm công nghệ tạo ra tác động thực tế cho cộng đồng sinh viên DUT và xã hội.
-          </p>
-
-          {/* Toggle Tab */}
-          <div className="inline-flex p-1 bg-slate-200/80 rounded-xl mt-4">
+    <div className="min-h-screen text-[#334155] selection:bg-sky-100 selection:text-[#0284C7] overflow-x-clip">
+      {/* 1. Institutional Hero Banner (Cosmic Gradient + Flowing Light Trails) */}
+      <PageHeroBanner
+        breadcrumbs={[{ label: 'Tuyển thành viên' }]}
+        eyebrow="TUYỂN THÀNH VIÊN BK-IC GEN 2026 • DUT"
+        title="Gia nhập Bách Khoa"
+        titleHighlight="Innovation Club"
+        subtitle="Cùng chúng mình xây dựng những sản phẩm công nghệ tạo ra tác động thực tế cho cộng đồng sinh viên DUT và xã hội."
+        actions={
+          <div className="inline-flex p-1 bg-white/10 border border-white/20 backdrop-blur-md rounded-2xl shadow-xs">
             <button
               onClick={() => setActiveTab('apply')}
-              className={`px-5 py-2 text-xs font-semibold rounded-lg transition ${
-                activeTab === 'apply' ? 'bg-white text-slate-900 shadow-xs' : 'text-slate-600 hover:text-slate-900'
+              className={`px-5 py-2.5 text-xs font-bold rounded-xl transition duration-200 ${
+                activeTab === 'apply'
+                  ? 'bg-gradient-to-r from-white via-slate-100 to-sky-50 text-[#075985] shadow-xs'
+                  : 'text-slate-200 hover:text-white'
               }`}
             >
               Nộp đơn Ứng tuyển
             </button>
             <button
               onClick={() => setActiveTab('track')}
-              className={`px-5 py-2 text-xs font-semibold rounded-lg transition ${
-                activeTab === 'track' ? 'bg-white text-slate-900 shadow-xs' : 'text-slate-600 hover:text-slate-900'
+              className={`px-5 py-2.5 text-xs font-bold rounded-xl transition duration-200 ${
+                activeTab === 'track'
+                  ? 'bg-gradient-to-r from-white via-slate-100 to-sky-50 text-[#075985] shadow-xs'
+                  : 'text-slate-200 hover:text-white'
               }`}
             >
               Tra cứu Trạng thái Hồ sơ
             </button>
           </div>
-        </div>
+        }
+      />
 
+      {/* 2. Seamless Pure White Content Canvas with Tech Grid & Trails */}
+      <PageContentCanvas className="max-w-4xl">
         {/* TAB 1: APPLICATION FORM */}
         {activeTab === 'apply' && (
-          <div className="rounded-3xl border border-slate-200 bg-white p-6 sm:p-10 shadow-sm">
+          <ScrollReveal direction="up" distance={20} duration={0.65}>
+            <div className="rounded-3xl border border-slate-200/80 bg-white p-6 sm:p-10 shadow-xs hover:border-[#38BDF8]/60 hover:shadow-xl hover:shadow-sky-500/5 transition-all duration-300">
             {!isOpen ? (
               <div className="text-center py-10 space-y-6">
                 <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-blue-100 text-[#245BFA]">
@@ -481,11 +485,13 @@ export const JoinPage: React.FC = () => {
               </form>
             )}
           </div>
+          </ScrollReveal>
         )}
 
         {/* TAB 2: APPLICATION TRACKER */}
         {activeTab === 'track' && (
-          <div className="rounded-3xl border border-slate-200 bg-white p-6 sm:p-10 shadow-sm space-y-6">
+          <ScrollReveal direction="up" distance={20} duration={0.65}>
+            <div className="rounded-3xl border border-slate-200/80 bg-white p-6 sm:p-10 shadow-xs hover:border-[#38BDF8]/60 hover:shadow-xl hover:shadow-sky-500/5 transition-all duration-300 space-y-6">
             <div className="max-w-md mx-auto text-center space-y-2">
               <h2 className="text-xl font-bold text-slate-900">
                 Kiểm tra tiến độ xét duyệt đơn
@@ -574,8 +580,9 @@ export const JoinPage: React.FC = () => {
               </div>
             )}
           </div>
+          </ScrollReveal>
         )}
-      </div>
+      </PageContentCanvas>
     </div>
   );
 };

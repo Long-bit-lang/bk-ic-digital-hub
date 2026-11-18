@@ -43,14 +43,6 @@ export const FeaturedActivitiesSection: React.FC<FeaturedActivitiesSectionProps>
             title="Hoạt động Nổi bật"
             subtitle="Các workshop chuyên sâu, buổi sinh hoạt định kỳ và sự kiện kết nối công nghệ tiêu biểu của BK-IC."
           />
-          <Link
-            to="/activities"
-            className="inline-flex items-center gap-1.5 text-xs font-bold text-[#0284C7] hover:text-[#38BDF8] transition-colors shrink-0 group"
-            aria-label="Xem tất cả hoạt động"
-          >
-            <span>Xem tất cả hoạt động</span>
-            <ArrowUpRight className="h-4 w-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-          </Link>
         </div>
       </ScrollReveal>
 

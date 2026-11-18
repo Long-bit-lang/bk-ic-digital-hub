@@ -1,7 +1,9 @@
 // BK-IC Companion Project Detail Page — Minimalist Editorial
 import React from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { Breadcrumbs } from '../../components/editorial/Breadcrumbs';
+import { PageHeroBanner } from '../../components/layout/PageHeroBanner';
+import { PageContentCanvas } from '../../components/layout/PageContentCanvas';
+import { ScrollReveal } from '../../components/effects/ScrollReveal';
 import { sampleProjects } from './CompanionProjectsPage';
 import { 
   Rocket, 
@@ -36,168 +38,141 @@ export const CompanionProjectDetailPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-transparent py-12 px-4 sm:px-6 lg:px-8">
-      <div className="mx-auto max-w-5xl space-y-10">
-        {/* Navigation & Breadcrumbs */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <Breadcrumbs
-            items={[
-              { label: 'Hoạt động', to: '/activities' },
-              { label: 'Dự án đồng hành', to: '/activities/companion-projects' },
-              { label: project.title }
-            ]}
-          />
+    <div className="min-h-screen text-[#334155] selection:bg-sky-100 selection:text-[#0284C7] overflow-x-clip">
+      {/* 1. Institutional Hero Banner (Cosmic Gradient + Flowing Light Trails) */}
+      <PageHeroBanner
+        breadcrumbs={[
+          { label: 'Hoạt động', to: '/activities' },
+          { label: 'Dự án đồng hành', to: '/activities/companion-projects' },
+          { label: project.title }
+        ]}
+        eyebrow={`${project.field.toUpperCase()} • VƯỜN ƯƠM CÔNG NGHỆ`}
+        title={project.title}
+        subtitle={project.summary}
+        compact={true}
+        actions={
           <Link
             to="/activities/companion-projects"
-            className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-500 hover:text-[#1749B5] transition"
+            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-white/10 border border-white/20 text-xs font-semibold text-slate-200 hover:text-white hover:bg-white/20 transition backdrop-blur-md"
           >
-            <ArrowLeft className="h-4 w-4" />
+            <ArrowLeft className="h-3.5 w-3.5" />
             <span>Quay lại danh mục Dự án</span>
           </Link>
-        </div>
+        }
+      />
 
-        {/* Title Area */}
-        <div className="space-y-4 border-b border-slate-200 pb-8">
-          <div className="flex flex-wrap items-center gap-2">
-            <span className="px-3 py-1 rounded-full text-xs font-semibold bg-blue-50 text-[#1749B5] border border-blue-200">
-              {project.field}
-            </span>
-            <span className="px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
-              {project.stage}
-            </span>
-            <span className="text-xs font-medium text-slate-400">
-              Năm khởi tạo: {project.year}
-            </span>
-          </div>
-
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#10182D] tracking-tight leading-tight">
-            {project.title}
-          </h1>
-
-          <p className="text-base sm:text-lg text-[#5E6573] leading-relaxed">
-            {project.summary}
-          </p>
-        </div>
-
-        {/* Metadata Area */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          <div className="p-5 rounded-2xl border border-slate-200 bg-white space-y-1">
-            <div className="flex items-center gap-2 text-xs uppercase text-slate-400 font-semibold">
-              <Users className="h-4 w-4 text-[#1749B5]" />
-              <span>Đội ngũ nghiên cứu</span>
+      {/* 2. Seamless Pure White Content Canvas with Tech Grid & Trails */}
+      <PageContentCanvas className="max-w-5xl">
+        {/* Project Meta Card */}
+        <ScrollReveal direction="up" distance={20} duration={0.6}>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 p-6 rounded-3xl border border-slate-200/80 bg-white shadow-xs">
+            <div className="flex items-start gap-3">
+              <div className="p-2.5 rounded-2xl bg-sky-50 text-[#0284C7] shrink-0 border border-sky-100">
+                <Rocket className="h-5 w-5" />
+              </div>
+              <div className="text-xs space-y-0.5">
+                <div className="text-slate-400 font-medium">Giai đoạn phát triển</div>
+                <div className="font-bold text-[#075985] text-sm">{project.stage}</div>
+                <div className="text-slate-500">Năm khởi động: {project.year}</div>
+              </div>
             </div>
-            <div className="text-sm font-bold text-[#10182D] truncate">{project.leadName}</div>
-            <div className="text-xs text-slate-500">Sinh viên Bách khoa</div>
-          </div>
 
-          <div className="p-5 rounded-2xl border border-slate-200 bg-white space-y-1">
-            <div className="flex items-center gap-2 text-xs uppercase text-slate-400 font-semibold">
-              <GraduationCap className="h-4 w-4 text-[#1749B5]" />
-              <span>Khoa / Viện</span>
+            <div className="flex items-start gap-3">
+              <div className="p-2.5 rounded-2xl bg-sky-50 text-[#0284C7] shrink-0 border border-sky-100">
+                <Users className="h-5 w-5" />
+              </div>
+              <div className="text-xs space-y-0.5">
+                <div className="text-slate-400 font-medium">Đội ngũ thực hiện</div>
+                <div className="font-bold text-[#10182D] text-sm">{project.leadName}</div>
+                <div className="text-slate-500">{project.faculty}</div>
+              </div>
             </div>
-            <div className="text-sm font-bold text-[#10182D] truncate">{project.faculty}</div>
-            <div className="text-xs text-slate-500">DUT • Đại học Đà Nẵng</div>
-          </div>
 
-          <div className="p-5 rounded-2xl border border-slate-200 bg-white space-y-1">
-            <div className="flex items-center gap-2 text-xs uppercase text-slate-400 font-semibold">
-              <Rocket className="h-4 w-4 text-[#1749B5]" />
-              <span>Giai đoạn</span>
+            <div className="flex items-start gap-3">
+              <div className="p-2.5 rounded-2xl bg-sky-50 text-[#0284C7] shrink-0 border border-sky-100">
+                <Target className="h-5 w-5" />
+              </div>
+              <div className="text-xs space-y-0.5">
+                <div className="text-slate-400 font-medium">Trạng thái bảo trợ</div>
+                <div className="font-bold text-emerald-600 text-sm">Ươm tạo chính thức</div>
+                <div className="text-slate-500">Hỗ trợ lab &amp; chuyên môn</div>
+              </div>
             </div>
-            <div className="text-sm font-bold text-[#10182D] truncate">{project.stage}</div>
-            <div className="text-xs text-slate-500">Ươm tạo bởi BK-IC</div>
           </div>
-
-          <div className="p-5 rounded-2xl border border-slate-200 bg-white space-y-1">
-            <div className="flex items-center gap-2 text-xs uppercase text-slate-400 font-semibold">
-              <Building2 className="h-4 w-4 text-[#1749B5]" />
-              <span>Bảo trợ chuyên môn</span>
-            </div>
-            <div className="text-sm font-bold text-[#10182D]">BK-IC Digital Hub</div>
-            <div className="text-xs text-slate-500">Đoàn TN – Hội SV DUT</div>
-          </div>
-        </div>
-
-        {/* Optional Media Area Placeholder */}
-        <div className="rounded-3xl border border-slate-200 bg-slate-50 p-8 sm:p-12 text-center space-y-3">
-          <div className="inline-flex items-center gap-2 text-xs text-slate-400 uppercase tracking-wider font-semibold">
-            <Cpu className="h-4 w-4" />
-            <span>Khu vực Trình diễn Nguyên mẫu &amp; Video Demo</span>
-          </div>
-          <div className="max-w-md mx-auto text-xs text-slate-500">
-            Khung hiển thị hình ảnh phần cứng, sơ đồ kiến trúc hệ thống, giao diện ứng dụng và video thử nghiệm thực địa của dự án.
-          </div>
-        </div>
+        </ScrollReveal>
 
         {/* Main Content Area */}
         <div className="space-y-8 text-slate-700 leading-relaxed text-sm sm:text-base">
-          <div className="space-y-3">
-            <h2 className="text-xl sm:text-2xl font-bold text-[#10182D]">
-              Giải pháp &amp; Tính năng cốt lõi
-            </h2>
-            <p className="text-slate-600 leading-relaxed">
-              Dự án tập trung giải quyết bài toán tối ưu hóa quy trình vận hành và tiết kiệm chi phí thông qua việc kết hợp các cảm biến thông minh, bộ điều khiển vi xử lý và nền tảng điện toán đám mây.
-            </p>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
-              <div className="p-4 rounded-2xl border border-slate-200 bg-white space-y-1.5">
-                <div className="font-bold text-[#10182D] flex items-center gap-2">
-                  <CheckCircle2 className="h-4 w-4 text-[#1749B5]" />
-                  <span>Xử lý thời gian thực</span>
+          <ScrollReveal direction="up" distance={20} delay={0.1} duration={0.6}>
+            <div className="space-y-4">
+              <h2 className="text-xl sm:text-2xl font-bold text-[#10182D]">
+                Giải pháp &amp; Tính năng cốt lõi
+              </h2>
+              <p className="text-slate-600 leading-relaxed">
+                Dự án tập trung giải quyết bài toán tối ưu hóa quy trình vận hành và tiết kiệm chi phí thông qua việc kết hợp các cảm biến thông minh, bộ điều khiển vi xử lý và nền tảng điện toán đám mây.
+              </p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1">
+                <div className="p-5 rounded-3xl border border-slate-200/80 bg-white shadow-xs space-y-1.5">
+                  <div className="font-bold text-[#10182D] flex items-center gap-2">
+                    <CheckCircle2 className="h-4 w-4 text-[#0284C7]" />
+                    <span>Xử lý thời gian thực</span>
+                  </div>
+                  <p className="text-xs text-slate-500 leading-relaxed">Thu thập và phân tích dữ liệu với độ trễ thấp dưới 100ms.</p>
                 </div>
-                <p className="text-xs text-slate-500">Thu thập và phân tích dữ liệu với độ trễ thấp dưới 100ms.</p>
-              </div>
-              <div className="p-4 rounded-2xl border border-slate-200 bg-white space-y-1.5">
-                <div className="font-bold text-[#10182D] flex items-center gap-2">
-                  <CheckCircle2 className="h-4 w-4 text-[#1749B5]" />
-                  <span>Kiến trúc mở rộng</span>
+                <div className="p-5 rounded-3xl border border-slate-200/80 bg-white shadow-xs space-y-1.5">
+                  <div className="font-bold text-[#10182D] flex items-center gap-2">
+                    <CheckCircle2 className="h-4 w-4 text-[#0284C7]" />
+                    <span>Kiến trúc mở rộng</span>
+                  </div>
+                  <p className="text-xs text-slate-500 leading-relaxed">Dễ dàng tích hợp với các hệ thống quản trị hiện hữu tại khuôn viên trường.</p>
                 </div>
-                <p className="text-xs text-slate-500">Dễ dàng tích hợp với các hệ thống quản trị hiện hữu tại khuôn viên trường.</p>
               </div>
             </div>
-          </div>
+          </ScrollReveal>
 
-          <div className="space-y-3">
-            <h2 className="text-xl sm:text-2xl font-bold text-[#10182D]">
-              Nhu cầu kết nối &amp; Hợp tác
-            </h2>
-            <p className="text-slate-600 leading-relaxed">
-              Nhóm dự án hiện đang mong muốn kết nối với:
-            </p>
-            <ul className="space-y-2 text-xs sm:text-sm text-slate-600">
-              <li className="flex items-start gap-2">
-                <span className="h-1.5 w-1.5 rounded-full bg-[#1749B5] mt-2 shrink-0"></span>
-                <span><strong>Cố vấn chuyên môn:</strong> Hướng dẫn kiểm thử độ tin cậy và thương mại hóa sản phẩm.</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="h-1.5 w-1.5 rounded-full bg-[#1749B5] mt-2 shrink-0"></span>
-                <span><strong>Doanh nghiệp đối tác:</strong> Cung cấp môi trường thử nghiệm thực tế hoặc tài trợ trang thiết bị.</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="h-1.5 w-1.5 rounded-full bg-[#1749B5] mt-2 shrink-0"></span>
-                <span><strong>Nhà đầu tư thiên thần:</strong> Hỗ trợ vốn hạt giống để hoàn thiện vòng kiểm định tiêu chuẩn.</span>
-              </li>
-            </ul>
-          </div>
+          <ScrollReveal direction="up" distance={20} delay={0.15} duration={0.6}>
+            <div className="space-y-4">
+              <h2 className="text-xl sm:text-2xl font-bold text-[#10182D]">
+                Nhu cầu kết nối &amp; Hợp tác
+              </h2>
+              <p className="text-slate-600 leading-relaxed">
+                Nhóm dự án hiện đang mong muốn kết nối với:
+              </p>
+              <ul className="space-y-2.5 text-xs sm:text-sm text-slate-600">
+                <li className="flex items-start gap-2.5">
+                  <span className="h-2 w-2 rounded-full bg-[#0284C7] mt-1.5 shrink-0" />
+                  <span><strong>Cố vấn chuyên môn:</strong> Hướng dẫn kiểm thử độ tin cậy và thương mại hóa sản phẩm.</span>
+                </li>
+                <li className="flex items-start gap-2.5">
+                  <span className="h-2 w-2 rounded-full bg-[#0284C7] mt-1.5 shrink-0" />
+                  <span><strong>Doanh nghiệp đối tác:</strong> Cung cấp môi trường thử nghiệm thực tế hoặc tài trợ trang thiết bị.</span>
+                </li>
+                <li className="flex items-start gap-2.5">
+                  <span className="h-2 w-2 rounded-full bg-[#0284C7] mt-1.5 shrink-0" />
+                  <span><strong>Nhà đầu tư thiên thần:</strong> Hỗ trợ vốn hạt giống để hoàn thiện vòng kiểm định tiêu chuẩn.</span>
+                </li>
+              </ul>
+            </div>
+          </ScrollReveal>
         </div>
 
         {/* Bottom Navigation */}
-        <div className="pt-6 border-t border-slate-200 flex items-center justify-between">
+        <div className="pt-6 border-t border-slate-200/80 flex items-center justify-between">
           <Link
             to="/activities/companion-projects"
-            className="inline-flex items-center gap-2 text-xs font-semibold text-slate-600 hover:text-[#1749B5] transition"
+            className="inline-flex items-center gap-2 text-xs font-semibold text-slate-600 hover:text-[#0284C7] transition"
           >
             <ArrowLeft className="h-4 w-4" />
             <span>Tất cả Dự án đồng hành</span>
           </Link>
           <Link
             to="/partnership/companion-project"
-            className="text-xs font-semibold text-[#1749B5] hover:underline"
+            className="text-xs font-bold text-[#0284C7] hover:text-[#075985] hover:underline"
           >
             Đăng ký Hợp tác Đồng hành Dự án →
           </Link>
         </div>
-      </div>
+      </PageContentCanvas>
     </div>
   );
 };
-

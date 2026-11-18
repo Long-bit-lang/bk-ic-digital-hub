@@ -27,7 +27,7 @@ export const AboutHeroSection: React.FC = () => {
           {/* Main Title & Brand Tagline */}
           <div className="space-y-3">
             <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight text-[#10182D] leading-[1.12]">
-              BK-IC – Câu lạc bộ Khởi nghiệp và Đổi mới Sáng tạo
+              Câu lạc bộ Khởi nghiệp và Đổi mới Sáng tạo
             </h1>
             <p className="text-lg sm:text-xl font-bold bg-gradient-to-r from-[#1749B5] via-[#245BFA] to-[#0EA5E9] bg-clip-text text-transparent">
               Kết nối ý tưởng – Thúc đẩy sáng tạo – Kiến tạo giá trị.
@@ -55,7 +55,7 @@ export const AboutHeroSection: React.FC = () => {
         <div className="lg:col-span-5 space-y-4">
           <div className="relative rounded-3xl overflow-hidden border border-slate-200/90 bg-white p-3 shadow-lg shadow-blue-950/5">
             {/* Main Featured Photo */}
-            <div 
+            <div
               onClick={() => setIsLightboxOpen(true)}
               className="group/heroimg relative h-64 sm:h-72 w-full rounded-2xl overflow-hidden bg-slate-100 cursor-zoom-in"
               title="Bấm để xem ảnh chi tiết"
@@ -66,7 +66,7 @@ export const AboutHeroSection: React.FC = () => {
                 className="w-full h-full object-cover object-center group-hover/heroimg:scale-105 transition-transform duration-500"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-[#0A1432]/80 via-transparent to-transparent" />
-              
+
               {/* Zoom hint on hover */}
               <div className="absolute top-3 right-3 flex items-center gap-1 px-2.5 py-1 rounded-full bg-slate-900/60 backdrop-blur-md text-white text-[10px] font-semibold opacity-0 group-hover/heroimg:opacity-100 transition-opacity border border-white/20">
                 <ZoomIn className="h-3 w-3" />

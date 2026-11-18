@@ -2,7 +2,8 @@
 // Integrated Sections: Intro, Story & Team Photo, Vision & Mission, Fields, Core Values, Member Album (GEN 1)
 import React, { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-import { Breadcrumbs } from '../components/editorial/Breadcrumbs';
+import { PageHeroBanner } from '../components/layout/PageHeroBanner';
+import { PageContentCanvas } from '../components/layout/PageContentCanvas';
 import { AboutHeroSection } from '../components/about/AboutHeroSection';
 import { AboutStorySection } from '../components/about/AboutStorySection';
 import { AboutVisionMissionSection } from '../components/about/AboutVisionMissionSection';
@@ -29,11 +30,18 @@ export const AboutPage: React.FC = () => {
   }, [location.hash, location.pathname]);
 
   return (
-    <div className="min-h-screen bg-transparent text-[#10182D] py-8 sm:py-12 px-4 sm:px-6 lg:px-8">
-      <div className="mx-auto max-w-7xl space-y-6">
-        {/* Navigation Breadcrumbs */}
-        <Breadcrumbs items={[{ label: 'Về chúng tôi' }]} />
+    <div className="min-h-screen text-[#334155] selection:bg-sky-100 selection:text-[#0284C7] overflow-x-clip">
+      {/* 1. Institutional Hero Banner (Cosmic Gradient + Flowing Light Trails) */}
+      <PageHeroBanner
+        breadcrumbs={[{ label: 'Về chúng tôi' }]}
+        eyebrow="TỔ CHỨC KHỞI NGHIỆP TRƯỜNG ĐH BÁCH KHOA • DUT"
+        title="Câu lạc bộ Khởi nghiệp &"
+        titleHighlight="Đổi mới Sáng tạo"
+        subtitle="Môi trường kết nối sinh viên kỹ thuật Bách khoa với ban cố vấn chuyên môn, dự án nghiên cứu ứng dụng và mạng lưới doanh nghiệp khởi nghiệp quốc gia."
+      />
 
+      {/* 2. Seamless Pure White Content Canvas with Tech Grid & Trails */}
+      <PageContentCanvas>
         {/* Section 01: Giới thiệu BK-IC (Hero Editorial Presentation) */}
         <AboutHeroSection />
 
@@ -51,7 +59,7 @@ export const AboutPage: React.FC = () => {
 
         {/* Section 06: Album thành viên câu lạc bộ (GEN 1 Archive: BCN, BĐH, BTV) */}
         <AboutMemberAlbumSection />
-      </div>
+      </PageContentCanvas>
     </div>
   );
 };

@@ -71,11 +71,10 @@ export const NewsCard: React.FC<NewsCardProps> = ({
           top: `calc(10px + ${24 * index}px)`,
           transformOrigin: 'top center'
         }}
-        className={`group w-full rounded-[36px] bg-white/95 backdrop-blur-xl p-6 sm:p-8 md:p-10 shadow-[0_20px_50px_rgba(0,0,0,0.08)] border border-slate-200/90 hover:border-[#38BDF8]/80 hover:shadow-[0_24px_55px_-12px_rgba(56,189,248,0.22)] overflow-hidden relative will-change-transform transition-all duration-300 ease-out ${
-          index > 0
-            ? 'shadow-[0_-12px_28px_-6px_rgba(15,23,42,0.12),0_20px_50px_rgba(0,0,0,0.08)]'
-            : ''
-        }`}
+        className={`group w-full rounded-[36px] bg-white/95 backdrop-blur-xl p-6 sm:p-8 md:p-10 shadow-[0_20px_50px_rgba(0,0,0,0.08)] border border-slate-200/90 hover:border-[#38BDF8]/80 hover:shadow-[0_24px_55px_-12px_rgba(56,189,248,0.22)] overflow-hidden relative will-change-transform transition-all duration-300 ease-out ${index > 0
+          ? 'shadow-[0_-12px_28px_-6px_rgba(15,23,42,0.12),0_20px_50px_rgba(0,0,0,0.08)]'
+          : ''
+          }`}
       >
         {/* ===================================================================== */}
         {/* TOP ACCENT BAR & FOLD CREASE (NẾP GẤP SẮC NÉT)                         */}
@@ -112,7 +111,7 @@ export const NewsCard: React.FC<NewsCardProps> = ({
                 </span>
 
                 <span className="text-xs font-mono font-semibold text-slate-400">
-                  Bản tin • 0{index + 1} / 0{total}
+                  Bản tin
                 </span>
 
                 <div className="flex items-center gap-1.5 text-xs font-mono text-slate-500 ml-auto">
@@ -137,9 +136,6 @@ export const NewsCard: React.FC<NewsCardProps> = ({
             {/* Bottom Meta & Action Link */}
             <div className="flex flex-wrap items-center justify-between gap-3 pt-4 border-t border-slate-100">
               <div className="flex items-center gap-2 text-xs font-mono text-slate-500">
-                <Clock className="w-3.5 h-3.5 text-slate-400" />
-                <span>{item.readTime || '3 phút đọc'}</span>
-                <span>•</span>
                 <span className="text-slate-400">BK-IC News</span>
               </div>
 

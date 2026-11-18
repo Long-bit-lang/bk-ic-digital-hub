@@ -45,16 +45,6 @@ export const PartnersSection: React.FC<PartnersSectionProps> = ({
             title="Đối tác &amp; Hệ sinh thái"
             subtitle="Mạng lưới Nhà trường, Vườn ươm khởi nghiệp, Quỹ đầu tư và Doanh nghiệp công nghệ đồng hành cùng BK-IC."
           />
-          <div className="mt-4">
-            <Link
-              to="/partnership/partners"
-              className="inline-flex items-center gap-1.5 text-xs font-bold text-[#0284C7] hover:text-[#38BDF8] transition-colors group"
-              aria-label="Xem toàn bộ mạng lưới đối tác"
-            >
-              <span>Xem toàn bộ mạng lưới đối tác</span>
-              <ArrowUpRight className="h-4 w-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-            </Link>
-          </div>
         </div>
       </ScrollReveal>
 

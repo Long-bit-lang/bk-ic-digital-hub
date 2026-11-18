@@ -1,8 +1,9 @@
 // BK-IC Activities Hub — Minimalist Editorial 6-Category Platform
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { SectionHeading } from '../components/editorial/SectionHeading';
-import { Breadcrumbs } from '../components/editorial/Breadcrumbs';
+import { PageHeroBanner } from '../components/layout/PageHeroBanner';
+import { PageContentCanvas } from '../components/layout/PageContentCanvas';
+import { ScrollReveal } from '../components/effects/ScrollReveal';
 import { CTASection } from '../components/editorial/CTASection';
 import { 
   Calendar, 
@@ -70,72 +71,73 @@ export const ActivitiesPage: React.FC = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-transparent py-12 px-4 sm:px-6 lg:px-8">
-      <div className="mx-auto max-w-7xl space-y-12">
-        {/* Breadcrumbs */}
-        <Breadcrumbs items={[{ label: 'Hoạt động' }]} />
+    <div className="min-h-screen text-[#334155] selection:bg-sky-100 selection:text-[#0284C7] overflow-x-clip">
+      {/* 1. Institutional Hero Banner (Cosmic Gradient + Flowing Light Trails) */}
+      <PageHeroBanner
+        breadcrumbs={[{ label: 'Hoạt động' }]}
+        eyebrow="HỆ THỐNG PHÂN HỆ HOẠT ĐỘNG • BK-IC DUT"
+        title="Đổi mới Sáng tạo &"
+        titleHighlight="Kiến tạo Giá trị Thực"
+        subtitle="Toàn bộ chuỗi hoạt động của CLB được cấu trúc khoa học thành 6 phân hệ chuyên biệt nhằm hỗ trợ tối đa cho sinh viên từ giai đoạn ý tưởng đến khi phát triển thành dự án khả thi."
+      />
 
-        {/* Hero Section */}
-        <div className="max-w-3xl space-y-4">
-          <SectionHeading
-            eyebrow="HỆ THỐNG PHÂN HỆ HOẠT ĐỘNG • BK-IC DUT"
-            title="Đổi mới Sáng tạo & Kiến tạo Giá trị Thực"
-            subtitle="Toàn bộ chuỗi hoạt động của CLB được cấu trúc khoa học thành 6 phân hệ chuyên biệt nhằm hỗ trợ tối đa cho sinh viên từ giai đoạn ý tưởng đến khi phát triển thành dự án khả thi."
-          />
-        </div>
-
-        {/* 6 Subcategory Cards Grid */}
+      {/* 2. Seamless Pure White Content Canvas with Tech Grid & Trails */}
+      <PageContentCanvas>
+        {/* 6 Subcategory Cards Grid with ScrollReveal */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {categories.map((cat, idx) => {
             const Icon = cat.icon;
             return (
-              <Link
-                key={idx}
-                to={cat.to}
-                className="group flex flex-col justify-between rounded-3xl border border-[#E2E6EE] bg-white p-7 shadow-xs hover:border-[#6B9DFF] hover:shadow-lg transition duration-300"
-              >
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between">
-                    <div className="p-3 rounded-2xl bg-slate-50 text-[#1749B5] group-hover:bg-[#1749B5] group-hover:text-white transition duration-200">
-                      <Icon className="h-5 w-5" />
+              <ScrollReveal key={idx} direction="up" distance={20} delay={idx * 0.08} duration={0.6}>
+                <Link
+                  to={cat.to}
+                  className="group flex flex-col justify-between h-full rounded-3xl border border-slate-200/80 bg-white p-7 shadow-xs hover:border-[#38BDF8] hover:shadow-xl hover:shadow-sky-500/10 hover:-translate-y-1 transition-all duration-300"
+                >
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between">
+                      <div className="p-3 rounded-2xl bg-sky-50 text-[#0284C7] group-hover:bg-[#0284C7] group-hover:text-white transition duration-300 shadow-2xs">
+                        <Icon className="h-5 w-5" />
+                      </div>
+                      <span className="text-[11px] font-bold tracking-wider text-slate-400 group-hover:text-[#0284C7] transition">
+                        {cat.badge}
+                      </span>
                     </div>
-                    <span className="text-[11px] font-bold tracking-wider text-slate-400 group-hover:text-[#1749B5] transition">
-                      {cat.badge}
-                    </span>
+
+                    <h3 className="text-xl font-bold text-[#10182D] group-hover:text-[#0284C7] transition">
+                      {cat.title}
+                    </h3>
+
+                    <p className="text-xs sm:text-sm text-[#5E6573] leading-relaxed">
+                      {cat.desc}
+                    </p>
                   </div>
 
-                  <h3 className="text-xl font-bold text-[#10182D] group-hover:text-[#1749B5] transition">
-                    {cat.title}
-                  </h3>
-
-                  <p className="text-xs sm:text-sm text-[#5E6573] leading-relaxed">
-                    {cat.desc}
-                  </p>
-                </div>
-
-                <div className="pt-6 mt-6 border-t border-slate-100 flex items-center justify-between text-xs font-semibold">
-                  <span className="text-slate-400 text-[11px]">{cat.highlight}</span>
-                  <span className="text-[#1749B5] flex items-center gap-1 group-hover:translate-x-1 transition-transform">
-                    <span>Khám phá</span>
-                    <ArrowRight className="h-3.5 w-3.5" />
-                  </span>
-                </div>
-              </Link>
+                  <div className="pt-6 mt-6 border-t border-slate-100 flex items-center justify-between text-xs font-semibold">
+                    <span className="text-slate-400 text-[11px]">{cat.highlight}</span>
+                    <span className="text-[#0284C7] flex items-center gap-1 group-hover:translate-x-1.5 transition-transform">
+                      <span>Khám phá</span>
+                      <ArrowRight className="h-3.5 w-3.5" />
+                    </span>
+                  </div>
+                </Link>
+              </ScrollReveal>
             );
           })}
         </div>
 
         {/* CTA Transition */}
-        <CTASection
-          eyebrow="ĐỒNG HÀNH CÙNG BK-IC"
-          title="Bạn là sinh viên có ý tưởng công nghệ hoặc đam mê khởi nghiệp?"
-          description="Tham gia các buổi workshop hoặc nộp hồ sơ gia nhập CLB để được ươm mầm và phát triển cùng cộng đồng sinh viên Bách khoa."
-          primaryText="Đợt Tuyển thành viên"
-          primaryTo="/activities/recruitment"
-          secondaryText="Liên hệ hợp tác"
-          secondaryTo="/partnership"
-        />
-      </div>
+        <ScrollReveal direction="up" distance={24} duration={0.65}>
+          <CTASection
+            eyebrow="ĐỒNG HÀNH CÙNG BK-IC"
+            title="Bạn là sinh viên có ý tưởng công nghệ hoặc đam mê khởi nghiệp?"
+            description="Tham gia các buổi workshop hoặc nộp hồ sơ gia nhập CLB để được ươm mầm và phát triển cùng cộng đồng sinh viên Bách khoa."
+            primaryText="Đợt Tuyển thành viên"
+            primaryTo="/activities/recruitment"
+            secondaryText="Liên hệ hợp tác"
+            secondaryTo="/partnership"
+          />
+        </ScrollReveal>
+      </PageContentCanvas>
     </div>
   );
 };

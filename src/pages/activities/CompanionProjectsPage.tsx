@@ -1,8 +1,9 @@
 // BK-IC Companion Projects Listing — Minimalist Editorial
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { SectionHeading } from '../../components/editorial/SectionHeading';
-import { Breadcrumbs } from '../../components/editorial/Breadcrumbs';
+import { PageHeroBanner } from '../../components/layout/PageHeroBanner';
+import { PageContentCanvas } from '../../components/layout/PageContentCanvas';
+import { ScrollReveal } from '../../components/effects/ScrollReveal';
 import { CTASection } from '../../components/editorial/CTASection';
 import { Rocket, Layers, Users, ArrowRight, Inbox, Search } from 'lucide-react';
 
@@ -66,121 +67,120 @@ export const CompanionProjectsPage: React.FC = () => {
   });
 
   return (
-    <div className="min-h-screen bg-transparent py-12 px-4 sm:px-6 lg:px-8">
-      <div className="mx-auto max-w-7xl space-y-12">
-        {/* Breadcrumbs */}
-        <Breadcrumbs
-          items={[
-            { label: 'Hoạt động', to: '/activities' },
-            { label: 'Dự án đồng hành' }
-          ]}
-        />
+    <div className="min-h-screen text-[#334155] selection:bg-sky-100 selection:text-[#0284C7] overflow-x-clip">
+      {/* 1. Institutional Hero Banner (Cosmic Gradient + Flowing Light Trails) */}
+      <PageHeroBanner
+        breadcrumbs={[
+          { label: 'Hoạt động', to: '/activities' },
+          { label: 'Dự án đồng hành' }
+        ]}
+        eyebrow="VƯỜN ƯƠM DỰ ÁN CÔNG NGHỆ • BK-IC DUT"
+        title="Dự án Công nghệ &"
+        titleHighlight="Đổi mới Sáng tạo Đồng hành"
+        subtitle="Hệ thống danh mục các dự án nghiên cứu phát triển sản phẩm công nghệ do sinh viên Bách khoa thực hiện, được hỗ trợ kỹ thuật và ươm tạo hướng đến thương mại hóa."
+      />
 
-        {/* Hero Section */}
-        <div className="max-w-3xl space-y-4">
-          <SectionHeading
-            eyebrow="DỰ ÁN ĐỒNG HÀNH • BK-IC DUT"
-            title="Vườn ươm Sản phẩm Công nghệ Sinh viên"
-            subtitle="Danh mục các dự án nghiên cứu ứng dụng và khởi nghiệp do sinh viên Trường ĐH Bách khoa phát triển, được BK-IC đồng hành bảo trợ và ươm tạo."
-          />
-        </div>
+      {/* 2. Seamless Pure White Content Canvas with Tech Grid & Trails */}
+      <PageContentCanvas>
+        {/* Search & Filter Bar */}
+        <ScrollReveal direction="up" distance={16} duration={0.5}>
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200/80 pb-4">
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => setFilter('all')}
+                className={`px-4 py-2 rounded-xl text-xs font-semibold transition ${
+                  filter === 'all' ? 'bg-[#0284C7] text-white shadow-xs' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                }`}
+              >
+                Tất cả ({sampleProjects.length})
+              </button>
+              <button
+                onClick={() => setFilter('pilot')}
+                className={`px-4 py-2 rounded-xl text-xs font-semibold transition ${
+                  filter === 'pilot' ? 'bg-[#0284C7] text-white shadow-xs' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                }`}
+              >
+                Giai đoạn Pilot
+              </button>
+              <button
+                onClick={() => setFilter('mvp')}
+                className={`px-4 py-2 rounded-xl text-xs font-semibold transition ${
+                  filter === 'mvp' ? 'bg-[#0284C7] text-white shadow-xs' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                }`}
+              >
+                Nguyên mẫu MVP
+              </button>
+            </div>
 
-        {/* Filter & Search Bar */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 pb-4">
-          <div className="flex items-center gap-2">
-            <button
-              onClick={() => setFilter('all')}
-              className={`px-4 py-2 rounded-xl text-xs font-semibold transition ${
-                filter === 'all' ? 'bg-[#1749B5] text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-              }`}
-            >
-              Tất cả ({sampleProjects.length})
-            </button>
-            <button
-              onClick={() => setFilter('pilot')}
-              className={`px-4 py-2 rounded-xl text-xs font-semibold transition ${
-                filter === 'pilot' ? 'bg-[#1749B5] text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-              }`}
-            >
-              Thử nghiệm thực tế
-            </button>
-            <button
-              onClick={() => setFilter('mvp')}
-              className={`px-4 py-2 rounded-xl text-xs font-semibold transition ${
-                filter === 'mvp' ? 'bg-[#1749B5] text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-              }`}
-            >
-              Nguyên mẫu (MVP)
-            </button>
+            <div className="relative max-w-xs w-full">
+              <Search className="h-4 w-4 text-slate-400 absolute left-3 top-2.5 pointer-events-none" />
+              <input
+                type="text"
+                placeholder="Tìm dự án theo tên, lĩnh vực..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full pl-9 pr-4 py-2 rounded-xl border border-slate-200 bg-white text-xs text-slate-800 placeholder:text-slate-400 focus:outline-none focus:border-[#0284C7]"
+              />
+            </div>
           </div>
-
-          <div className="relative max-w-xs w-full">
-            <Search className="h-4 w-4 text-slate-400 absolute left-3 top-3 pointer-events-none" />
-            <input
-              type="text"
-              placeholder="Tìm dự án theo tên, lĩnh vực..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-9 pr-4 py-2 rounded-xl border border-slate-200 bg-white text-xs text-slate-800 placeholder:text-slate-400 focus:outline-none focus:border-[#1749B5]"
-            />
-          </div>
-        </div>
+        </ScrollReveal>
 
         {/* Listing Grid */}
         {filteredProjects.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredProjects.map((proj) => (
-              <div
-                key={proj.slug}
-                className="group flex flex-col justify-between rounded-3xl border border-[#E2E6EE] bg-white p-6 sm:p-7 shadow-xs hover:border-[#6B9DFF] hover:shadow-md transition duration-300"
-              >
-                <div className="space-y-4">
-                  {/* Field & Stage */}
-                  <div className="flex items-center justify-between">
-                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-blue-50 text-[#1749B5] border border-blue-100">
-                      {proj.field}
-                    </span>
-                    <span className="text-[11px] font-medium text-slate-400">
-                      Năm: {proj.year}
-                    </span>
+            {filteredProjects.map((proj, idx) => (
+              <ScrollReveal key={proj.slug} direction="up" distance={20} delay={idx * 0.08} duration={0.6}>
+                <div
+                  className="group flex flex-col justify-between h-full rounded-3xl border border-slate-200/80 bg-white p-6 sm:p-7 shadow-xs hover:border-[#38BDF8] hover:shadow-xl hover:shadow-sky-500/10 hover:-translate-y-1 transition-all duration-300"
+                >
+                  <div className="space-y-4">
+                    {/* Field & Stage */}
+                    <div className="flex items-center justify-between">
+                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-sky-50 text-[#0284C7] border border-sky-100">
+                        {proj.field}
+                      </span>
+                      <span className="text-[11px] font-medium text-slate-400">
+                        Năm: {proj.year}
+                      </span>
+                    </div>
+
+                    {/* Title */}
+                    <h3 className="text-base sm:text-lg font-bold text-[#10182D] leading-snug group-hover:text-[#0284C7] transition">
+                      <Link to={`/activities/companion-projects/${proj.slug}`}>
+                        {proj.title}
+                      </Link>
+                    </h3>
+
+                    {/* Summary */}
+                    <p className="text-xs sm:text-sm text-[#5E6573] leading-relaxed line-clamp-3">
+                      {proj.summary}
+                    </p>
+
+                    {/* Metadata */}
+                    <div className="space-y-1.5 pt-3 border-t border-slate-100 text-xs text-slate-600">
+                      <div className="flex items-start gap-2">
+                        <span className="text-slate-400 font-medium">Giai đoạn:</span>
+                        <strong className="text-slate-800">{proj.stage}</strong>
+                      </div>
+                      <div className="flex items-start gap-2">
+                        <span className="text-slate-400 font-medium">Đội ngũ:</span>
+                        <span className="truncate">{proj.leadName}</span>
+                      </div>
+                    </div>
                   </div>
 
-                  {/* Title */}
-                  <h3 className="text-base sm:text-lg font-bold text-[#10182D] leading-snug group-hover:text-[#1749B5] transition">
-                    <Link to={`/activities/companion-projects/${proj.slug}`}>
-                      {proj.title}
+                  {/* Card Footer Link */}
+                  <div className="pt-5 mt-4 border-t border-slate-100">
+                    <Link
+                      to={`/activities/companion-projects/${proj.slug}`}
+                      className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#0284C7] hover:text-[#075985] transition group-hover:translate-x-1"
+                    >
+                      <span>Xem thông tin dự án</span>
+                      <ArrowRight className="h-3.5 w-3.5" />
                     </Link>
-                  </h3>
-
-                  {/* Summary */}
-                  <p className="text-xs sm:text-sm text-[#5E6573] leading-relaxed line-clamp-3">
-                    {proj.summary}
-                  </p>
-
-                  {/* Metadata */}
-                  <div className="space-y-1.5 pt-3 border-t border-slate-100 text-xs text-slate-600">
-                    <div className="flex items-start gap-2">
-                      <span className="text-slate-400 font-medium">Giai đoạn:</span>
-                      <strong className="text-slate-800">{proj.stage}</strong>
-                    </div>
-                    <div className="flex items-start gap-2">
-                      <span className="text-slate-400 font-medium">Đội ngũ:</span>
-                      <span className="truncate">{proj.leadName}</span>
-                    </div>
                   </div>
                 </div>
-
-                {/* Card Footer Link */}
-                <div className="pt-5 mt-4 border-t border-slate-100">
-                  <Link
-                    to={`/activities/companion-projects/${proj.slug}`}
-                    className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#1749B5] hover:text-[#10182D] transition group-hover:translate-x-0.5"
-                  >
-                    <span>Xem thông tin dự án</span>
-                    <ArrowRight className="h-3.5 w-3.5" />
-                  </Link>
-                </div>
-              </div>
+              </ScrollReveal>
             ))}
           </div>
         ) : (
@@ -199,17 +199,18 @@ export const CompanionProjectsPage: React.FC = () => {
         )}
 
         {/* CTA Transition */}
-        <CTASection
-          eyebrow="ĐỒNG HÀNH DỰ ÁN"
-          title="Tài trợ hoặc Đầu tư vào các Dự án Sinh viên"
-          description="Doanh nghiệp hoặc cựu sinh viên có thể xem Catalogue dự án chi tiết và tham gia bảo trợ nguồn lực kỹ thuật."
-          primaryText="Xem Catalogue Dự án"
-          primaryTo="/partnership/companion-project"
-          secondaryText="Sân khấu BK Shark"
-          secondaryTo="/activities/bk-shark"
-        />
-      </div>
+        <ScrollReveal direction="up" distance={20} duration={0.65}>
+          <CTASection
+            eyebrow="ĐỒNG HÀNH DỰ ÁN"
+            title="Tài trợ hoặc Đầu tư vào các Dự án Sinh viên"
+            description="Doanh nghiệp hoặc cựu sinh viên có thể xem Catalogue dự án chi tiết và tham gia bảo trợ nguồn lực kỹ thuật."
+            primaryText="Xem Catalogue Dự án"
+            primaryTo="/partnership/companion-project"
+            secondaryText="Sân khấu BK Shark"
+            secondaryTo="/activities/bk-shark"
+          />
+        </ScrollReveal>
+      </PageContentCanvas>
     </div>
   );
 };
-

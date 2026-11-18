@@ -1,8 +1,9 @@
 // BK-IC Workshop Listing — Minimalist Editorial
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { SectionHeading } from '../../components/editorial/SectionHeading';
-import { Breadcrumbs } from '../../components/editorial/Breadcrumbs';
+import { PageHeroBanner } from '../../components/layout/PageHeroBanner';
+import { PageContentCanvas } from '../../components/layout/PageContentCanvas';
+import { ScrollReveal } from '../../components/effects/ScrollReveal';
 import { CTASection } from '../../components/editorial/CTASection';
 import { Calendar, Clock, MapPin, User, ArrowRight, Sparkles, Inbox, Search } from 'lucide-react';
 
@@ -67,129 +68,128 @@ export const WorkshopsPage: React.FC = () => {
   });
 
   return (
-    <div className="min-h-screen bg-transparent py-12 px-4 sm:px-6 lg:px-8">
-      <div className="mx-auto max-w-7xl space-y-12">
-        {/* Breadcrumb Trail */}
-        <Breadcrumbs
-          items={[
-            { label: 'Hoạt động', to: '/activities' },
-            { label: 'Workshop thường niên' }
-          ]}
-        />
+    <div className="min-h-screen text-[#334155] selection:bg-sky-100 selection:text-[#0284C7] overflow-x-clip">
+      {/* 1. Institutional Hero Banner (Cosmic Gradient + Flowing Light Trails) */}
+      <PageHeroBanner
+        breadcrumbs={[
+          { label: 'Hoạt động', to: '/activities' },
+          { label: 'Workshop thường niên' }
+        ]}
+        eyebrow="WORKSHOP THƯỜNG NIÊN • BK-IC DUT"
+        title="Chuỗi Hội thảo Công nghệ &"
+        titleHighlight="Kỹ năng Khởi nghiệp"
+        subtitle="Các buổi chia sẻ chuyên sâu với sự tham gia của giảng viên hướng dẫn, chuyên gia doanh nghiệp và cựu sinh viên khởi nghiệp thành công."
+      />
 
-        {/* Hero Section */}
-        <div className="max-w-3xl space-y-4">
-          <SectionHeading
-            eyebrow="WORKSHOP THƯỜNG NIÊN • BK-IC DUT"
-            title="Chuỗi Hội thảo Công nghệ & Kỹ năng Khởi nghiệp"
-            subtitle="Các buổi chia sẻ chuyên sâu với sự tham gia của giảng viên hướng dẫn, chuyên gia doanh nghiệp và cựu sinh viên khởi nghiệp thành công."
-          />
-        </div>
-
+      {/* 2. Seamless Pure White Content Canvas with Tech Grid & Trails */}
+      <PageContentCanvas>
         {/* Search & Filter Bar */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 pb-4">
-          <div className="flex items-center gap-2">
-            <button
-              onClick={() => setFilter('all')}
-              className={`px-4 py-2 rounded-xl text-xs font-semibold transition ${
-                filter === 'all' ? 'bg-[#1749B5] text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-              }`}
-            >
-              Tất cả ({sampleWorkshops.length})
-            </button>
-            <button
-              onClick={() => setFilter('upcoming')}
-              className={`px-4 py-2 rounded-xl text-xs font-semibold transition ${
-                filter === 'upcoming' ? 'bg-[#1749B5] text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-              }`}
-            >
-              Sắp diễn ra
-            </button>
-            <button
-              onClick={() => setFilter('completed')}
-              className={`px-4 py-2 rounded-xl text-xs font-semibold transition ${
-                filter === 'completed' ? 'bg-[#1749B5] text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-              }`}
-            >
-              Đã diễn ra
-            </button>
-          </div>
+        <ScrollReveal direction="up" distance={16} duration={0.5}>
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200/80 pb-4">
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => setFilter('all')}
+                className={`px-4 py-2 rounded-xl text-xs font-semibold transition ${
+                  filter === 'all' ? 'bg-[#0284C7] text-white shadow-xs' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                }`}
+              >
+                Tất cả ({sampleWorkshops.length})
+              </button>
+              <button
+                onClick={() => setFilter('upcoming')}
+                className={`px-4 py-2 rounded-xl text-xs font-semibold transition ${
+                  filter === 'upcoming' ? 'bg-[#0284C7] text-white shadow-xs' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                }`}
+              >
+                Sắp diễn ra
+              </button>
+              <button
+                onClick={() => setFilter('completed')}
+                className={`px-4 py-2 rounded-xl text-xs font-semibold transition ${
+                  filter === 'completed' ? 'bg-[#0284C7] text-white shadow-xs' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                }`}
+              >
+                Đã diễn ra
+              </button>
+            </div>
 
-          <div className="relative max-w-xs w-full">
-            <Search className="h-4 w-4 text-slate-400 absolute left-3 top-3 pointer-events-none" />
-            <input
-              type="text"
-              placeholder="Tìm workshop theo từ khóa..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-9 pr-4 py-2 rounded-xl border border-slate-200 bg-white text-xs text-slate-800 placeholder:text-slate-400 focus:outline-none focus:border-[#1749B5]"
-            />
+            <div className="relative max-w-xs w-full">
+              <Search className="h-4 w-4 text-slate-400 absolute left-3 top-2.5 pointer-events-none" />
+              <input
+                type="text"
+                placeholder="Tìm workshop theo từ khóa..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full pl-9 pr-4 py-2 rounded-xl border border-slate-200 bg-white text-xs text-slate-800 placeholder:text-slate-400 focus:outline-none focus:border-[#0284C7]"
+              />
+            </div>
           </div>
-        </div>
+        </ScrollReveal>
 
         {/* Listing Grid */}
         {filteredWorkshops.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredWorkshops.map((ws) => (
-              <div
-                key={ws.slug}
-                className="group flex flex-col justify-between rounded-3xl border border-[#E2E6EE] bg-white p-6 sm:p-7 shadow-xs hover:border-[#6B9DFF] hover:shadow-md transition duration-300"
-              >
-                <div className="space-y-4">
-                  {/* Category & Status */}
-                  <div className="flex items-center justify-between">
-                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-blue-50 text-[#1749B5] border border-blue-100">
-                      {ws.category}
-                    </span>
-                    <span
-                      className={`text-[11px] font-semibold ${
-                        ws.status === 'upcoming' ? 'text-emerald-600' : 'text-slate-400'
-                      }`}
+            {filteredWorkshops.map((ws, idx) => (
+              <ScrollReveal key={ws.slug} direction="up" distance={20} delay={idx * 0.08} duration={0.6}>
+                <div
+                  className="group flex flex-col justify-between h-full rounded-3xl border border-slate-200/80 bg-white p-6 sm:p-7 shadow-xs hover:border-[#38BDF8] hover:shadow-xl hover:shadow-sky-500/10 hover:-translate-y-1 transition-all duration-300"
+                >
+                  <div className="space-y-4">
+                    {/* Category & Status */}
+                    <div className="flex items-center justify-between">
+                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-sky-50 text-[#0284C7] border border-sky-100">
+                        {ws.category}
+                      </span>
+                      <span
+                        className={`text-[11px] font-semibold ${
+                          ws.status === 'upcoming' ? 'text-emerald-600' : 'text-slate-400'
+                        }`}
+                      >
+                        {ws.status === 'upcoming' ? '• Sắp mở đơn' : '• Đã kết thúc'}
+                      </span>
+                    </div>
+
+                    {/* Title */}
+                    <h3 className="text-base sm:text-lg font-bold text-[#10182D] leading-snug group-hover:text-[#0284C7] transition">
+                      <Link to={`/activities/workshops/${ws.slug}`}>
+                        {ws.title}
+                      </Link>
+                    </h3>
+
+                    {/* Summary */}
+                    <p className="text-xs sm:text-sm text-[#5E6573] leading-relaxed line-clamp-3">
+                      {ws.summary}
+                    </p>
+
+                    {/* Metadata */}
+                    <div className="space-y-1.5 pt-3 border-t border-slate-100 text-xs text-slate-600">
+                      <div className="flex items-center gap-2">
+                        <Calendar className="h-3.5 w-3.5 text-[#0284C7] shrink-0" />
+                        <span>{ws.date} ({ws.time})</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <MapPin className="h-3.5 w-3.5 text-[#0284C7] shrink-0" />
+                        <span className="truncate">{ws.location}</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <User className="h-3.5 w-3.5 text-[#0284C7] shrink-0" />
+                        <span className="truncate">{ws.speaker}</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* View Details Link */}
+                  <div className="pt-5 mt-4 border-t border-slate-100">
+                    <Link
+                      to={`/activities/workshops/${ws.slug}`}
+                      className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#0284C7] hover:text-[#075985] transition group-hover:translate-x-1"
                     >
-                      {ws.status === 'upcoming' ? '• Sắp mở đơn' : '• Đã kết thúc'}
-                    </span>
-                  </div>
-
-                  {/* Title */}
-                  <h3 className="text-base sm:text-lg font-bold text-[#10182D] leading-snug group-hover:text-[#1749B5] transition">
-                    <Link to={`/activities/workshops/${ws.slug}`}>
-                      {ws.title}
+                      <span>Xem chi tiết nội dung</span>
+                      <ArrowRight className="h-3.5 w-3.5" />
                     </Link>
-                  </h3>
-
-                  {/* Summary */}
-                  <p className="text-xs sm:text-sm text-[#5E6573] leading-relaxed line-clamp-3">
-                    {ws.summary}
-                  </p>
-
-                  {/* Metadata */}
-                  <div className="space-y-1.5 pt-3 border-t border-slate-100 text-xs text-slate-600">
-                    <div className="flex items-center gap-2">
-                      <Calendar className="h-3.5 w-3.5 text-slate-400 shrink-0" />
-                      <span>{ws.date} ({ws.time})</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <MapPin className="h-3.5 w-3.5 text-slate-400 shrink-0" />
-                      <span className="truncate">{ws.location}</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <User className="h-3.5 w-3.5 text-slate-400 shrink-0" />
-                      <span className="truncate">{ws.speaker}</span>
-                    </div>
                   </div>
                 </div>
-
-                {/* View Details Link */}
-                <div className="pt-5 mt-4 border-t border-slate-100">
-                  <Link
-                    to={`/activities/workshops/${ws.slug}`}
-                    className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#1749B5] hover:text-[#10182D] transition group-hover:translate-x-0.5"
-                  >
-                    <span>Xem chi tiết nội dung</span>
-                    <ArrowRight className="h-3.5 w-3.5" />
-                  </Link>
-                </div>
-              </div>
+              </ScrollReveal>
             ))}
           </div>
         ) : (
@@ -208,17 +208,18 @@ export const WorkshopsPage: React.FC = () => {
         )}
 
         {/* CTA Transition */}
-        <CTASection
-          eyebrow="KẾT NỐI HỌC THUẬT"
-          title="Đề xuất chủ đề Workshop hoặc Diễn giả đồng hành"
-          description="Doanh nghiệp hoặc chuyên gia mong muốn chia sẻ kinh nghiệm kỹ thuật cùng sinh viên Bách khoa có thể kết nối với Ban Chuyên môn."
-          primaryText="Liên hệ Ban Tổ chức"
-          primaryTo="/partnership"
-          secondaryText="Xem Cuộc thi sáng tạo"
-          secondaryTo="/activities/competitions"
-        />
-      </div>
+        <ScrollReveal direction="up" distance={20} duration={0.65}>
+          <CTASection
+            eyebrow="KẾT NỐI HỌC THUẬT"
+            title="Đề xuất chủ đề Workshop hoặc Diễn giả đồng hành"
+            description="Doanh nghiệp hoặc chuyên gia mong muốn chia sẻ kinh nghiệm kỹ thuật cùng sinh viên Bách khoa có thể kết nối với Ban Chuyên môn."
+            primaryText="Liên hệ Ban Tổ chức"
+            primaryTo="/partnership"
+            secondaryText="Xem Cuộc thi sáng tạo"
+            secondaryTo="/activities/competitions"
+          />
+        </ScrollReveal>
+      </PageContentCanvas>
     </div>
   );
 };
-
