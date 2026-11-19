@@ -932,36 +932,36 @@ export interface PartnershipModelItem {
 
 export const PARTNERSHIP_MODELS: PartnershipModelItem[] = [
   {
-    id: 'program_sponsor',
-    title: 'Tài trợ Chương trình & Cuộc thi',
-    badge: 'TÀI TRỢ',
-    desc: 'Đồng hành xây dựng thương hiệu tuyển dụng, tiếp cận hàng nghìn sinh viên tài năng và vinh danh trên các ấn phẩm chính thức của Bách khoa.',
+    id: 'expert_mentoring',
+    title: 'Đồng hành Kỹ thuật & Cố vấn Giảng viên',
+    badge: 'CỐ VẤN R&D',
+    desc: 'Các nhóm dự án sinh viên được kết nối trực tiếp với giảng viên hướng dẫn chuyên môn từ các Khoa của Trường ĐH Bách khoa và mentor kỹ thuật giàu kinh nghiệm.',
     benefits: [
-      'Đặt logo trang trọng trên toàn bộ backdrop, website, mạng xã hội',
-      'Quyền tham gia Ban Giám khảo chấm thi BK Shark',
-      'Gian hàng giới thiệu sản phẩm & tuyển dụng tại sự kiện'
+      'Cố vấn 1-1 về kiến trúc giải pháp, AI, IoT và thiết kế phần cứng/phần mềm',
+      'Hỗ trợ định hướng đề tài Nghiên cứu Khoa học Sinh viên (NCKH) cấp Khoa & Trường',
+      'Tối ưu hóa sản phẩm mẫu (Prototype / MVP) để kiểm chứng thực tế'
     ]
   },
   {
-    id: 'expert_mentoring',
-    title: 'Cố vấn Chuyên môn & Mentor',
-    badge: 'CHUYÊN GIA',
-    desc: 'Các chuyên gia, kỹ sư đầu ngành và cựu sinh viên trực tiếp dẫn dắt, giải đáp bài toán công nghệ thực chiến cho các nhóm dự án sinh viên.',
+    id: 'program_sponsor',
+    title: 'Ươm tạo Đi thi Khởi nghiệp & Đấu trường Công nghệ',
+    badge: 'ĐẤU TRƯỜNG',
+    desc: 'Đồng hành toàn diện cùng các đội thi sinh viên tham gia BK Shark, SV_STARTUP, Đà Nẵng Innovation Startup và các cuộc thi học thuật quốc gia, quốc tế.',
     benefits: [
-      'Kết nối sâu với các dự án tiềm năng từ giai đoạn sớm',
-      'Được mời làm diễn giả chính các Workshop công nghệ',
-      'Giao lưu cùng mạng lưới chuyên gia hệ sinh thái khởi nghiệp'
+      'Huấn luyện kỹ năng xây dựng Pitch Deck, Business Model Canvas và thuyết trình gọi vốn',
+      'Tổ chức các phiên Mock Pitching phản biện trực tiếp cùng Hội đồng Chuyên gia',
+      'Bảo trợ truyền thông và giới thiệu dự án trên các kênh chính thức của BK-IC'
     ]
   },
   {
     id: 'real_world_problem',
-    title: 'Đặt hàng Bài toán Thực tiễn',
-    badge: 'DOANH NGHIỆP',
-    desc: 'Doanh nghiệp chuyển giao các bài toán tối ưu kỹ thuật, tự động hóa hoặc phân tích dữ liệu thực tế để sinh viên giải quyết dưới sự hướng dẫn của giảng viên.',
+    title: 'Kết nối Đội ngũ Đa ngành & Hạ tầng Thử nghiệm',
+    badge: 'ĐỘI NGŨ & LAB',
+    desc: 'Hỗ trợ sinh viên ghép nhóm liên ngành (CNTT, Điện – Điện tử, Cơ khí, Kinh tế – Quản lý dự án) và tiếp cận nguồn lực thử nghiệm giải pháp thực tế.',
     benefits: [
-      'Giải quyết bài toán R&D với chi phí tối ưu',
-      'Đánh giá năng lực thực tế của nhân sự tương lai trước khi tuyển dụng',
-      'Sở hữu quyền thương mại hóa các giải pháp được chuyển giao'
+      'Tìm kiếm đồng đội (Co-founder) bổ sung mảnh ghép kỹ thuật và phát triển kinh doanh',
+      'Hỗ trợ không gian sinh hoạt nhóm, tài liệu học thuật và kết nối vườn ươm đối tác',
+      'Cơ hội triển khai thử nghiệm (Pilot) giải pháp ngay tại khuôn viên trường và địa phương'
     ]
   }
 ];
