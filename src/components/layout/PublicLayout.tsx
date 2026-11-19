@@ -20,11 +20,11 @@ export const PublicLayout: React.FC = () => {
         {/* Ambient Flowing Light Trails */}
         <GlowingLightTrails variant="ambient-trails" opacity={0.35} className="fixed inset-0" />
 
-        {/* Soft Ambient Floating Depth Glows (Mandatory Sky Blue + Primary Blue Palette) */}
-        <div className="absolute top-[8%] -left-40 w-[650px] h-[650px] bg-[radial-gradient(circle_at_center,rgba(56,189,248,0.14),transparent_70%)] blur-3xl animate-float-orb-1" />
-        <div className="absolute top-[35%] -right-40 w-[700px] h-[700px] bg-[radial-gradient(circle_at_center,rgba(2,132,199,0.12),transparent_70%)] blur-3xl animate-float-orb-2" />
-        <div className="absolute top-[65%] -left-36 w-[650px] h-[650px] bg-[radial-gradient(circle_at_center,rgba(56,189,248,0.12),transparent_70%)] blur-3xl animate-float-orb-3" />
-        <div className="absolute bottom-[5%] -right-24 w-[700px] h-[700px] bg-[radial-gradient(circle_at_center,rgba(2,132,199,0.14),transparent_70%)] blur-3xl animate-float-orb-4" />
+        {/* Soft Ambient Floating Depth Glows (Mandatory Sky Blue + Primary Blue Palette — soft radial gradient without GPU blur-3xl overhead) */}
+        <div className="absolute top-[8%] -left-40 w-[650px] h-[650px] bg-[radial-gradient(circle_at_center,rgba(56,189,248,0.14)_0%,rgba(56,189,248,0.05)_40%,transparent_70%)] animate-float-orb-1" />
+        <div className="absolute top-[35%] -right-40 w-[700px] h-[700px] bg-[radial-gradient(circle_at_center,rgba(2,132,199,0.12)_0%,rgba(2,132,199,0.04)_40%,transparent_70%)] animate-float-orb-2" />
+        <div className="absolute top-[65%] -left-36 w-[650px] h-[650px] bg-[radial-gradient(circle_at_center,rgba(56,189,248,0.12)_0%,rgba(56,189,248,0.04)_40%,transparent_70%)] animate-float-orb-3" />
+        <div className="absolute bottom-[5%] -right-24 w-[700px] h-[700px] bg-[radial-gradient(circle_at_center,rgba(2,132,199,0.14)_0%,rgba(2,132,199,0.05)_40%,transparent_70%)] animate-float-orb-4" />
       </div>
 
       {/* Primary Navigation Bar */}

@@ -306,6 +306,7 @@ export const InternalActivitiesTab: React.FC = () => {
                         src={week.coverImage}
                         alt={week.title}
                         loading="lazy"
+                        decoding="async"
                         className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                       />
                       <div className="absolute top-3 left-3 flex items-center gap-2">

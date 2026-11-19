@@ -117,9 +117,10 @@ export const Navbar: React.FC = () => {
   return (
     <>
       {/* Outer Sticky Wrapper:
-          - Top State: floating with padding-top pt-3 sm:pt-4
-          - Scrolled State: full-bleed pt-0 pb-0 */}
+          - Top State: floating with padding-top pt-3 sm:pt-4 + iOS safe-area-inset-top
+          - Scrolled State: full-bleed pt-0 pb-0 + iOS safe-area-inset-top */}
       <header
+        style={{ paddingTop: scrolled ? 'env(safe-area-inset-top, 0px)' : 'calc(env(safe-area-inset-top, 0px) + 0.75rem)' }}
         className={`sticky top-0 z-50 w-full pointer-events-none transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:transition-none ${
           scrolled ? 'pt-0 pb-0' : 'pt-3 sm:pt-4 pb-2'
         }`}
@@ -397,7 +398,10 @@ export const Navbar: React.FC = () => {
       {/* ========================================================================= */}
       {mobileMenuOpen && (
         <div className="fixed inset-0 top-16 sm:top-20 z-40 bg-slate-900/40 backdrop-blur-sm lg:hidden animate-in fade-in duration-200">
-          <div className="h-full max-w-sm ml-auto bg-white p-6 shadow-2xl flex flex-col justify-between overflow-y-auto animate-in slide-in-from-right duration-250">
+          <div
+            style={{ paddingBottom: 'calc(1.5rem + env(safe-area-inset-bottom, 0px))' }}
+            className="h-full max-w-sm ml-auto bg-white p-6 shadow-2xl flex flex-col justify-between overflow-y-auto animate-in slide-in-from-right duration-250"
+          >
             <div className="space-y-6">
               {/* Header inside drawer */}
               <div className="flex items-center justify-between border-b border-slate-100 pb-4">

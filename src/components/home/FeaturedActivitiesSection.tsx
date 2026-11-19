@@ -33,7 +33,7 @@ export const FeaturedActivitiesSection: React.FC<FeaturedActivitiesSectionProps>
       </div>
 
       {/* Subtle Ambient Radial Glow */}
-      <div className="absolute bottom-10 right-1/4 w-[500px] h-[400px] bg-[radial-gradient(circle_at_center,rgba(56,189,248,0.12),transparent_70%)] pointer-events-none -z-10 blur-3xl" />
+      <div className="absolute bottom-10 right-1/4 w-[500px] h-[400px] bg-[radial-gradient(circle_at_center,rgba(56,189,248,0.12)_0%,transparent_70%)] pointer-events-none -z-10" />
 
       {/* Section Header with ScrollReveal */}
       <ScrollReveal direction="up" distance={20} duration={0.6}>

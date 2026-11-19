@@ -34,7 +34,7 @@ const NODES = [
   { top: '82%', left: '16%' }
 ];
 
-export const TechGridParticles: React.FC<TechGridParticlesProps> = ({
+export const TechGridParticles: React.FC<TechGridParticlesProps> = React.memo(({
   className = '',
   showGrid = true,
   showParticles = true,
@@ -133,5 +133,5 @@ export const TechGridParticles: React.FC<TechGridParticlesProps> = ({
       )}
     </div>
   );
-};
+});
 

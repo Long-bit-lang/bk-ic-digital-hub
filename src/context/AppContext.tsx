@@ -18,7 +18,7 @@ import {
   SiteSettings,
   FeedbackSummary
 } from '../types';
-import { api, setApiUserContext, setApiAuthToken } from '../services/api';
+import { api, setApiUserContext, setApiAuthToken, getApiAuthToken } from '../services/api';
 import { buildQrToken, resolveQrIntervalSec } from '../utils/qrConfig';
 import {
   INITIAL_UNITS,
@@ -190,15 +190,24 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [serverError, setServerError] = useState<string | null>(null);
 
-  // Load server time
+  // Load server time (only triggers state update when minute/date display or initial load changes)
   const refreshServerTime = useCallback(async () => {
     try {
       const res = await api.cms.getServerTime();
       if (res.success) {
-        setServerTime({
-          iso: res.iso,
-          currentTimeVN: res.currentTimeVN,
-          currentDateVN: res.currentDateVN
+        setServerTime((prev) => {
+          if (
+            prev &&
+            prev.currentTimeVN === res.currentTimeVN &&
+            prev.currentDateVN === res.currentDateVN
+          ) {
+            return prev;
+          }
+          return {
+            iso: res.iso,
+            currentTimeVN: res.currentTimeVN,
+            currentDateVN: res.currentDateVN
+          };
         });
       }
     } catch {
@@ -208,6 +217,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
 
   // Reload Members
   const reloadMembers = useCallback(async () => {
+    if (!getApiAuthToken()) return;
     try {
       const res = await api.members.getAll();
       if (res?.success && Array.isArray(res.members)) {
@@ -218,22 +228,34 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     }
   }, []);
 
-  // Reload Sessions
+  // Reload Sessions (only calls protected endpoint when authenticated, and avoids state churn if unchanged)
   const reloadSessions = useCallback(async () => {
+    if (!getApiAuthToken()) return;
     try {
       const res = await api.sessions.getAll();
       if (res?.success && Array.isArray(res.sessions)) {
-        setSessions(res.sessions);
+        setSessions((prev) => {
+          if (prev.length === res.sessions.length && JSON.stringify(prev) === JSON.stringify(res.sessions)) {
+            return prev;
+          }
+          return res.sessions;
+        });
       }
     } catch (err: any) {
-      console.warn('Could not reload sessions from backend:', err);
+      if (err?.status !== 401) {
+        console.warn('Could not reload sessions from backend:', err);
+      }
     }
   }, []);
 
   // Reload Attendance & Requests
   const reloadAttendance = useCallback(async () => {
+    if (!getApiAuthToken()) return;
     try {
-      const resAtt = await api.attendance.getRecords();
+      const [resAtt, resReq] = await Promise.all([
+        api.attendance.getRecords(),
+        api.attendance.getRequests()
+      ]);
       if (resAtt?.success) {
         if (Array.isArray(resAtt.attendance)) {
           setAttendance(resAtt.attendance);
@@ -241,7 +263,6 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
           setAttendance((resAtt as any).records);
         }
       }
-      const resReq = await api.attendance.getRequests();
       if (resReq?.success && Array.isArray(resReq.requests)) {
         setAttendanceRequests(resReq.requests);
       }
@@ -252,6 +273,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
 
   // Reload Tasks
   const reloadTasks = useCallback(async () => {
+    if (!getApiAuthToken()) return;
     try {
       const res = await api.tasks.getAll();
       if (res?.success && Array.isArray(res.tasks)) {
@@ -264,6 +286,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
 
   // Reload Evaluations
   const reloadEvaluations = useCallback(async () => {
+    if (!getApiAuthToken()) return;
     try {
       const res = await api.evaluations.getAll();
       if (res?.success && Array.isArray(res.evaluations)) {
@@ -276,6 +299,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
 
   // Reload Notifications
   const reloadNotifications = useCallback(async () => {
+    if (!getApiAuthToken()) return;
     try {
       const res = await api.notifications.getAll();
       if (res?.success && Array.isArray(res.notifications)) {
@@ -289,25 +313,31 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
 
   // Reload Applications
   const reloadApplications = useCallback(async () => {
+    if (!getApiAuthToken()) return;
     try {
       const res = await api.cms.getApplications();
       if (res?.success && Array.isArray(res.applications)) {
         setApplications(res.applications);
       }
     } catch (err: any) {
-      console.warn('Could not reload applications from backend:', err);
+      if (err?.status !== 403) {
+        console.warn('Could not reload applications from backend:', err);
+      }
     }
   }, []);
 
   // Reload Audit Logs
   const reloadAuditLogs = useCallback(async () => {
+    if (!getApiAuthToken()) return;
     try {
       const res = await api.audit.getLogs();
       if (res?.success && Array.isArray(res.logs)) {
         setAuditLogs(res.logs);
       }
     } catch (err: any) {
-      console.warn('Could not reload audit logs from backend:', err);
+      if (err?.status !== 403) {
+        console.warn('Could not reload audit logs from backend:', err);
+      }
     }
   }, []);
 
@@ -316,7 +346,16 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     setIsLoading(true);
     setServerError(null);
     try {
-      // 1. Auth check
+      // Fast path for unauthenticated public visitors: skip protected /api/auth/me call (zero 401 noise)
+      if (!getApiAuthToken()) {
+        setCurrentUser(null);
+        setApiUserContext(null);
+        await refreshServerTime();
+        return;
+      }
+
+      // 1. Auth check when token exists
+      let activeUser: User | null = null;
       try {
         const authRes = await api.auth.getMe();
         if (authRes.success && authRes.user) {
@@ -325,6 +364,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
             mustChangePassword: authRes.session?.mustChangePassword ?? authRes.user.mustChangePassword,
             isRecoverySession: authRes.session?.isRecoverySession ?? authRes.user.isRecoverySession
           };
+          activeUser = userObj;
           setCurrentUser(userObj);
           setApiUserContext(userObj.id);
 
@@ -339,11 +379,12 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
           setCurrentUser(null);
           setApiAuthToken(null);
           setApiUserContext(null);
-          // Return early if not logged in - don't fail, allow unauthenticated access to public data
           await refreshServerTime();
           return;
         }
       }
+
+      const isAdminOrBN = activeUser?.role === 'admin' || activeUser?.unit === 'BN';
 
       await Promise.allSettled([
         reloadMembers(),
@@ -352,8 +393,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
         reloadTasks(),
         reloadEvaluations(),
         reloadNotifications(),
-        reloadApplications(),
-        reloadAuditLogs(),
+        ...(isAdminOrBN ? [reloadApplications(), reloadAuditLogs()] : []),
         refreshServerTime()
       ]);
     } catch (err: any) {
@@ -379,14 +419,16 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     syncAllData();
   }, [syncAllData]);
 
-  // Periodic background polling (every 6s) to ensure real-time attendance lifecycle state transitions
+  // Periodic background polling (only active when user is authenticated & tab is visible)
   useEffect(() => {
+    if (!currentUser) return;
     const timer = setInterval(() => {
+      if (typeof document !== 'undefined' && document.visibilityState === 'hidden') return;
       reloadSessions().catch(() => {});
       refreshServerTime().catch(() => {});
-    }, 6000);
+    }, 12000);
     return () => clearInterval(timer);
-  }, [reloadSessions, refreshServerTime]);
+  }, [currentUser, reloadSessions, refreshServerTime]);
 
   // Switch user
   const switchUser = async (userId: string | null) => {

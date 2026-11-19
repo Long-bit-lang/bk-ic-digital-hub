@@ -30,7 +30,7 @@ export const CompetitionSection: React.FC<CompetitionSectionProps> = ({
       </div>
 
       {/* Subtle Ambient Radial Glow */}
-      <div className="absolute top-1/2 -left-32 w-[500px] h-[500px] bg-[radial-gradient(circle_at_center,rgba(56,189,248,0.14),transparent_70%)] pointer-events-none -z-10 blur-3xl animate-pulse-glow" />
+      <div className="absolute top-1/2 -left-32 w-[500px] h-[500px] bg-[radial-gradient(circle_at_center,rgba(56,189,248,0.14)_0%,transparent_70%)] pointer-events-none -z-10 animate-pulse-glow" />
 
       {/* Section Header with ScrollReveal */}
       <ScrollReveal direction="up" distance={20} duration={0.6}>

@@ -5,7 +5,10 @@ import { ExternalLink, ShieldCheck, MapPin, Mail, Phone, ArrowUpRight } from 'lu
 
 export const Footer: React.FC = () => {
   return (
-    <footer className="relative overflow-hidden bg-gradient-to-b from-[#060914] via-[#09122C] to-[#04060E] text-slate-300 border-t border-white/10">
+    <footer
+      style={{ paddingBottom: 'env(safe-area-inset-bottom, 0px)' }}
+      className="relative overflow-hidden bg-gradient-to-b from-[#060914] via-[#09122C] to-[#04060E] text-slate-300 border-t border-white/10"
+    >
       {/* Ambient Gradient Glows */}
       <div className="absolute left-1/2 top-0 -translate-x-1/2 w-4/5 h-48 bg-gradient-to-b from-[#1749B5]/25 via-[#245BFA]/10 to-transparent blur-3xl pointer-events-none" />
       <div className="absolute -right-20 -bottom-20 w-80 h-80 bg-gradient-to-tl from-[#6B9DFF]/15 to-transparent rounded-full blur-3xl pointer-events-none" />

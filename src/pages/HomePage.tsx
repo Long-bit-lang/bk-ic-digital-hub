@@ -33,10 +33,10 @@ export const HomePage: React.FC = () => {
           {/* Subtle Tech Grid Pattern in Hero */}
           <TechGridParticles density="subtle" showParticles={true} />
 
-          {/* Ambient Cosmic Radial Orbs & Mesh Lighting */}
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1100px] h-[550px] bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-[#0284C7]/40 via-[#38BDF8]/15 to-transparent blur-3xl pointer-events-none" />
-          <div className="absolute -top-20 -left-20 w-96 h-96 bg-gradient-to-br from-[#0284C7]/30 to-transparent rounded-full blur-3xl pointer-events-none" />
-          <div className="absolute top-1/2 -right-20 w-96 h-96 bg-gradient-to-bl from-[#38BDF8]/20 to-transparent rounded-full blur-3xl pointer-events-none" />
+          {/* Ambient Cosmic Radial Orbs & Mesh Lighting (Soft Radial Falloff without CSS blur-3xl GPU overhead) */}
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1100px] h-[550px] bg-[radial-gradient(ellipse_at_top,rgba(2,132,199,0.38)_0%,rgba(56,189,248,0.14)_40%,transparent_75%)] pointer-events-none" />
+          <div className="absolute -top-20 -left-20 w-96 h-96 bg-[radial-gradient(circle_at_center,rgba(2,132,199,0.28)_0%,transparent_70%)] rounded-full pointer-events-none" />
+          <div className="absolute top-1/2 -right-20 w-96 h-96 bg-[radial-gradient(circle_at_center,rgba(56,189,248,0.18)_0%,transparent_70%)] rounded-full pointer-events-none" />
 
           {/* Dynamic Glowing Wave Light Trails Centered in Banner (no edge interference) */}
           <div className="absolute top-1/2 -translate-y-1/2 inset-x-0 pointer-events-none z-10 opacity-60">
@@ -105,17 +105,17 @@ export const HomePage: React.FC = () => {
       {/* 2. MAIN CONTENT SECTIONS (Sky Blue + Pure White with Tech Grid & Trails)  */}
       {/* ========================================================================= */}
       <div className="relative bg-white -mt-1">
-        {/* Subtle Tech Grid with Floating Particles Across Content */}
-        <TechGridParticles density="subtle" showGrid={true} showParticles={true} />
+        {/* Subtle Tech Grid Across Content */}
+        <TechGridParticles density="subtle" showGrid={true} showParticles={false} />
 
         {/* Ambient Flowing Light Trails Weaving Throughout */}
         <GlowingLightTrails variant="ambient-trails" opacity={0.45} />
 
         {/* Soft Ambient Depth Glows with fluid floating animation (Mandatory Sky Blue Palette) */}
-        <div className="absolute top-[8%] -left-40 w-[650px] h-[650px] bg-[radial-gradient(circle_at_center,rgba(56,189,248,0.14),transparent_70%)] pointer-events-none z-0 blur-3xl animate-float-orb-1" />
-        <div className="absolute top-[32%] -right-40 w-[700px] h-[700px] bg-[radial-gradient(circle_at_center,rgba(2,132,199,0.12),transparent_70%)] pointer-events-none z-0 blur-3xl animate-float-orb-2" />
-        <div className="absolute top-[60%] -left-40 w-[650px] h-[650px] bg-[radial-gradient(circle_at_center,rgba(56,189,248,0.12),transparent_70%)] pointer-events-none z-0 blur-3xl animate-float-orb-3" />
-        <div className="absolute bottom-[6%] -right-24 w-[700px] h-[700px] bg-[radial-gradient(circle_at_center,rgba(2,132,199,0.14),transparent_70%)] pointer-events-none z-0 blur-3xl animate-float-orb-4" />
+        <div className="absolute top-[8%] -left-40 w-[650px] h-[650px] bg-[radial-gradient(circle_at_center,rgba(56,189,248,0.14)_0%,rgba(56,189,248,0.05)_40%,transparent_70%)] pointer-events-none z-0 animate-float-orb-1" />
+        <div className="absolute top-[32%] -right-40 w-[700px] h-[700px] bg-[radial-gradient(circle_at_center,rgba(2,132,199,0.12)_0%,rgba(2,132,199,0.04)_40%,transparent_70%)] pointer-events-none z-0 animate-float-orb-2" />
+        <div className="absolute top-[60%] -left-40 w-[650px] h-[650px] bg-[radial-gradient(circle_at_center,rgba(56,189,248,0.12)_0%,rgba(56,189,248,0.04)_40%,transparent_70%)] pointer-events-none z-0 animate-float-orb-3" />
+        <div className="absolute bottom-[6%] -right-24 w-[700px] h-[700px] bg-[radial-gradient(circle_at_center,rgba(2,132,199,0.14)_0%,rgba(2,132,199,0.05)_40%,transparent_70%)] pointer-events-none z-0 animate-float-orb-4" />
 
         <div className="relative z-10">
           {/* 2. BẢN TIN (NEWS) SECTION */}

@@ -12,27 +12,6 @@ import {
 } from 'lucide-react';
 import { ImageLightboxModal } from '../common/ImageLightboxModal';
 
-// Discover all available avatar photos in public/imageAVT in real time via Vite
-const avatarFiles =
-  typeof (import.meta as any).glob === 'function'
-    ? (import.meta as any).glob('../../../public/imageAVT/*.{jpg,jpeg,png,webp,JPG,JPEG,PNG,WEBP}', {
-        eager: true,
-        query: '?url',
-        import: 'default'
-      })
-    : {};
-
-// Build map: '105220278' -> '/imageAVT/105220278.jpg'
-const VITE_DETECTED_AVATARS: Record<string, string> = {};
-for (const [filePath, fileUrl] of Object.entries(avatarFiles)) {
-  const filename = filePath.split('/').pop() || '';
-  const nameWithoutExt = filename.replace(/\.[^/.]+$/, '');
-  if (nameWithoutExt && !nameWithoutExt.includes('2aObo') && nameWithoutExt !== 'default') {
-    const resolvedUrl = typeof fileUrl === 'string' ? fileUrl : (fileUrl as any)?.default || `/imageAVT/${filename}`;
-    VITE_DETECTED_AVATARS[nameWithoutExt] = resolvedUrl;
-  }
-}
-
 export const DEFAULT_MEMBER_AVATAR = '/imageAVT/default.jpg';
 
 // Registered individual photos in public/imageAVT named by MSSV
@@ -49,7 +28,7 @@ export const KNOWN_AVATARS: Record<string, string> = {
 };
 
 export const getMemberAvatar = (studentId: string): string => {
-  return VITE_DETECTED_AVATARS[studentId] || KNOWN_AVATARS[studentId] || `/imageAVT/${studentId}.jpg`;
+  return KNOWN_AVATARS[studentId] || `/imageAVT/${studentId}.jpg`;
 };
 
 export interface MemberItem {
@@ -396,7 +375,7 @@ export const AboutMemberAlbumSection: React.FC = () => {
     alt: ''
   });
 
-  // Automatically fetch newly uploaded member photos from /api/album/avatars
+  // Automatically fetch newly uploaded member photos from /api/album/avatars once on mount
   React.useEffect(() => {
     let isMounted = true;
 
@@ -416,21 +395,13 @@ export const AboutMemberAlbumSection: React.FC = () => {
 
     fetchLiveAvatars();
 
-    // Re-fetch automatically on window focus (e.g. user drags a new photo into public/imageAVT and clicks back to browser)
-    const handleFocus = () => {
-      fetchLiveAvatars();
-    };
-    window.addEventListener('focus', handleFocus);
-
     return () => {
       isMounted = false;
-      window.removeEventListener('focus', handleFocus);
     };
   }, []);
 
   const getActiveAvatar = (studentId: string): string => {
     return (
-      VITE_DETECTED_AVATARS[studentId] ||
       avatarRegistry[studentId] ||
       KNOWN_AVATARS[studentId] ||
       `/imageAVT/${studentId}.jpg`
@@ -625,7 +596,7 @@ export const AboutMemberAlbumSection: React.FC = () => {
             {filteredMembers.map((member) => (
               <div
                 key={member.id}
-                className="group relative rounded-2xl border border-slate-200/90 bg-white/95 backdrop-blur-xl p-3 sm:p-4 shadow-xs hover:border-[#1749B5] hover:shadow-lg transition-all duration-300 flex flex-col justify-between"
+                className="group relative rounded-2xl border border-slate-200/90 bg-white p-3 sm:p-4 shadow-xs hover:border-[#1749B5] hover:shadow-lg transition-all duration-300 flex flex-col justify-between"
               >
                 {/* Top: Vertical Portrait Photograph Container */}
                 <div
@@ -637,6 +608,7 @@ export const AboutMemberAlbumSection: React.FC = () => {
                     src={getActiveAvatar(member.studentId)}
                     alt={member.fullName}
                     loading="lazy"
+                    decoding="async"
                     className="w-full h-full object-cover object-top group-hover/img:scale-105 transition-transform duration-500"
                     onError={(e) => {
                       const img = e.target as HTMLImageElement;

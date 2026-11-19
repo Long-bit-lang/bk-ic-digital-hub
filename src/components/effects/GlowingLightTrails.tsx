@@ -8,7 +8,7 @@ interface GlowingLightTrailsProps {
   opacity?: number;
 }
 
-export const GlowingLightTrails: React.FC<GlowingLightTrailsProps> = ({
+export const GlowingLightTrails: React.FC<GlowingLightTrailsProps> = React.memo(({
   className = '',
   variant = 'section-flow',
   opacity = 1
@@ -55,17 +55,6 @@ export const GlowingLightTrails: React.FC<GlowingLightTrailsProps> = ({
                 <stop offset="0%" stopColor="#38BDF8" stopOpacity="0.12" />
                 <stop offset="100%" stopColor="#0284C7" stopOpacity="0" />
               </linearGradient>
-
-              {/* Luminous Glow Filter */}
-              <filter id="heroGlowFilter" x="-20%" y="-40%" width="140%" height="180%">
-                <feGaussianBlur in="SourceGraphic" stdDeviation="6" result="blur1" />
-                <feGaussianBlur in="SourceGraphic" stdDeviation="14" result="blur2" />
-                <feMerge>
-                  <feMergeNode in="blur2" />
-                  <feMergeNode in="blur1" />
-                  <feMergeNode in="SourceGraphic" />
-                </feMerge>
-              </filter>
             </defs>
 
             {/* Ambient Wave Underlay */}
@@ -75,13 +64,22 @@ export const GlowingLightTrails: React.FC<GlowingLightTrailsProps> = ({
               className="animate-wave-subtle"
             />
 
+            {/* Soft Halo Layer 1 (GPU-friendly replacement for SVG feGaussianBlur) */}
+            <path
+              d="M-40,160 C260,260 520,80 840,170 C1120,240 1320,140 1480,180"
+              stroke="url(#heroTrailGrad1)"
+              strokeWidth="12"
+              strokeOpacity="0.22"
+              strokeLinecap="round"
+              className="animate-trail-flow-1"
+            />
+
             {/* Glowing Light Trail 1: Broad luminous wave */}
             <path
               d="M-40,160 C260,260 520,80 840,170 C1120,240 1320,140 1480,180"
               stroke="url(#heroTrailGrad1)"
-              strokeWidth="4"
+              strokeWidth="3.5"
               strokeLinecap="round"
-              filter="url(#heroGlowFilter)"
               className="animate-trail-flow-1"
             />
 
@@ -91,7 +89,6 @@ export const GlowingLightTrails: React.FC<GlowingLightTrailsProps> = ({
               stroke="url(#heroTrailGrad2)"
               strokeWidth="2.5"
               strokeLinecap="round"
-              filter="url(#heroGlowFilter)"
               className="animate-trail-flow-2"
             />
 
@@ -135,14 +132,6 @@ export const GlowingLightTrails: React.FC<GlowingLightTrailsProps> = ({
                 <stop offset="65%" stopColor="#E0F2FE" stopOpacity="0.8" />
                 <stop offset="100%" stopColor="#38BDF8" stopOpacity="0" />
               </linearGradient>
-
-              <filter id="secGlowFilter" x="-10%" y="-30%" width="120%" height="160%">
-                <feGaussianBlur in="SourceGraphic" stdDeviation="5" result="blur" />
-                <feMerge>
-                  <feMergeNode in="blur" />
-                  <feMergeNode in="SourceGraphic" />
-                </feMerge>
-              </filter>
             </defs>
 
             {/* Trail 1: Flowing Primary Light Trail */}
@@ -151,7 +140,6 @@ export const GlowingLightTrails: React.FC<GlowingLightTrailsProps> = ({
               stroke="url(#secTrailGrad1)"
               strokeWidth="3"
               strokeLinecap="round"
-              filter="url(#secGlowFilter)"
               className="animate-trail-flow-1"
             />
 
@@ -162,7 +150,6 @@ export const GlowingLightTrails: React.FC<GlowingLightTrailsProps> = ({
               strokeWidth="2"
               strokeLinecap="round"
               strokeDasharray="220 180"
-              filter="url(#secGlowFilter)"
               className="animate-trail-flow-2"
             />
           </svg>
@@ -184,29 +171,25 @@ export const GlowingLightTrails: React.FC<GlowingLightTrailsProps> = ({
             <defs>
               <linearGradient id="ambGrad1" x1="0%" y1="0%" x2="100%" y2="100%">
                 <stop offset="0%" stopColor="#38BDF8" stopOpacity="0" />
-                <stop offset="30%" stopColor="#38BDF8" stopOpacity="0.35" />
-                <stop offset="60%" stopColor="#0284C7" stopOpacity="0.4" />
+                <stop offset="30%" stopColor="#38BDF8" stopOpacity="0.28" />
+                <stop offset="60%" stopColor="#0284C7" stopOpacity="0.32" />
                 <stop offset="100%" stopColor="#075985" stopOpacity="0" />
               </linearGradient>
 
               <linearGradient id="ambGrad2" x1="100%" y1="0%" x2="0%" y2="100%">
                 <stop offset="0%" stopColor="#E0F2FE" stopOpacity="0" />
-                <stop offset="40%" stopColor="#38BDF8" stopOpacity="0.3" />
-                <stop offset="80%" stopColor="#0284C7" stopOpacity="0.2" />
+                <stop offset="40%" stopColor="#38BDF8" stopOpacity="0.25" />
+                <stop offset="80%" stopColor="#0284C7" stopOpacity="0.18" />
                 <stop offset="100%" stopColor="#38BDF8" stopOpacity="0" />
               </linearGradient>
-
-              <filter id="ambBlur" x="-10%" y="-10%" width="120%" height="120%">
-                <feGaussianBlur stdDeviation="8" />
-              </filter>
             </defs>
 
             {/* Flowing ribbon 1 */}
             <path
               d="M-100,200 C300,50 600,450 1000,220 C1300,80 1500,350 1600,250"
               stroke="url(#ambGrad1)"
-              strokeWidth="24"
-              filter="url(#ambBlur)"
+              strokeWidth="28"
+              strokeLinecap="round"
               className="animate-float-subtle-1"
             />
 
@@ -214,8 +197,8 @@ export const GlowingLightTrails: React.FC<GlowingLightTrailsProps> = ({
             <path
               d="M-50,600 C350,750 700,400 1100,580 C1350,700 1500,500 1600,620"
               stroke="url(#ambGrad2)"
-              strokeWidth="18"
-              filter="url(#ambBlur)"
+              strokeWidth="22"
+              strokeLinecap="round"
               className="animate-float-subtle-2"
             />
           </svg>
@@ -223,5 +206,5 @@ export const GlowingLightTrails: React.FC<GlowingLightTrailsProps> = ({
       )}
     </div>
   );
-};
+});
 

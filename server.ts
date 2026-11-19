@@ -142,14 +142,26 @@ async function startServer() {
   app.use('/api/penalties', penaltiesRouter);
   app.use('/api', cmsRouter);
 
-  // Serve Member Avatar repository statically from public/imageAVT and root /imageAVT
-  app.use('/imageAVT', express.static(path.resolve(__dirname, 'public/imageAVT')));
-  app.use('/imageAVT', express.static(path.resolve(__dirname, 'imageAVT')));
+  // Serve Member Avatar repository and Club media statically with browser caching
+  app.use('/imageAVT', express.static(path.resolve(__dirname, 'public/imageAVT'), { maxAge: '7d' }));
+  app.use('/imageAVT', express.static(path.resolve(__dirname, 'imageAVT'), { maxAge: '7d' }));
+  app.use('/images', express.static(path.resolve(__dirname, 'public/images'), { maxAge: '7d' }));
+  app.use('/icons', express.static(path.resolve(__dirname, 'public/icons'), { maxAge: '30d' }));
 
-  // Real-time Member Avatar Scanner API
-  // Automatically detects any newly uploaded images named by MSSV in public/imageAVT or imageAVT
+  // Real-time Member Avatar Scanner API with 60s in-memory cache to avoid synchronous fs.readdirSync on every request
+  let cachedAvatarResponse: { count: number; avatars: Record<string, string>; expiresAt: number } | null = null;
+
   app.get('/api/album/avatars', (_req, res) => {
     try {
+      const now = Date.now();
+      if (cachedAvatarResponse && now < cachedAvatarResponse.expiresAt) {
+        return res.json({
+          success: true,
+          count: cachedAvatarResponse.count,
+          avatars: cachedAvatarResponse.avatars
+        });
+      }
+
       const candidates = [
         path.resolve(__dirname, 'public/imageAVT'),
         path.resolve(__dirname, 'imageAVT'),
@@ -182,9 +194,15 @@ async function startServer() {
         }
       }
 
+      cachedAvatarResponse = {
+        count: Object.keys(avatarMap).length,
+        avatars: avatarMap,
+        expiresAt: now + 60_000
+      };
+
       res.json({
         success: true,
-        count: Object.keys(avatarMap).length,
+        count: cachedAvatarResponse.count,
         avatars: avatarMap
       });
     } catch (err: any) {

@@ -87,7 +87,7 @@ export const NewsCard: React.FC<NewsCardProps> = ({
           top: `calc(10px + ${24 * index}px)`,
           transformOrigin: 'top center'
         }}
-        className={`group w-full rounded-[36px] bg-white/95 backdrop-blur-xl p-6 sm:p-8 md:p-10 shadow-[0_20px_50px_rgba(0,0,0,0.08)] border border-slate-200/90 hover:border-[#38BDF8]/80 hover:shadow-[0_24px_55px_-12px_rgba(56,189,248,0.22)] overflow-hidden relative will-change-transform transition-all duration-300 ease-out ${index > 0
+        className={`group w-full rounded-[36px] bg-white p-6 sm:p-8 md:p-10 shadow-[0_20px_50px_rgba(0,0,0,0.08)] border border-slate-200/90 hover:border-[#38BDF8]/80 hover:shadow-[0_24px_55px_-12px_rgba(56,189,248,0.22)] overflow-hidden relative will-change-transform transition-all duration-300 ease-out ${index > 0
           ? 'shadow-[0_-12px_28px_-6px_rgba(15,23,42,0.12),0_20px_50px_rgba(0,0,0,0.08)]'
           : ''
           }`}
@@ -106,9 +106,9 @@ export const NewsCard: React.FC<NewsCardProps> = ({
         {/* 3. Crease Shadow Ridge (Rãnh chìm của nếp gấp khi bị đè lên) */}
         <div className="absolute top-[7px] left-0 right-0 h-[1.5px] bg-gradient-to-r from-transparent via-slate-300/80 to-transparent pointer-events-none shadow-xs" />
 
-        {/* 4. Ambient Radial Glow Orb */}
+        {/* 4. Ambient Radial Glow Orb (Soft gradient without CSS blur-3xl GPU overhead) */}
         <div
-          className={`absolute -right-20 -top-20 w-80 h-80 rounded-full ${config.glowClass} blur-3xl pointer-events-none`}
+          className="absolute -right-20 -top-20 w-80 h-80 rounded-full bg-[radial-gradient(circle_at_center,rgba(56,189,248,0.10)_0%,transparent_70%)] pointer-events-none"
         />
 
         {/* ===================================================================== */}
@@ -206,6 +206,7 @@ export const NewsCard: React.FC<NewsCardProps> = ({
                     src={item.image}
                     alt={item.title}
                     loading="lazy"
+                    decoding="async"
                     onError={() => setImageError(true)}
                     className="w-full h-full object-cover transition-transform duration-700 group-hover/img:scale-105"
                   />
@@ -229,6 +230,7 @@ export const NewsCard: React.FC<NewsCardProps> = ({
                     src={item.image}
                     alt={item.title}
                     loading="lazy"
+                    decoding="async"
                     onError={() => setImageError(true)}
                     className="w-full h-full object-cover transition-transform duration-700 group-hover/img:scale-105"
                   />

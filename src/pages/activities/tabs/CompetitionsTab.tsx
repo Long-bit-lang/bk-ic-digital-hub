@@ -87,6 +87,7 @@ export const CompetitionsTab: React.FC = () => {
                 <img
                   src={featuredComp.coverImage}
                   alt={featuredComp.title}
+                  decoding="async"
                   className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                 />
                 <div className="absolute top-3 left-3 flex flex-wrap gap-2">
@@ -303,6 +304,8 @@ export const CompetitionsTab: React.FC = () => {
                       <img
                         src={comp.coverImage}
                         alt={comp.title}
+                        loading="lazy"
+                        decoding="async"
                         className="w-full h-full object-cover transition-transform duration-500 group-hover/img:scale-105"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-slate-950/60 via-transparent to-slate-950/20 pointer-events-none" />
