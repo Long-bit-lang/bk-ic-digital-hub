@@ -31,7 +31,12 @@ export const AboutVisionMissionSection: React.FC = () => {
     <section id="vision-mission" className="relative scroll-mt-24 py-10 sm:py-14 border-b border-slate-200/80">
       <SectionHeading
         eyebrow="03 • TẦM NHÌN &amp; SỨ MỆNH"
-        title="Định hướng Chiến lược &amp; Mục tiêu Cốt lõi"
+        title={
+          <>
+            Định hướng Chiến lược &amp;
+            <span className="block">Mục tiêu Cốt lõi</span>
+          </>
+        }
         subtitle="Kim chỉ nam dẫn lối toàn bộ các chương trình học thuật, ươm tạo dự án và hợp tác phát triển của BK-IC."
       />
 

@@ -43,13 +43,13 @@ export const BKSharkTab: React.FC = () => {
             <GlowingLightTrails variant="hero-flow" />
           </div>
 
-          <div className="relative z-10 max-w-3xl space-y-5">
+          <div className="relative z-10 max-w-4xl space-y-5">
             <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/10 border border-white/20 text-xs font-bold text-sky-200 backdrop-blur-md shadow-xs">
               <Flame className="h-4 w-4 text-[#38BDF8] animate-pulse" />
               <span>SÂN KHẤU PITCHING & GỌI VỐN ĐỈNH CAO • BK-IC</span>
             </div>
 
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight leading-tight text-white">
+            <h2 className="text-2xl sm:text-4xl lg:text-5xl font-black tracking-tight leading-tight text-white sm:whitespace-nowrap">
               Ý tưởng lớn.{' '}
               <span className="bg-gradient-to-r from-[#38BDF8] via-[#BAE6FD] to-white bg-clip-text text-transparent">
                 Sân khấu lớn.

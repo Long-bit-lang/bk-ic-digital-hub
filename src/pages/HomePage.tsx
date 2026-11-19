@@ -53,7 +53,7 @@ export const HomePage: React.FC = () => {
                 <span>BACHKHOA INNOVATION &amp; ENTREPRENEURSHIP CLUB</span>
               </span>
               <span className="text-xs font-mono font-medium text-slate-400 hidden sm:inline">
-                DUT • ĐHĐN • 2026
+                DUT • 2026
               </span>
             </div>
           </ScrollReveal>

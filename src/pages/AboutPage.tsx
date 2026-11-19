@@ -35,8 +35,8 @@ export const AboutPage: React.FC = () => {
       <PageHeroBanner
         breadcrumbs={[{ label: 'Về chúng tôi' }]}
         eyebrow="TỔ CHỨC KHỞI NGHIỆP TRƯỜNG ĐH BÁCH KHOA • DUT"
-        title="Bách Khoa Innovation Club –"
-        titleHighlight="BK-IC"
+        title=""
+        titleHighlight="Bách Khoa Innovation Club"
         subtitle="Nơi ý tưởng được khơi nguồn, công nghệ được kiến tạo và tương lai được định hình."
       />
 

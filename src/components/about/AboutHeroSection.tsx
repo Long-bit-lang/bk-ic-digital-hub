@@ -27,7 +27,7 @@ export const AboutHeroSection: React.FC = () => {
           {/* Main Title & Brand Tagline */}
           <div className="space-y-3">
             <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight text-[#10182D] leading-[1.12]">
-              Bách Khoa Innovation Club – BK-IC
+              Bách Khoa Innovation Club
             </h1>
             <p className="text-lg sm:text-xl font-bold bg-gradient-to-r from-[#1749B5] via-[#245BFA] to-[#0EA5E9] bg-clip-text text-transparent">
               Nơi ý tưởng được khơi nguồn, công nghệ được kiến tạo và tương lai được định hình.

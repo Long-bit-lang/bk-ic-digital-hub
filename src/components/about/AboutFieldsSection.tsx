@@ -107,6 +107,8 @@ export const AboutFieldsSection: React.FC = () => {
         eyebrow="04 • LĨNH VỰC HOẠT ĐỘNG (OUR FIELDS)"
         title="5 Lĩnh vực Hoạt động Trọng tâm"
         subtitle="BK-IC tập trung vào 5 lĩnh vực trọng tâm nhằm phát triển tư duy, kết nối nguồn lực và hỗ trợ chuyển hóa ý tưởng thành dự án thực tế."
+        className="max-w-4xl"
+        titleClassName="text-2xl sm:text-4xl lg:text-5xl sm:whitespace-nowrap"
       />
 
       <div className="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-6 sm:gap-8">

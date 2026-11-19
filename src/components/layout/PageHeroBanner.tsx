@@ -89,7 +89,7 @@ export const PageHeroBanner: React.FC<PageHeroBannerProps> = ({
           <div className="space-y-4 max-w-4xl">
             <ScrollReveal direction="up" distance={22} delay={0.08} duration={0.65}>
               <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-[1.12] text-white">
-                {title}{' '}
+                {title ? <>{title} </> : null}
                 {titleHighlight && (
                   <span className="bg-gradient-to-r from-[#38BDF8] via-[#BAE6FD] to-white bg-clip-text text-transparent block sm:inline">
                     {titleHighlight}

@@ -9,17 +9,17 @@ export const PartnershipCapabilities: React.FC = () => {
     <section className="py-16 md:py-20 bg-gradient-to-b from-white via-sky-50/20 to-white relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
         {/* Section Header */}
-        <div className="max-w-3xl mx-auto text-center space-y-4">
+        <div className="max-w-4xl mx-auto text-center space-y-4">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-sky-50 border border-sky-200 text-xs font-semibold text-[#0284C7]">
             <BookOpen className="h-3.5 w-3.5" />
             <span>NỀN TẢNG BỒI DƯỠNG</span>
           </div>
 
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-[#10182D] tracking-tight">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-[#10182D] tracking-tight sm:whitespace-nowrap">
             Định hướng Hỗ trợ Phát triển Năng lực Sinh viên
           </h2>
 
-          <p className="text-sm sm:text-base text-slate-600 leading-relaxed font-normal">
+          <p className="text-sm sm:text-base text-slate-600 leading-relaxed font-normal max-w-3xl mx-auto">
             BK-IC tập trung vào định hướng hỗ trợ và phát triển hai nhóm năng lực thiết yếu cho sinh viên kỹ thuật Trường Đại học Bách khoa – ĐHĐN; tạo tiền đề vững chắc để các bạn tự tin hiện thực hóa các sáng kiến công nghệ.
           </p>
         </div>
