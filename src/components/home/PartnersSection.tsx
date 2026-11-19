@@ -17,7 +17,7 @@ interface PartnersSectionProps {
 const CATEGORIES: Array<PartnerItem['category']> = [
   'Đơn vị bảo trợ',
   'Đối tác chiến lược',
-  'Đối tác đồng hành'
+  'Dự án đồng hành'
 ];
 
 export const PartnersSection: React.FC<PartnersSectionProps> = ({
@@ -43,7 +43,7 @@ export const PartnersSection: React.FC<PartnersSectionProps> = ({
             align="center"
             eyebrow="MẠNG LƯỚI ĐỒNG HÀNH"
             title="Đối tác &amp; Hệ sinh thái"
-            subtitle="Mạng lưới Nhà trường, Vườn ươm khởi nghiệp, Quỹ đầu tư và Doanh nghiệp công nghệ đồng hành cùng BK-IC."
+            subtitle="Mạng lưới Nhà trường, Đối tác chiến lược và các Dự án đổi mới sáng tạo đồng hành cùng BK-IC."
           />
         </div>
       </ScrollReveal>
@@ -55,7 +55,7 @@ export const PartnersSection: React.FC<PartnersSectionProps> = ({
             .filter((p) => p.category === category)
             .sort((a, b) => a.displayOrder - b.displayOrder);
 
-          if (categoryPartners.length === 0) return null;
+          if (categoryPartners.length === 0 && category !== 'Dự án đồng hành') return null;
 
           return (
             <ScrollReveal
@@ -76,16 +76,18 @@ export const PartnersSection: React.FC<PartnersSectionProps> = ({
               </div>
 
               {/* Centered Partner Logo Grid/Row */}
-              <div className="flex flex-wrap items-stretch justify-center gap-3.5 sm:gap-4.5 max-w-5xl mx-auto">
-                {categoryPartners.map((partner) => (
-                  <div
-                    key={partner.id}
-                    className="w-[calc(50%-0.5rem)] sm:w-[calc(33.333%-0.75rem)] md:w-[220px] lg:w-[220px] max-w-[240px]"
-                  >
-                    <PartnerLogoCard partner={partner} />
-                  </div>
-                ))}
-              </div>
+              {categoryPartners.length > 0 && (
+                <div className="flex flex-wrap items-stretch justify-center gap-3.5 sm:gap-4.5 max-w-5xl mx-auto">
+                  {categoryPartners.map((partner) => (
+                    <div
+                      key={partner.id}
+                      className="w-[calc(50%-0.5rem)] sm:w-[calc(33.333%-0.75rem)] md:w-[220px] lg:w-[220px] max-w-[240px]"
+                    >
+                      <PartnerLogoCard partner={partner} />
+                    </div>
+                  ))}
+                </div>
+              )}
             </ScrollReveal>
           );
         })}

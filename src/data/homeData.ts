@@ -55,7 +55,7 @@ export interface PartnerItem {
   id: string;
   name: string;
   logo: string;
-  category: 'Đơn vị bảo trợ' | 'Đối tác chiến lược' | 'Đối tác đồng hành';
+  category: 'Đơn vị bảo trợ' | 'Đối tác chiến lược' | 'Dự án đồng hành' | 'Đối tác đồng hành';
   websiteUrl?: string;
   description?: string;
   displayOrder: number;
@@ -383,107 +383,27 @@ export const HOME_PARTNERS_DATA: PartnerItem[] = [
   // Nhóm 1: Đơn vị bảo trợ
   {
     id: 'partner-01',
-    name: 'Trường Đại học Bách khoa – ĐHĐN',
+    name: 'Trung tâm Hỗ trợ Sinh viên và Quan hệ Doanh nghiệp',
     logo: '/images/bkic/dut_emblem.jpg',
     category: 'Đơn vị bảo trợ',
-    websiteUrl: 'https://dut.udn.vn',
-    description: 'Cơ quan chủ quản bảo trợ pháp lý và học thuật cao nhất của BK-IC',
+    websiteUrl: 'https://jobs.dut.udn.vn/?fbclid=IwY2xjawVr3wJleHRuA2FlbQIxMABwZG9mBWJyaWQRMWkxVDdlVjhhNUNCeHJ4SEhzcnRjBmFwcF9pZBAyMjIwMzkxNzg4MjAwODkyAAEfnp3MqcA9whQPKmWdpqYERgqwTyHLsAKPmQvP4g5zohslSvprKKvOu97URF0_aem_p8mlVG9kavsT8e1rVJH5bw',
+    description: 'Trường Đại học Bách khoa – ĐHĐN (DUT Jobs)',
     displayOrder: 1,
-    initials: 'DUT'
-  },
-  {
-    id: 'partner-02',
-    name: 'Đoàn Thanh niên – Hội Sinh viên Trường ĐH Bách khoa',
-    logo: '/images/bkic/bkic_logo.jpg',
-    category: 'Đơn vị bảo trợ',
-    websiteUrl: 'https://dut.udn.vn',
-    description: 'Đơn vị định hướng phong trào rèn luyện và bảo trợ thanh niên đổi mới sáng tạo',
-    displayOrder: 2,
-    initials: 'ĐTN'
-  },
-  {
-    id: 'partner-03',
-    name: 'Trung tâm Hỗ trợ Khởi nghiệp Đổi mới Sáng tạo Đà Nẵng',
-    logo: '/images/bkic/bkshark_danangbooth.jpg',
-    category: 'Đơn vị bảo trợ',
-    websiteUrl: 'https://startupdanang.vn',
-    description: 'Đơn vị đầu mối hệ sinh thái khởi nghiệp đổi mới sáng tạo thành phố Đà Nẵng',
-    displayOrder: 3,
-    initials: 'DNST'
+    initials: 'CSSR'
   },
 
   // Nhóm 2: Đối tác chiến lược
   {
-    id: 'partner-04',
-    name: 'Sở Khoa học & Công nghệ TP. Đà Nẵng',
-    logo: '/images/bkic/dut_emblem.jpg',
+    id: 'partner-02',
+    name: 'Hub Network',
+    logo: '/images/bkic/hub_network_logo.svg',
     category: 'Đối tác chiến lược',
-    websiteUrl: 'https://dost.danang.gov.vn',
-    description: 'Bảo trợ các đề tài nghiên cứu chuyển giao công nghệ sinh viên',
-    displayOrder: 4,
-    initials: 'DOST'
-  },
-  {
-    id: 'partner-05',
-    name: 'Vườn ươm Doanh nghiệp Đà Nẵng (DNES)',
-    logo: '/images/bkic/bkshark_auditorium.jpg',
-    category: 'Đối tác chiến lược',
-    websiteUrl: 'https://dnes.vn',
-    description: 'Mạng lưới ươm tạo hạt giống và hỗ trợ không gian làm việc sáng tạo',
-    displayOrder: 5,
-    initials: 'DNES'
-  },
-  {
-    id: 'partner-06',
-    name: 'Hiệp hội Doanh nghiệp Khởi nghiệp Đổi mới Sáng tạo',
-    logo: '/images/bkic/startup_training.jpg',
-    category: 'Đối tác chiến lược',
-    websiteUrl: 'https://startupdanang.vn',
-    description: 'Kết nối mạng lưới cố vấn chuyên môn và các nhà sáng lập khởi nghiệp',
-    displayOrder: 6,
-    initials: 'VSIE'
-  },
-
-  // Nhóm 3: Đối tác đồng hành
-  {
-    id: 'partner-07',
-    name: 'FPT Software Miền Trung',
-    logo: '/images/bkic/bkdn_students.jpg',
-    category: 'Đối tác đồng hành',
-    websiteUrl: 'https://fptsoftware.com',
-    description: 'Tài trợ các hội thảo công nghệ AI và tiếp nhận thực tập sinh viên',
-    displayOrder: 7,
-    initials: 'FPT'
-  },
-  {
-    id: 'partner-08',
-    name: 'Enouvo IT Solutions & Coworking',
-    logo: '/images/bkic/bkshark_ecosim_pitch.jpg',
-    category: 'Đối tác đồng hành',
-    websiteUrl: 'https://enouvo.com',
-    description: 'Hỗ trợ không gian sáng tạo và cố vấn phát triển sản phẩm số',
-    displayOrder: 8,
-    initials: 'ENV'
-  },
-  {
-    id: 'partner-09',
-    name: 'Sun* Danang R&D Lab',
-    logo: '/images/bkic/bkdn_awards.jpg',
-    category: 'Đối tác đồng hành',
-    websiteUrl: 'https://sun-asterisk.vn',
-    description: 'Đồng hành trong các giải đấu Hackathon và ươm tạo kỹ sư công nghệ',
-    displayOrder: 9,
-    initials: 'SUN'
-  },
-  {
-    id: 'partner-10',
-    name: 'Viettel Telecom Đà Nẵng',
-    logo: '/images/bkic/bkic_launch.jpg',
-    category: 'Đối tác đồng hành',
-    websiteUrl: 'https://viettel.vn',
-    description: 'Hợp tác nghiên cứu ứng dụng hạ tầng IoT và giải pháp viễn thông',
-    displayOrder: 10,
-    initials: 'VTL'
+    websiteUrl: 'https://1hub.network/',
+    description: 'Mạng lưới kết nối và hỗ trợ hệ sinh thái đổi mới sáng tạo',
+    displayOrder: 2,
+    initials: 'HUB'
   }
+
+  // Nhóm 3: Dự án đồng hành (để trống theo yêu cầu)
 ];
 

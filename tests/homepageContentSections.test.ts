@@ -145,12 +145,14 @@ console.log(`[PASS] Scenario 9: Supporting activities stack contains ${supportin
 // -----------------------------------------------------------------------------
 console.log('\n--- Testing Section 4: Đối tác & Hệ sinh thái (Partners) ---');
 
-const expectedTiers = ['Đơn vị bảo trợ', 'Đối tác chiến lược', 'Đối tác đồng hành'];
-expectedTiers.forEach((tier) => {
+const populatedTiers = ['Đơn vị bảo trợ', 'Đối tác chiến lược'];
+populatedTiers.forEach((tier) => {
   const count = HOME_PARTNERS_DATA.filter((p) => p.category === tier).length;
   assert.ok(count > 0, `Partner tier "${tier}" must have at least 1 partner (found ${count})`);
 });
-console.log('[PASS] Scenario 10: All 3 partner tiers (Bảo trợ, Chiến lược, Đồng hành) are populated');
+const companionProjectsCount = HOME_PARTNERS_DATA.filter((p) => p.category === 'Dự án đồng hành').length;
+assert.strictEqual(companionProjectsCount, 0, 'Dự án đồng hành must be kept empty as requested');
+console.log('[PASS] Scenario 10: Partner tiers (Bảo trợ, Chiến lược) are populated, Dự án đồng hành is intentionally empty');
 
 HOME_PARTNERS_DATA.forEach((partner) => {
   assert.ok(partner.name, 'Partner must have name');
