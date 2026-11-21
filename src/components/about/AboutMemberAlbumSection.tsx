@@ -13,7 +13,7 @@ import {
 } from 'lucide-react';
 import { ImageLightboxModal } from '../common/ImageLightboxModal';
 
-export const DEFAULT_MEMBER_AVATAR = '/imageAVT/default.jpg';
+export const DEFAULT_MEMBER_AVATAR = '/imageAVT/defaults.jpg';
 export const AVATAR_VERSION = 'v=20261120c';
 
 // Registered individual photos in public/imageAVT named by MSSV
@@ -725,7 +725,7 @@ export const AboutMemberAlbumSection: React.FC = () => {
                     onError={(e) => {
                       const img = e.currentTarget;
                       img.onerror = null;
-                      if (!img.src.includes('default.jpg')) {
+                      if (!img.src.includes('defaults.jpg') && !img.src.includes('default.jpg')) {
                         img.src = `${DEFAULT_MEMBER_AVATAR}?${AVATAR_VERSION}`;
                       }
                     }}

@@ -853,12 +853,12 @@ cmsRouter.get('/public/album-members', (req, res) => {
   }
 
   // Sanitize and format for Album GEN 1
-  // If studentId doesn't have an avatar in /imageAVT, fall back to /imageAVT/default.jpg
+  // If studentId doesn't have an avatar in /imageAVT, fall back to /imageAVT/defaults.jpg
   const sanitized = clubMembers.map(u => {
     const hasPhoto = u.studentId && availableAvatars.has(u.studentId);
     const avatarUrl = hasPhoto
       ? `/imageAVT/${u.studentId}.jpg?v=20261120c`
-      : `/imageAVT/default.jpg?v=20261120c`;
+      : `/imageAVT/defaults.jpg?v=20261120c`;
 
     return {
       id: u.id,
