@@ -38,15 +38,18 @@ export const KNOWN_AVATARS: Record<string, string> = {
   '106220169': '/imageAVT/106220169.jpg', // Nguyễn Tuấn Dũng
   '118240268': '/imageAVT/118240268.jpg', // Nguyễn Trọng Sang
   '102240263': '/imageAVT/118240268.jpg', // Nguyễn Trọng Sang fallback
+  '101230361': '/imageAVT/101230361.jpg', // Trần Hoài Thương
   '102240308': '/imageAVT/102240308.jpg', // Nguyễn Đăng Lê Hoàng
   '110250035': '/imageAVT/110250035.jpg', // Phạm Hưng Phát
   '101240005': '/imageAVT/101240005.jpg', // Nguyễn Thành Bảo
   '102250216': '/imageAVT/102250216.jpg', // Huỳnh Ngọc Thuỳ Dung
+  '102230313': '/imageAVT/102230313.jpg', // Đoàn Hoàng Thiên Phú
   '101250111': '/imageAVT/101250111.jpg', // Trần Đại Nhật Hải
   '123250056': '/imageAVT/123250056.jpg', // Trần Nguyên Bình
   '102230094': '/imageAVT/102230094.jpg', // Huỳnh Phước Phú
   '107250108': '/imageAVT/107250108.jpg', // Huỳnh Gia Thiên
   '102250369': '/imageAVT/102250369.jpg', // Nguyễn Thái Minh Thông
+  '123250015': '/imageAVT/123250015.jpg', // Nguyễn Thị Phương Hoà
   '118230121': '/imageAVT/118230121.jpg'  // Hồ Thị Mỹ Ly
 };
 
@@ -497,7 +500,7 @@ export const AboutMemberAlbumSection: React.FC = () => {
                   studentId: m.studentId,
                   classId: m.classId,
                   memberId: m.memberId,
-                  avatarUrl: `/imageAVT/${m.studentId}.jpg`,
+                  avatarUrl: m.avatarUrl || getActiveAvatar(m.studentId),
                   departmentName: dept.name
                 }))
               };

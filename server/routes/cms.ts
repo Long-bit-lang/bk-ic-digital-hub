@@ -835,19 +835,44 @@ cmsRouter.get('/public/album-members', (req, res) => {
   // Filter out standalone master admin
   const clubMembers = (store.users || []).filter(u => u.id !== 'usr-admin' && u.studentId !== 'ADMIN-DUT-2026');
 
+  // Check which members have uploaded avatars in /public/imageAVT
+  const avtDir = path.resolve(__dirname, '../../public/imageAVT');
+  const availableAvatars = new Set<string>();
+  if (fs.existsSync(avtDir)) {
+    try {
+      const files = fs.readdirSync(avtDir);
+      for (const f of files) {
+        const match = f.match(/^(\d{8,10})\.(jpe?g|png|webp)$/i);
+        if (match) {
+          availableAvatars.add(match[1]);
+        }
+      }
+    } catch {
+      // fallback gracefully
+    }
+  }
+
   // Sanitize and format for Album GEN 1
-  const sanitized = clubMembers.map(u => ({
-    id: u.id,
-    fullName: u.fullName,
-    position: u.position,
-    faculty: u.faculty,
-    studentId: u.studentId,
-    classId: u.classId,
-    memberId: u.memberId,
-    unit: u.unit,
-    avatarUrl: `/imageAVT/${u.studentId}.jpg?v=20261120b`,
-    departmentName: u.unit === 'BN' ? 'Ban chủ nhiệm' : u.unit === 'BDH' ? 'Ban điều hành' : 'Ban thành viên'
-  }));
+  // If studentId doesn't have an avatar in /imageAVT, fall back to /imageAVT/default.jpg
+  const sanitized = clubMembers.map(u => {
+    const hasPhoto = u.studentId && availableAvatars.has(u.studentId);
+    const avatarUrl = hasPhoto
+      ? `/imageAVT/${u.studentId}.jpg?v=20261120c`
+      : `/imageAVT/default.jpg?v=20261120c`;
+
+    return {
+      id: u.id,
+      fullName: u.fullName,
+      position: u.position,
+      faculty: u.faculty,
+      studentId: u.studentId,
+      classId: u.classId,
+      memberId: u.memberId,
+      unit: u.unit,
+      avatarUrl,
+      departmentName: u.unit === 'BN' ? 'Ban chủ nhiệm' : u.unit === 'BDH' ? 'Ban điều hành' : 'Ban thành viên'
+    };
+  });
 
   res.json({
     success: true,
