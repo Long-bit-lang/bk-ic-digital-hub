@@ -395,13 +395,13 @@ export const HOME_PARTNERS_DATA: PartnerItem[] = [
   // Nhóm 2: Đối tác chiến lược
   {
     id: 'partner-02',
-    name: 'Hub Network',
-    logo: '/images/bkic/hub_network_logo.svg',
+    name: 'Hub Network DN',
+    logo: '/images/bkic/hub_network_dn_logo.png',
     category: 'Đối tác chiến lược',
-    websiteUrl: 'https://1hub.network/',
-    description: 'Mạng lưới kết nối và hỗ trợ hệ sinh thái đổi mới sáng tạo',
+    websiteUrl: 'https://www.facebook.com/profile.php?id=61566071287402',
+    description: 'Mạng lưới các CLB Khởi nghiệp, Đổi mới Sáng tạo & Chuyển đổi số khu vực Đà Nẵng',
     displayOrder: 2,
-    initials: 'HUB'
+    initials: 'HNDN'
   }
 
   // Nhóm 3: Dự án đồng hành (để trống theo yêu cầu)
