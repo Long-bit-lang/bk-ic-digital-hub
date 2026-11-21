@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "tsx server.ts",
     "start": "tsx server.ts",
-    "build": "vite build",
+    "build": "tsx scripts/optimizeImages.ts && vite build",
+    "optimize:images": "tsx scripts/optimizeImages.ts",
     "preview": "vite preview",
     "clean": "rm -rf dist server.js",
     "cleanup": "tsx scripts/safeCleanup.ts",

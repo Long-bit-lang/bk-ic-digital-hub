@@ -52,7 +52,13 @@ console.table(initialStats);
 function isSyntheticOrTestUser(u: any): boolean {
   // Master admin is strictly preserved
   if (u.id === 'usr-admin' || u.role === 'admin') return false;
-  return true;
+  // Authentic club members with valid student IDs are strictly preserved
+  if (u.studentId && /^\d{8,10}$/.test(u.studentId)) return false;
+  const email = (u.email || '').toLowerCase();
+  if (email.includes('@example.com') || email.includes('test.') || email.startsWith('test-') || (u.fullName || '').toLowerCase().includes('test user')) {
+    return true;
+  }
+  return false;
 }
 
 function isTestSession(_s: any): boolean {

@@ -5,11 +5,13 @@ import React, { Suspense, lazy } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AppProvider } from './context/AppContext';
 
-// Public Layout & Primary Public Pages (Eagerly loaded for instant FCP/LCP & 0ms Tab Switching)
+// Public Layout & Primary Public Pages (Eagerly loaded for instant FCP/LCP)
 import { PublicLayout } from './components/layout/PublicLayout';
 import { HomePage } from './pages/HomePage';
-import { AboutPage } from './pages/AboutPage';
-import { PartnershipPage } from './pages/PartnershipPage';
+
+// Route-based Code Splitting for heavy subpages (Optimizes bundle size, memory & avoids UI freezing)
+const AboutPage = lazy(() => import('./pages/AboutPage').then((m) => ({ default: m.AboutPage })));
+const PartnershipPage = lazy(() => import('./pages/PartnershipPage').then((m) => ({ default: m.PartnershipPage })));
 
 // Activities Layout & 6 Tabs (Kept eager together so switching tabs inside /activities is 0ms instant)
 import { ActivitiesLayout } from './pages/activities/ActivitiesLayout';

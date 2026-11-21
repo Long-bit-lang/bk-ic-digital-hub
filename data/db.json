@@ -264,9 +264,9 @@
       "classId": "24KT2",
       "academicYear": "24",
       "role": "leader",
-      "unit": "BN",
-      "committee": "BN",
-      "position": "Thành viên Ban Chủ Nhiệm",
+      "unit": "BDH",
+      "committee": "BDH",
+      "position": "Thành viên Ban Điều Hành",
       "joinDate": "2026-10-26",
       "status": "active",
       "statusEffectiveDate": "2026-10-26",
@@ -291,6 +291,16 @@
       ],
       "lastLoginAt": "2026-11-17T08:19:34.072Z",
       "unitHistory": [
+        {
+          "id": "uh-1795147473488",
+          "previousUnit": "BN",
+          "newUnit": "BDH",
+          "previousPosition": "Thành viên Ban Chủ Nhiệm",
+          "newPosition": "Thành viên Ban Chủ Nhiệm",
+          "effectiveDate": "2026-11-20",
+          "approvedBy": "Quản trị viên Hệ thống (Admin)",
+          "timestamp": "2026-11-20T04:04:33.488Z"
+        },
         {
           "id": "uh-1794505342295",
           "previousUnit": "BDH",
@@ -960,9 +970,9 @@
       "classId": "25TDH2",
       "academicYear": "25",
       "role": "member",
-      "unit": "BDH",
-      "committee": "BDH",
-      "position": "Thành viên Ban Điều hành",
+      "unit": "BTV",
+      "committee": "BTV",
+      "position": "Thành viên Ban Thành viên",
       "joinDate": "2026-10-26",
       "status": "active",
       "statusEffectiveDate": "2026-10-26",
@@ -987,6 +997,16 @@
       ],
       "lastLoginAt": "2026-11-12T07:28:16.240Z",
       "unitHistory": [
+        {
+          "id": "uh-1795147506009",
+          "previousUnit": "BDH",
+          "newUnit": "BTV",
+          "previousPosition": "Thành viên Ban Điều hành",
+          "newPosition": "Thành viên Ban Thành viên",
+          "effectiveDate": "2026-11-20",
+          "approvedBy": "Quản trị viên Hệ thống (Admin)",
+          "timestamp": "2026-11-20T04:05:06.009Z"
+        },
         {
           "id": "uh-1794532443851",
           "previousUnit": "BTV",
@@ -1224,7 +1244,7 @@
       ],
       "mustChangePassword": false,
       "isRecoverySession": false,
-      "lastLoginAt": "2026-11-18T15:48:19.346Z",
+      "lastLoginAt": "2026-11-20T04:04:16.035Z",
       "resetTokenHash": "7f745d51bc826458289b3acd808a9fa58948843c9f4c9f5672bc8c30e6396837",
       "resetTokenExpiresAt": "2026-10-25T04:41:39.728Z"
     }
@@ -3877,6 +3897,54 @@
   ],
   "exportLogs": [],
   "auditLogs": [
+    {
+      "id": "audit-1795147506009",
+      "timestamp": "2026-11-20T04:05:06.009Z",
+      "actorId": "usr-admin",
+      "actorName": "Quản trị viên Hệ thống (Admin)",
+      "actorRole": "admin",
+      "actorUnit": "BN",
+      "action": "Cập nhật thông tin thành viên",
+      "targetType": "User",
+      "targetId": "usr-1792983281510",
+      "details": "Cập nhật hồ sơ thành viên Lê Hồng Ngân (105250375)"
+    },
+    {
+      "id": "audit-1795147485611",
+      "timestamp": "2026-11-20T04:04:45.611Z",
+      "actorId": "usr-admin",
+      "actorName": "Quản trị viên Hệ thống (Admin)",
+      "actorRole": "admin",
+      "actorUnit": "BN",
+      "action": "Cập nhật thông tin thành viên",
+      "targetType": "User",
+      "targetId": "usr-1792983281490",
+      "details": "Cập nhật hồ sơ thành viên Nguyễn Thị Thục Trang (121240105)"
+    },
+    {
+      "id": "audit-1795147473488",
+      "timestamp": "2026-11-20T04:04:33.488Z",
+      "actorId": "usr-admin",
+      "actorName": "Quản trị viên Hệ thống (Admin)",
+      "actorRole": "admin",
+      "actorUnit": "BN",
+      "action": "Cập nhật thông tin thành viên",
+      "targetType": "User",
+      "targetId": "usr-1792983281490",
+      "details": "Cập nhật hồ sơ thành viên Nguyễn Thị Thục Trang (121240105)"
+    },
+    {
+      "id": "audit-1795147456037",
+      "timestamp": "2026-11-20T04:04:16.037Z",
+      "actorId": "usr-admin",
+      "actorName": "Quản trị viên Hệ thống (Admin)",
+      "actorRole": "admin",
+      "actorUnit": "BN",
+      "action": "Đăng nhập hệ thống",
+      "targetType": "User",
+      "targetId": "usr-admin",
+      "details": "Đăng nhập thành công với email admin.bkic@dut.udn.vn (Vai trò: admin)"
+    },
     {
       "id": "audit-1795017207453",
       "timestamp": "2026-11-18T15:53:27.453Z",

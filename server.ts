@@ -143,73 +143,12 @@ async function startServer() {
   app.use('/api', cmsRouter);
 
   // Serve Member Avatar repository and Club media statically with browser caching
-  app.use('/imageAVT', express.static(path.resolve(__dirname, 'public/imageAVT'), { maxAge: '7d' }));
-  app.use('/imageAVT', express.static(path.resolve(__dirname, 'imageAVT'), { maxAge: '7d' }));
-  app.use('/images', express.static(path.resolve(__dirname, 'public/images'), { maxAge: '7d' }));
-  app.use('/icons', express.static(path.resolve(__dirname, 'public/icons'), { maxAge: '30d' }));
-
-  // Real-time Member Avatar Scanner API with 60s in-memory cache to avoid synchronous fs.readdirSync on every request
-  let cachedAvatarResponse: { count: number; avatars: Record<string, string>; expiresAt: number } | null = null;
-
-  app.get('/api/album/avatars', (_req, res) => {
-    try {
-      const now = Date.now();
-      if (cachedAvatarResponse && now < cachedAvatarResponse.expiresAt) {
-        return res.json({
-          success: true,
-          count: cachedAvatarResponse.count,
-          avatars: cachedAvatarResponse.avatars
-        });
-      }
-
-      const candidates = [
-        path.resolve(__dirname, 'public/imageAVT'),
-        path.resolve(__dirname, 'imageAVT'),
-        path.resolve(__dirname, 'dist/imageAVT')
-      ];
-
-      const avatarMap: Record<string, string> = {};
-      const allowedExts = new Set(['.jpg', '.jpeg', '.png', '.webp', '.gif', '.svg']);
-
-      for (const dir of candidates) {
-        if (fs.existsSync(dir)) {
-          const files = fs.readdirSync(dir);
-          for (const file of files) {
-            const ext = path.extname(file).toLowerCase();
-            if (allowedExts.has(ext)) {
-              const nameWithoutExt = path.parse(file).name.trim();
-
-              // 1. Direct match by file name (e.g. 105220278.jpg)
-              if (nameWithoutExt && !avatarMap[nameWithoutExt]) {
-                avatarMap[nameWithoutExt] = `/imageAVT/${encodeURIComponent(file)}`;
-              }
-
-              // 2. Regex match for 9-digit studentId (e.g. 105220278_avt.jpg or 105220278.jpg)
-              const match = file.match(/(\d{9})/);
-              if (match && match[1] && !avatarMap[match[1]]) {
-                avatarMap[match[1]] = `/imageAVT/${encodeURIComponent(file)}`;
-              }
-            }
-          }
-        }
-      }
-
-      cachedAvatarResponse = {
-        count: Object.keys(avatarMap).length,
-        avatars: avatarMap,
-        expiresAt: now + 60_000
-      };
-
-      res.json({
-        success: true,
-        count: cachedAvatarResponse.count,
-        avatars: avatarMap
-      });
-    } catch (err: any) {
-      console.error('[BK-IC Server] Avatar scan error:', err);
-      res.status(500).json({ success: false, avatars: {} });
-    }
-  });
+  // Member avatar static serving (zero cache in development so new uploads/replacements show immediately)
+  const avtMaxAge = process.env.NODE_ENV === 'production' ? '7d' : 0;
+  app.use('/imageAVT', express.static(path.resolve(__dirname, 'public/imageAVT'), { maxAge: avtMaxAge, etag: true, lastModified: true }));
+  app.use('/imageAVT', express.static(path.resolve(__dirname, 'imageAVT'), { maxAge: avtMaxAge, etag: true, lastModified: true }));
+  app.use('/images', express.static(path.resolve(__dirname, 'public/images'), { maxAge: '7d', etag: true, lastModified: true }));
+  app.use('/icons', express.static(path.resolve(__dirname, 'public/icons'), { maxAge: '30d', etag: true, lastModified: true }));
 
   // Guard: Any unmatched /api/* route returns clean JSON 404 instead of SPA HTML
   app.use('/api', (req, res) => {
@@ -237,6 +176,8 @@ async function startServer() {
     console.log('[BK-IC Server] Vite development middleware mounted with HTTP server HMR.');
   } else {
     const distPath = path.resolve(__dirname, 'dist');
+    // Hashed assets in /dist/assets can be cached for 1 year immutable
+    app.use('/assets', express.static(path.resolve(distPath, 'assets'), { maxAge: '1y', immutable: true }));
     app.use(express.static(distPath, { maxAge: '1d', index: false }));
     app.get('*', (req, res) => {
       res.sendFile(path.resolve(distPath, 'index.html'));
@@ -279,7 +220,10 @@ async function startServer() {
   // Ensures session states (scheduled -> ongoing -> ended), attendance (open -> closed),
   // feedback 24h warning emails, closing penalty tickets, and 30-day session archival
   // are executed autonomously to prevent database bloat and memory overload.
+  let isProcessingLifecycle = false;
   const lifecycleInterval = setInterval(async () => {
+    if (isProcessingLifecycle) return;
+    isProcessingLifecycle = true;
     try {
       const store = db.get();
       const changedSync = syncSessionsLifecycle(store);
@@ -290,6 +234,8 @@ async function startServer() {
       }
     } catch (err) {
       console.error('[BK-IC Server] Lifecycle scheduler error:', err);
+    } finally {
+      isProcessingLifecycle = false;
     }
   }, 20000);
 

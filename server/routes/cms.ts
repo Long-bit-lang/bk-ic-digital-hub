@@ -1,6 +1,12 @@
 // CMS, Applications and System Utility Routes
 import { Router } from 'express';
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
 import { db } from '../db.ts';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 import type { Application, UnitId, User } from '../../src/types/index.ts';
 import { extractAcademicYear } from './auth.ts';
 import { getVNCurrentTimeStr, getVNCurrentDateStr, getNowISO } from '../timeUtils.ts';
@@ -821,6 +827,72 @@ cmsRouter.post('/system/reset-demo', requireAuth, requireNormalSession, requireA
   const actor = req.user!;
   const fresh = db.resetToDefaults();
   res.json({ success: true, message: 'Đã khôi phục dữ liệu hệ thống về trạng thái ban đầu!', data: fresh });
+});
+
+// GET /api/public/album-members - Public endpoint returning official GEN 1 club members for About Page Album
+cmsRouter.get('/public/album-members', (req, res) => {
+  const store = db.get();
+  // Filter out standalone master admin
+  const clubMembers = (store.users || []).filter(u => u.id !== 'usr-admin' && u.studentId !== 'ADMIN-DUT-2026');
+
+  // Sanitize and format for Album GEN 1
+  const sanitized = clubMembers.map(u => ({
+    id: u.id,
+    fullName: u.fullName,
+    position: u.position,
+    faculty: u.faculty,
+    studentId: u.studentId,
+    classId: u.classId,
+    memberId: u.memberId,
+    unit: u.unit,
+    avatarUrl: `/imageAVT/${u.studentId}.jpg?v=20261120b`,
+    departmentName: u.unit === 'BN' ? 'Ban chủ nhiệm' : u.unit === 'BDH' ? 'Ban điều hành' : 'Ban thành viên'
+  }));
+
+  res.json({
+    success: true,
+    total: sanitized.length,
+    members: sanitized
+  });
+});
+
+// In-memory cache for avatar scan results (prevents synchronous filesystem I/O on every request)
+let cachedAvatarResponse: { count: number; avatars: Record<string, string>; expiresAt: number } | null = null;
+
+// GET /api/album/avatars - Public avatar scanner returning available member photos in /public/imageAVT
+cmsRouter.get('/album/avatars', (req, res) => {
+  const now = Date.now();
+  if (cachedAvatarResponse && now < cachedAvatarResponse.expiresAt) {
+    res.setHeader('Cache-Control', 'public, max-age=60');
+    return res.json({ success: true, count: cachedAvatarResponse.count, avatars: cachedAvatarResponse.avatars });
+  }
+
+  const avtDir = path.resolve(__dirname, '../../public/imageAVT');
+  const avatars: Record<string, string> = {};
+  if (fs.existsSync(avtDir)) {
+    try {
+      const files = fs.readdirSync(avtDir);
+      for (const f of files) {
+        // Match files starting with student ID (digits) and common image extensions
+        const match = f.match(/^(\d{8,10})\.(jpe?g|png|webp)$/i);
+        if (match) {
+          const mssv = match[1];
+          avatars[mssv] = `/imageAVT/${f}?v=20261120c`;
+        }
+      }
+    } catch {
+      // fallback gracefully
+    }
+  }
+
+  cachedAvatarResponse = {
+    count: Object.keys(avatars).length,
+    avatars,
+    expiresAt: now + 60_000 // 60s cache
+  };
+
+  res.setHeader('Cache-Control', 'public, max-age=60');
+  res.json({ success: true, count: cachedAvatarResponse.count, avatars });
 });
 
 // Admin-only CMS content endpoints (strictly protected by requireAdmin)
